@@ -25,3 +25,42 @@ Imports:
     robust,
     DT,
     gridExtra
+Collate: 
+    'dLogLikelihood.R'
+    'normalDistribution.R'
+    'pguCorrelator.R'
+    'pguData.R'
+    'pguDelegate.R'
+    'pguExplorer.R'
+    'pguExporter.R'
+    'pguFile.R'
+    'pguFilter.R'
+    'pguIMP.R'
+    'pguImporter.R'
+    'pguImputation.R'
+    'pguLimitsOfQuantification.R'
+    'pguModel.R'
+    'pguNormDist.R'
+    'pguOptimizer.R'
+    'pguOutliers.R'
+    'pguRegressor.R'
+    'pguStatus.R'
+    'pguTransformator.R'
+    'sLogLikelihood.R'
+    'transposeTibble.R'
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    'pguStatus.R'
+    'pguDelegate.R'
+    
+    'sLogLikelihood.R'
+    'transposeTibble.R'

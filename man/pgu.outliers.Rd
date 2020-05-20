@@ -199,13 +199,13 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{outliers}}{Returns the instance variable outliers.
 (tibble::tibble)}
 
-\item{\code{cleaningAgentAlphabet}}{Returns the instance variable cleaningAlphabet.
+\item{\code{cleaningAgentAlphabet}}{Returns the instance variable cleaningAgentAlphabet.
 (character)}
 
 \item{\code{cleaningAgent}}{Returns the instance variable cleaningAgent.
 (character)}
 
-\item{\code{setCleaningAgent}}{Sets the instance variable cleaningParameter.
+\item{\code{setCleaningAgent}}{Sets the instance variable cleaningAgent.
 (character)}
 
 \item{\code{seed}}{Returns the instance variable seed.
@@ -987,7 +987,7 @@ Creates a datatable with substituted outliers highlightes by colored background.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Al colored datatable
+A colored datatable
 (DT::datatable)
 }
 \subsection{Examples}{
@@ -1028,7 +1028,7 @@ A bar plot.
 \if{html}{\out{<a id="method-featureBarPlot"></a>}}
 \if{latex}{\out{\hypertarget{method-featureBarPlot}{}}}
 \subsection{Method \code{featureBarPlot()}}{
-Displays the distribution of an attribute as histogram.
+Displays the distribution of an attribute's values as histogram.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBarPlot(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
@@ -1062,7 +1062,7 @@ A histogram.
 \if{html}{\out{<a id="method-featureBoxPlotWithSubset"></a>}}
 \if{latex}{\out{\hypertarget{method-featureBoxPlotWithSubset}{}}}
 \subsection{Method \code{featureBoxPlotWithSubset()}}{
-Displays the distribution of an attribute as box plot.
+Displays the distribution of an attribute's vlues as box plot.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBoxPlotWithSubset(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
@@ -1096,7 +1096,7 @@ A box plot.
 \if{html}{\out{<a id="method-featurePlot"></a>}}
 \if{latex}{\out{\hypertarget{method-featurePlot}{}}}
 \subsection{Method \code{featurePlot()}}{
-Displays the distribution of an attribute as a composition of a box plot and a histogram.
+Displays the distribution of an attribute's values as a composition of a box plot and a histogram.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featurePlot(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }

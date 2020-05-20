@@ -14,10 +14,15 @@
 #'
 #' @import R6
 #' @import tidyverse
+#' @import gridExtra
 #' @import outliers
-#' @import grDevices
-#' @import gplots
 #' @import DT
+#' @import DMwR
+#' @import mice
+#' @import RWeka
+#' @import mice
+#' @import Amelia
+#' @import psych
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -57,7 +62,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                    return(private$.outliers)
                                  },
                                  #' @field cleaningAgentAlphabet
-                                 #' Returns the instance variable cleaningAlphabet.
+                                 #' Returns the instance variable cleaningAgentAlphabet.
                                  #' (character)
                                  cleaningAgentAlphabet = function(){
                                    return(private$.cleaningAgentAlphabet)
@@ -69,7 +74,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                    return(as.character(private$.cleaningAgent))
                                  },
                                  #' @field setCleaningAgent
-                                 #' Sets the instance variable cleaningParameter.
+                                 #' Sets the instance variable cleaningAgent.
                                  #' (character)
                                  setCleaningAgent = function(agent = "character"){
                                    private$.cleaningAgent <- factor(agent, levels = self$cleaningAgentAlphabet)
@@ -977,7 +982,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
                                  #' @return
-                                 #' Al colored datatable
+                                 #' A colored datatable
                                  #' (DT::datatable)
                                  #' @examples
                                  #' data %>%
@@ -1036,7 +1041,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                  },#function
 
                                  #' @description
-                                 #' Displays the distribution of an attribute as histogram.
+                                 #' Displays the distribution of an attribute's values as histogram.
                                  #' @param data
                                  #' dataframe to be analyzed.
                                  #' (tibble::tibble)
@@ -1059,7 +1064,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
 
 
                                  #' @description
-                                 #' Displays the distribution of an attribute as box plot.
+                                 #' Displays the distribution of an attribute's vlues as box plot.
                                  #' @param data
                                  #' dataframe to be analyzed.
                                  #' (tibble::tibble)
@@ -1085,7 +1090,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                  }, #function
 
                                  #' @description
-                                 #' Displays the distribution of an attribute as a composition of a box plot and a histogram.
+                                 #' Displays the distribution of an attribute's values as a composition of a box plot and a histogram.
                                  #' @param data
                                  #' dataframe to be analyzed.
                                  #' (tibble::tibble)
