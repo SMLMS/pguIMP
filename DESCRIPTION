@@ -40,7 +40,8 @@ Imports:
     tidyverse,
     tools,
     writexl
-Collate: 
+Collate:
+    'pguImp.R'
     'dLogLikelihood.R'
     'normalDistribution.R'
     'pguCorrelator.R'
@@ -62,4 +63,3 @@ Collate:
     'pguStatus.R'
     'pguDelegate.R'
     'transposeTibble.R'
-    'pguImp.R'
