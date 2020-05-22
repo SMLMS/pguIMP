@@ -1,4 +1,4 @@
-#' @title main
+#' @title IMPgui
 #' @description Run shiny based gui of pguIMP.
 #'
 #' @return shiny application object
