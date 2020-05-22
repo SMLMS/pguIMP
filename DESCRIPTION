@@ -41,7 +41,7 @@ Imports:
     tools,
     writexl
 Collate:
-    'pguImp.R'
+    'pguIMP.R'
     'dLogLikelihood.R'
     'normalDistribution.R'
     'pguCorrelator.R'
