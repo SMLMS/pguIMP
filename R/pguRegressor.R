@@ -317,8 +317,8 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                        if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                          progress$inc(1)
                                        }
-                                       abs <- sym(abscissa)
-                                       ord <- sym(ordinate)
+                                       abs <- dplyr::sym(abscissa)
+                                       ord <- dplyr::sym(ordinate)
                                        if(self$featurePairIsValid(abscissa, ordinate)){
                                          self$createModel(data, abscissa, ordinate)
                                          private$.intercept[[as.name(ord), as.name(abs)]] <- as.numeric(c(summary(self$model)$coefficients[1,1]))
@@ -356,8 +356,8 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  printModel = function(abscissa = "character", ordinate = "character"){
                                    t <- NULL
                                    if(self$featurePairIsValid(abscissa, ordinate)){
-                                     abs <- sym(abscissa)
-                                     ord <- sym(ordinate)
+                                     abs <- dplyr::sym(abscissa)
+                                     ord <- dplyr::sym(ordinate)
                                      para <- c("abscissa", "ordinate", "intercept", "p.intercept", "slope", "p.slope")
                                      val <- c(abscissa,
                                               ordinate,
@@ -431,6 +431,7 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                      dplyr::select(features, dplyr::everything()) %>%
                                      return()
                                  },#function
+
                                  ##################
                                  # plot functions #
                                  ##################
@@ -444,10 +445,10 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' x$plotRegression() %>%
                                  #'  show()
                                  plotRegression = function(){
-                                   abs <- sym(names(self$model$model)[2])
-                                   ord <- sym(names(self$model$model)[1])
+                                   abs <- dplyr::sym(names(self$model$model)[2])
+                                   ord <- dplyr::sym(names(self$model$model)[1])
                                    p <- ggplot2::ggplot(data = self$model$model,
-                                                        aes_string(x=as.name(abs),
+                                                        ggplot2::aes_string(x=as.name(abs),
                                                                    y=as.name(ord)),
                                                         na.rm = TRUE)+
                                      ggplot2::geom_point()+
@@ -455,6 +456,7 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                      ggplot2::ggtitle("Robust Model\nLinear Regression")
                                    return(p)
                                  },#function
+
                                  #' @description
                                  #' Creates a histogram of the residual distribution of the model
                                  #' stored within the instance variable of the class.
@@ -469,7 +471,7 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                      ggplot2::ggplot(mapping=ggplot2::aes_string(x="value"), na.rm=TRUE)+
                                      ggplot2::geom_histogram() +
                                      ggplot2::ggtitle("Residuals\nBar Plot") +
-                                     ggplot2::theme(axis.title.y = element_blank())
+                                     ggplot2::theme(axis.title.y = ggplot2::element_blank())
                                    return(p)
                                  },#function
                                  #' @description
@@ -486,10 +488,10 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                      ggplot2::ggplot(mapping=ggplot2::aes_string(y="value"), na.rm=TRUE)+
                                      ggplot2::geom_boxplot()+
                                      ggplot2::ggtitle("Residuals\nBox Plot") +
-                                     ggplot2::theme(axis.title.x = element_blank(),
-                                                    axis.text.x = element_blank(),
-                                                    axis.ticks.x = element_blank(),
-                                                    axis.title.y = element_blank())
+                                     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                                                    axis.text.x = ggplot2::element_blank(),
+                                                    axis.ticks.x = ggplot2::element_blank(),
+                                                    axis.title.y = ggplot2::element_blank())
                                    return(p)
                                  },#function
                                  #' @description
@@ -507,7 +509,7 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' (character)
                                  #' @return
                                  #' A composite graph.
-                                 #' (ggplot2::ggplot)
+                                 #' (gridExtra::grid.arrange)
                                  #' @examples
                                  #' x$plotModel(data, abscissa = "time", ordinate = "death") %>%
                                  #'  show()
@@ -515,9 +517,9 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                    p <- NULL
                                    if(self$featurePairIsValid(abscissa, ordinate)){
                                      self$createModel(data, abscissa, ordinate)
-                                     p1 <- private$plotRegression()
-                                     p2 <- private$plotResidualBox()
-                                     p3 <- private$plotResidualDist()
+                                     p1 <- self$plotRegression()
+                                     p2 <- self$plotResidualBox()
+                                     p3 <- self$plotResidualDist()
                                      p <- gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1,1,2),c(1,1,1,3)))
                                    }
                                    return(p)

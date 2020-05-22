@@ -1,7 +1,15 @@
-library(shiny)
-library(shinydashboard)
-library(shinyjs)
+#' Shiny app server object
+#'
+#' @import shiny
+#' @import shinydashboard
+#' @import shinyjs
+#'
+#' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
+#'
+#' @export
+#'
 
+# create the shiny application user interface body.
 menueColumnWidth <- 3
 dataColumnWidth <- 12 - menueColumnWidth
 halfDataColumnWidth <- as.integer(dataColumnWidth/2)
@@ -27,7 +35,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
                               width = "100%")
         ),
         shiny::column(
-          
+
           width = dataColumnWidth,
           shinydashboard::tabBox(
             width = 12,
@@ -48,7 +56,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         )
       )
     )),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_filter",
     shiny::fluidPage(
@@ -99,7 +107,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_explore",
     fluidPage(
@@ -150,7 +158,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_detect_loq",
     shiny::fluidPage(
@@ -222,7 +230,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_mutate_loq",
     shiny::fluidPage(
@@ -301,7 +309,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_detect_trafo",
     shiny::fluidPage(
@@ -381,7 +389,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
-  
+
   shinydashboard::tabItem(
     tabName = "tab_mutate_trafo",
     fluidPage(
@@ -886,6 +894,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   #   )#end fluidPage
   # )#end tabItem
 ))
-    
+
 
 

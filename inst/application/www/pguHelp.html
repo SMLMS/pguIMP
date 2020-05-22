@@ -21,7 +21,7 @@
       <a href="#loq-mutate">Mutate</a>
     </div>
   </li>
-  
+
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn">Transformation</a>
     <div class="dropdown-content">
@@ -29,7 +29,7 @@
       <a href="#transformation-mutate">Mutate</a>
     </div>
   </li>
-  
+
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn">Imputation</a>
     <div class="dropdown-content">
@@ -37,7 +37,7 @@
       <a href="#imputation-mutate">Mutate</a>
     </div>
   </li>
-  
+
   <li class="dropdown">
     <a href="javascript:void(0)" class="dropbtn">Outliers</a>
     <div class="dropdown-content">
@@ -71,9 +71,9 @@
 
   <div class="col-8">
     <div class="horizontalgap"></div>
-    <h1>PGU Cleaner Help</h1>
+    <h1>PGU IMP Help</h1>
     <p>Sebastian Malkusch &copy; 2020</p>
-    
+
     <div class="horizontalgap"></div>
      <h2 id="import">Import</h2>
      <p>Manages the upload of the upload of the dataset. The data needs to be of type .xlsx and must comprise the sheets: raw_data, loq, metadata.</p>
@@ -87,7 +87,7 @@
      <p>Specifies which data types were recognized from the imported data sheet loq.</p>
      <h5 id="import-metaData">metadata</h5>
      <p>Specifies which data types were recognized from the imported data sheet metadata.</p>
-     
+
      <div class="horizontalgap"></div>
      <h2 id="filter">Filter</h2>
      <p>Filter the raw dataset. All further analysis steps will be performed on the filtered dataset.</p>
@@ -101,7 +101,7 @@
      <p>Displays some statistical parameters about the filtered data set.</p>
      <h5 id="filter-missings">Missings</h5>
      <p>Displays the amount of missing entrys within each selected column.</p>
-     
+
      <div class="horizontalgap"></div>
      <h2 id="explore">Explore</h2>
      <p>Examines the data space of the filtered data set graphically.</p>
@@ -113,7 +113,7 @@
      <p>Graphical exploration of the <a href="https://en.wikipedia.org/wiki/Abscissa_and_ordinate">abscissa</a> attribute distribution displayed as <a href="https://en.wikipedia.org/wiki/Box_plot">box-plot</a> and <a href="https://en.wikipedia.org/wiki/Histogram">histogram</a>. Below the plot, some statistical parameters are displayed. Will only work for <a href="https://en.wikipedia.org/wiki/Abscissa_and_ordinate">abscissa</a> attributes of type numeric. Otherwise it will be blank.</p>
      <h5 id="explore-ordStats">Ordinate Statistics</h5>
      <p>Graphical exploration of the <a href="https://en.wikipedia.org/wiki/Abscissa_and_ordinate">ordinate</a> attribute distribution displayed as <a href="https://en.wikipedia.org/wiki/Box_plot">box-plot</a> and <a href="https://en.wikipedia.org/wiki/Histogram">histogram</a>. Below the plot, some statistical parameters are displayed. Will only work for <a href="https://en.wikipedia.org/wiki/Abscissa_and_ordinate">ordinate</a> attributes of type numeric. Otherwise it will be blank.</p>
-     
+
      <div class="horizontalgap"></div>
      <h2 id="loq-detect">LOQ Detect</h2>
      <p>Identify candidates that exist outside of the user provided  <a href="https://en.wikipedia.org/wiki/Detection_limit">LOQ</a> intervals</p>
@@ -137,7 +137,7 @@
      <p>List of the detected  <a href="https://en.wikipedia.org/wiki/Detection_limit">LOQ</a> outlier candidates. The respective critical values are marked by their background color.</p>
      <h5 id="loq-detect-loqData">LOQ Data</h5>
      <p>The entire filtered data set with each <a href="https://en.wikipedia.org/wiki/Detection_limit">LOQ</a> outlier candidate highlighted by the background color respectively.</p>
-     
+
      <div class="horizontalgap"></div>
      <h2 id="loq-mutate">LOQ Mutate</h2>
      <p>Substitute the detected  <a href="https://en.wikipedia.org/wiki/Detection_limit">LOQ</a> outlier candidates with specific values.</p>
@@ -176,7 +176,7 @@
      <p>Specifies the <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">data transformation</a> that led to the minimum deviation from a <a href="https://en.wikipedia.org/wiki/Normal_distribution">normal distribution</a> as measured by the respective test parameter.</p>
      <h5 id="transformation-detect-optimalParameters">Optimal Transformation Parameters</h5>
      <p>The parameters, which belong to the optimal <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">transformations</a>.</p>
-     
+
     <div class="horizontalgap"></div>
     <h2 id="transformation-mutate">Transformation Mutate</h2>
     <p>Performes a <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">data transformation</a> and provides multiple <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">statistical hypothesis tests</a> for <a href="https://en.wikipedia.org/wiki/Normal_distribution">normality</a> (<a href="https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test">Shapiro-Wilk test</a>, <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test">Kolmogorov-Smirnov test</a>, <a href="https://en.wikipedia.org/wiki/Anderson%E2%80%93Darling_test">Anderson-Darling test</a>). Data are further <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed, before passed to the next analysis step.</p>
@@ -208,7 +208,7 @@
      <p>List of results of all <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">statistical hypothesis tests</a> performed against <a href="https://en.wikipedia.org/wiki/Normal_distribution">normal distribution</a> of all <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">transformed</a> attributes.</p>
      <h5 id="transformation-mutate-globalData">Transfromed Data</h5>
      <p>The normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set that is passed to further analysis.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="imputation-detect">Imputation Detect</h2>
     <p>Detect imputation sites and explore theri distribution throughout the data set.</p>
@@ -220,7 +220,7 @@
     <p>A list of all candidates that have missing values in at least one attribute.</p>
     <h5 id="imputation-detect-data">Imputation Site Data</h5>
     <p>The normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set that is passed to further analysis.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="imputation-mutate">Imputation Mutate</h2>
     <p>Replace missing values with substitutes by classical and AI-powerd <a href="https://en.wikipedia.org/wiki/Imputation_(statistics)">imputation</a> algorithms.</p>
@@ -230,15 +230,15 @@
     <p>Resets parameters so that they match those of performed processing routine.</p>
     <h5 id="impute-mutate-method">Mutation Method</h5>
     <p>Select an <a href="https://en.wikipedia.org/wiki/Imputation_(statistics)">imputation</a> algorithm:
-    <a href="https://en.wikipedia.org/wiki/Median">median</a>, 
-    <a href="https://en.wikipedia.org/wiki/Arithmetic_mean">mean</a>, 
-    <a href="https://en.wikipedia.org/wiki/Expected_value">mu</a>, 
-    <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">mc</a>, 
-    <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">knn</a>, 
-    <a href="https://en.wikipedia.org/wiki/Predictive_mean_matching">pmm</a>, 
-    <a href="https://en.wikipedia.org/wiki/Predictive_analytics#Classification_and_regression_trees_.28CART.29">CART</a>, 
-    <a href="https://en.wikipedia.org/wiki/Random_forest">rf</a>, 
-    <a href="https://www.researchgate.net/publication/33051395_Induction_of_model_trees_for_predicting_continuous_classes">M5P</a>, 
+    <a href="https://en.wikipedia.org/wiki/Median">median</a>,
+    <a href="https://en.wikipedia.org/wiki/Arithmetic_mean">mean</a>,
+    <a href="https://en.wikipedia.org/wiki/Expected_value">mu</a>,
+    <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">mc</a>,
+    <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">knn</a>,
+    <a href="https://en.wikipedia.org/wiki/Predictive_mean_matching">pmm</a>,
+    <a href="https://en.wikipedia.org/wiki/Predictive_analytics#Classification_and_regression_trees_.28CART.29">CART</a>,
+    <a href="https://en.wikipedia.org/wiki/Random_forest">rf</a>,
+    <a href="https://www.researchgate.net/publication/33051395_Induction_of_model_trees_for_predicting_continuous_classes">M5P</a>,
     <a href="https://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf">amelia</a>,
     <a href="https://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf">amelia_bound</a>.
     </p>
@@ -256,7 +256,7 @@
     <p>List of all candidates with substituted imputation sites.</p>
     <h5 id="impute-mutate-data">Imputation Site Data</h5>
     <p>The normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set with substituted imputation sites that is passed to further analysis.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="outliers-detect">Outliers Detect</h2>
     <p>Performes <a href="https://en.wikipedia.org/wiki/Grubbs%27s_test_for_outliers">Grubb's test for outliers</a> to detect outliers in the normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set.</p>
@@ -270,7 +270,7 @@
     <p>Detailed list of candidtates with at least one outlier.</p>
     <h5 id="outliers-detect-data">Outlier Data</h5>
     <p>The normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set with substituted imputation sites that is passed to further analysis.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="outliers-mutate">Outliers Mutate</h2>
     <p>Replace missing values with substitutes by classical and AI-powerd substitution algorithms. For this purpose outliers are handled as imputation sites.</p>
@@ -280,15 +280,15 @@
     <p>Resets parameters so that they match those of performed processing routine.</p>
     <h5 id="outliers-mutate-method">Mutation Method</h5>
     <p>Select an <a href="https://en.wikipedia.org/wiki/Imputation_(statistics)">imputation</a> algorithm:
-    <a href="https://en.wikipedia.org/wiki/Median">median</a>, 
-    <a href="https://en.wikipedia.org/wiki/Arithmetic_mean">mean</a>, 
-    <a href="https://en.wikipedia.org/wiki/Expected_value">mu</a>, 
-    <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">mc</a>, 
-    <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">knn</a>, 
-    <a href="https://en.wikipedia.org/wiki/Predictive_mean_matching">pmm</a>, 
-    <a href="https://en.wikipedia.org/wiki/Predictive_analytics#Classification_and_regression_trees_.28CART.29">CART</a>, 
-    <a href="https://en.wikipedia.org/wiki/Random_forest">rf</a>, 
-    <a href="https://www.researchgate.net/publication/33051395_Induction_of_model_trees_for_predicting_continuous_classes">M5P</a>, 
+    <a href="https://en.wikipedia.org/wiki/Median">median</a>,
+    <a href="https://en.wikipedia.org/wiki/Arithmetic_mean">mean</a>,
+    <a href="https://en.wikipedia.org/wiki/Expected_value">mu</a>,
+    <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">mc</a>,
+    <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">knn</a>,
+    <a href="https://en.wikipedia.org/wiki/Predictive_mean_matching">pmm</a>,
+    <a href="https://en.wikipedia.org/wiki/Predictive_analytics#Classification_and_regression_trees_.28CART.29">CART</a>,
+    <a href="https://en.wikipedia.org/wiki/Random_forest">rf</a>,
+    <a href="https://www.researchgate.net/publication/33051395_Induction_of_model_trees_for_predicting_continuous_classes">M5P</a>,
     <a href="https://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf">amelia</a>,
     <a href="https://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf">amelia_bound</a>.
     </p>
@@ -306,7 +306,7 @@
     <p>List of all candidates with substituted imputation sites.</p>
     <h5 id="outliers-mutate-data">Outlier Mutated Data</h5>
     <p>The normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set with substituted imputation sites and substituted outliers that is passed to further analysis.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="analysis-correlation">Analysis Correlation</h2>
     <p>Performes a <a href="https://en.wikipedia.org/wiki/Correlation_and_dependence">correlation</a> analysis on the cleaned,  normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set.</p>
@@ -318,7 +318,7 @@
     <p>Matrices comprising the pair wise <a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient">Spearman's rank correlation coefficients</a> and the respective p-value.</p>
     <h5 id="correlation-kendall">Kendall</h5>
     <p>Matrices comprising the pair wise <a href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">Kendall's rank correlation coefficients</a> and the respective p-value.</p>
-    
+
     <div class="horizontalgap"></div>
     <h2 id="analysis-regression">Analysis Regression</h2>
     <p>Performes <a href="https://en.wikipedia.org/wiki/Linear_regression">linear regression</a> analysis (To be more precise a <a href="https://en.wikipedia.org/wiki/Robust_regression">robust regression</a>) on the cleaned,  normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set</p>
@@ -334,17 +334,17 @@
      <p>Matrices comprising the pair wise intercepts of the regression models and their respective p-values.</p>
      <h5 id="regression-slope">Slope</h5>
      <p>Matrices comprising the pair wise slope of the regression models and their respective p-values.</p>
-    
-    
+
+
     <div class="horizontalgap"></div>
     <h2 id="export">Export</h2>
     <p>Exports the analysis results in Excel format</p>
     <h5 id=""></h5>
     <p>Perfomres the download. The option is only available if a normalized and <a href="https://en.wikipedia.org/wiki/Standard_score">Z-score</a> transfromed data set with substituted imputation sites and substituted outliers is present.</p>
-    
+
     <div class="horizontalgap"></div>
   </div>
-  
+
   <div class="col-2"></div>
 </div>
 

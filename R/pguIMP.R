@@ -1,25 +1,29 @@
 #' @title main
 #' @description Run shiny based gui of pguIMP.
 #'
-#' @examples
-#' pguIMP::main()
+#' @return shiny application object
 #'
 #' @import shiny
+#'
+#' @include dLogLikelihood.R
+#' @include sLogLikelihood.R
+#' @include transposeTibble.R
+#' @include normalDistribution.R
+#'
+#' @examples
+#' pguIMP::IMPgui()
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
 #' @export
 #'
 
-
-# source(file = "R/pguGlobals.R", local=TRUE)
-
-main <- function() {
-  appDir <- system.file("gui", package = "pguIMP")
+IMPgui <- function() {
+  appDir <- system.file("application", package = "pguIMP")
   if (appDir == "") {
-    stop("Could not find gui directory. Try re-installing `pguIMP`.", call. = FALSE)
+    stop("Could not find application. Try re-installing `pguIMP`.", call. = FALSE)
   }
-  shiny::runApp("gui", launch.browser=TRUE)
+  appDir %>%
+  shiny::shinyAppDir() %>%
+    shiny::runApp(launch.browser = TRUE)
 }
-
-# main()

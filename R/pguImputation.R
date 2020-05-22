@@ -878,7 +878,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' x$featureBarPlot() %>%
                                  #'  show()
                                  featureBarPlot = function(data = "tbl_df", feature = "character"){
-                                   feature <- sym(feature)
+                                   feature <- dplyr::sym(feature)
                                    p <- data %>%
                                      ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
                                      ggplot2::geom_bar(stat = "bin")
@@ -931,7 +931,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                                     legend.key = ggplot2::element_blank(),
                                                     legend.background = ggplot2::element_blank())
 
-                                   limits1 <- layer_scales(p1)$y$range$range
+                                   limits1 <- ggplot2::layer_scales(p1)$y$range$range
 
                                    p2 <- self$featureBarPlot(data, feature)
 

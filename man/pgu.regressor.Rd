@@ -755,7 +755,7 @@ and creates a composite graph based on their results.
 }
 \subsection{Returns}{
 A composite graph.
-(ggplot2::ggplot)
+(gridExtra::grid.arrange)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

@@ -1,6 +1,15 @@
-library(shiny)
-library(shinydashboard)
-library(shinyjs)
+#' Shiny app server object
+#'
+#' @import shiny
+#' @import shinydashboard
+#' @import shinyjs
+#'
+#' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
+#'
+#' @export
+#'
+
+# create the shiny application user interface sidebar.
 
 sidebar <- shinydashboard::dashboardSidebar(
   shinydashboard::sidebarMenu(
@@ -75,6 +84,6 @@ sidebar <- shinydashboard::dashboardSidebar(
                                labe = h5('Download')
                              )
     )
-    
+
   )
 )

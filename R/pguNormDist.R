@@ -22,6 +22,8 @@
 #' @import nortest
 #'
 #' @include dLogLikelihood.R
+#' @include sLogLikelihood.R
+#' @include normalDistribution.R
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -328,22 +330,22 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                    estMu <- mean(self$rawData[["x"]], na.rm=TRUE)
                                    estSigma <- sd(self$rawData[["x"]], na.rm=TRUE)
                                    fit<-tryCatch({
-                                     bbmle::mle2(x ~ pguIMP::dLogLikelihood(mu=mu, sigma=sigma), start = list(mu=estMu, sigma=estSigma), data=self$rawData)
+                                     bbmle::mle2(x ~ dLogLikelihood(mu=mu, sigma=sigma), start = list(mu=estMu, sigma=estSigma), data=self$rawData)
                                    },
                                    error = function(e) {
                                      self$resetFail()
-                                     errorMesage <- sprintf("\nWarning in pgu.normDist during maximum likelihood optimization:\n%s", e)
+                                     errorMesage <- sprintf("\nError in pgu.normDist during maximum likelihood optimization:\n%s", e)
                                      cat(errorMesage)
                                      return(NA)
                                    })#tryCatch
                                    if(isS4(fit)){
-                                     private$.rawData["residuals"] <- residuals(fit)
+                                     private$.rawData["residuals"] <- bbmle::residuals(fit)
                                      private$.expMu <- fit@coef[1]
                                      private$.expSigma <- fit@coef[2]
                                      ll <- bbmle::logLik(fit)
                                      private$.logLikelihood <- ll[1]
                                      private$.degOfFreedom <- attr(ll, "df")
-                                     private$.bic <- BIC(fit)
+                                     private$.bic <- stats::BIC(fit)
                                      private$.aic <- bbmle::AIC(fit)
                                      private$.aicc <- bbmle::AICc(fit)
                                      private$.fitSuccess <- TRUE
@@ -356,8 +358,8 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @examples
                                  #' x$createHistogram()
                                  createHistogram = function(){
-                                   rawHist <- ggplot_build(ggplot2::ggplot(data = self$rawData, mapping = ggplot2::aes_string(x="x"))+
-                                                             ggplot2::geom_histogram(aes(y=..density..))
+                                   rawHist <- ggplot2::ggplot_build(ggplot2::ggplot(data = self$rawData, mapping = ggplot2::aes_string(x="x"))+
+                                                             ggplot2::geom_histogram(ggplot2::aes(y=..density..))
                                    )
                                    d <- tibble::tibble(x = rawHist$data[[1]]$x,
                                                        y_data =rawHist$data[[1]]$y)

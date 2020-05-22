@@ -12,7 +12,7 @@
 #'
 #' @import R6
 #' @import tidyverse
-#' @import grid
+#' @import gridExtra
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -86,9 +86,12 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' x <- pguIMP:pgu.explorer$new(data = y)
                           initialize = function(obj = "tbl_df") {
                             if(class(obj) != "tbl_df"){
-                              obj <- tibble::tibble(!!("Sample Name") <- c("none"),
-                                                     values <- c(NA)
-                                                     )
+                              # obj <- tibble::tibble(!!("Sample Name") <- c("none"),
+                              #                        values <- c(NA)
+                              #                        )
+                              obj <- tibble::tibble(`Sample Name` <- c("none"),
+                                                    values <- c(NA)
+                              )
                             }#if
                             self$setRawData <- obj
                             self$setAbscissa <- "Sample Name"
@@ -243,7 +246,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                             p <- NULL
                             if(self$abscissaIsNumeric()){
                               p1 <- self$abscissaBoxPlot()
-                              limits <- layer_scales(p1)$y$range$range
+                              limits <- ggplot2::layer_scales(p1)$y$range$range
                               p2 <- self$abscissaBarPlot() +
                                 ggplot2::scale_x_continuous(position = "top", limits=limits) +
                                 ggplot2::coord_flip()
@@ -303,7 +306,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                             p <- NULL
                             if(self$ordinateIsNumeric()){
                               p1 <- self$ordinateBoxPlot()
-                              limits <- layer_scales(p1)$y$range$range
+                              limits <- ggplot2::layer_scales(p1)$y$range$range
                               p2 <- self$ordinateBarPlot() +
                                 ggplot2::scale_x_continuous(position = "top", limits=limits) +
                                 ggplot2::coord_flip()

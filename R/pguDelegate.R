@@ -1820,7 +1820,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateFeatureParameter <- DT::renderDataTable(
                                   self$model$fitResultFeature(feature = input$si.trafoMutateFeature) %>%
-                                    transformTibble() %>%
+                                    pguIMP::transposeTibble() %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -1857,7 +1857,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateFeatureQuality <- DT::renderDataTable(
                                   self$model$testResultFeature(feature = input$si.trafoMutateFeature) %>%
-                                    transformTibble() %>%
+                                    pguIMP::transposeTibble() %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",

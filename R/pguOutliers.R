@@ -1055,7 +1055,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                  #' x$featureBarPlot() %>%
                                  #'  show()
                                  featureBarPlot = function(data = "tbl_df", feature = "character"){
-                                   feature <- sym(feature)
+                                   feature <- dplyr::sym(feature)
                                    p <- data %>%
                                      ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
                                      ggplot2::geom_bar(stat = "bin")

@@ -140,16 +140,3 @@ pgu.status <- R6::R6Class("pgu.status",
                           }
                         ) #public
 )#R6Class
-
-
-
-
-main <- function(){
-  status <- pgu.status$new()
-  status$update(processName = "correlated", value = TRUE)
-  print(status)
-  status$query(processName = "correlated") %>%
-    print()
-}
-
-main()

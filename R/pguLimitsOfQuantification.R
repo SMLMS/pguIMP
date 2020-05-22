@@ -14,7 +14,7 @@
 #' @import tidyverse
 #' @import pracma
 #' @import DT
-#' @import grid
+#' @import gridExtra
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

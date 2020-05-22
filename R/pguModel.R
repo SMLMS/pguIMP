@@ -565,10 +565,10 @@ pgu.model <- R6::R6Class("pgu.model",
                                    idx <- self$featureIdx(feature)
                                    model <- self$modelList[[idx]]
                                    p1 <- model$plotHistogram()
-                                   xLimits <- layer_scales(p1)$x$range$range
+                                   xLimits <- ggplot2::layer_scales(p1)$x$range$range
                                    p2 <- model$plotResiduals() +
                                      ggplot2::scale_x_continuous(position = "bottom", limits=xLimits)
-                                   yLimits <- layer_scales(p2)$y$range$range
+                                   yLimits <- ggplot2::layer_scales(p2)$y$range$range
                                    p3 <- model$plotResidualDist() +
                                      ggplot2::coord_flip() +
                                      ggplot2::scale_x_continuous(position = "bottom", limits=yLimits)

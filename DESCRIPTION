@@ -18,49 +18,48 @@ BugReports: https://github.com/SMLMS/pguIMP/issues
 Imports:
     shiny (>= 1.4.0.2),
     R6 (>= 2.4.1),
-    tidyverse,
-    writexl,
-    tools,
-    stats,
-    robust,
+    Amelia,
+    DMwR,
     DT,
-    gridExtra
+    MASS,
+    RWeka,
+    VIM,
+    bbmle,
+    grid,
+    gridExtra,
+    mice,
+    nortest,
+    outliers,
+    pracma,
+    psych,
+    rcompanion,
+    robust,
+    shinydashboard,
+    shinyjs,
+    stats,
+    tidyverse,
+    tools,
+    writexl
 Collate: 
     'dLogLikelihood.R'
     'normalDistribution.R'
     'pguCorrelator.R'
-    'pguData.R'
-    'pguDelegate.R'
-    'pguExplorer.R'
-    'pguExporter.R'
     'pguFile.R'
-    'pguFilter.R'
-    'pguIMP.R'
-    'pguImporter.R'
-    'pguImputation.R'
-    'pguLimitsOfQuantification.R'
-    'pguModel.R'
-    'pguNormDist.R'
-    'pguOptimizer.R'
-    'pguOutliers.R'
+    'pguData.R'
+    'pguExporter.R'
     'pguRegressor.R'
-    'pguStatus.R'
-    'pguTransformator.R'
+    'pguOutliers.R'
+    'pguImputation.R'
     'sLogLikelihood.R'
-    'transposeTibble.R'
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    'pguNormDist.R'
+    'pguModel.R'
+    'pguTransformator.R'
+    'pguOptimizer.R'
+    'pguExplorer.R'
+    'pguFilter.R'
+    'pguLimitsOfQuantification.R'
+    'pguImporter.R'
     'pguStatus.R'
     'pguDelegate.R'
-    
-    'sLogLikelihood.R'
     'transposeTibble.R'
+    'pguImp.R'
