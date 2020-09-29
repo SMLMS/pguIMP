@@ -276,9 +276,11 @@ server <- function(input, output, session) {
   shiny::observe({
     if (analysisFinished()) {
       shinyjs::enable("dbExport")
+      shinyjs::enable("dbReport")
     }
     else {
       shinyjs::disable("dbExport")
+      shinyjs::disable("dbReport")
     }
   })
 
@@ -288,6 +290,15 @@ server <- function(input, output, session) {
     },
     content = function(file){
       delegate$exportData(file)
+    }
+  )
+
+  output$dbReport <- shiny::downloadHandler(
+    filename = function(){
+      delegate$reportFileName(input, output, session)
+    },
+    content = function(file){
+      delegate$writeReport(file)
     }
   )
 

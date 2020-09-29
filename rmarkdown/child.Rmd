@@ -1,0 +1,23 @@
+---
+title: "Individual Species"
+author: 'Sebastian Malkusch'
+date: "February 7, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+---
+```{r, echo=FALSE}
+figure_caption <- sprintf("\\label{fig:%s}Distribution of %s",name[1], name[1])
+
+```
+
+## Analysis of `r sprintf("%s", name[1])`
+A lot of stuff to write.
+
+```{r echo=FALSE, results='asis', fig.width=5,fig.height=5,fig.cap=figure_caption}
+params$df %>%
+  dplyr::select(tidyselect::all_of(name)) %>%
+  plot()
+```
+
+in Figure `r sprintf("\\ref{fig:%s}", name[1])` we see examples of plotting in R.

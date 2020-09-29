@@ -65,7 +65,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .cleanedData = "pgu.data",
                             .correlator = "pgu.correlator",
                             .regressor = "pgu.regressor",
-                            .exporter = "pgu.exporter"
+                            .exporter = "pgu.exporter",
+                            .reporter = "pgu.reporter"
                           ),
                           ##################
                           # accessor methods
@@ -214,7 +215,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' (pguIMP::pgu.exporter)
                             exporter = function(){
                               return(private$.exporter)
-                            }
+                            },
+                            #' @field reporter
+                            #' Returns the instance variable reporter
+                            #' (pguIMP::pgu.reporter)
+                            reporter = function(){
+                              return(private$.reporter)
+                            },
                           ),
                           ###################
                           # memory management
@@ -257,6 +264,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.correlator <- pgu.correlator$new()
                               private$.regressor <- pgu.regressor$new()
                               private$.exporter <- pgu.exporter$new()
+                              private$.reporter <- pgu.reporter$new()
+
                             }, #function
 
                             #' @description
@@ -303,6 +312,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$correlator)
                               print(self$regressor)
                               print(self$exporter)
+                              print(self$reporter)
                               invisible(self)
                             }, #fucntion
                             ####################
@@ -3760,7 +3770,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' y <- x$exportFileName(input, output, session)
                             exportFileName = function(input, output, session){
-                              private$.fileName$setSuffix <- "xlsx"
+                              private$.fileName$setSuffix <- "pdf"
                               private$.fileName$updateTimeString()
                               private$.fileName$exportFileName() %>%
                                 return()
@@ -3802,6 +3812,43 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   self$exporter$writeDataToExcel()
                               }#if
                             }, #function
+
+                            #############################
+                            # analysis report functions #
+                            #############################
+                            #' @description
+                            #' Creates and returns a report filename.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @return
+                            #' export filename
+                            #' (character)
+                            #' @examples
+                            #' y <- x$reportFileName(input, output, session)
+                            reportFileName = function(input, output, session){
+                              private$.fileName$setSuffix <- "xlsx"
+                              private$.fileName$updateTimeString()
+                              private$.fileName$exportFileName() %>%
+                                return()
+                            }, #function
+                            #' @description
+                            #' Exports a report on the pguIMP analysis
+                            #' in pdf format.
+                            #' @param file
+                            #' export filename
+                            #' (character)
+                            #' @examples
+                            #' x$write_report(file="report.pdf")
+                            write_report = function(file){
+                              if(self$status$query(processName = "outliersMutated")){
+                                private$.reporter$setFilename <- file
+                                self$reporter$write_report()
+                              }#if
+                            },#function
 
                             ###################################
                             # update graphical user interface #

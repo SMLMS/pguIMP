@@ -83,6 +83,16 @@ sidebar <- shinydashboard::dashboardSidebar(
                                width = "100%",
                                labe = h5('Download')
                              )
+    ),
+    shinydashboard::menuItem("Report",
+                             # tabName = "tab_report",
+                             icon = shiny::icon("file-pdf"),
+                             shinyjs::useShinyjs(),
+                             shiny::downloadButton(
+                               'dbReport',
+                               width = "100%",
+                               labe = h5('Download')
+                             )
     )
 
   )

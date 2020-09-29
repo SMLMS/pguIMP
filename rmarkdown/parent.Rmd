@@ -1,0 +1,52 @@
+---
+output:
+  pdf_document:
+    includes:
+      in_header: tex/header.tex
+      before_body: tex/title_page.tex
+    toc: TRUE
+    number_sections: TRUE
+    fig_caption: TRUE
+    keep_md: FALSE
+    toc_depth: 2
+    
+params:
+ df: !r tibble::tibble
+---
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
+```
+```{r echo=FALSE, eval=TRUE, include=FALSE}
+pagebreak <- function() {
+  if(knitr::is_latex_output())
+    return("\\newpage")
+  else
+    return('<div style="page-break-before: always;" />')
+}
+```
+
+
+\newpage
+# Methods
+Some info.
+
+```{r echo=FALSE, eval=TRUE, include=FALSE}
+out <- NULL
+for (name in colnames(params$df))
+{
+  env=new.env()
+  out <- c(out, knitr::knit_child('child.Rmd', envir=env))
+  pagebreak()
+}
+```
+`r paste(out, collapse='\n')`
+
+```{r echo=FALSE, eval=TRUE}
+params$df %>%
+  knitr::kable(caption = "The famous iris data set")
+
+```
