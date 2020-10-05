@@ -57,7 +57,7 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                             public = list(
                               #' @description
                               #' Creates and returns a new `pgu.reporter` object.
-                              #' @param
+                              #' @param name
                               #' Filename of the report pdf.
                               #' (character)
                               #' @return
@@ -93,10 +93,38 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                               ##################
                               # render functions
                               ##################
-                              write_report = function(){
-                                rmarkdown::render(input = "parent.Rmd",
+                              #' @description
+                              #' Writes a report of the pguIMP analysis to a pdf file.
+                              #' @param obj
+                              #' A list of class objects that are passed to the rmarkdown script.
+                              #' @return
+                              #' t.b.a.
+                              #' @examples
+                              #' x$write_report(obj)
+                              write_report = function(obj){
+                                report_dir <- tempdir()
+                                print("report dir")
+                                print(report_dir)
+
+                                report_file <- system.file("inst", "rmarkdown", "report.Rmd", package = "pguIMP")
+                                header_file <- system.file("inst", "rmarkdown", "header.tex", package = "pguIMP")
+                                impressum_file <- system.file("inst", "rmarkdown", "impressum.tex", package = "pguIMP")
+                                title_file <- system.file("inst", "rmarkdown", "title_page.tex", package = "pguIMP")
+
+                                report_file_tmp <- file.path(report_dir, "report.Rmd")
+                                header_file_tmp <- file.path(report_dir, "header.tex")
+                                impressum_file_tmp <- file.path(report_dir, "impressum.tex")
+                                title_file_tmp <- file.path(report_dir, "title_page.tex")
+
+                                file.copy(report_file, report_file_tmp, overwrite = TRUE)
+                                file.copy(header_file, header_file_tmp, overwrite = TRUE)
+                                file.copy(impressum_file, impressum_file_tmp, overwrite = TRUE)
+                                file.copy(title_file, title_file_tmp, overwrite = TRUE)
+
+                                rmarkdown::render(report_file_tmp,
                                                   output_format = "pdf_document",
                                                   output_file = self$filename,
+                                                  params = obj,
                                                   clean = TRUE)
                               }
                             )

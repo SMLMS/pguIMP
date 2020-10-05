@@ -12,7 +12,7 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 URL: https://github.com/SMLMS/pguIMP
 BugReports: https://github.com/SMLMS/pguIMP/issues
 Imports:
@@ -41,12 +41,16 @@ Imports:
     tools,
     writexl
 Collate:
-    'pguIMP.R'
     'dLogLikelihood.R'
     'normalDistribution.R'
     'pguCorrelator.R'
     'pguFile.R'
     'pguData.R'
+    'pguFilter.R'
+    'pguLimitsOfQuantification.R'
+    'pguImporter.R'
+    'pguStatus.R'
+    'pguReporter.R'
     'pguExporter.R'
     'pguRegressor.R'
     'pguOutliers.R'
@@ -57,9 +61,6 @@ Collate:
     'pguTransformator.R'
     'pguOptimizer.R'
     'pguExplorer.R'
-    'pguFilter.R'
-    'pguLimitsOfQuantification.R'
-    'pguImporter.R'
-    'pguStatus.R'
     'pguDelegate.R'
     'transposeTibble.R'
+    'pguIMP.R'

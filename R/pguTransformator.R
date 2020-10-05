@@ -283,9 +283,14 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' idx <- x$addConstGenerator(value = -0.5)
                                  addConstGenerator =  function(value = "numeric"){
                                    c <- 0.0
-                                   if (value <= 0.0){
-                                     c <- (-1.0 * value) + .Machine$double.xmin
+                                   # if (value <= 0.0){
+                                   #   c <- (-1.0 * value) + .Machine$double.xmin
+                                   if (value < 0.0){
+                                     c <- (-1.0 * value) + 1
                                    }#if
+                                   else if(dplyr::near(0.0, value)){
+                                     c <- value + 1
+                                   }#else if
                                    return(c)
                                  }, #function
                                  ####################

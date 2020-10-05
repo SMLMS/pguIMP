@@ -694,6 +694,18 @@ y <- x$exportFileName(input, output, session)
 x$exportData(file="result.xlsx")
 
 ## ------------------------------------------------
+## Method `pgu.delegate$reportFileName`
+## ------------------------------------------------
+
+y <- x$reportFileName(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$writeReport`
+## ------------------------------------------------
+
+x$write_report(file="report.pdf")
+
+## ------------------------------------------------
 ## Method `pgu.delegate$hideOutdatedResults`
 ## ------------------------------------------------
 
@@ -776,6 +788,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 
 \item{\code{exporter}}{Returns the instance variable exporter
 (pguIMP::pgu.exporter)}
+
+\item{\code{reporter}}{Returns the instance variable reporter
+(pguIMP::pgu.reporter)}
 }
 \if{html}{\out{</div>}}
 }
@@ -895,6 +910,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateFilterMissingsTbl}{\code{pgu.delegate$updateFilterMissingsTbl()}}
 \item \href{#method-exportFileName}{\code{pgu.delegate$exportFileName()}}
 \item \href{#method-exportData}{\code{pgu.delegate$exportData()}}
+\item \href{#method-reportFileName}{\code{pgu.delegate$reportFileName()}}
+\item \href{#method-writeReport}{\code{pgu.delegate$writeReport()}}
 \item \href{#method-hideOutdatedResults}{\code{pgu.delegate$hideOutdatedResults()}}
 \item \href{#method-clone}{\code{pgu.delegate$clone()}}
 }
@@ -4177,6 +4194,66 @@ Exports the pguIMP analysis results
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$exportData(file="result.xlsx")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reportFileName"></a>}}
+\if{latex}{\out{\hypertarget{method-reportFileName}{}}}
+\subsection{Method \code{reportFileName()}}{
+Creates and returns a report filename.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$reportFileName(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+export filename
+(character)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{y <- x$reportFileName(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-writeReport"></a>}}
+\if{latex}{\out{\hypertarget{method-writeReport}{}}}
+\subsection{Method \code{writeReport()}}{
+Exports a report on the pguIMP analysis
+in pdf format.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$writeReport(file)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{file}}{export filename
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$write_report(file="report.pdf")
 }
 \if{html}{\out{</div>}}
 

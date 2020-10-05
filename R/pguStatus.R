@@ -100,7 +100,7 @@ pgu.status <- R6::R6Class("pgu.status",
                           reset = function(){
                             private$.processAlphabet <- c("dataUploaded", "dataImported", "loqImported", "metadataImported", "dataFiltered",
                                                           "loqDetected", "loqMutated", "modelOptimized", "modelDefined", "naDetected",
-                                                          "naMutated", "outliersDetected", "outliersMutated", "correlated", "regression")
+                                                          "outliersDetected", "imputed", "correlated", "regression")
                             private$.processStatus <- c(rep(FALSE, length(self$processAlphabet)))
                           },
                           #' @description

@@ -31,6 +31,7 @@
 #' @include pguCorrelator.R
 #' @include pguRegressor.R
 #' @include pguExporter.R
+#' @include pguReporter.R
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -221,8 +222,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' (pguIMP::pgu.reporter)
                             reporter = function(){
                               return(private$.reporter)
-                            },
-                          ),
+                            }
+                          ),#acessors
                           ###################
                           # memory management
                           ###################
@@ -1612,7 +1613,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 shiny::updateSelectInput(session,
                                                          inputId = "si.trafoMutateType",
                                                          choices = self$transformator$trafoAlphabet,
-                                                         selected = self$transformator$trafoType(feature = self$loqMutatedData$numericFeatureNames[1])
+                                                         selected = self$transformator$trafoType(feature = input$si.trafoMutateFeature)
+                                                         # selected = self$transformator$trafoType(feature = self$loqMutatedData$numericFeatureNames[1])
                                 )
                               }#if
                             }, #function
@@ -1631,7 +1633,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateCheckboxInput(session,
                                                            inputId = "cb.trafoMutateMirror",
-                                                           value = self$transformator$mirrorLogic(feature = self$loqMutatedData$numericFeatureNames[1])
+                                                           value = self$transformator$mirrorLogic(feature = input$si.trafoMutateFeature)
+                                                           # value = self$transformator$mirrorLogic(feature = self$loqMutatedData$numericFeatureNames[1])
                                 )
                               }#if
                             }, #function
@@ -2518,13 +2521,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$outliersDetect(input, output, session)
                             outliersDetect = function(input, output, session){
-                              if(self$status$query(processName = "naMutated")){
+                              if(self$status$query(processName = "naDetected")){
                                 self$transformedData$numericData() %>%
                                   private$.outliers$resetOutliersParameter()
                                 private$.status$update(processName = "outliersDetected", value = TRUE)
                               }#if
                               else{
-                                shiny::showNotification(paste("No Na's imputed. Please run imputation of missings first."),type = "error", duration = 10)
+                                shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
                               }#else
                             }, #function
 
@@ -3770,7 +3773,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' y <- x$exportFileName(input, output, session)
                             exportFileName = function(input, output, session){
-                              private$.fileName$setSuffix <- "pdf"
+                              private$.fileName$setSuffix <- "xlsx"
                               private$.fileName$updateTimeString()
                               private$.fileName$exportFileName() %>%
                                 return()
@@ -3830,7 +3833,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' y <- x$reportFileName(input, output, session)
                             reportFileName = function(input, output, session){
-                              private$.fileName$setSuffix <- "xlsx"
+                              private$.fileName$setSuffix <- "pdf"
                               private$.fileName$updateTimeString()
                               private$.fileName$exportFileName() %>%
                                 return()
@@ -3843,10 +3846,29 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' (character)
                             #' @examples
                             #' x$write_report(file="report.pdf")
-                            write_report = function(file){
+                            writeReport = function(file){
                               if(self$status$query(processName = "outliersMutated")){
                                 private$.reporter$setFilename <- file
-                                self$reporter$write_report()
+                                analysis_parameter <- tibble::tibble(
+                                  parameter = c("value"),
+                                  loq_na_handling = c(self$loq$naHandlingAgent),
+                                  lloq_substitute = c(self$loq$lloqSubstituteAgent),
+                                  uloq_substitute = c(self$loq$uloqSubstituteAgent),
+                                  imputation_method = c(self$imputer$imputationAgent),
+                                  imputation_seed = c(self$imputer$seed),
+                                  imputation_iterations = c(self$imputer$iterations),
+                                  outlier_method = c(self$outliers$cleaningAgent),
+                                  outier_seed = c(self$outliers$seed),
+                                  outlier_iterations = c(self$outliers$iterations)
+                                )
+
+                                list(trafo_parameter = self$transformator$trafoParameter,
+                                     model_parameter = self$model$modelParameterData(),
+                                     model_quality = self$model$modelQualityData(),
+                                     model_statistics = self$model$testResultData(),
+                                     analysis_parameter = analysis_parameter
+                                ) %>%
+                                  self$reporter$write_report()
                               }#if
                             },#function
 
@@ -3918,19 +3940,19 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.imputeDetectDetail <- DT::renderDataTable(NULL)
                                 output$tbl.imputeDetectData <- DT::renderDataTable(NULL)
                               }#if
-                              if(!self$status$query(processName = "naMutated")){
-                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
-                                output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
-                                output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
-                                output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
-                              }#if
+                              # if(!self$status$query(processName = "naMutated")){
+                              #   output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
+                              #   output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
+                              #   output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
+                              #   output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
+                              # }#if
                               if(!self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
                                 output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
                                 output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
                               }#if
-                              if(!self$status$query(processName = "outliersMutated")){
+                              if(!self$status$query(processName = "imputed")){
                                 output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
                                 output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
                                 output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)

@@ -132,17 +132,17 @@ server <- function(input, output, session) {
     delegate$updateLoqMutateGui(input, output, session)
   })
 
-  shiny::observeEvent(input$ab.wizardOptimize, {
-    delegate$optimizeTrafoParameter(input, output, session)
-    delegate$updateDetectedTrafoTypes(input, output, session)
-    delegate$updateDetectedTrafoParameter(input, output, session)
-    delegate$hideOutdatedResults(input, output, session)
-    analysisFinished(FALSE)
-  })
-
-  shiny::observeEvent(input$ab.wizardReset, {
-    delegate$updateTrafoDetectGui(input, output, session)
-  })
+  # shiny::observeEvent(input$ab.wizardOptimize, {
+  #   delegate$optimizeTrafoParameter(input, output, session)
+  #   delegate$updateDetectedTrafoTypes(input, output, session)
+  #   delegate$updateDetectedTrafoParameter(input, output, session)
+  #   delegate$hideOutdatedResults(input, output, session)
+  #   analysisFinished(FALSE)
+  # })
+  #
+  # shiny::observeEvent(input$ab.wizardReset, {
+  #   delegate$updateTrafoDetectGui(input, output, session)
+  # })
 
   shiny::observeEvent(input$ab.trafoMutateSetGlobal, {
     delegate$trafoMutateGlobal(input, output, session)
@@ -176,6 +176,7 @@ server <- function(input, output, session) {
     delegate$updateTrafoMutateFeatureGraphic(input, output, session)
     delegate$updateTrafoMutateFeatureParameterTbl(input, output, session)
     delegate$updateTrafoMutateFeatureQualityTbl(input, output, session)
+    delegate$resetTrafoMutateGui(input,output, session)
   })
 
   shiny::observeEvent(input$ab.trafoMutateReset, {
@@ -193,25 +194,25 @@ server <- function(input, output, session) {
     analysisFinished(FALSE)
   })
 
-  shiny::observeEvent(input$ab.imputeMutateReset, {
-    delegate$updateImputeMutateGui(input, output, session)
-  })
-
-  shiny::observeEvent(input$ab.imputeMutate, {
-    delegate$imputeMutate(input, output, session)
-    delegate$updateImputeMutateSeed(input, output, session)
-    delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
-    delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
-    delegate$updateImputeMutateDetailTbl(input, output, session)
-    delegate$updateImputeMutateDataTbl(input, output, session)
-    delegate$hideOutdatedResults(input, output, session)
-    analysisFinished(FALSE)
-  })
-
-  shiny::observeEvent(input$si.imputeMutateFeature, {
-    delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
-    delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
-  })
+  # shiny::observeEvent(input$ab.imputeMutateReset, {
+  #   delegate$updateImputeMutateGui(input, output, session)
+  # })
+  #
+  # shiny::observeEvent(input$ab.imputeMutate, {
+  #   delegate$imputeMutate(input, output, session)
+  #   delegate$updateImputeMutateSeed(input, output, session)
+  #   delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
+  #   delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
+  #   delegate$updateImputeMutateDetailTbl(input, output, session)
+  #   delegate$updateImputeMutateDataTbl(input, output, session)
+  #   delegate$hideOutdatedResults(input, output, session)
+  #   analysisFinished(FALSE)
+  # })
+  #
+  # shiny::observeEvent(input$si.imputeMutateFeature, {
+  #   delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
+  #   delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
+  # })
 
   shiny::observeEvent(input$ab.outliersDetect, {
     delegate$outliersDetect(input, output, session)
@@ -224,20 +225,20 @@ server <- function(input, output, session) {
     analysisFinished(FALSE)
   })
 
-  shiny::observeEvent(input$ab.outliersMutate, {
-    delegate$outliersMutate(input, output, session)
-    delegate$updateOutliersMutateSeed(input, output, session)
-    delegate$updateOutliersMutateFeatureDetailGraphic(input, output, session)
-    delegate$updateOutliersMutateFeatureDetailTbl(input, output, session)
-    delegate$updateOutliersMutateDetailTbl(input, output, session)
-    delegate$updateOutliersMutateDataTbl(input, output, session)
-    delegate$hideOutdatedResults(input, output, session)
-    analysisFinished(TRUE)
-  })
-
-  shiny::observeEvent(input$ab.outliersMutateReset, {
-    delegate$updateOutliersMutateGui(input, output, session)
-  })
+  # shiny::observeEvent(input$ab.outliersMutate, {
+  #   delegate$outliersMutate(input, output, session)
+  #   delegate$updateOutliersMutateSeed(input, output, session)
+  #   delegate$updateOutliersMutateFeatureDetailGraphic(input, output, session)
+  #   delegate$updateOutliersMutateFeatureDetailTbl(input, output, session)
+  #   delegate$updateOutliersMutateDetailTbl(input, output, session)
+  #   delegate$updateOutliersMutateDataTbl(input, output, session)
+  #   delegate$hideOutdatedResults(input, output, session)
+  #   analysisFinished(TRUE)
+  # })
+  #
+  # shiny::observeEvent(input$ab.outliersMutateReset, {
+  #   delegate$updateOutliersMutateGui(input, output, session)
+  # })
 
   shiny::observeEvent(input$ab.correlation, {
     delegate$correlate(input, output, session)

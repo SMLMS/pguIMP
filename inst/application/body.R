@@ -417,7 +417,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::checkboxInput(
             "cb.trafoMutateMirror",
-            label = h5("Mirror Data"),
+            label = h5("Mirror"),
             value = FALSE
           ),
           shiny::hr(),
@@ -608,6 +608,11 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::h1("Detect Outliers"),
           shiny::br(),
           shiny::hr(),
+          shiny::checkboxInput(
+            "cb.trafoZTransform",
+            label = h5("Standardize"),
+            value = TRUE
+          ),
           shiny::actionButton(
             inputId = "ab.outliersDetect",
             label = "detect outlier",

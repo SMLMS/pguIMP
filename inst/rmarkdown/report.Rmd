@@ -1,0 +1,68 @@
+---
+header-includes:
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+output:
+  pdf_document:
+    includes:
+      in_header: header.tex
+      before_body: title_page.tex
+    toc: TRUE
+    number_sections: TRUE
+    fig_caption: TRUE
+    keep_md: FALSE
+    toc_depth: 2
+params:
+ trafo_parameter: !r tibble::tibble
+ model_parameter: !r tibble::tibble
+ model_quality: !r tibble::tibble
+ model_statistics: !r tibble::tibble
+ analysis_parameter: !r tibble::tibble
+---
+
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
+```
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+```{r echo=FALSE, eval=TRUE, include=FALSE}
+pagebreak <- function() {
+  if(knitr::is_latex_output())
+    return("\\newpage")
+  else
+    return('<div style="page-break-before: always;" />')
+}
+```
+
+
+\newpage
+# Data transformation
+## Data transformation parameter
+Information about the user-selected data transformation methods.
+```{r, message = FALSE, echo=FALSE, eval=TRUE}
+
+params$trafo_parameter %>%
+  knitr::kable(caption = "The famous iris data set")
+```
+
+## Modeling
+The transformed data are fitted to the model of a normal distribution (see eq. \@ref(eq:normal)).
+$$
+p\left(x | \mu, \sigma \right) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\left(\frac{\left(x-\mu \right)^2}{2\sigma^{2}} \right)}
+\label{eq:normal}
+$$
+Here, $\mu$ defines the expectation value, and $\mu$ defines the standard deviation of the model. The determined model parameters for the transformed data are listed below.
+
+```{r, message = FALSE, echo=FALSE, eval=TRUE}
+
+params$model_parameter %>%
+  knitr::kable(caption = "Model parameter of transformed data (mu := $\\mu$, sigma := $\\sigma$).")
+```
+
+
+
