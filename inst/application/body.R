@@ -480,6 +480,75 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
+
+  shinydashboard::tabItem(
+    tabName = "tab_normalize_impute",
+    shiny::fluidPage(
+      width = 12,
+      title = "Normalization",
+      shiny::fluidRow(
+        shiny::column(
+          width = menueColumnWidth,
+          shiny::h1("Normalization"),
+          shiny::br(),
+          shiny::br(),
+          selectInput(
+            "si.imputeNormMethod",
+            label = h5("Normalization Type"),
+            choices = list(),
+            selected = 1,
+            width = "100%"
+          ),
+          selectInput(
+            "si.imputeNormFeature",
+            label = h5("Feature"),
+            choices = list(),
+            selected = 1,
+            width = "100%"
+          ),
+          shiny::br(),
+          shiny::hr(),
+          shiny::actionButton(
+            inputId = "ab.imputeNormMutate",
+            label = "mutate",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::actionButton(
+            inputId = "ab.imputeNormReset",
+            label = "reset",
+            width = "100%"
+          )
+        ),
+        shiny::column(
+          width = dataColumnWidth,
+          shiny::fluidRow(
+            shiny::column(
+              width = 6,
+              h3("Feature Plot"),
+              shiny::plotOutput("plt.imputeNormFeature")
+            ),
+            shiny::column(
+              width = 6,
+              h3("Feature Statistics"),
+              DT::dataTableOutput("tbl.imputeNormFeatureStatistics")
+            )
+          ),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Model parameters"),
+          DT::dataTableOutput("tbl.imputeNormParameter"),
+          shiny::br(),
+          shiny::h3("Normalized data statistics"),
+          DT::dataTableOutput("tbl.imputeNormStatistics"),
+          shiny::br(),
+          shiny::h3("Normalized data"),
+          DT::dataTableOutput("tbl.imputeNormData")
+        )
+      )
+    )
+  ),
+
   shinydashboard::tabItem(
     tabName = "tab_detect_impute",
     shiny::fluidPage(
@@ -517,6 +586,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       )
     )
   ),
+
   shinydashboard::tabItem(
     tabName = "tab_mutate_impute",
     shiny::fluidPage(

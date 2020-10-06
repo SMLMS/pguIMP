@@ -55,6 +55,7 @@ Collate:
     'pguRegressor.R'
     'pguOutliers.R'
     'pguImputation.R'
+    'pguNormalizer.R'
     'sLogLikelihood.R'
     'pguNormDist.R'
     'pguModel.R'

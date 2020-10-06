@@ -55,7 +55,7 @@ sidebar <- shinydashboard::dashboardSidebar(
                                                          tabName = "tab_missings_impute"),
                              shinydashboard::menuSubItem("Detect outliers",
                                                          icon = shiny::icon("microscope"),
-                                                         tabName = "tab_detect_impute"),
+                                                         tabName = "tab_outliers_impute"),
                              shinydashboard::menuSubItem("Mutate",
                                                          icon = shiny::icon("dna"),
                                                          tabName = "tab_mutate_impute")

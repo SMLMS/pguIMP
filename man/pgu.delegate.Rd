@@ -358,6 +358,66 @@ x$updateTrafoMutateGlobalTestsTbl(input, output, session)
 x$updateTrafoMutateGlobalDataTbl(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormFeature`
+## ------------------------------------------------
+
+x$updateImputeNormFeature(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormMethod`
+## ------------------------------------------------
+
+x$updateImputeNormMethod(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormGui`
+## ------------------------------------------------
+
+x$updateImputeNormGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$imputeNormMutate`
+## ------------------------------------------------
+
+x$imputeNormMutate(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormFeatureGraphic`
+## ------------------------------------------------
+
+x$updateImputeNormFeatureGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$resetImputeNormGui`
+## ------------------------------------------------
+
+x$resetImputeNormGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormFeatureStatisticsTbl`
+## ------------------------------------------------
+
+x$uppdateImputeNormFeatureStatisticsTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormStatisticsTbl`
+## ------------------------------------------------
+
+x$uppdateImputeNormStatisticsTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormParameterTbl`
+## ------------------------------------------------
+
+x$updateImputeNormParameterTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeNormDataTbl`
+## ------------------------------------------------
+
+x$updateImputeNormDataTbl(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$imputeDetect`
 ## ------------------------------------------------
 
@@ -765,6 +825,12 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{featureModel}}{Returns the instance variable featureModel
 (pguIMP::pgu.normDist)}
 
+\item{\code{normalizer}}{Returns the instance variable normalizer
+(pguIMP::pgu.normalizer)}
+
+\item{\code{normalizedData}}{Returns the instance variable normalizedData
+(pguIMP::pgu.data)}
+
 \item{\code{imputer}}{Returns the instance variable imputer
 (pguIMP::pgu.imputation)}
 
@@ -854,6 +920,16 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateTrafoMutateGlobalQualityTbl}{\code{pgu.delegate$updateTrafoMutateGlobalQualityTbl()}}
 \item \href{#method-updateTrafoMutateGlobalTestsTbl}{\code{pgu.delegate$updateTrafoMutateGlobalTestsTbl()}}
 \item \href{#method-updateTrafoMutateGlobalDataTbl}{\code{pgu.delegate$updateTrafoMutateGlobalDataTbl()}}
+\item \href{#method-updateImputeNormFeature}{\code{pgu.delegate$updateImputeNormFeature()}}
+\item \href{#method-updateImputeNormMethod}{\code{pgu.delegate$updateImputeNormMethod()}}
+\item \href{#method-updateImputeNormGui}{\code{pgu.delegate$updateImputeNormGui()}}
+\item \href{#method-imputeNormMutate}{\code{pgu.delegate$imputeNormMutate()}}
+\item \href{#method-updateImputeNormFeatureGraphic}{\code{pgu.delegate$updateImputeNormFeatureGraphic()}}
+\item \href{#method-resetImputeNormGui}{\code{pgu.delegate$resetImputeNormGui()}}
+\item \href{#method-updateImputeNormFeatureStatisticsTbl}{\code{pgu.delegate$updateImputeNormFeatureStatisticsTbl()}}
+\item \href{#method-updateImputeNormStatisticsTbl}{\code{pgu.delegate$updateImputeNormStatisticsTbl()}}
+\item \href{#method-updateImputeNormParameterTbl}{\code{pgu.delegate$updateImputeNormParameterTbl()}}
+\item \href{#method-updateImputeNormDataTbl}{\code{pgu.delegate$updateImputeNormDataTbl()}}
 \item \href{#method-imputeDetect}{\code{pgu.delegate$imputeDetect()}}
 \item \href{#method-updateImputeDetectGraphic}{\code{pgu.delegate$updateImputeDetectGraphic()}}
 \item \href{#method-updateImputeDetectStatisticsTbl}{\code{pgu.delegate$updateImputeDetectStatisticsTbl()}}
@@ -2563,6 +2639,301 @@ Updates the tbl.trafoMutateGlobalData table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateTrafoMutateGlobalDataTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormFeature"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormFeature}{}}}
+\subsection{Method \code{updateImputeNormFeature()}}{
+Updates the si.imputeNormFeature shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeature(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormFeature(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormMethod"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormMethod}{}}}
+\subsection{Method \code{updateImputeNormMethod()}}{
+Updates the si.imputeNormMethod shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormMethod(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormMethod(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormGui"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormGui}{}}}
+\subsection{Method \code{updateImputeNormGui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-imputeNormMutate"></a>}}
+\if{latex}{\out{\hypertarget{method-imputeNormMutate}{}}}
+\subsection{Method \code{imputeNormMutate()}}{
+Calls the scale routine of the instance variable normalizer on the instance variable transformedData.
+Updates the instance class status.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeNormMutate(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$imputeNormMutate(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormFeatureGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormFeatureGraphic}{}}}
+\subsection{Method \code{updateImputeNormFeatureGraphic()}}{
+Updates the impute norm feature compound graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeatureGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormFeatureGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-resetImputeNormGui"></a>}}
+\if{latex}{\out{\hypertarget{method-resetImputeNormGui}{}}}
+\subsection{Method \code{resetImputeNormGui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$resetImputeNormGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$resetImputeNormGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormFeatureStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormFeatureStatisticsTbl}{}}}
+\subsection{Method \code{updateImputeNormFeatureStatisticsTbl()}}{
+Updates the numerical impute norm analysis table for a user defined feature.
+corresponding to the respective user defined attributes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$uppdateImputeNormFeatureStatisticsTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormStatisticsTbl}{}}}
+\subsection{Method \code{updateImputeNormStatisticsTbl()}}{
+Updates the numerical impute norm analysis table.
+corresponding to the respective user defined attributes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$uppdateImputeNormStatisticsTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormParameterTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormParameterTbl}{}}}
+\subsection{Method \code{updateImputeNormParameterTbl()}}{
+Updates the impute norm parameter table.
+corresponding to the respective user defined attributes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormParameterTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormParameterTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeNormDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeNormDataTbl}{}}}
+\subsection{Method \code{updateImputeNormDataTbl()}}{
+Updates the impute norm scaled data table.
+corresponding to the respective user defined attributes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormDataTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeNormDataTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

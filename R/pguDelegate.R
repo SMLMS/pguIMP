@@ -26,6 +26,7 @@
 #' @include pguTransformator.R
 #' @include pguModel.R
 #' @include pguNormDist.R
+#' @include pguNormalizer.R
 #' @include pguImputation.R
 #' @include pguOutliers.R
 #' @include pguCorrelator.R
@@ -59,6 +60,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .model = "pgu.model",
                             .transformedData = "pgu.data",
                             .featureModel = "pgu.normDist",
+                            .normalizer = "pgu.normalizer",
+                            .normalizedData = "pgu.data",
                             .imputer = "pgu.imputation",
                             .imputedData = "pgu.data",
                             .outliers = "pgu.outliers",
@@ -169,6 +172,18 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             featureModel = function(){
                               return(private$.featureModel)
                             },
+                            #' @field normalizer
+                            #' Returns the instance variable normalizer
+                            #' (pguIMP::pgu.normalizer)
+                            normalizer = function(){
+                              return(private$.normalizer)
+                            },
+                            #' @field normalizedData
+                            #' Returns the instance variable normalizedData
+                            #' (pguIMP::pgu.data)
+                            normalizedData = function(){
+                              return(private$.normalizedData)
+                            },
                             #' @field imputer
                             #' Returns the instance variable imputer
                             #' (pguIMP::pgu.imputation)
@@ -257,6 +272,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.model <- pgu.model$new()
                               private$.transformedData <- pgu.data$new()
                               private$.featureModel <- pgu.normDist$new()
+                              private$.normalizer <- pgu.normalizer$new()
+                              private$.normalizedData <- pgu.data$new()
                               private$.imputer <- pgu.imputation$new()
                               private$.imputedData <- pgu.data$new()
                               private$.outliers <- pgu.outliers$new()
@@ -305,6 +322,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$model)
                               print(self$transformedData)
                               print(self$featureModel)
+                              print(self$normalizer)
+                              print(self$normalizedData)
                               print(self$imputer)
                               print(self$imputedData)
                               print(self$outliers)
@@ -1707,7 +1726,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 name  <- as.name("Sample Name")
                                 private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
                                   self$transformator$mutateData() %>%
-                                  self$model$scaleData() %>%
+                                  # self$model$scaleData() %>%
                                   tibble::add_column(!! name := self$loqMutatedData$rawData %>%
                                                        dplyr::select(!!name) %>%
                                                        unlist() %>%
@@ -1786,7 +1805,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 name  <- as.name("Sample Name")
                                 private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
                                   self$transformator$mutateData() %>%
-                                  self$model$scaleData() %>%
+                                  # self$model$scaleData() %>%
                                   tibble::add_column(!! name := self$loqMutatedData$rawData %>%
                                                        dplyr::select(!!name) %>%
                                                        unlist() %>%
@@ -2073,6 +2092,282 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.trafoMutateGlobalData <- DT::renderDataTable(NULL)
                               }#else
                             }, #function
+
+                            ##############################
+                            # impute normalize functions #
+                            ##############################
+                            #' @description
+                            #' Updates the si.imputeNormFeature shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormFeature(input, output, session)
+                            updateImputeNormFeature = function(input, output, session){
+                              if(self$status$query(processName = "modelDefined")){
+                                shiny::updateSelectInput(session,
+                                                         "si.imputeNormFeature",
+                                                         choices = self$transformedData$numericFeatureNames,
+                                                         selected = self$transformedData$numericFeatureNames[1])
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the si.imputeNormMethod shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormMethod(input, output, session)
+                            updateImputeNormMethod = function(input, output, session){
+                              if(self$status$query(processName = "modelDefined")){
+                                shiny::updateSelectInput(session,
+                                                         "si.imputeNormMethod",
+                                                         choices = self$normalizer$normAgentAlphabet,
+                                                         selected = self$normalizer$normAgent
+                                )
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormGui(input, output, session)
+                            updateImputeNormGui = function(input, output, session){
+                              if(self$status$query(processName = "modelDefined")){
+                                self$updateImputeNormMethod(input, output, session)
+                                self$updateImputeNormFeature(input, output, session)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Calls the scale routine of the instance variable normalizer on the instance variable transformedData.
+                            #' Updates the instance class status.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$imputeNormMutate(input, output, session)
+                            imputeNormMutate = function(input, output, session){
+                              if(self$status$query(processName = "modelDefined")){
+                                private$.normalizer$setNormAgent <- input$si.imputeNormMethod
+
+                                self$transformedData$numericData() %>%
+                                  private$.normalizer$detectNormParameter()
+
+                                name  <- as.name("Sample Name")
+                                private$.normalizedData$setRawData <- self$transformedData$numericData() %>%
+                                  self$normalizer$scale_data() %>%
+                                  tibble::add_column(!! name := self$transformedData$rawData %>%
+                                                       dplyr::select(!!name) %>%
+                                                       unlist() %>%
+                                                       as.character()) %>%
+                                  dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
+                                private$.status$update(processName = "normalized", value = TRUE)
+                              }#if
+                              else{
+                                shiny::showNotification(paste("No transformation model selected. Please transfrom data first."),type = "error", duration = 10)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the impute norm feature compound graphic.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormFeatureGraphic(input, output, session)
+                            updateImputeNormFeatureGraphic = function(input, output, session){
+                              if(self$status$query(processName = "normalized")){
+                                output$plt.imputeNormFeature <- shiny::renderPlot(
+                                  self$normalizer$featurePlot(data_df = self$normalizedData$rawData, feature = input$si.imputeNormFeature),
+                                  height = 425
+                                )#output
+                              }#if
+                              else{
+                                output$plt.imputeNormFeature <- shiny::renderPlot(NULL)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$resetImputeNormGui(input, output, session)
+                            resetImputeNormGui = function(input, output, session){
+                              if(self$status$query(processName = "normalized")){
+                                self$updateImputeNormMethod(input, output, session)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the numerical impute norm analysis table for a user defined feature.
+                            #' corresponding to the respective user defined attributes.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$uppdateImputeNormFeatureStatisticsTbl(input, output, session)
+                            updateImputeNormFeatureStatisticsTbl = function(input, output, session){
+                              if(private$.status$query(processName = "normalized")){
+                                output$tbl.imputeNormFeatureStatistics <- DT::renderDataTable({
+                                  self$normalizedData$dataStatistics() %>%
+                                    dplyr::filter(Value == input$si.imputeNormFeature) %>%
+                                    dplyr::select_if(is.numeric) %>%
+                                    tidyr::pivot_longer(cols = dplyr::everything()) %>%
+                                    dplyr::rename(statistics = "name") %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.imputeNormFeatureStatistics <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the numerical impute norm analysis table.
+                            #' corresponding to the respective user defined attributes.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$uppdateImputeNormStatisticsTbl(input, output, session)
+                            updateImputeNormStatisticsTbl = function(input, output, session){
+                              if(private$.status$query(processName = "normalized")){
+                                output$tbl.imputeNormStatistics <- DT::renderDataTable({
+                                  self$normalizedData$dataStatistics() %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("normalized_statistics"),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.imputeNormStatistics <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the impute norm parameter table.
+                            #' corresponding to the respective user defined attributes.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormParameterTbl(input, output, session)
+                            updateImputeNormParameterTbl = function(input, output, session){
+                              if(private$.status$query(processName = "normalized")){
+                                output$tbl.imputeNormParameter <- DT::renderDataTable({
+                                  self$normalizer$normParameter %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("normalization_parameter"),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.imputeNormParameter <- DT::renderDataTable(NULL)
+                              }#else
+                            },#function
+
+                            #' @description
+                            #' Updates the impute norm scaled data table.
+                            #' corresponding to the respective user defined attributes.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeNormDataTbl(input, output, session)
+                            updateImputeNormDataTbl = function(input, output, session){
+                              if(private$.status$query(processName = "normalized")){
+                                output$tbl.imputeNormData <- DT::renderDataTable({
+                                  self$normalizedData$rawData %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("normalized_data"),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.imputeNormData <- DT::renderDataTable(NULL)
+                              }#else
+                            },#function
 
                             ###########################
                             # impute detect functions #
@@ -3933,6 +4228,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.trafoMutateGlobalQuality <- DT::renderDataTable(NULL)
                                 output$tbl.trafoMutateGlobalTests <- DT::renderDataTable(NULL)
                                 output$tbl.trafoMutateGlobalData <- DT::renderDataTable(NULL)
+                              }#if
+                              if(!self$status$query(processName = "normalized")){
+                                output$plt.imputeNormFeature <- shiny::renderPlot(NULL)
+                                output$tbl.imputeNormFeatureStatistics<- DT::renderDataTable(NULL)
+                                output$tbl.imputeNormParameter<- DT::renderDataTable(NULL)
+                                output$tbl.imputeNormStatistics<- DT::renderDataTable(NULL)
+                                output$tbl.imputeNormData<- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "naDetected")){
                                 output$plt.imputeDetectSummary <- shiny::renderPlot(NULL)

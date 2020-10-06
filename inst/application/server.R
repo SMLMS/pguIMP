@@ -154,6 +154,7 @@ server <- function(input, output, session) {
     delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
     delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
     delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
+    delegate$updateImputeNormGui(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
@@ -168,6 +169,7 @@ server <- function(input, output, session) {
     delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
     delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
     delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
+    delegate$updateImputeNormGui(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
@@ -181,6 +183,27 @@ server <- function(input, output, session) {
 
   shiny::observeEvent(input$ab.trafoMutateReset, {
     delegate$resetTrafoMutateGui(input, output, session)
+  })
+
+  shiny::observeEvent(input$ab.imputeNormMutate,{
+    delegate$imputeNormMutate(input, output, session)
+    delegate$updateImputeNormFeatureGraphic(input, output, session)
+    delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)
+    delegate$updateImputeNormParameterTbl(input, output, session)
+    delegate$updateImputeNormStatisticsTbl(input, output, session)
+    delegate$updateImputeNormDataTbl(input, output, session)
+    delegate$hideOutdatedResults(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$si.imputeNormFeature, {
+    delegate$updateImputeNormFeatureGraphic(input, output, session)
+    delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)
+    delegate$resetImputeNormGui(input,output, session)
+  })
+
+  shiny::observeEvent(input$ab.imputeNormReset, {
+    delegate$resetImputeNormGui(input, output, session)
   })
 
   shiny::observeEvent(input$ab.imputeDetect, {
