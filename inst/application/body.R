@@ -550,38 +550,38 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   ),
 
   shinydashboard::tabItem(
-    tabName = "tab_detect_impute",
+    tabName = "tab_missings_impute",
     shiny::fluidPage(
       width = 12,
-      title = "Detect Imputation Sites",
+      title = "Detect Missings",
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Detect Imputation Sites"),
+          shiny::h1("Detect Missings"),
           shiny::br(),
           shiny::hr(),
           shiny::actionButton(
-            inputId = "ab.imputeDetect",
+            inputId = "ab.imputeMissingsDetect",
             label = "detect imputation sites",
             width = "100%"
           )
         ),
         shiny::column(
           width = dataColumnWidth,
-          shiny::h3("Imputation Site Heatmap"),
-          shiny::plotOutput("plt.imputeDetectSummary"),
+          shiny::h3("Missings Heatmap"),
+          shiny::plotOutput("plt.imputeMissingsSummary"),
           shiny::br(),
           shiny::br(),
-          shiny::h3("Imputation Site Statistics"),
-          DT::dataTableOutput("tbl.imputeDetectStatistics"),
+          shiny::h3("Missings Statistics"),
+          DT::dataTableOutput("tbl.imputeMissingsStatistics"),
           shiny::br(),
           shiny::br(),
-          shiny::h3("Imputation Site Details"),
-          DT::dataTableOutput("tbl.imputeDetectDetail"),
+          shiny::h3("Missings Details"),
+          DT::dataTableOutput("tbl.imputeMissingsDetail"),
           shiny::br(),
           shiny::br(),
-          shiny::h3("Imputation Site Data"),
-          DT::dataTableOutput("tbl.imputeDetectData")
+          shiny::h3("Missings Data"),
+          DT::dataTableOutput("tbl.imputeMissingsData")
         )
       )
     )

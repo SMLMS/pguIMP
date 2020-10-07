@@ -418,34 +418,34 @@ x$updateImputeNormParameterTbl(input, output, session)
 x$updateImputeNormDataTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$imputeDetect`
+## Method `pgu.delegate$imputeMissingsDetect`
 ## ------------------------------------------------
 
-x$imputeDetect(input, output, session)
+x$imputeMissingsDetect(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeDetectGraphic`
+## Method `pgu.delegate$updateImputeMissingsGraphic`
 ## ------------------------------------------------
 
-x$updateImputeDetectGraphic(input, output, session)
+x$updateImputeMissingsGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeDetectStatisticsTbl`
+## Method `pgu.delegate$updateImputeMissingsStatisticsTbl`
 ## ------------------------------------------------
 
-x$updateImputeDetectStatisticsTbl(input, output, session)
+x$updateImputeMissingsStatisticsTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeDetectDetailTbl`
+## Method `pgu.delegate$updateImputeMissingsDetailTbl`
 ## ------------------------------------------------
 
-x$updateImputeDetectDetailTbl(input, output, session)
+x$updateImputeMissingsDetailTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeDetectDataTbl`
+## Method `pgu.delegate$updateImputeMissingsDataTbl`
 ## ------------------------------------------------
 
-x$updateImputeDetectDataTbl(input, output, session)
+x$updateImputeMissingsDataTbl(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMutateFeature`
@@ -831,14 +831,17 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{normalizedData}}{Returns the instance variable normalizedData
 (pguIMP::pgu.data)}
 
+\item{\code{missings}}{Returns the instance variable missings
+(pguIMP::pgu.missings)}
+
+\item{\code{outliers}}{Returns the instance variable outlierd
+(pguIMP::pgu.outliers)}
+
 \item{\code{imputer}}{Returns the instance variable imputer
 (pguIMP::pgu.imputation)}
 
 \item{\code{imputedData}}{Returns the instance variable imputedData
 (pguIMP::pgu.data)}
-
-\item{\code{outliers}}{Returns the instance variable outlierd
-(pguIMP::pgu.outliers)}
 
 \item{\code{revisedData}}{Returns the instance variable revisedData
 (pguIMP::pgu.data)}
@@ -930,11 +933,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeNormStatisticsTbl}{\code{pgu.delegate$updateImputeNormStatisticsTbl()}}
 \item \href{#method-updateImputeNormParameterTbl}{\code{pgu.delegate$updateImputeNormParameterTbl()}}
 \item \href{#method-updateImputeNormDataTbl}{\code{pgu.delegate$updateImputeNormDataTbl()}}
-\item \href{#method-imputeDetect}{\code{pgu.delegate$imputeDetect()}}
-\item \href{#method-updateImputeDetectGraphic}{\code{pgu.delegate$updateImputeDetectGraphic()}}
-\item \href{#method-updateImputeDetectStatisticsTbl}{\code{pgu.delegate$updateImputeDetectStatisticsTbl()}}
-\item \href{#method-updateImputeDetectDetailTbl}{\code{pgu.delegate$updateImputeDetectDetailTbl()}}
-\item \href{#method-updateImputeDetectDataTbl}{\code{pgu.delegate$updateImputeDetectDataTbl()}}
+\item \href{#method-imputeMissingsDetect}{\code{pgu.delegate$imputeMissingsDetect()}}
+\item \href{#method-updateImputeMissingsGraphic}{\code{pgu.delegate$updateImputeMissingsGraphic()}}
+\item \href{#method-updateImputeMissingsStatisticsTbl}{\code{pgu.delegate$updateImputeMissingsStatisticsTbl()}}
+\item \href{#method-updateImputeMissingsDetailTbl}{\code{pgu.delegate$updateImputeMissingsDetailTbl()}}
+\item \href{#method-updateImputeMissingsDataTbl}{\code{pgu.delegate$updateImputeMissingsDataTbl()}}
 \item \href{#method-updateImputeMutateFeature}{\code{pgu.delegate$updateImputeMutateFeature()}}
 \item \href{#method-updateImputeMutateMethod}{\code{pgu.delegate$updateImputeMutateMethod()}}
 \item \href{#method-updateImputeMutateSeed}{\code{pgu.delegate$updateImputeMutateSeed()}}
@@ -2941,13 +2944,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-imputeDetect"></a>}}
-\if{latex}{\out{\hypertarget{method-imputeDetect}{}}}
-\subsection{Method \code{imputeDetect()}}{
+\if{html}{\out{<a id="method-imputeMissingsDetect"></a>}}
+\if{latex}{\out{\hypertarget{method-imputeMissingsDetect}{}}}
+\subsection{Method \code{imputeMissingsDetect()}}{
 Calls the missing detection routine of the instance variable imputer on the instance variable transformedData.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeDetect(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeMissingsDetect(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2963,7 +2966,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeDetect(input, output, session)
+\preformatted{x$imputeMissingsDetect(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2971,12 +2974,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeDetectGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeDetectGraphic}{}}}
-\subsection{Method \code{updateImputeDetectGraphic()}}{
-Updates the plt.imputeDetectSummary graphic.
+\if{html}{\out{<a id="method-updateImputeMissingsGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsGraphic}{}}}
+\subsection{Method \code{updateImputeMissingsGraphic()}}{
+Updates the plt.imputeMissingsSummary graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeDetectGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsGraphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2992,7 +2995,7 @@ Updates the plt.imputeDetectSummary graphic.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeDetectGraphic(input, output, session)
+\preformatted{x$updateImputeMissingsGraphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3000,12 +3003,12 @@ Updates the plt.imputeDetectSummary graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeDetectStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeDetectStatisticsTbl}{}}}
-\subsection{Method \code{updateImputeDetectStatisticsTbl()}}{
+\if{html}{\out{<a id="method-updateImputeMissingsStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsStatisticsTbl}{}}}
+\subsection{Method \code{updateImputeMissingsStatisticsTbl()}}{
 Updates the tbl.imputeDetectStatistics table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeDetectStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3021,7 +3024,7 @@ Updates the tbl.imputeDetectStatistics table.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeDetectStatisticsTbl(input, output, session)
+\preformatted{x$updateImputeMissingsStatisticsTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3029,12 +3032,12 @@ Updates the tbl.imputeDetectStatistics table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeDetectDetailTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeDetectDetailTbl}{}}}
-\subsection{Method \code{updateImputeDetectDetailTbl()}}{
+\if{html}{\out{<a id="method-updateImputeMissingsDetailTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsDetailTbl}{}}}
+\subsection{Method \code{updateImputeMissingsDetailTbl()}}{
 Updates the tbl.imputeDetectDetail table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeDetectDetailTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsDetailTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3050,7 +3053,7 @@ Updates the tbl.imputeDetectDetail table.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeDetectDetailTbl(input, output, session)
+\preformatted{x$updateImputeMissingsDetailTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3058,12 +3061,12 @@ Updates the tbl.imputeDetectDetail table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeDetectDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeDetectDataTbl}{}}}
-\subsection{Method \code{updateImputeDetectDataTbl()}}{
+\if{html}{\out{<a id="method-updateImputeMissingsDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsDataTbl}{}}}
+\subsection{Method \code{updateImputeMissingsDataTbl()}}{
 Updates the tbl.imputeDetectData table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeDetectDataTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsDataTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3079,7 +3082,7 @@ Updates the tbl.imputeDetectData table.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeDetectDataTbl(input, output, session)
+\preformatted{x$updateImputeMissingsDataTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

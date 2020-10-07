@@ -206,13 +206,13 @@ server <- function(input, output, session) {
     delegate$resetImputeNormGui(input, output, session)
   })
 
-  shiny::observeEvent(input$ab.imputeDetect, {
-    delegate$imputeDetect(input, output, session)
-    delegate$updateImputeDetectGraphic(input, output, session)
-    delegate$updateImputeDetectStatisticsTbl(input, output, session)
-    delegate$updateImputeDetectDetailTbl(input, output, session)
-    delegate$updateImputeDetectDataTbl(input, output, session)
-    delegate$updateImputeMutateGui(input, output, session)
+  shiny::observeEvent(input$ab.imputeMissingsDetect, {
+    delegate$imputeMissingsDetect(input, output, session)
+    delegate$updateImputeMissingsGraphic(input, output, session)
+    delegate$updateImputeMissingsStatisticsTbl(input, output, session)
+    delegate$updateImputeMissingsDetailTbl(input, output, session)
+    delegate$updateImputeMissingsDataTbl(input, output, session)
+    # delegate$updateOutliersDetectGui(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
