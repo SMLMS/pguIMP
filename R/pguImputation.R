@@ -380,7 +380,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  # handle imputation sites #
                                  ###########################
                                  #' @description
-                                 #' Chooseses a cleaning method based upon the instance variable `imputationAgent`
+                                 #' Chooses a cleaning method based upon the instance variable `imputationAgent`
                                  #' and handles the imputation sites in the dataframe.
                                  #' Returns a cleaned data set.
                                  #' Display the progress if shiny is loaded.

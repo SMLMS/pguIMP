@@ -53,7 +53,7 @@ sidebar <- shinydashboard::dashboardSidebar(
                              shinydashboard::menuSubItem("Missing statistics",
                                                          icon = shiny::icon("question-circle"),
                                                          tabName = "tab_missings_impute"),
-                             shinydashboard::menuSubItem("Detect outliers",
+                             shinydashboard::menuSubItem("Detect anomalies",
                                                          icon = shiny::icon("microscope"),
                                                          tabName = "tab_outliers_impute"),
                              shinydashboard::menuSubItem("Mutate",

@@ -10,7 +10,7 @@
 Detects and substitutes missing values from data set.
 }
 \details{
-Detects missing values in the transfromed and normalized data set.
+Detects missing values in the transformed and normalized data set.
 }
 \section{Construction}{
 

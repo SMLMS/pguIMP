@@ -4,7 +4,7 @@
 #' Detects and substitutes missing values from data set.
 #'
 #' @details
-#' Detects missing values in the transfromed and normalized data set.
+#' Detects missing values in the transformed and normalized data set.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:

@@ -562,7 +562,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeMissingsDetect",
-            label = "detect imputation sites",
+            label = "Detect Missings",
             width = "100%"
           )
         ),
@@ -588,202 +588,276 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   ),
 
   shinydashboard::tabItem(
-    tabName = "tab_mutate_impute",
+    tabName = "tab_outliers_impute",
     shiny::fluidPage(
       width = 12,
-      title = "Mutate Imputation Sites",
+      title = "Detect Anomalies",
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Mutate Imputation Sites"),
-          shiny::br(),
-          shiny::br(),
-          shiny::selectInput(
-            "si.imputeMutateMethod",
-            label = h5("Mutation Method"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::numericInput(
-            "ni.imputeMutateSeed",
-            label = h5("Seed"),
-            width = "100%",
-            min = 1,
-            max = 1000,
-            step = 1,
-            value = 42
-          ),
-          shiny::numericInput(
-            "ni.imputeMutateIterations",
-            label = h5("Iterations"),
-            width = "100%",
-            min = 1,
-            max = 10,
-            step = 1,
-            value = 4
-          ),
-          shiny::selectInput(
-            "si.imputeMutateFeature",
-            label = h5("Feature"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::actionButton(
-            inputId = "ab.imputeMutate",
-            label = "mutate imputation sites",
-            width = "100%"
-          ),
-          shiny::actionButton(
-            inputId = "ab.imputeMutateReset",
-            label = "reset imputation settings",
-            width = "100%"
-          )
-        ),
-        shiny::column(
-          width = dataColumnWidth,
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("Feature Plot"),
-              shiny::plotOutput("plt.imputeMutateFeatureDetail")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("Feature Data"),
-              DT::dataTableOutput("tbl.imputeMutateFeatureDetail")
-            )
-          ),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Imputation Site Detail"),
-          DT::dataTableOutput("tbl.imputeMutateDetail"),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Imputation Site Data"),
-          DT::dataTableOutput("tbl.imputeMutateData")
-        )
-      )
-    )
-  ),
-  shinydashboard::tabItem(
-    tabName = "tab_detect_outliers",
-    shiny::fluidPage(
-      width = 12,
-      title = "Outliers",
-      shiny::fluidRow(
-        shiny::column(
-          width = menueColumnWidth,
-          shiny::h1("Detect Outliers"),
+          shiny::h1("Detect Anomalies"),
           shiny::br(),
           shiny::hr(),
-          shiny::checkboxInput(
-            "cb.trafoZTransform",
-            label = h5("Standardize"),
-            value = TRUE
+          selectInput(
+            "si.imputeOutliersMethod",
+            label = h5("Detection Method"),
+            choices = list(),
+            selected = 1,
+            width = "100%"
           ),
+          shiny::hr(),
+          selectInput(
+            "si.imputeOutliersFeature",
+            label = h5("Feature"),
+            choices = list(),
+            selected = 1,
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::numericInput(
+            "ni.imputeOutliersAlpha",
+            label = h5("alpha"),
+            value = 0.05,
+            min = 0.0,
+            max = 1.0,
+            step = 0.01,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersEpsilon",
+            label = h5("espilon"),
+            value = 1.66,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersMinSamples",
+            label = h5("minSamples"),
+            value = 5,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersGamma",
+            label = h5("gamma"),
+            value = 0.05,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersNu",
+            label = h5("nu"),
+            value = 0.95,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersSeed",
+            label = h5("seed"),
+            value = 42,
+            width = "100%"
+          ),
+          shiny::br(),
+          shiny::hr(),
           shiny::actionButton(
-            inputId = "ab.outliersDetect",
-            label = "detect outlier",
+            inputId = "ab.imputeOutliersDetect",
+            label = "Detect Anomalies",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::actionButton(
+            inputId = "ab.imputeOutliersReset",
+            label = "Reset",
             width = "100%"
           )
         ),
         shiny::column(
           width = dataColumnWidth,
           shiny::h3("Outlier Distribution"),
-          shiny::plotOutput("plt.outliersDetectSummary"),
+          shiny::plotOutput("plt.outliersImputeSummary"),
           shiny::hr(),
-          shiny::h3("Outlier Statistics"),
-          DT::dataTableOutput("tbl.outliersDetectStatistics"),
-          shiny::hr(),
-          shiny::h3("Outlier Details"),
-          DT::dataTableOutput("tbl.outliersDetectDetail"),
-          shiny::hr(),
-          shiny::h3("Outlier Data"),
-          DT::dataTableOutput("tbl.outliersDetectData")
-        )
-      )
-    )
-  ),
-  shinydashboard::tabItem(
-    tabName = "tab_mutate_outliers",
-    shiny::fluidPage(
-      width = 12,
-      title = "Outliers",
-      shiny::fluidRow(
-        shiny::column(
-          width = menueColumnWidth,
-          shiny::h1("Mutate Outliers"),
-          shiny::selectInput(
-            "si.outliersMutateMethod",
-            label = h5("Mutation Method"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::numericInput(
-            "ni.outliersMutateSeed",
-            label = h5("Seed"),
-            width = "100%",
-            min = 1,
-            max = 1000,
-            step = 1,
-            value = 42
-          ),
-          shiny::numericInput(
-            "ni.outliersMutateIterations",
-            label = h5("Iterations"),
-            width = "100%",
-            min = 1,
-            max = 10,
-            step = 1,
-            value = 4
-          ),
-          shiny::selectInput(
-            "si.outliersMutateFeature",
-            label = h5("Feature"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::actionButton(
-            inputId = "ab.outliersMutate",
-            label = "mutate imputation sites",
-            width = "100%"
-          ),
-          shiny::actionButton(
-            inputId = "ab.outliersMutateReset",
-            label = "reset imputation settings",
-            width = "100%"
-          )
-        ),
-        shiny::column(
-          width = dataColumnWidth,
           shiny::fluidRow(
             shiny::column(
               width = 6,
               shiny::h3("Feature Plot"),
-              shiny::plotOutput("plt.outliersMutateFeatureDetail")
+              shiny::plotOutput("plt.outliersImputeFeature")
             ),
             shiny::column(
               width = 6,
               shiny::h3("Feature Data"),
-              DT::dataTableOutput("tbl.outliersMutateFeatureDetail")
+              DT::dataTableOutput("tbl.outliersImputeFeature")
             )
           ),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Outlier Mutated Details"),
-          DT::dataTableOutput("tbl.outliersMutateDetail"),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Outlier Mutated Data"),
-          DT::dataTableOutput("tbl.outliersMutateData")
+          shiny::hr(),
+          shiny::h3("Outlier Statistics"),
+          DT::dataTableOutput("tbl.outliersImputeStatistics"),
+          shiny::hr(),
+          shiny::h3("Outlier Details"),
+          DT::dataTableOutput("tbl.outliersImputeDetail"),
+          shiny::hr(),
+          shiny::h3("Outlier Data"),
+          DT::dataTableOutput("tbl.outliersImputeData")
         )
       )
     )
   ),
+
+
+  # shinydashboard::tabItem(
+  #   tabName = "tab_mutate_impute",
+  #   shiny::fluidPage(
+  #     width = 12,
+  #     title = "Mutate Imputation Sites",
+  #     shiny::fluidRow(
+  #       shiny::column(
+  #         width = menueColumnWidth,
+  #         shiny::h1("Mutate Imputation Sites"),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::selectInput(
+  #           "si.imputeMutateMethod",
+  #           label = h5("Mutation Method"),
+  #           width = "100%",
+  #           choices = list(),
+  #           selected = 1
+  #         ),
+  #         shiny::numericInput(
+  #           "ni.imputeMutateSeed",
+  #           label = h5("Seed"),
+  #           width = "100%",
+  #           min = 1,
+  #           max = 1000,
+  #           step = 1,
+  #           value = 42
+  #         ),
+  #         shiny::numericInput(
+  #           "ni.imputeMutateIterations",
+  #           label = h5("Iterations"),
+  #           width = "100%",
+  #           min = 1,
+  #           max = 10,
+  #           step = 1,
+  #           value = 4
+  #         ),
+  #         shiny::selectInput(
+  #           "si.imputeMutateFeature",
+  #           label = h5("Feature"),
+  #           width = "100%",
+  #           choices = list(),
+  #           selected = 1
+  #         ),
+  #         shiny::actionButton(
+  #           inputId = "ab.imputeMutate",
+  #           label = "mutate imputation sites",
+  #           width = "100%"
+  #         ),
+  #         shiny::actionButton(
+  #           inputId = "ab.imputeMutateReset",
+  #           label = "reset imputation settings",
+  #           width = "100%"
+  #         )
+  #       ),
+  #       shiny::column(
+  #         width = dataColumnWidth,
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Feature Plot"),
+  #             shiny::plotOutput("plt.imputeMutateFeatureDetail")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Feature Data"),
+  #             DT::dataTableOutput("tbl.imputeMutateFeatureDetail")
+  #           )
+  #         ),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::h3("Imputation Site Detail"),
+  #         DT::dataTableOutput("tbl.imputeMutateDetail"),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::h3("Imputation Site Data"),
+  #         DT::dataTableOutput("tbl.imputeMutateData")
+  #       )
+  #     )
+  #   )
+  # ),
+
+  # shinydashboard::tabItem(
+  #   tabName = "tab_mutate_outliers",
+  #   shiny::fluidPage(
+  #     width = 12,
+  #     title = "Outliers",
+  #     shiny::fluidRow(
+  #       shiny::column(
+  #         width = menueColumnWidth,
+  #         shiny::h1("Mutate Outliers"),
+  #         shiny::selectInput(
+  #           "si.outliersMutateMethod",
+  #           label = h5("Mutation Method"),
+  #           width = "100%",
+  #           choices = list(),
+  #           selected = 1
+  #         ),
+  #         shiny::numericInput(
+  #           "ni.outliersMutateSeed",
+  #           label = h5("Seed"),
+  #           width = "100%",
+  #           min = 1,
+  #           max = 1000,
+  #           step = 1,
+  #           value = 42
+  #         ),
+  #         shiny::numericInput(
+  #           "ni.outliersMutateIterations",
+  #           label = h5("Iterations"),
+  #           width = "100%",
+  #           min = 1,
+  #           max = 10,
+  #           step = 1,
+  #           value = 4
+  #         ),
+  #         shiny::selectInput(
+  #           "si.outliersMutateFeature",
+  #           label = h5("Feature"),
+  #           width = "100%",
+  #           choices = list(),
+  #           selected = 1
+  #         ),
+  #         shiny::actionButton(
+  #           inputId = "ab.outliersMutate",
+  #           label = "mutate imputation sites",
+  #           width = "100%"
+  #         ),
+  #         shiny::actionButton(
+  #           inputId = "ab.outliersMutateReset",
+  #           label = "reset imputation settings",
+  #           width = "100%"
+  #         )
+  #       ),
+  #       shiny::column(
+  #         width = dataColumnWidth,
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Feature Plot"),
+  #             shiny::plotOutput("plt.outliersMutateFeatureDetail")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Feature Data"),
+  #             DT::dataTableOutput("tbl.outliersMutateFeatureDetail")
+  #           )
+  #         ),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::h3("Outlier Mutated Details"),
+  #         DT::dataTableOutput("tbl.outliersMutateDetail"),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::h3("Outlier Mutated Data"),
+  #         DT::dataTableOutput("tbl.outliersMutateData")
+  #       )
+  #     )
+  #   )
+  # ),
   shinydashboard::tabItem(
     tabName = "tab_analysis_correlation",
     shiny::fluidPage(

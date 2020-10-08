@@ -16,7 +16,7 @@ For this purpose outliers are handled as imputation sites.
 }
 \section{Construction}{
 
-x <- pguIMP::pgu.outliers$new(data)
+x <- pguIMP::pgu.outliers$new(data_df)
 }
 
 \examples{
@@ -26,7 +26,7 @@ x <- pguIMP::pgu.outliers$new(data)
 ## ------------------------------------------------
 
 y <- tibble:tibble()
-x <- pguIMP:pgu.outliers$new(data = y)
+x <- pguIMP:pgu.outliers$new(data_df = y)
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$print`
@@ -36,10 +36,10 @@ x$print()
 print(x)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$resetOutliersParameter`
+## Method `pgu.outliers$resetOutliers`
 ## ------------------------------------------------
 
-x$resetOutliersParameter(data, progress)
+x$resetOutliers(data, progress)
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$filterFeatures`
@@ -48,10 +48,10 @@ x$resetOutliersParameter(data, progress)
 matrix <- x$filterFeatures(data)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$outliersIdxByFeature`
+## Method `pgu.outliers$detectOutliersParameter`
 ## ------------------------------------------------
 
-idx <- x$outliersIdxByFeature(featureName = "infected")
+x$detectOutliersParameter(data_df)
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$outliersFeatureList`
@@ -60,96 +60,58 @@ idx <- x$outliersIdxByFeature(featureName = "infected")
 idx <- x$outliersFeatureList(data)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$runGrubbs`
+## Method `pgu.outliers$detectOutliers`
+## ------------------------------------------------
+
+x$detectOutliers(data_df)
+
+## ------------------------------------------------
+## Method `pgu.outliers$detectByGrubbs`
+## ------------------------------------------------
+
+x$detectByGrubbs(data_df)
+
+## ------------------------------------------------
+## Method `pgu.outliers$grubbs_numeric`
 ## ------------------------------------------------
 
 y <- x$runGrubbs(data, feature = "infected")
 
 ## ------------------------------------------------
-## Method `pgu.outliers$findOutliers`
+## Method `pgu.outliers$detectByDbscan`
 ## ------------------------------------------------
 
-x$findOutliers(data, progress)
+x$detectByDBSCAN(data_df)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$outlierStatistics`
+## Method `pgu.outliers$dbscan_numeric`
 ## ------------------------------------------------
 
-x$outlierStatistics(data)
+x$dbscan_numeric(data_df,"infected")
 
 ## ------------------------------------------------
-## Method `pgu.outliers$insertImputationSites`
+## Method `pgu.outliers$detectBySvm`
 ## ------------------------------------------------
 
-x$insertImputationSites(data)
+x$detectByDBSCAN(data_df)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$handleOutliers`
+## Method `pgu.outliers$svm_numeric`
 ## ------------------------------------------------
 
-x$handleOutliers(data, progress)
+x$dbscan_numeric(data_df,"infected")
 
 ## ------------------------------------------------
-## Method `pgu.outliers$cleanByMedian`
+## Method `pgu.outliers$setImputationSites`
 ## ------------------------------------------------
 
-x$cleanByMedian(data, progress)
+mutated_df <- x$setImputationSites(data_df)
 
 ## ------------------------------------------------
-## Method `pgu.outliers$cleanByMean`
+## Method `pgu.outliers$calcOutliersStatistics`
 ## ------------------------------------------------
 
-x$cleanByMean(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByExpectationValue`
-## ------------------------------------------------
-
-x$cleanByExpectationValue(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByMC`
-## ------------------------------------------------
-
-x$cleanByMC(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByKnn`
-## ------------------------------------------------
-
-x$cleanByKnn(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByMice`
-## ------------------------------------------------
-
-x$cleanByMice(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByM5P`
-## ------------------------------------------------
-
-x$cleanByM5P(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByAmelia`
-## ------------------------------------------------
-
-x$cleanByAmelia(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$cleanByAmeliaBound`
-## ------------------------------------------------
-
-x$cleanByAmeliaBound(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$dataTable`
-## ------------------------------------------------
-
-data \%>\%
- x$dataTable() \%>\%
- print()
+x$calcOutliersStatistics(data)
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$outlierTable`
@@ -199,26 +161,17 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{outliers}}{Returns the instance variable outliers.
 (tibble::tibble)}
 
-\item{\code{cleaningAgentAlphabet}}{Returns the instance variable cleaningAgentAlphabet.
+\item{\code{outliersStatistics}}{Returns the instance variable outliersStatistics.
+(tibble::tibble)}
+
+\item{\code{outliersAgentAlphabet}}{Returns the instance variable of outliersAgentAlphabet
 (character)}
 
-\item{\code{cleaningAgent}}{Returns the instance variable cleaningAgent.
+\item{\code{outliersAgent}}{Returns the instance variable outliersAgent.
 (character)}
 
-\item{\code{setCleaningAgent}}{Sets the instance variable cleaningAgent.
+\item{\code{setOutliersAgent}}{Sets the instance variable outliersAgent.
 (character)}
-
-\item{\code{seed}}{Returns the instance variable seed.
-(numeric)}
-
-\item{\code{setSeed}}{Sets the instance variable seed.
-(numeric)}
-
-\item{\code{iterations}}{Returns the instance variable iterations.
-(numeric)}
-
-\item{\code{setIterations}}{Sets the instance variable iterations.
-(numeric)}
 
 \item{\code{featureData}}{Returns the instance variable featureData.
 (numeric)}
@@ -229,11 +182,35 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setAlpha}}{Set the instance variable alpha.
 (numeric)}
 
-\item{\code{minSamples}}{Returns the instance variable minSamples.
+\item{\code{epsilon}}{Returns the instance variable epsilon.
 (numeric)}
 
-\item{\code{outliersStatistics}}{Returns the instance variable outliersStatistics.
-(tibble::tibble)}
+\item{\code{setEpsilon}}{Set the instance variable epsilon.
+(numeric)}
+
+\item{\code{minSamples}}{Returns the instance variable minSamples.
+(integer)}
+
+\item{\code{setMinSamples}}{Set the instance variable minSamples.
+(integer)}
+
+\item{\code{gamma}}{Returns the instance variable gamma.
+(numeric)}
+
+\item{\code{setGamma}}{Set the instance variable gamma.
+(numeric)}
+
+\item{\code{nu}}{Returns the instance variable nu.
+(numeric)}
+
+\item{\code{setNu}}{Set the instance variable nu.
+(numeric)}
+
+\item{\code{seed}}{Returns the instance variable seed.
+(integer)}
+
+\item{\code{setSeed}}{Set the instance variable seed.
+(integer)}
 }
 \if{html}{\out{</div>}}
 }
@@ -243,25 +220,19 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-new}{\code{pgu.outliers$new()}}
 \item \href{#method-finalize}{\code{pgu.outliers$finalize()}}
 \item \href{#method-print}{\code{pgu.outliers$print()}}
-\item \href{#method-resetOutliersParameter}{\code{pgu.outliers$resetOutliersParameter()}}
+\item \href{#method-resetOutliers}{\code{pgu.outliers$resetOutliers()}}
 \item \href{#method-filterFeatures}{\code{pgu.outliers$filterFeatures()}}
-\item \href{#method-outliersIdxByFeature}{\code{pgu.outliers$outliersIdxByFeature()}}
+\item \href{#method-detectOutliersParameter}{\code{pgu.outliers$detectOutliersParameter()}}
 \item \href{#method-outliersFeatureList}{\code{pgu.outliers$outliersFeatureList()}}
-\item \href{#method-runGrubbs}{\code{pgu.outliers$runGrubbs()}}
-\item \href{#method-findOutliers}{\code{pgu.outliers$findOutliers()}}
-\item \href{#method-outlierStatistics}{\code{pgu.outliers$outlierStatistics()}}
-\item \href{#method-insertImputationSites}{\code{pgu.outliers$insertImputationSites()}}
-\item \href{#method-handleOutliers}{\code{pgu.outliers$handleOutliers()}}
-\item \href{#method-cleanByMedian}{\code{pgu.outliers$cleanByMedian()}}
-\item \href{#method-cleanByMean}{\code{pgu.outliers$cleanByMean()}}
-\item \href{#method-cleanByExpectationValue}{\code{pgu.outliers$cleanByExpectationValue()}}
-\item \href{#method-cleanByMC}{\code{pgu.outliers$cleanByMC()}}
-\item \href{#method-cleanByKnn}{\code{pgu.outliers$cleanByKnn()}}
-\item \href{#method-cleanByMice}{\code{pgu.outliers$cleanByMice()}}
-\item \href{#method-cleanByM5P}{\code{pgu.outliers$cleanByM5P()}}
-\item \href{#method-cleanByAmelia}{\code{pgu.outliers$cleanByAmelia()}}
-\item \href{#method-cleanByAmeliaBound}{\code{pgu.outliers$cleanByAmeliaBound()}}
-\item \href{#method-dataTable}{\code{pgu.outliers$dataTable()}}
+\item \href{#method-detectOutliers}{\code{pgu.outliers$detectOutliers()}}
+\item \href{#method-detectByGrubbs}{\code{pgu.outliers$detectByGrubbs()}}
+\item \href{#method-grubbs_numeric}{\code{pgu.outliers$grubbs_numeric()}}
+\item \href{#method-detectByDbscan}{\code{pgu.outliers$detectByDbscan()}}
+\item \href{#method-dbscan_numeric}{\code{pgu.outliers$dbscan_numeric()}}
+\item \href{#method-detectBySvm}{\code{pgu.outliers$detectBySvm()}}
+\item \href{#method-svm_numeric}{\code{pgu.outliers$svm_numeric()}}
+\item \href{#method-setImputationSites}{\code{pgu.outliers$setImputationSites()}}
+\item \href{#method-calcOutliersStatistics}{\code{pgu.outliers$calcOutliersStatistics()}}
 \item \href{#method-outlierTable}{\code{pgu.outliers$outlierTable()}}
 \item \href{#method-plotOutliersDistribution}{\code{pgu.outliers$plotOutliersDistribution()}}
 \item \href{#method-featureBarPlot}{\code{pgu.outliers$featureBarPlot()}}
@@ -276,14 +247,40 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Method \code{new()}}{
 Creates and returns a new \code{pgu.outliers} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$new(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$new(
+  data_df = "tbl_df",
+  alpha = 0.05,
+  epsilon = 0.1,
+  minSamples = 4,
+  gamma = 0.05,
+  nu = 0.1,
+  seed = 42
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be cleaned.
+\item{\code{data_df}}{The data to be cleaned.
 (tibble::tibble)}
+
+\item{\code{alpha}}{Initial definition of the instance variable alpha.
+(numeric)}
+
+\item{\code{epsilon}}{Initial definition of the instance variable epsilon.
+(numeric)}
+
+\item{\code{minSamples}}{Initial definition of the instance variable minSamples.
+(integer)}
+
+\item{\code{gamma}}{Initial definition of the instance variable gamma.
+(numeric)}
+
+\item{\code{nu}}{Initial definition of the instance variable nu.
+(numeric)}
+
+\item{\code{seed}}{Initial definition of the instance variable seed.
+(integer)}
 }
 \if{html}{\out{</div>}}
 }
@@ -294,7 +291,7 @@ A new \code{pgu.outliers} object.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.outliers$new(data = y)
+x <- pguIMP:pgu.outliers$new(data_df = y)
 }
 \if{html}{\out{</div>}}
 
@@ -335,30 +332,27 @@ print(x)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetOutliersParameter"></a>}}
-\if{latex}{\out{\hypertarget{method-resetOutliersParameter}{}}}
-\subsection{Method \code{resetOutliersParameter()}}{
+\if{html}{\out{<a id="method-resetOutliers"></a>}}
+\if{latex}{\out{\hypertarget{method-resetOutliers}{}}}
+\subsection{Method \code{resetOutliers()}}{
 Resets instance variables and
 performes Grubb's test for outliers to detect outliers in the normalized and Z-score transfromed data set.
 Progresse is indicated by the progress object passed to the function.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$resetOutliersParameter(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$resetOutliers(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{Dataframe to be analyzed.
+\item{\code{data_df}}{Dataframe to be analyzed.
 (tibble::tibble)}
-
-\item{\code{progress}}{Keeps track of the analysis progress.
-(shiny::Progress)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetOutliersParameter(data, progress)
+\preformatted{x$resetOutliers(data, progress)
 }
 \if{html}{\out{</div>}}
 
@@ -371,13 +365,13 @@ Progresse is indicated by the progress object passed to the function.
 \subsection{Method \code{filterFeatures()}}{
 Filters attributes from the given dataframe that are known to the class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$filterFeatures(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$filterFeatures(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{Dataframe to be filtered.
+\item{\code{data_df}}{Dataframe to be filtered.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -396,29 +390,27 @@ A filterd dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-outliersIdxByFeature"></a>}}
-\if{latex}{\out{\hypertarget{method-outliersIdxByFeature}{}}}
-\subsection{Method \code{outliersIdxByFeature()}}{
-Returns the position of an attribute's outliers within a data frame.
+\if{html}{\out{<a id="method-detectOutliersParameter"></a>}}
+\if{latex}{\out{\hypertarget{method-detectOutliersParameter}{}}}
+\subsection{Method \code{detectOutliersParameter()}}{
+determines the outliers parameter by analyzing the
+tibble data_df and the instance variable outliers.
+Results are stored to instance variable outliersParameter.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outliersIdxByFeature(featureName = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectOutliersParameter(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{featureName}}{The attribute's name.
-(character)}
+\item{\code{data_df}}{Dataframe to be analyzed.
+(tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-The postion of entries identified as outliers.
-(numeric)
-}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$outliersIdxByFeature(featureName = "infected")
+\preformatted{x$detectOutliersParameter(data_df)
 }
 \if{html}{\out{</div>}}
 
@@ -433,13 +425,13 @@ Characterizes each row of the data frame as either \code{complete}
 or indicates which attribute has been identified as an outlier within the row.
 If multiple attributes' row entries were identified as outliers, the row is characterized by \code{multiple}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outliersFeatureList(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outliersFeatureList(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{The data frame to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -458,20 +450,84 @@ Vector of row characteristics.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-runGrubbs"></a>}}
-\if{latex}{\out{\hypertarget{method-runGrubbs}{}}}
-\subsection{Method \code{runGrubbs()}}{
-Performes Grubb's test for outliers to detect a single outlier in the provided attributes data.
-If an outlier is found, it is written to the instance variable \code{outliers}.
-The function indicates a find by a positive feedback.
+\if{html}{\out{<a id="method-detectOutliers"></a>}}
+\if{latex}{\out{\hypertarget{method-detectOutliers}{}}}
+\subsection{Method \code{detectOutliers()}}{
+Chooses a method for identification of anomalies based upon the instance variable \code{outliersAgent}
+Detects anomalies in a data frame by one-dimensional analysis of each feature.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$runGrubbs(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectOutliers(data_df = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be analyzed.
+(tibble::tibble)}
+
+\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+(shiny::Progress)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$detectOutliers(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-detectByGrubbs"></a>}}
+\if{latex}{\out{\hypertarget{method-detectByGrubbs}{}}}
+\subsection{Method \code{detectByGrubbs()}}{
+Identifies anomalies in the data frame based on Grubb's test.
+Iterates over the whole data frame. Calls the object's public function
+\code{grubbs_numeric} until no more anomalies are identified.
+The threshold for anomaly detection is defined in the instance variable \code{alpha}.
+Display the progress if shiny is loaded.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectByGrubbs(data_df = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Data frame to be analyzed.
+(tibble::tibble)}
+
+\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+(shiny::Progress)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$detectByGrubbs(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-grubbs_numeric"></a>}}
+\if{latex}{\out{\hypertarget{method-grubbs_numeric}{}}}
+\subsection{Method \code{grubbs_numeric()}}{
+Performs Grubb's test for anomalies to detect a single outlier in the provided attributes data.
+If an outlier is found, it is added to the instance variable \code{outliers}.
+The threshold for anomaly detection is difined in the instance variable \code{alpha}.
+The function indicates a find by a positive feedback.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$grubbs_numeric(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The data frame to be analyzed.
 (tibble::tibble)}
 
 \item{\code{feature}}{The attribute within the data frame to be analyzed.}
@@ -492,142 +548,23 @@ Feedback if an outlier was found.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-findOutliers"></a>}}
-\if{latex}{\out{\hypertarget{method-findOutliers}{}}}
-\subsection{Method \code{findOutliers()}}{
-Performes Grubb's test for outliers ontil all outliers in the dataframe are identified.
-Displays the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$findOutliers(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$findOutliers(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-outlierStatistics"></a>}}
-\if{latex}{\out{\hypertarget{method-outlierStatistics}{}}}
-\subsection{Method \code{outlierStatistics()}}{
-Calculates the statistics on the previously performed outlier detection analysis
-and stores the results in the instance variable \code{outliersStatistcs}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outlierStatistics(data = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$outlierStatistics(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-insertImputationSites"></a>}}
-\if{latex}{\out{\hypertarget{method-insertImputationSites}{}}}
-\subsection{Method \code{insertImputationSites()}}{
-Includes imputation sites into the data frame.
-Outliers are replaces by NA.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$insertImputationSites(data = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Returns a data frame with outliers replaced by NA.
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$insertImputationSites(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-handleOutliers"></a>}}
-\if{latex}{\out{\hypertarget{method-handleOutliers}{}}}
-\subsection{Method \code{handleOutliers()}}{
-Chooseses a cleaning method based upon the instance variable \code{cleaningAgent} and handles the imputation sites in the dataframe.
-Returns a cleaned data set.
+\if{html}{\out{<a id="method-detectByDbscan"></a>}}
+\if{latex}{\out{\hypertarget{method-detectByDbscan}{}}}
+\subsection{Method \code{detectByDbscan()}}{
+Identifies anomalies in the data frame based on DBSCAN.
+Iterates over the whole data frame. Calls the object's public function
+\code{dbscan_numeric} until all features are analyzed.
+The cluster hyper parameter are defined in the instance variables \code{epsilon} and \code{minSamples}.
+The results of the \code{dbscan_numeric} routine are added to the instance variable \code{outliers}.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$handleOutliers(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectByDbscan(data_df = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$handleOutliers(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByMedian"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByMedian}{}}}
-\subsection{Method \code{cleanByMedian()}}{
-Substitutes imputation sites by the median of the respective attribute.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByMedian(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be analyzed.
 (tibble::tibble)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
@@ -635,13 +572,9 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByMedian(data, progress)
+\preformatted{x$detectByDBSCAN(data_df)
 }
 \if{html}{\out{</div>}}
 
@@ -649,167 +582,23 @@ Cleaned dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByMean"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByMean}{}}}
-\subsection{Method \code{cleanByMean()}}{
-Substitutes imputation sites by the aritmertic mean of the respective attribute.
-Returns the cleaned dataframe.
+\if{html}{\out{<a id="method-dbscan_numeric"></a>}}
+\if{latex}{\out{\hypertarget{method-dbscan_numeric}{}}}
+\subsection{Method \code{dbscan_numeric()}}{
+Identifies anomalies in a single feature of a data frame based on DBSCAN.
+The cluster hyperparameter are defined in the instance variables \code{epsilon} and \code{minSamples}.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByMean(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$dbscan_numeric(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be analyzed.
 (tibble::tibble)}
 
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByMean(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByExpectationValue"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByExpectationValue}{}}}
-\subsection{Method \code{cleanByExpectationValue()}}{
-Substitutes imputation sites by the expectation value of the respective attribute.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByExpectationValue(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByExpectationValue(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByMC"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByMC}{}}}
-\subsection{Method \code{cleanByMC()}}{
-Substitutes imputation sites by values generated by a monte carlo simulation.
-The procedure runs several times as defined by the instance variable \code{iterations}.
-The run with the best result is identified and used for substitution.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByMC(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByMC(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByKnn"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByKnn}{}}}
-\subsection{Method \code{cleanByKnn()}}{
-Substitutes imputation sites by predictions of a KNN analysis of the whole dataframe.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByKnn(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-(shiny::Progress)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByKnn(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByMice"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByMice}{}}}
-\subsection{Method \code{cleanByMice()}}{
-Substitutes imputation sites by values generated by a different methods of the mice package.
-The procedure runs several times as defined by the instance variable \code{iterations}.
-The run with the best result is identified and used for substitution.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByMice(data, method = "character", progress = "Progress")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{method}}{One of the methods supported by the mice package.
+\item{\code{feature}}{Feature to be analyzed
 (character)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
@@ -818,12 +607,12 @@ Display the progress if shiny is loaded.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
+A data frame comprising the information about detected anomalies of the feature.
+(tibble::tibble)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByMice(data, progress)
+\preformatted{x$dbscan_numeric(data_df,"infected")
 }
 \if{html}{\out{</div>}}
 
@@ -831,20 +620,23 @@ Cleaned dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByM5P"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByM5P}{}}}
-\subsection{Method \code{cleanByM5P()}}{
-Substitutes imputation sites by predictions of a M5P tree trained on the whole dataframe.
-Returns the cleaned dataframe.
+\if{html}{\out{<a id="method-detectBySvm"></a>}}
+\if{latex}{\out{\hypertarget{method-detectBySvm}{}}}
+\subsection{Method \code{detectBySvm()}}{
+Identifies anomalies in the data frame based on one class SVM.
+Iterates over the whole data frame. Calls the object's public function
+\code{svm_numeric} until all features are analyzed.
+The cluster hyper parameter are defined in the instance variables \code{gamma} and \code{nu}.
+The results of the \code{svm_numeric} routine are added to the instance variable \code{outliers}.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByM5P(data = "tl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectBySvm(data_df = "tbl_df", progress = "Process")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be analyzed.
 (tibble::tibble)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
@@ -852,13 +644,9 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
-}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByM5P(data, progress)
+\preformatted{x$detectByDBSCAN(data_df)
 }
 \if{html}{\out{</div>}}
 
@@ -866,22 +654,24 @@ Cleaned dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByAmelia"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByAmelia}{}}}
-\subsection{Method \code{cleanByAmelia()}}{
-Substitutes imputation sites by values generated by a different methods of the amelia package.
-The procedure is run without bound information.
-Returns the cleaned dataframe.
+\if{html}{\out{<a id="method-svm_numeric"></a>}}
+\if{latex}{\out{\hypertarget{method-svm_numeric}{}}}
+\subsection{Method \code{svm_numeric()}}{
+Identifies anomalies in a single feature of a data frame based on one class SVM.
+The cluster hyperparameter are defined in the instance variables \code{gamma} and \code{nu}.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByAmelia(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$svm_numeric(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be analyzed.
 (tibble::tibble)}
+
+\item{\code{feature}}{Feature to be analyzed
+(character)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
 (shiny::Progress)}
@@ -889,12 +679,12 @@ Display the progress if shiny is loaded.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
+A data frame comprising the information about detected anomalies of the feature.
+(tibble::tibble)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByAmelia(data, progress)
+\preformatted{x$dbscan_numeric(data_df,"infected")
 }
 \if{html}{\out{</div>}}
 
@@ -902,35 +692,29 @@ Cleaned dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cleanByAmeliaBound"></a>}}
-\if{latex}{\out{\hypertarget{method-cleanByAmeliaBound}{}}}
-\subsection{Method \code{cleanByAmeliaBound()}}{
-Substitutes imputation sites by values generated by a different methods of the amelia package.
-The procedure is run with bound information.
-Returns the cleaned dataframe.
-Display the progress if shiny is loaded.
+\if{html}{\out{<a id="method-setImputationSites"></a>}}
+\if{latex}{\out{\hypertarget{method-setImputationSites}{}}}
+\subsection{Method \code{setImputationSites()}}{
+Replaces the detected anomalies of a user provided data frame with \code{NA} for further imputation routines.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$cleanByAmeliaBound(data = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$setImputationSites(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{Data frame to be mutated.
 (tibble::tibble)}
-
-\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-(shiny::Progress)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Cleaned dataframe.
-(tibble:tibble)
+A data frame with anomalies replaced by \code{NA}.
+(tibble::tibble)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$cleanByAmeliaBound(data, progress)
+\preformatted{mutated_df <- x$setImputationSites(data_df)
 }
 \if{html}{\out{</div>}}
 
@@ -938,31 +722,26 @@ Cleaned dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-dataTable"></a>}}
-\if{latex}{\out{\hypertarget{method-dataTable}{}}}
-\subsection{Method \code{dataTable()}}{
-Creates a datatable with outliers highlightes by colored background.
+\if{html}{\out{<a id="method-calcOutliersStatistics"></a>}}
+\if{latex}{\out{\hypertarget{method-calcOutliersStatistics}{}}}
+\subsection{Method \code{calcOutliersStatistics()}}{
+Calculates the statistics on the previously performed outlier detection analysis
+and stores the results in the instance variable \code{outliersStatistcs}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$dataTable(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$calcOutliersStatistics(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{The data frame to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-Al colored datatable
-(DT::datatable)
-}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{data \%>\%
- x$dataTable() \%>\%
- print()
+\preformatted{x$calcOutliersStatistics(data)
 }
 \if{html}{\out{</div>}}
 
@@ -975,13 +754,13 @@ Al colored datatable
 \subsection{Method \code{outlierTable()}}{
 Creates a datatable with substituted outliers highlightes by colored background.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outlierTable(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$outlierTable(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data frame to be analyzed.
+\item{\code{data_df}}{The data frame to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -1030,13 +809,13 @@ A bar plot.
 \subsection{Method \code{featureBarPlot()}}{
 Displays the distribution of an attribute's values as histogram.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBarPlot(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBarPlot(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{dataframe to be analyzed.
+\item{\code{data_df}}{dataframe to be analyzed.
 (tibble::tibble)}
 
 \item{\code{feature}}{attribute to be shown.
@@ -1064,13 +843,16 @@ A histogram.
 \subsection{Method \code{featureBoxPlotWithSubset()}}{
 Displays the distribution of an attribute's vlues as box plot.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBoxPlotWithSubset(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureBoxPlotWithSubset(
+  data_df = "tbl_df",
+  feature = "character"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{dataframe to be analyzed.
+\item{\code{data_df}}{dataframe to be analyzed.
 (tibble::tibble)}
 
 \item{\code{feature}}{attribute to be shown.
@@ -1098,13 +880,13 @@ A box plot.
 \subsection{Method \code{featurePlot()}}{
 Displays the distribution of an attribute's values as a composition of a box plot and a histogram.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featurePlot(data = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featurePlot(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{dataframe to be analyzed.
+\item{\code{data_df}}{dataframe to be analyzed.
 (tibble::tibble)}
 
 \item{\code{feature}}{attribute to be shown.

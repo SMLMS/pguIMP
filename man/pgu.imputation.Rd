@@ -672,7 +672,7 @@ writes the to the instance variable \code{imputationsites}.
 \if{html}{\out{<a id="method-handleImputationSites"></a>}}
 \if{latex}{\out{\hypertarget{method-handleImputationSites}{}}}
 \subsection{Method \code{handleImputationSites()}}{
-Chooseses a cleaning method based upon the instance variable \code{imputationAgent}
+Chooses a cleaning method based upon the instance variable \code{imputationAgent}
 and handles the imputation sites in the dataframe.
 Returns a cleaned data set.
 Display the progress if shiny is loaded.

@@ -1931,8 +1931,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updtateTrafoMutateGlobalParameterTbl(input, output, session)
-                            updtateTrafoMutateGlobalParameterTbl = function(input, output, session){
+                            #' x$updateTrafoMutateGlobalParameterTbl(input, output, session)
+                            updateTrafoMutateGlobalParameterTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalParameter <- DT::renderDataTable(
                                   self$transformator$trafoParameter %>%
@@ -2243,7 +2243,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$uppdateImputeNormFeatureStatisticsTbl(input, output, session)
+                            #' x$updateImputeNormFeatureStatisticsTbl(input, output, session)
                             updateImputeNormFeatureStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.imputeNormFeatureStatistics <- DT::renderDataTable({
@@ -2278,7 +2278,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$uppdateImputeNormStatisticsTbl(input, output, session)
+                            #' x$updateImputeNormStatisticsTbl(input, output, session)
                             updateImputeNormStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.imputeNormStatistics <- DT::renderDataTable({
@@ -2535,11 +2535,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               }#else
                             }, #function
 
-                            ###########################
-                            # impute mutate functions #
-                            ###########################
+                            #############################
+                            # impute outliers functions #
+                            #############################
                             #' @description
-                            #' Updates the si.imputeMutateFeature shiny widget.
+                            #' Updates the si.imputeOutliersMethod shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2547,19 +2547,19 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeMutateFeature(input, output, session)
-                            updateImputeMutateFeature = function(input, output, session){
+                            #' x$updateImputeOutliersMethod(input, output, session)
+                            updateImputeOutliersMethod = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateSelectInput(session,
-                                                         "si.imputeMutateFeature",
-                                                         choices = self$imputer$imputationParameter[["features"]],
-                                                         selected = self$imputer$imputationParameter[["features"]][1]
+                                                         "si.imputeOutliersMethod",
+                                                         choices = self$outliers$outliersAgentAlphabet,
+                                                         selected = self$otliers$outliersAgent
                                 )
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the si.imputeMutateMethod shiny widget.
+                            #' Updates the si.imputeOutliersFeature shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2567,19 +2567,18 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeMutateMethod(input, output, session)
-                            updateImputeMutateMethod = function(input, output, session){
+                            #' x$updateImputeOutliersFeature(input, output, session)
+                            updateImputeOutliersFeature = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateSelectInput(session,
-                                                         "si.imputeMutateMethod",
-                                                         choices = self$imputer$imputationAgentAlphabet,
-                                                         selected = self$imputer$imputationAgent
-                                )
+                                                         "si.imputeOutliersFeature",
+                                                         choices = self$normalizedData$numericFeatureNames,
+                                                         selected = self$normalizedData$numericFeatureNames[1])
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the ni.imputeMutateSeed shiny widget.
+                            #' Updates the ni.imputeOutliersAlpha shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2587,17 +2586,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeMutateSeed(input, output, session)
-                            updateImputeMutateSeed = function(input, output, session){
+                            #' x$updateImputeOutliersAlpha(input, output, session)
+                            updateImputeOutliersAlpha = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
-                                                          "ni.imputeMutateSeed",
-                                                          value = self$imputer$seed)
+                                                          "ni.imputeOutliersAlpha",
+                                                          value = self$outliers$alpha)
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the ni.imputeMutateIterations shiny widget.
+                            #' Updates the ni.imputeOutliersEpsilon shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2605,17 +2604,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeMutateIterations(input, output, session)
-                            updateImputeMutateIterations = function(input, output, session){
+                            #' x$updateImputeOutliersEpsilon(input, output, session)
+                            updateImputeOutliersEpsilon = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
-                                                          "ni.imputeMutateIterations",
-                                                          value = self$imputer$iterations)
+                                                          "ni.imputeOutliersEpsilon",
+                                                          value = self$outliers$epsilon)
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the gui.
+                            #' Updates the ni.imputeOutliersMinSamples shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2623,415 +2622,71 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeMutateGui(input, output, session)
-                            updateImputeMutateGui = function(input, output, session){
+                            #' x$updateImputeOutliersMinSamples(input, output, session)
+                            updateImputeOutliersMinSamples = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
-                                self$updateImputeMutateMethod(input, output, session)
-                                self$updateImputeMutateSeed(input, output, session)
-                                self$updateImputeMutateIterations(input, output, session)
-                                self$updateImputeMutateFeature(input, output, session)
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Calls the mutate imputation site routine of the instance variable imputer on the instance variable transformedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$imputeMutate(input, output, session)
-                            imputeMutate = function(input, output, session){
-                              if(self$status$query(processName = "naDetected")){
-                                private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
-                                private$.imputer$setSeed <- input$ni.imputeMutateSeed
-                                private$.imputer$setIterations <- input$ni.imputeMutateIterations
-
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$transformedData$numericFeatureNames))
-                                progress$set(message = "Impute Missings", value = 0)
-                                on.exit(progress$close())
-
-                                name  <- as.name("Sample Name")
-                                private$.imputedData$setRawData <- self$transformedData$numericData() %>%
-                                  self$imputer$handleImputationSites(progress = progress) %>%
-                                  # self$model$rescaleData() %>%
-                                  # self$transformator$reverseMutateData() %>%
-                                  tibble::add_column(!! name := self$transformedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
-                                private$.status$update(processName = "naMutated", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No Na's detected. Please detect missing first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the plt.imputeMutateFeatureDetail graphic.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateFeatureDetailGraphic(input, output, session)
-                            updateImputeMutateFeatureDetailGraphic = function(input, output, session){
-                              if(self$status$query(processName = "naMutated")){
-                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
-                                  self$imputer$featurePlot(data = self$imputedData$numericData(),
-                                                           feature = input$si.imputeMutateFeature)
-                                )#output
-                              }#if
-                              else{
-                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.imputeMutateFeatureDetail table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateFeatureDetailTbl(input, output, session)
-                            updateImputeMutateFeatureDetailTbl = function(input, output, session){
-                              if (self$status$query(processName = "naMutated")){
-                                output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData %>%
-                                                        dplyr::select(c("Sample Name", input$si.imputeMutateFeature)),
-                                                      by = "Sample Name") %>%
-                                    dplyr::slice(self$imputer$imputationSiteIdxByFeature(feature = input$si.imputeMutateFeature)) %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteMutationDetails"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.imputeMutateDetail table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateDetailTbl(input, output, session)
-                            updateImputeMutateDetailTbl = function(input, output, session){
-                              if(self$status$query(processName = "naMutated")){
-                                dfImputationSites <- self$imputer$imputationSites
-                                idx <- dfImputationSites[["row"]][!duplicated(dfImputationSites[["row"]])]
-
-                                output$tbl.imputeMutateDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
-                                    dplyr::slice(idx) %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteMutationDetail"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.imputeMutateData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateDataTbl(input, output, session)
-                            updateImputeMutateDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "naMutated")){
-                                output$tbl.imputeMutateData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteMutationData"),
-                                          text = "Download"
-                                        ))#button
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            ############################
-                            # outlier detect functions #
-                            ############################
-                            #' @description
-                            #' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$outliersDetect(input, output, session)
-                            outliersDetect = function(input, output, session){
-                              if(self$status$query(processName = "naDetected")){
-                                self$transformedData$numericData() %>%
-                                  private$.outliers$resetOutliersParameter()
-                                private$.status$update(processName = "outliersDetected", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the plt.outliersDetectSummary graphic.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersDetectGraphic(input, output, session)
-                            updateOutliersDetectGraphic = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                output$plt.outliersDetectSummary <- shiny::renderPlot(
-                                  self$outliers$plotOutliersDistribution()
-                                )#output
-                              }#if
-                              else{
-                                output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.outliersDetectStatistics table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersDetectStatisticsTbl(input, output, session)
-                            updateOutliersDetectStatisticsTbl = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                output$tbl.outliersDetectStatistics <- DT::renderDataTable(
-                                  self$outliers$outliersStatistics %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersDetectionStatistics"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.outliersDetectDetail table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersDetectDetailTbl(input, output, session)
-                            updateOutliersDetectDetailTbl = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                dfOutlier <- self$outliers$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                output$tbl.outliersDetectDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$transformedData$rawData, by = "Sample Name") %>%
-                                    dplyr::slice(idx) %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersDetectionDetail"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.outliersDetectData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersDetectDataTbl(input, output, session)
-                            updateOutliersDetectDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                output$tbl.outliersDetectData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$transformedData$rawData, by = "Sample Name") %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersDetectionData"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            ############################
-                            # outlier mutate functions #
-                            ############################
-                            #' @description
-                            #' Updates the si.outliersMutateFeature shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersMutateFeature(input, output, session)
-                            updateOutliersMutateFeature = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                shiny::updateSelectInput(session,
-                                                         "si.outliersMutateFeature",
-                                                         choices = self$outliers$outliersParameter[["features"]],
-                                                         selected = self$outliers$outliersParameter[["features"]][1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.outliersMutateMethod shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersMutateMethod(input, output, session)
-                            updateOutliersMutateMethod = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                shiny::updateSelectInput(session,
-                                                         "si.outliersMutateMethod",
-                                                         choices = self$outliers$cleaningAgentAlphabet,
-                                                         selected = self$outliers$cleaningAgent
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the ni.outliersMutateSeed shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersMutateSeed(input, output, session)
-                            updateOutliersMutateSeed = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
-                                                          "ni.outliersMutateSeed",
+                                                          "ni.imputeOutliersMinSamples",
+                                                          value = self$outliers$minSamples)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the ni.imputeOutliersGamma shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeOutliersGamma(input, output, session)
+                            updateImputeOutliersGamma = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeOutliersGamma",
+                                                          value = self$outliers$gamma)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the ni.imputeOutliersNu shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeOutliersNu(input, output, session)
+                            updateImputeOutliersNu = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeOutliersNu",
+                                                          value = self$outliers$nu)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the ni.imputeOutliersSeed shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeOutliersSeed(input, output, session)
+                            updateImputeOutliersSeed = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeOutliersSeed",
                                                           value = self$outliers$seed)
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the ni.outliersMutateIterations shiny widget.
+                            #' Updates the gui.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -3039,12 +2694,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateOutliersMutateIterations(input, output, session)
-                            updateOutliersMutateIterations = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                shiny::updateNumericInput(session,
-                                                          "ni.outliersMutateIterations",
-                                                          value = self$outliers$iterations)
+                            #' x$updateImputeOutliersGui(input, output, session)
+                            updateImputeOutliersGui = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                self$updateImputeOutliersMethod(input, output, session)
+                                self$updateImputeOutliersFeature(input, output, session)
+                                self$updateImputeOutliersAlpha(input, output, session)
+                                self$updateImputeOutliersEpsilon(input, output, session)
+                                self$updateImputeOutliersMinSamples(input, output, session)
+                                self$updateImputeOutliersGamma(input, output, session)
+                                self$updateImputeOutliersNu(input, output, session)
+                                self$updateImputeOutliersSeed(input, output, session)
                               }#if
                             }, #function
 
@@ -3057,18 +2717,22 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateOutliersMutateGui(input, output, session)
-                            updateOutliersMutateGui = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                self$updateOutliersMutateFeature(input, output, session)
-                                self$updateOutliersMutateMethod(input, output, session)
-                                self$updateOutliersMutateSeed(input, output, session)
-                                self$updateOutliersMutateIterations(input, output, session)
+                            #' x$resetImputeOutliersGui(input, output, session)
+                            resetImputeOutliersGui = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                self$updateImputeOutliersMethod(input, output, session)
+                                self$updateImputeOutliersAlpha(input, output, session)
+                                self$updateImputeOutliersEpsilon(input, output, session)
+                                self$updateImputeOutliersMinSamples(input, output, session)
+                                self$updateImputeOutliersGamma(input, output, session)
+                                self$updateImputeOutliersNu(input, output, session)
+                                self$updateImputeOutliersSeed(input, output, session)
                               }#if
-                            }, #function
+                            },#function
 
                             #' @description
-                            #' Calls the mutate outliers routine of the instance variable outliers on the instance variable transformedData.
+                            #' Calls the detectOutliers routine of the instance variable outliers
+                            #' on the instance variable normalizedData.
                             #' Updates the instance class status.
                             #' @param input
                             #' Pointer to shiny input
@@ -3077,42 +2741,32 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$outliersMutate(input, output, session)
-                            outliersMutate = function(input, output, session){
-                              if(self$status$query(processName = "outliersDetected")){
-                                private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
-                                private$.outliers$setSeed <- input$ni.outliersMutateSeed
-                                private$.outliers$setIterations <- input$ni.outliersMutateIterations
+                            #' x$imputeOutliersDetect(input, output, session)
+                            imputeOutliersDetect = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                private$.outliers$setOutliersAgent <- input$si.imputeOutliersMethod
+                                private$.outliers$setAlpha <- input$ni.imputeOutliersAlpha
+                                private$.outliers$setEpsilon <- input$ni.imputeOutliersEpsilon
+                                private$.outliers$setMinSamples <- input$ni.imputeOutliersMinSamples
+                                private$.outliers$setGamma <- input$ni.imputeOutliersGamma
+                                private$.outliers$setNu <- input$ni.imputeOutliersNu
+                                private$.outliers$setSeed <- input$ni.imputeOutliersSeed
 
-                                progress <- shiny::Progress$new(session, min = 1, max = 2 * length(self$imputedData$numericFeatureNames))
-                                progress$set(message = "Mutate Outliers", value = 0)
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
+                                progress$set(message = "Searching for anomalies", value = 1)
                                 on.exit(progress$close())
+                                self$normalizedData$numericData() %>%
+                                  private$.outliers$detectOutliers(progress)
 
-                                name  <- as.name("Sample Name")
-                                private$.revisedData$setRawData <- self$imputedData$numericData() %>%
-                                  self$outliers$handleOutliers(progress = progress) %>%
-                                  tibble::add_column(!! name := self$imputedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-                                private$.cleanedData$setRawData <- self$revisedData$numericData() %>%
-                                  self$model$rescaleData() %>%
-                                  self$transformator$reverseMutateData() %>%
-                                  tibble::add_column(!! name := self$imputedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-                                private$.status$update(processName = "outliersMutated", value = TRUE)
+                                private$.status$update(processName = "outliersDetected", value = TRUE)
                               }#if
                               else{
-                                shiny::showNotification(paste("No outliers detected. Please detect outliers first."),type = "error", duration = 10)
+                                shiny::showNotification(paste("No missings detected. Please detect missings first."),type = "error", duration = 10)
                               }#else
                             }, #function
 
                             #' @description
-                            #' Updates the plt.outliersMutateFeatureDetail graphic.
+                            #' Updates the plt.outliersImputeSummary graphic.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -3120,21 +2774,20 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateOutliersMutateFeatureDetailGraphic(input, output, session)
-                            updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
-                              if(self$status$query(processName = "outliersMutated")){
-                                output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
-                                  self$outliers$featurePlot(data = self$revisedData$numericData(),
-                                                            feature = input$si.outliersMutateFeature)
-                                )#output
+                            #' x$updateImputeOutliersGraphic(input, output, session)
+                            updateImputeOutliersGraphic = function(input, output, session){
+                              if(self$status$query(processName = "outliersDetected")){
+                                output$plt.outliersImputeSummary <- shiny::renderPlot(
+                                  self$outliers$plotOutliersDistribution()
+                                )
                               }#if
                               else{
-                                output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
+                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL)
                               }#else
                             }, #function
 
                             #' @description
-                            #' Updates the tbl.outliersMutateFeatureDetail table.
+                            #' Updates the plt.outliersImputeFeature graphic.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -3142,113 +2795,733 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateOutliersMutateFeatureDetailTbl(input, output, session)
-                            updateOutliersMutateFeatureDetailTbl = function(input, output, session){
-                              if (self$status$query(processName = "outliersMutated")){
-                                output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$revisedData$rawData %>%
-                                                        dplyr::select(c("Sample Name", input$si.outliersMutateFeature))  ,
-                                                      by = "Sample Name") %>%
-                                    dplyr::slice(self$outliers$outliersIdxByFeature(feature = input$si.outliersMutateFeature)) %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersMutationDetails"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
+                            #' x$updateImputeOutliersFeatureGraphic(input, output, session)
+                            updateImputeOutliersFeatureGraphic = function(input, output, session){
+                              if(self$status$query(processName = "outliersDetected")){
+                                output$plt.outliersImputeFeature <- shiny::renderPlot(
+                                    self$outliers$featurePlot(data_df = self$normalizedData$numericData(),
+                                                              feature = input$si.imputeOutliersFeature)
+                                )
                               }#if
                               else{
-                                output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
+                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL)
                               }#else
                             }, #function
 
-                            #' @description
-                            #' Updates the tbl.outliersMutateDetail table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersMutateDetailTbl(input, output, session)
-                            updateOutliersMutateDetailTbl = function(input, output, session){
-                              if(self$status$query(processName = "outliersMutated")){
-                                dfOutlier <- self$outliers$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                output$tbl.outliersMutateDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$revisedData$rawData, by = "Sample Name") %>%
-                                    dplyr::slice(idx) %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersMutationDetail"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
+                            #' ###########################
+                            #' # impute mutate functions #
+                            #' ###########################
+                            #' #' @description
+                            #' #' Updates the si.imputeMutateFeature shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateFeature(input, output, session)
+                            #' updateImputeMutateFeature = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     shiny::updateSelectInput(session,
+                            #'                              "si.imputeMutateFeature",
+                            #'                              choices = self$imputer$imputationParameter[["features"]],
+                            #'                              selected = self$imputer$imputationParameter[["features"]][1]
+                            #'     )
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the si.imputeMutateMethod shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateMethod(input, output, session)
+                            #' updateImputeMutateMethod = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     shiny::updateSelectInput(session,
+                            #'                              "si.imputeMutateMethod",
+                            #'                              choices = self$imputer$imputationAgentAlphabet,
+                            #'                              selected = self$imputer$imputationAgent
+                            #'     )
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the ni.imputeMutateSeed shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateSeed(input, output, session)
+                            #' updateImputeMutateSeed = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     shiny::updateNumericInput(session,
+                            #'                               "ni.imputeMutateSeed",
+                            #'                               value = self$imputer$seed)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the ni.imputeMutateIterations shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateIterations(input, output, session)
+                            #' updateImputeMutateIterations = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     shiny::updateNumericInput(session,
+                            #'                               "ni.imputeMutateIterations",
+                            #'                               value = self$imputer$iterations)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the gui.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateGui(input, output, session)
+                            #' updateImputeMutateGui = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     self$updateImputeMutateMethod(input, output, session)
+                            #'     self$updateImputeMutateSeed(input, output, session)
+                            #'     self$updateImputeMutateIterations(input, output, session)
+                            #'     self$updateImputeMutateFeature(input, output, session)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Calls the mutate imputation site routine of the instance variable imputer on the instance variable transformedData.
+                            #' #' Updates the instance class status.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$imputeMutate(input, output, session)
+                            #' imputeMutate = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
+                            #'     private$.imputer$setSeed <- input$ni.imputeMutateSeed
+                            #'     private$.imputer$setIterations <- input$ni.imputeMutateIterations
+                            #'
+                            #'     progress <- shiny::Progress$new(session, min = 1, max = length(self$transformedData$numericFeatureNames))
+                            #'     progress$set(message = "Impute Missings", value = 0)
+                            #'     on.exit(progress$close())
+                            #'
+                            #'     name  <- as.name("Sample Name")
+                            #'     private$.imputedData$setRawData <- self$transformedData$numericData() %>%
+                            #'       self$imputer$handleImputationSites(progress = progress) %>%
+                            #'       # self$model$rescaleData() %>%
+                            #'       # self$transformator$reverseMutateData() %>%
+                            #'       tibble::add_column(!! name := self$transformedData$rawData %>%
+                            #'                            dplyr::select(!!name) %>%
+                            #'                            unlist() %>%
+                            #'                            as.character()) %>%
+                            #'       dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
+                            #'     private$.status$update(processName = "naMutated", value = TRUE)
+                            #'   }#if
+                            #'   else{
+                            #'     shiny::showNotification(paste("No Na's detected. Please detect missing first."),type = "error", duration = 10)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the plt.imputeMutateFeatureDetail graphic.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateFeatureDetailGraphic(input, output, session)
+                            #' updateImputeMutateFeatureDetailGraphic = function(input, output, session){
+                            #'   if(self$status$query(processName = "naMutated")){
+                            #'     output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
+                            #'       self$imputer$featurePlot(data = self$imputedData$numericData(),
+                            #'                                feature = input$si.imputeMutateFeature)
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.imputeMutateFeatureDetail table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateFeatureDetailTbl(input, output, session)
+                            #' updateImputeMutateFeatureDetailTbl = function(input, output, session){
+                            #'   if (self$status$query(processName = "naMutated")){
+                            #'     output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$imputedData$rawData %>%
+                            #'                             dplyr::select(c("Sample Name", input$si.imputeMutateFeature)),
+                            #'                           by = "Sample Name") %>%
+                            #'         dplyr::slice(self$imputer$imputationSiteIdxByFeature(feature = input$si.imputeMutateFeature)) %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("imputationSiteMutationDetails"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.imputeMutateDetail table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateDetailTbl(input, output, session)
+                            #' updateImputeMutateDetailTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "naMutated")){
+                            #'     dfImputationSites <- self$imputer$imputationSites
+                            #'     idx <- dfImputationSites[["row"]][!duplicated(dfImputationSites[["row"]])]
+                            #'
+                            #'     output$tbl.imputeMutateDetail <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
+                            #'         dplyr::slice(idx) %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("imputationSiteMutationDetail"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.imputeMutateData table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeMutateDataTbl(input, output, session)
+                            #' updateImputeMutateDataTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "naMutated")){
+                            #'     output$tbl.imputeMutateData <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("imputationSiteMutationData"),
+                            #'               text = "Download"
+                            #'             ))#button
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
 
-                            #' @description
-                            #' Updates the tbl.outliersMutateData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateOutliersMutateDataTbl(input, output, session)
-                            updateOutliersMutateDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "outliersMutated")){
-                                output$tbl.outliersMutateData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$revisedData$rawData, by = "Sample Name") %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersMutationData"),
-                                          text = "Download"
-                                        ))#output
-                                      )#options
-                                    )#DT::datatabe
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
-                              } #else
-                            }, #function
+                            ############################
+                            # outlier detect functions #
+                            ############################
+                            #' #' @description
+                            #' #' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
+                            #' #' Updates the instance class status.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$outliersDetect(input, output, session)
+                            #' outliersDetect = function(input, output, session){
+                            #'   if(self$status$query(processName = "naDetected")){
+                            #'     self$transformedData$numericData() %>%
+                            #'       private$.outliers$resetOutliersParameter()
+                            #'     private$.status$update(processName = "outliersDetected", value = TRUE)
+                            #'   }#if
+                            #'   else{
+                            #'     shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the plt.outliersDetectSummary graphic.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersDetectGraphic(input, output, session)
+                            #' updateOutliersDetectGraphic = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     output$plt.outliersDetectSummary <- shiny::renderPlot(
+                            #'       self$outliers$plotOutliersDistribution()
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersDetectStatistics table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersDetectStatisticsTbl(input, output, session)
+                            #' updateOutliersDetectStatisticsTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     output$tbl.outliersDetectStatistics <- DT::renderDataTable(
+                            #'       self$outliers$outliersStatistics %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersDetectionStatistics"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersDetectDetail table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersDetectDetailTbl(input, output, session)
+                            #' updateOutliersDetectDetailTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     dfOutlier <- self$outliers$outliers
+                            #'     idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                            #'     output$tbl.outliersDetectDetail <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$transformedData$rawData, by = "Sample Name") %>%
+                            #'         dplyr::slice(idx) %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersDetectionDetail"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersDetectData table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersDetectDataTbl(input, output, session)
+                            #' updateOutliersDetectDataTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     output$tbl.outliersDetectData <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$transformedData$rawData, by = "Sample Name") %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersDetectionData"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+
+                            #' ############################
+                            #' # outlier mutate functions #
+                            #' ############################
+                            #' #' @description
+                            #' #' Updates the si.outliersMutateFeature shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateFeature(input, output, session)
+                            #' updateOutliersMutateFeature = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     shiny::updateSelectInput(session,
+                            #'                              "si.outliersMutateFeature",
+                            #'                              choices = self$outliers$outliersParameter[["features"]],
+                            #'                              selected = self$outliers$outliersParameter[["features"]][1]
+                            #'     )#input
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the si.outliersMutateMethod shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateMethod(input, output, session)
+                            #' updateOutliersMutateMethod = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     shiny::updateSelectInput(session,
+                            #'                              "si.outliersMutateMethod",
+                            #'                              choices = self$outliers$cleaningAgentAlphabet,
+                            #'                              selected = self$outliers$cleaningAgent
+                            #'     )#input
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the ni.outliersMutateSeed shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateSeed(input, output, session)
+                            #' updateOutliersMutateSeed = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     shiny::updateNumericInput(session,
+                            #'                               "ni.outliersMutateSeed",
+                            #'                               value = self$outliers$seed)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the ni.outliersMutateIterations shiny widget.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateIterations(input, output, session)
+                            #' updateOutliersMutateIterations = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     shiny::updateNumericInput(session,
+                            #'                               "ni.outliersMutateIterations",
+                            #'                               value = self$outliers$iterations)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the gui.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateGui(input, output, session)
+                            #' updateOutliersMutateGui = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     self$updateOutliersMutateFeature(input, output, session)
+                            #'     self$updateOutliersMutateMethod(input, output, session)
+                            #'     self$updateOutliersMutateSeed(input, output, session)
+                            #'     self$updateOutliersMutateIterations(input, output, session)
+                            #'   }#if
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Calls the mutate outliers routine of the instance variable outliers on the instance variable transformedData.
+                            #' #' Updates the instance class status.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$outliersMutate(input, output, session)
+                            #' outliersMutate = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersDetected")){
+                            #'     private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
+                            #'     private$.outliers$setSeed <- input$ni.outliersMutateSeed
+                            #'     private$.outliers$setIterations <- input$ni.outliersMutateIterations
+                            #'
+                            #'     progress <- shiny::Progress$new(session, min = 1, max = 2 * length(self$imputedData$numericFeatureNames))
+                            #'     progress$set(message = "Mutate Outliers", value = 0)
+                            #'     on.exit(progress$close())
+                            #'
+                            #'     name  <- as.name("Sample Name")
+                            #'     private$.revisedData$setRawData <- self$imputedData$numericData() %>%
+                            #'       self$outliers$handleOutliers(progress = progress) %>%
+                            #'       tibble::add_column(!! name := self$imputedData$rawData %>%
+                            #'                            dplyr::select(!!name) %>%
+                            #'                            unlist() %>%
+                            #'                            as.character()) %>%
+                            #'       dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+                            #'     private$.cleanedData$setRawData <- self$revisedData$numericData() %>%
+                            #'       self$model$rescaleData() %>%
+                            #'       self$transformator$reverseMutateData() %>%
+                            #'       tibble::add_column(!! name := self$imputedData$rawData %>%
+                            #'                            dplyr::select(!!name) %>%
+                            #'                            unlist() %>%
+                            #'                            as.character()) %>%
+                            #'       dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+                            #'     private$.status$update(processName = "outliersMutated", value = TRUE)
+                            #'   }#if
+                            #'   else{
+                            #'     shiny::showNotification(paste("No outliers detected. Please detect outliers first."),type = "error", duration = 10)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the plt.outliersMutateFeatureDetail graphic.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateFeatureDetailGraphic(input, output, session)
+                            #' updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersMutated")){
+                            #'     output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
+                            #'       self$outliers$featurePlot(data = self$revisedData$numericData(),
+                            #'                                 feature = input$si.outliersMutateFeature)
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersMutateFeatureDetail table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateFeatureDetailTbl(input, output, session)
+                            #' updateOutliersMutateFeatureDetailTbl = function(input, output, session){
+                            #'   if (self$status$query(processName = "outliersMutated")){
+                            #'     output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$revisedData$rawData %>%
+                            #'                             dplyr::select(c("Sample Name", input$si.outliersMutateFeature))  ,
+                            #'                           by = "Sample Name") %>%
+                            #'         dplyr::slice(self$outliers$outliersIdxByFeature(feature = input$si.outliersMutateFeature)) %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersMutationDetails"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersMutateDetail table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateDetailTbl(input, output, session)
+                            #' updateOutliersMutateDetailTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersMutated")){
+                            #'     dfOutlier <- self$outliers$outliers
+                            #'     idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                            #'     output$tbl.outliersMutateDetail <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$revisedData$rawData, by = "Sample Name") %>%
+                            #'         dplyr::slice(idx) %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersMutationDetail"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.outliersMutateData table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateOutliersMutateDataTbl(input, output, session)
+                            #' updateOutliersMutateDataTbl = function(input, output, session){
+                            #'   if(self$status$query(processName = "outliersMutated")){
+                            #'     output$tbl.outliersMutateData <- DT::renderDataTable(
+                            #'       self$filteredMetadata$rawData %>%
+                            #'         dplyr::right_join(self$revisedData$rawData, by = "Sample Name") %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("outliersMutationData"),
+                            #'               text = "Download"
+                            #'             ))#output
+                            #'           )#options
+                            #'         )#DT::datatabe
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
+                            #'   } #else
+                            #' }, #function
 
                             #########################
                             # correlation functions #

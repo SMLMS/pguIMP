@@ -1,4 +1,4 @@
-#' #' @title pgu.outliers
+#' @title pgu.outliers
 #'
 #' @description
 #' Detects and replaces possible outliers from data set.
@@ -10,7 +10,7 @@
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:
-#' x <- pguIMP::pgu.outliers$new(data)
+#' x <- pguIMP::pgu.outliers$new(data_df)
 #'
 #' @import R6
 #' @import tidyverse
@@ -116,9 +116,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               },
                               #' @field minSamples
                               #' Returns the instance variable minSamples.
-                              #' (numeric)
+                              #' (integer)
                               minSamples = function(){
                                 return(private$.minSamples)
+                              },
+                              #' @field setMinSamples
+                              #' Set the instance variable minSamples.
+                              #' (integer)
+                              setMinSamples = function(value = "integer"){
+                                private$.minSamples <- value
                               },
                               #' @field gamma
                               #' Returns the instance variable gamma.
@@ -146,14 +152,14 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               },
                               #' @field seed
                               #' Returns the instance variable seed.
-                              #' (numeric)
+                              #' (integer)
                               seed = function(){
                                 return(private$.seed)
                               },
                               #' @field setSeed
                               #' Set the instance variable seed.
-                              #' (numeric)
-                              setSeed = function(value = "numeric"){
+                              #' (integer)
+                              setSeed = function(value = "integer"){
                                 private$.seed <- value
                               }
                             ),#active
@@ -169,6 +175,21 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @param alpha
                               #' Initial definition of the instance variable alpha.
                               #' (numeric)
+                              #' @param epsilon
+                              #' Initial definition of the instance variable epsilon.
+                              #' (numeric)
+                              #' @param minSamples
+                              #' Initial definition of the instance variable minSamples.
+                              #' (integer)
+                              #' @param gamma
+                              #' Initial definition of the instance variable gamma.
+                              #' (numeric)
+                              #' @param nu
+                              #' Initial definition of the instance variable nu.
+                              #' (numeric)
+                              #' @param seed
+                              #' Initial definition of the instance variable seed.
+                              #' (integer)
                               #' @return
                               #' A new `pgu.outliers` object.
                               #' (pguIMP::pgu.outliers)
@@ -185,8 +206,8 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 private$.outliersAgentAlphabet <-c("none", "Grubbs", "DBSCAN", "SVM")
                                 self$setOutliersAgent <- "none"
                                 if(!tibble::is_tibble(data_df)){
-                                  data <- tibble::tibble(names <- "none",
-                                                         values <- c(NA))
+                                  data_df <- tibble::tibble(names <- "none",
+                                                            values <- c(NA))
                                 }
                                 self$resetOutliers(data_df)
                               }, #function
@@ -196,7 +217,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' indicates that instance of `pgu.outliers` is removed from heap.
                               finalize = function(){
                                 print("Instance of pgu.outliers removed from heap")
-                              },#function
+                              }, #function
 
                               ##########################
                               # print instance variables
@@ -213,7 +234,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 cat(rString)
                                 uString <- sprintf("outliersAgent: %s\nseed: %i\n", self$outliersAgent,self$seed)
                                 uString <- sprintf("%s\nGrubbs parameter:\nalpha: %.3e\n", uString, self$alpha)
-                                uString <- sprintf("%s\nDBSCAN parameter\nepsilon: %.3e\nminsamples: %i\n", uString, self$epsilon, self$minSamples)
+                                uString <- sprintf("%s\nDBSCAN parameter\nepsilon: %.3e\nminSamples: %i\n", uString, self$epsilon, self$minSamples)
                                 uString <- sprintf("%s\nSVM parameter\ngamma: %.3e\nnu: %.3e\n", uString, self$gamma, self$nu)
                                 cat(uString)
                                 print(self$outliers)
@@ -251,7 +272,6 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                                     type = character(0),
                                                                     color = character(0)) %>%
                                   dplyr::mutate_if(is.numeric, round, 8)
-                                #self$findOutliers(data_df, progress)
                               }, #function
 
                               ####################
@@ -259,7 +279,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               ####################
                               #' @description
                               #' Filters attributes from the given dataframe that are known to the class.
-                              #' @param data
+                              #' @param data_df
                               #' Dataframe to be filtered.
                               #' (tibble::tibble)
                               #' @return
@@ -267,18 +287,27 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' (tibble::tibble)
                               #' @examples
                               #' matrix <- x$filterFeatures(data)
-                              filterFeatures = function(data = "tbl_df"){
-                                data %>%
-                                  dplyr::select(private$.outliersParameter[["features"]]) %>%
+                              filterFeatures = function(data_df = "tbl_df"){
+                                data_df %>%
+                                  dplyr::select(dplyr::all_of(private$.outliersParameter[["features"]])) %>%
                                   return()
                               }, #function
 
+                              #' @description
+                              #' determines the outliers parameter by analyzing the
+                              #' tibble data_df and the instance variable outliers.
+                              #' Results are stored to instance variable outliersParameter.
+                              #' @param data_df
+                              #' Dataframe to be analyzed.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' x$detectOutliersParameter(data_df)
                               detectOutliersParameter = function(data_df="tbl_df"){
                                 measurements <- rep(0, nrow(self$outliersParameter))
                                 n_outliers <- rep(0, nrow(self$outliersParameter))
                                 for (i in seq(nrow(self$outliersParameter))){
                                   measurements[i] <- data_df %>%
-                                    dplyr::select(self$outliersParameter[["features"]][i]) %>%
+                                    dplyr::select(dplyr::all_of(self$outliersParameter[["features"]][i])) %>%
                                     tidyr::drop_na() %>%
                                     dplyr::count() %>%
                                     unlist() %>%
@@ -287,7 +316,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   n_outliers[i] <- self$outliers %>%
                                     dplyr::select(feature) %>%
                                     dplyr::filter(grepl(self$outliersParameter[["features"]][i],feature)) %>%
-                                    count() %>%
+                                    dplyr::count() %>%
                                     unlist() %>%
                                     as.integer()
                                 }
@@ -296,14 +325,14 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                                              outliers = n_outliers) %>%
                                   dplyr::mutate(existings = measurements - outliers) %>%
                                   dplyr::mutate(fractionOfOutliers = outliers/measurements) %>%
-                                  dplyr::select(c("features", "measurements", "existings", "outliers", "fractionOfOutliers"))
+                                  dplyr::select(dplyr::all_of(c("features", "measurements", "existings", "outliers", "fractionOfOutliers")))
                               },
 
                               #' @description
                               #' Characterizes each row of the data frame as either `complete`
                               #' or indicates which attribute has been identified as an outlier within the row.
                               #' If multiple attributes' row entries were identified as outliers, the row is characterized by `multiple`.
-                              #' @param data
+                              #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
                               #' @return
@@ -311,8 +340,8 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' (character)
                               #' @examples
                               #' idx <- x$outliersFeatureList(data)
-                              outliersFeatureList = function(data = "tbl_df"){
-                                outFeature <- c(rep("complete", nrow(data)))
+                              outliersFeatureList = function(data_df = "tbl_df"){
+                                outFeature <- c(rep("complete", nrow(data_df)))
                                 if (nrow(self$outliers) > 0) {
                                   for(i in seq(from = 1,to = nrow(self$outliers), by =1)){
                                     if (grepl("complete", outFeature[self$outliers[[i,"measurement"]]])){
@@ -329,6 +358,18 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               ###################
                               # detect outliers #
                               ###################
+
+                              #' @description
+                              #' Chooses a method for identification of anomalies based upon the instance variable `outliersAgent`
+                              #' Detects anomalies in a data frame by one-dimensional analysis of each feature.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @examples
+                              #' x$detectOutliers(data_df)
                               detectOutliers = function(data_df = "tbl_df", progress = "Progress"){
                                 set.seed(self$seed)
                                 switch(self$outliersAgent,
@@ -341,6 +382,20 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 self$calcOutliersStatistics(data_df)
                               },
 
+                              #' @description
+                              #' Identifies anomalies in the data frame based on Grubb's test.
+                              #' Iterates over the whole data frame. Calls the object's public function
+                              #' `grubbs_numeric` until no more anomalies are identified.
+                              #' The threshold for anomaly detection is defined in the instance variable `alpha`.
+                              #' Display the progress if shiny is loaded.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @examples
+                              #' x$detectByGrubbs(data_df)
                               detectByGrubbs = function(data_df = "tbl_df", progress = "Progress"){
                                 self$resetOutliers(data_df)
                                 for (feature in self$outliersParameter[["features"]]){
@@ -356,8 +411,9 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               },#function
 
                               #' @description
-                              #' Performes Grubb's test for outliers to detect a single outlier in the provided attributes data.
-                              #' If an outlier is found, it is written to the instance variable `outliers`.
+                              #' Performs Grubb's test for anomalies to detect a single outlier in the provided attributes data.
+                              #' If an outlier is found, it is added to the instance variable `outliers`.
+                              #' The threshold for anomaly detection is difined in the instance variable `alpha`.
                               #' The function indicates a find by a positive feedback.
                               #' @param data_df
                               #' The data frame to be analyzed.
@@ -398,6 +454,21 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 }#else
                               },#function
 
+                              #' @description
+                              #' Identifies anomalies in the data frame based on DBSCAN.
+                              #' Iterates over the whole data frame. Calls the object's public function
+                              #' `dbscan_numeric` until all features are analyzed.
+                              #' The cluster hyper parameter are defined in the instance variables `epsilon` and `minSamples`.
+                              #' The results of the `dbscan_numeric` routine are added to the instance variable `outliers`.
+                              #' Display the progress if shiny is loaded.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @examples
+                              #' x$detectByDBSCAN(data_df)
                               detectByDbscan = function(data_df = "tbl_df", progress = "Progress"){
                                 self$resetOutliers(data_df)
                                 for (feature in self$outliersParameter[["features"]]){
@@ -414,12 +485,35 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 } #for
                               }, #function
 
+                              #' @description
+                              #' Identifies anomalies in a single feature of a data frame based on DBSCAN.
+                              #' The cluster hyperparameter are defined in the instance variables `epsilon` and `minSamples`.
+                              #' Display the progress if shiny is loaded.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param feature
+                              #' Feature to be analyzed
+                              #' (character)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @return
+                              #' A data frame comprising the information about detected anomalies of the feature.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' x$dbscan_numeric(data_df,"infected")
                               dbscan_numeric = function(data_df = "tbl_df", feature = "character"){
-                                mean_val <- data_df[[feature]] %>%
+                                feature_df <- data_df %>%
+                                  dplyr::select(feature) %>%
+                                  tidyr::drop_na()
+
+                                mean_val <- feature_df %>%
+                                  unlist() %>%
+                                  as.numeric() %>%
                                   mean()
 
-                                dbscan_model <- data_df %>%
-                                  dplyr::select(feature) %>%
+                                dbscan_model <- feature_df %>%
                                   dbscan::dbscan(eps = self$epsilon, minPts = self$minSamples)
 
                                 outliers_df <- tibble::tibble(measurement = numeric(0),
@@ -428,13 +522,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                               type = character(0),
                                                               color = character(0))
 
-                                idx <- which(dbscan_model$cluster==0)
-                                if(length(idx) > 0){
-                                  values <-  data_df[[feature]][dbscan_model$cluster==0]
+                                if(sum(dbscan_model$cluster==0)>0){
+                                  values <-  feature_df[[feature]][dbscan_model$cluster==0]
+                                  idx <- which(data_df[[feature]] %in% values)
                                   feature <- rep(feature, length(values))
                                   outliers_df <- tibble::tibble(measurement = as.numeric(idx),
                                                                 feature = as.character(feature),
-                                                                values = as.numeric(values) ) %>%
+                                                                values = as.numeric(values)) %>%
                                     dplyr::mutate(type = ifelse(values > mean_val, "max", "min")) %>%
                                     dplyr::mutate(color = ifelse(values > mean_val, "firebrick", "blue"))
 
@@ -442,6 +536,21 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 return(outliers_df)
                               },
 
+                              #' @description
+                              #' Identifies anomalies in the data frame based on one class SVM.
+                              #' Iterates over the whole data frame. Calls the object's public function
+                              #' `svm_numeric` until all features are analyzed.
+                              #' The cluster hyper parameter are defined in the instance variables `gamma` and `nu`.
+                              #' The results of the `svm_numeric` routine are added to the instance variable `outliers`.
+                              #' Display the progress if shiny is loaded.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @examples
+                              #' x$detectByDBSCAN(data_df)
                               detectBySvm = function(data_df = "tbl_df", progress = "Process"){
                                 self$resetOutliers(data_df)
                                 for (feature in self$outliersParameter[["features"]]){
@@ -456,13 +565,35 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 }#for
                               },
 
+                              #' @description
+                              #' Identifies anomalies in a single feature of a data frame based on one class SVM.
+                              #' The cluster hyperparameter are defined in the instance variables `gamma` and `nu`.
+                              #' Display the progress if shiny is loaded.
+                              #' @param data_df
+                              #' Data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @param feature
+                              #' Feature to be analyzed
+                              #' (character)
+                              #' @param progress
+                              #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+                              #' (shiny::Progress)
+                              #' @return
+                              #' A data frame comprising the information about detected anomalies of the feature.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' x$dbscan_numeric(data_df,"infected")
                               svm_numeric = function(data_df = "tbl_df", feature = "character"){
-                                print(feature)
-                                mean_val <- data_df[[feature]] %>%
+                                feature_df <- data_df %>%
+                                  dplyr::select(feature) %>%
+                                  tidyr::drop_na()
+
+                                mean_val <- feature_df %>%
+                                  unlist() %>%
+                                  as.numeric() %>%
                                   mean()
 
-                                svm_model <- data_df %>%
-                                  dplyr::select(feature) %>%
+                                svm_model <- feature_df %>%
                                   e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
 
 
@@ -472,12 +603,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                               type = character(0),
                                                               color = character(0))
 
-                                result <- predict(model_oneclasssvm,data_df[feature]) %>%
+                                result <- predict(svm_model, data_df[feature]) %>%
                                   as.logical()
-                                idx <- which(!result)
+                                feature_idx <- which(!result)
 
-                                if(length(idx)>0){
-                                  values <- data_df[[feature]][idx]
+                                if(length(feature_idx)>0){
+                                  values <- feature_df[[feature]][feature_idx]
+                                  idx <- which(data_df[[feature]] %in% values)
                                   feature <- rep(feature, length(values))
                                   outliers_df <- tibble::tibble(measurement = as.numeric(idx),
                                                                 feature = as.character(feature),
@@ -491,11 +623,22 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               ########################
                               # set imputation sites #
                               ########################
+
+                              #' @description
+                              #' Replaces the detected anomalies of a user provided data frame with `NA` for further imputation routines.
+                              #' @param data_df
+                              #' Data frame to be mutated.
+                              #' (tibble::tibble)
+                              #' @return
+                              #' A data frame with anomalies replaced by `NA`.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' mutated_df <- x$setImputationSites(data_df)
                               setImputationSites = function(data_df = "tbl_df"){
                                 for (i in seq(nrow(self$outliersParameter))){
                                   temp_feature <- self$outliersParameter[["features"]][i]
                                   idx <- self$outliers %>%
-                                    dplyr::select(c("measurement", "feature")) %>%
+                                    dplyr::select(dplyr::all_of(c("measurement", "feature"))) %>%
                                     dplyr::filter(grepl(temp_feature, feature)) %>%
                                     dplyr::select("measurement") %>%
                                     unlist() %>%
@@ -507,9 +650,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                     unlist() %>%
                                                     as.numeric() %>%
                                                     replace(idx, NA))
-                                  # <- data_df[[self$outliersParameter[["features"]][i]]]%>%
-                                  #   replace(idx, NA)
-                                }
+                                }#for
                                 return(data_df)
                               }, #function
 
@@ -519,13 +660,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @description
                               #' Calculates the statistics on the previously performed outlier detection analysis
                               #' and stores the results in the instance variable `outliersStatistcs`.
-                              #' @param data
+                              #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
                               #' @examples
                               #' x$calcOutliersStatistics(data)
-                              calcOutliersStatistics = function(data = "tbl_df"){
-                                absCount <- data %>%
+                              calcOutliersStatistics = function(data_df = "tbl_df"){
+                                absCount <- data_df %>%
                                   self$filterFeatures() %>%
                                   dplyr::summarise_all(~sum(!is.na(.)))
                                 private$.outliersStatistics <- tibble::tibble(features = colnames(absCount),
@@ -568,7 +709,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
 
                               #' @description
                               #' Creates a datatable with substituted outliers highlightes by colored background.
-                              #' @param data
+                              #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
                               #' @return
@@ -578,9 +719,9 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' data %>%
                               #'  x$outlierTable() %>%
                               #'  print()
-                              outlierTable = function(data = "tbl_df"){
+                              outlierTable = function(data_df = "tbl_df"){
                                 idx <- self$outliers[["measurement"]][!duplicated(self$outliers[["measurement"]])]
-                                t <- data %>%
+                                t <- data_df %>%
                                   dplyr::slice(idx) %>%
                                   dplyr::mutate_if(is.numeric, round, 3) %>%
                                   DT::datatable(
@@ -596,7 +737,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   if (nrow(featureOutlier)>0){
                                     t <- DT::formatStyle(t,
                                                          featureName,
-                                                         backgroundColor = styleEqual(data %>%
+                                                         backgroundColor = styleEqual(data_df %>%
                                                                                         dplyr::select(!!featureName) %>%
                                                                                         dplyr::slice(featureOutlier[["measurement"]]) %>%
                                                                                         unlist() %>%
@@ -632,7 +773,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
 
                               #' @description
                               #' Displays the distribution of an attribute's values as histogram.
-                              #' @param data
+                              #' @param data_df
                               #' dataframe to be analyzed.
                               #' (tibble::tibble)
                               #' @param feature
@@ -644,9 +785,9 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @examples
                               #' x$featureBarPlot() %>%
                               #'  show()
-                              featureBarPlot = function(data = "tbl_df", feature = "character"){
+                              featureBarPlot = function(data_df = "tbl_df", feature = "character"){
                                 feature <- dplyr::sym(feature)
-                                p <- data %>%
+                                p <- data_df %>%
                                   ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
                                   ggplot2::geom_bar(stat = "bin")
                                 return(p)
@@ -655,7 +796,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
 
                               #' @description
                               #' Displays the distribution of an attribute's vlues as box plot.
-                              #' @param data
+                              #' @param data_df
                               #' dataframe to be analyzed.
                               #' (tibble::tibble)
                               #' @param feature
@@ -667,9 +808,9 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @examples
                               #' x$featureBoxPlotWithSubset() %>%
                               #'  show()
-                              featureBoxPlotWithSubset = function(data = "tbl_df", feature = "character"){
-                                outFeature <- self$outliersFeatureList(data)
-                                p <- data %>%
+                              featureBoxPlotWithSubset = function(data_df = "tbl_df", feature = "character"){
+                                outFeature <- self$outliersFeatureList(data_df)
+                                p <- data_df %>%
                                   dplyr::select(feature) %>%
                                   dplyr::mutate(outFeature = outFeature) %>%
                                   tidyr::gather_(key="feature", value="measurement", feature) %>%
@@ -681,7 +822,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
 
                               #' @description
                               #' Displays the distribution of an attribute's values as a composition of a box plot and a histogram.
-                              #' @param data
+                              #' @param data_df
                               #' dataframe to be analyzed.
                               #' (tibble::tibble)
                               #' @param feature
@@ -693,8 +834,8 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @examples
                               #' x$featurePlot() %>%
                               #'  show()
-                              featurePlot = function(data = "tbl_df", feature = "character"){
-                                p1 <- self$featureBoxPlotWithSubset(data, feature) +
+                              featurePlot = function(data_df = "tbl_df", feature = "character"){
+                                p1 <- self$featureBoxPlotWithSubset(data_df, feature) +
                                   ggplot2::theme(legend.position = c(0.9, 0.9),
                                                  legend.key = ggplot2::element_blank(),
                                                  legend.background = ggplot2::element_blank())
