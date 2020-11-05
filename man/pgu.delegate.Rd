@@ -436,6 +436,12 @@ x$updateImputeMissingsGraphic(input, output, session)
 x$updateImputeMissingsStatisticsTbl(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMissingsDistributionTbl`
+## ------------------------------------------------
+
+x$updateImputeMissingsDistributionTbl(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMissingsDetailTbl`
 ## ------------------------------------------------
 
@@ -524,281 +530,114 @@ x$updateImputeOutliersGraphic(input, output, session)
 ## ------------------------------------------------
 
 x$updateImputeOutliersFeatureGraphic(input, output, session)
-###########################
-# impute mutate functions #
-###########################
-#' @description
-#' Updates the si.imputeMutateFeature shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeature(input, output, session)
-updateImputeMutateFeature = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateSelectInput(session,
-                             "si.imputeMutateFeature",
-                             choices = self$imputer$imputationParameter[["features"]],
-                             selected = self$imputer$imputationParameter[["features"]][1]
-    )
-  }#if
-}, #function
 
-#' @description
-#' Updates the si.imputeMutateMethod shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateMethod(input, output, session)
-updateImputeMutateMethod = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateSelectInput(session,
-                             "si.imputeMutateMethod",
-                             choices = self$imputer$imputationAgentAlphabet,
-                             selected = self$imputer$imputationAgent
-    )
-  }#if
-}, #function
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersFeatureTbl`
+## ------------------------------------------------
 
-#' @description
-#' Updates the ni.imputeMutateSeed shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateSeed(input, output, session)
-updateImputeMutateSeed = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.imputeMutateSeed",
-                              value = self$imputer$seed)
-  }#if
-}, #function
+x$updateImputeOutliersFeatureTbl(input, output, session)
 
-#' @description
-#' Updates the ni.imputeMutateIterations shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateIterations(input, output, session)
-updateImputeMutateIterations = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.imputeMutateIterations",
-                              value = self$imputer$iterations)
-  }#if
-}, #function
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersStatisticsTbl`
+## ------------------------------------------------
 
-#' @description
-#' Updates the gui.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateGui(input, output, session)
-updateImputeMutateGui = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    self$updateImputeMutateMethod(input, output, session)
-    self$updateImputeMutateSeed(input, output, session)
-    self$updateImputeMutateIterations(input, output, session)
-    self$updateImputeMutateFeature(input, output, session)
-  }#if
-}, #function
+x$updateImputeOutliersStatisticsTbl(input, output, session)
 
-#' @description
-#' Calls the mutate imputation site routine of the instance variable imputer on the instance variable transformedData.
-#' Updates the instance class status.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$imputeMutate(input, output, session)
-imputeMutate = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
-    private$.imputer$setSeed <- input$ni.imputeMutateSeed
-    private$.imputer$setIterations <- input$ni.imputeMutateIterations
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersDetailTbl`
+## ------------------------------------------------
 
-    progress <- shiny::Progress$new(session, min = 1, max = length(self$transformedData$numericFeatureNames))
-    progress$set(message = "Impute Missings", value = 0)
-    on.exit(progress$close())
+x$updateImputeOutliersDetailTbl(input, output, session)
 
-    name  <- as.name("Sample Name")
-    private$.imputedData$setRawData <- self$transformedData$numericData() \%>\%
-      self$imputer$handleImputationSites(progress = progress) \%>\%
-      # self$model$rescaleData() \%>\%
-      # self$transformator$reverseMutateData() \%>\%
-      tibble::add_column(!! name := self$transformedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
-    private$.status$update(processName = "naMutated", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No Na's detected. Please detect missing first."),type = "error", duration = 10)
-  }#else
-}, #function
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersDataTbl`
+## ------------------------------------------------
 
-#' @description
-#' Updates the plt.imputeMutateFeatureDetail graphic.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeatureDetailGraphic(input, output, session)
-updateImputeMutateFeatureDetailGraphic = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
-      self$imputer$featurePlot(data = self$imputedData$numericData(),
-                               feature = input$si.imputeMutateFeature)
-    )#output
-  }#if
-  else{
-    output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
-  }#else
-}, #function
+x$updateImputeOutliersDataTbl(input, output, session)
 
-#' @description
-#' Updates the tbl.imputeMutateFeatureDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeatureDetailTbl(input, output, session)
-updateImputeMutateFeatureDetailTbl = function(input, output, session){
-  if (self$status$query(processName = "naMutated")){
-    output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData \%>\%
-                            dplyr::select(c("Sample Name", input$si.imputeMutateFeature)),
-                          by = "Sample Name") \%>\%
-        dplyr::slice(self$imputer$imputationSiteIdxByFeature(feature = input$si.imputeMutateFeature)) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationDetails"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateFeature`
+## ------------------------------------------------
 
-#' @description
-#' Updates the tbl.imputeMutateDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateDetailTbl(input, output, session)
-updateImputeMutateDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    dfImputationSites <- self$imputer$imputationSites
-    idx <- dfImputationSites[["row"]][!duplicated(dfImputationSites[["row"]])]
+x$updateImputeMutateFeature(input, output, session)
 
-    output$tbl.imputeMutateDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateMethod`
+## ------------------------------------------------
 
-#' @description
-#' Updates the tbl.imputeMutateData table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateDataTbl(input, output, session)
-updateImputeMutateDataTbl = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    output$tbl.imputeMutateData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationData"),
-              text = "Download"
-            ))#button
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+x$updateImputeMutateMethod(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateSeed`
+## ------------------------------------------------
+
+x$updateImputeMutateSeed(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateIterations`
+## ------------------------------------------------
+
+x$updateImputeMutateIterations(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateGui`
+## ------------------------------------------------
+
+x$updateImputeMutateGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$resetImputeMutateGui`
+## ------------------------------------------------
+
+x$resetImputeMutateGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$imputeMutateMutate`
+## ------------------------------------------------
+
+x$imputeMutateMutate(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateGraphic`
+## ------------------------------------------------
+
+x$updateImputeMutateGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateStatisticsTbl`
+## ------------------------------------------------
+
+x$updateImputeMutateStatisticsTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateDistributionTbl`
+## ------------------------------------------------
+
+x$updateImputeMutateDistributionTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateFeatureDetailGraphic`
+## ------------------------------------------------
+
+x$updateImputeMutateFeatureDetailGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateFeatureDetailTbl`
+## ------------------------------------------------
+
+x$updateImputeMutateFeatureDetailTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateDetailTbl`
+## ------------------------------------------------
+
+x$updateImputeMutateDetailTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateDataTbl`
+## ------------------------------------------------
+
+x$updateImputeMutateDataTbl(input, output, session)
 #' @description
 #' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
 #' Updates the instance class status.
@@ -1235,6 +1074,42 @@ updateOutliersMutateDataTbl = function(input, output, session){
 }, #function
 
 ## ------------------------------------------------
+## Method `pgu.delegate$validate`
+## ------------------------------------------------
+
+x$validate(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateAnalysisValidationGui`
+## ------------------------------------------------
+
+x$updateAnalysisValidationGu(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateAnalysisValidationTestTbl`
+## ------------------------------------------------
+
+x$updateAnalysisValidationTestTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCentralMomentsOrgTbl`
+## ------------------------------------------------
+
+x$updateCentralMomentsOrgTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCentralMomentsImpTbl`
+## ------------------------------------------------
+
+x$updateCentralMomentsImpTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCentralMomentsDeltaTbl`
+## ------------------------------------------------
+
+x$updateCentralMomentsDeltaTbl(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$correlate`
 ## ------------------------------------------------
 
@@ -1480,11 +1355,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{imputedData}}{Returns the instance variable imputedData
 (pguIMP::pgu.data)}
 
-\item{\code{revisedData}}{Returns the instance variable revisedData
-(pguIMP::pgu.data)}
-
 \item{\code{cleanedData}}{Returns the instance variable cleanedData
 (pguIMP::pgu.data)}
+
+\item{\code{validator}}{Returns the instance variable validator
+(pguIMP::pgu.validator)}
 
 \item{\code{correlator}}{Returns the instance variable correlator
 (pguIMP::pgu.correlator)}
@@ -1573,6 +1448,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-imputeMissingsDetect}{\code{pgu.delegate$imputeMissingsDetect()}}
 \item \href{#method-updateImputeMissingsGraphic}{\code{pgu.delegate$updateImputeMissingsGraphic()}}
 \item \href{#method-updateImputeMissingsStatisticsTbl}{\code{pgu.delegate$updateImputeMissingsStatisticsTbl()}}
+\item \href{#method-updateImputeMissingsDistributionTbl}{\code{pgu.delegate$updateImputeMissingsDistributionTbl()}}
 \item \href{#method-updateImputeMissingsDetailTbl}{\code{pgu.delegate$updateImputeMissingsDetailTbl()}}
 \item \href{#method-updateImputeMissingsDataTbl}{\code{pgu.delegate$updateImputeMissingsDataTbl()}}
 \item \href{#method-updateImputeOutliersMethod}{\code{pgu.delegate$updateImputeOutliersMethod()}}
@@ -1588,6 +1464,30 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-imputeOutliersDetect}{\code{pgu.delegate$imputeOutliersDetect()}}
 \item \href{#method-updateImputeOutliersGraphic}{\code{pgu.delegate$updateImputeOutliersGraphic()}}
 \item \href{#method-updateImputeOutliersFeatureGraphic}{\code{pgu.delegate$updateImputeOutliersFeatureGraphic()}}
+\item \href{#method-updateImputeOutliersFeatureTbl}{\code{pgu.delegate$updateImputeOutliersFeatureTbl()}}
+\item \href{#method-updateImputeOutliersStatisticsTbl}{\code{pgu.delegate$updateImputeOutliersStatisticsTbl()}}
+\item \href{#method-updateImputeOutliersDetailTbl}{\code{pgu.delegate$updateImputeOutliersDetailTbl()}}
+\item \href{#method-updateImputeOutliersDataTbl}{\code{pgu.delegate$updateImputeOutliersDataTbl()}}
+\item \href{#method-updateImputeMutateFeature}{\code{pgu.delegate$updateImputeMutateFeature()}}
+\item \href{#method-updateImputeMutateMethod}{\code{pgu.delegate$updateImputeMutateMethod()}}
+\item \href{#method-updateImputeMutateSeed}{\code{pgu.delegate$updateImputeMutateSeed()}}
+\item \href{#method-updateImputeMutateIterations}{\code{pgu.delegate$updateImputeMutateIterations()}}
+\item \href{#method-updateImputeMutateGui}{\code{pgu.delegate$updateImputeMutateGui()}}
+\item \href{#method-resetImputeMutateGui}{\code{pgu.delegate$resetImputeMutateGui()}}
+\item \href{#method-imputeMutateMutate}{\code{pgu.delegate$imputeMutateMutate()}}
+\item \href{#method-updateImputeMutateGraphic}{\code{pgu.delegate$updateImputeMutateGraphic()}}
+\item \href{#method-updateImputeMutateStatisticsTbl}{\code{pgu.delegate$updateImputeMutateStatisticsTbl()}}
+\item \href{#method-updateImputeMutateDistributionTbl}{\code{pgu.delegate$updateImputeMutateDistributionTbl()}}
+\item \href{#method-updateImputeMutateFeatureDetailGraphic}{\code{pgu.delegate$updateImputeMutateFeatureDetailGraphic()}}
+\item \href{#method-updateImputeMutateFeatureDetailTbl}{\code{pgu.delegate$updateImputeMutateFeatureDetailTbl()}}
+\item \href{#method-updateImputeMutateDetailTbl}{\code{pgu.delegate$updateImputeMutateDetailTbl()}}
+\item \href{#method-updateImputeMutateDataTbl}{\code{pgu.delegate$updateImputeMutateDataTbl()}}
+\item \href{#method-validate}{\code{pgu.delegate$validate()}}
+\item \href{#method-updateAnalysisValidationGui}{\code{pgu.delegate$updateAnalysisValidationGui()}}
+\item \href{#method-updateAnalysisValidationTestTbl}{\code{pgu.delegate$updateAnalysisValidationTestTbl()}}
+\item \href{#method-updateCentralMomentsOrgTbl}{\code{pgu.delegate$updateCentralMomentsOrgTbl()}}
+\item \href{#method-updateCentralMomentsImpTbl}{\code{pgu.delegate$updateCentralMomentsImpTbl()}}
+\item \href{#method-updateCentralMomentsDeltaTbl}{\code{pgu.delegate$updateCentralMomentsDeltaTbl()}}
 \item \href{#method-correlate}{\code{pgu.delegate$correlate()}}
 \item \href{#method-updateCorrelationMatrixRTbl}{\code{pgu.delegate$updateCorrelationMatrixRTbl()}}
 \item \href{#method-updateCorrelationMatrixPPearsonTbl}{\code{pgu.delegate$updateCorrelationMatrixPPearsonTbl()}}
@@ -3631,7 +3531,7 @@ Updates the plt.imputeMissingsSummary graphic.
 \if{html}{\out{<a id="method-updateImputeMissingsStatisticsTbl"></a>}}
 \if{latex}{\out{\hypertarget{method-updateImputeMissingsStatisticsTbl}{}}}
 \subsection{Method \code{updateImputeMissingsStatisticsTbl()}}{
-Updates the tbl.imputeDetectStatistics table.
+Updates the tbl.imputeMissingsStatistics table.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
 }
@@ -3650,6 +3550,35 @@ Updates the tbl.imputeDetectStatistics table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeMissingsStatisticsTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMissingsDistributionTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsDistributionTbl}{}}}
+\subsection{Method \code{updateImputeMissingsDistributionTbl()}}{
+Updates the tbl.imputeMissingsDistribution table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsDistributionTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMissingsDistributionTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -4087,281 +4016,529 @@ Updates the plt.outliersImputeFeature graphic.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeOutliersFeatureGraphic(input, output, session)
-###########################
-# impute mutate functions #
-###########################
-#' @description
-#' Updates the si.imputeMutateFeature shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeature(input, output, session)
-updateImputeMutateFeature = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateSelectInput(session,
-                             "si.imputeMutateFeature",
-                             choices = self$imputer$imputationParameter[["features"]],
-                             selected = self$imputer$imputationParameter[["features"]][1]
-    )
-  }#if
-}, #function
+}
+\if{html}{\out{</div>}}
 
-#' @description
-#' Updates the si.imputeMutateMethod shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateMethod(input, output, session)
-updateImputeMutateMethod = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateSelectInput(session,
-                             "si.imputeMutateMethod",
-                             choices = self$imputer$imputationAgentAlphabet,
-                             selected = self$imputer$imputationAgent
-    )
-  }#if
-}, #function
+}
 
-#' @description
-#' Updates the ni.imputeMutateSeed shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateSeed(input, output, session)
-updateImputeMutateSeed = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.imputeMutateSeed",
-                              value = self$imputer$seed)
-  }#if
-}, #function
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersFeatureTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersFeatureTbl}{}}}
+\subsection{Method \code{updateImputeOutliersFeatureTbl()}}{
+Updates the numeric outlier feature table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersFeatureTbl(input, output, session)}\if{html}{\out{</div>}}
+}
 
-#' @description
-#' Updates the ni.imputeMutateIterations shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateIterations(input, output, session)
-updateImputeMutateIterations = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.imputeMutateIterations",
-                              value = self$imputer$iterations)
-  }#if
-}, #function
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
 
-#' @description
-#' Updates the gui.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateGui(input, output, session)
-updateImputeMutateGui = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    self$updateImputeMutateMethod(input, output, session)
-    self$updateImputeMutateSeed(input, output, session)
-    self$updateImputeMutateIterations(input, output, session)
-    self$updateImputeMutateFeature(input, output, session)
-  }#if
-}, #function
+\item{\code{output}}{Pointer to shiny output}
 
-#' @description
-#' Calls the mutate imputation site routine of the instance variable imputer on the instance variable transformedData.
-#' Updates the instance class status.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$imputeMutate(input, output, session)
-imputeMutate = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
-    private$.imputer$setSeed <- input$ni.imputeMutateSeed
-    private$.imputer$setIterations <- input$ni.imputeMutateIterations
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersFeatureTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
 
-    progress <- shiny::Progress$new(session, min = 1, max = length(self$transformedData$numericFeatureNames))
-    progress$set(message = "Impute Missings", value = 0)
-    on.exit(progress$close())
+}
 
-    name  <- as.name("Sample Name")
-    private$.imputedData$setRawData <- self$transformedData$numericData() \%>\%
-      self$imputer$handleImputationSites(progress = progress) \%>\%
-      # self$model$rescaleData() \%>\%
-      # self$transformator$reverseMutateData() \%>\%
-      tibble::add_column(!! name := self$transformedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
-    private$.status$update(processName = "naMutated", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No Na's detected. Please detect missing first."),type = "error", duration = 10)
-  }#else
-}, #function
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersStatisticsTbl}{}}}
+\subsection{Method \code{updateImputeOutliersStatisticsTbl()}}{
+Updates the numerical loq statistics analysis table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+}
 
-#' @description
-#' Updates the plt.imputeMutateFeatureDetail graphic.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeatureDetailGraphic(input, output, session)
-updateImputeMutateFeatureDetailGraphic = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
-      self$imputer$featurePlot(data = self$imputedData$numericData(),
-                               feature = input$si.imputeMutateFeature)
-    )#output
-  }#if
-  else{
-    output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
-  }#else
-}, #function
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
 
-#' @description
-#' Updates the tbl.imputeMutateFeatureDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateFeatureDetailTbl(input, output, session)
-updateImputeMutateFeatureDetailTbl = function(input, output, session){
-  if (self$status$query(processName = "naMutated")){
-    output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData \%>\%
-                            dplyr::select(c("Sample Name", input$si.imputeMutateFeature)),
-                          by = "Sample Name") \%>\%
-        dplyr::slice(self$imputer$imputationSiteIdxByFeature(feature = input$si.imputeMutateFeature)) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationDetails"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+\item{\code{output}}{Pointer to shiny output}
 
-#' @description
-#' Updates the tbl.imputeMutateDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateDetailTbl(input, output, session)
-updateImputeMutateDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    dfImputationSites <- self$imputer$imputationSites
-    idx <- dfImputationSites[["row"]][!duplicated(dfImputationSites[["row"]])]
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersStatisticsTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
 
-    output$tbl.imputeMutateDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+}
 
-#' @description
-#' Updates the tbl.imputeMutateData table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeMutateDataTbl(input, output, session)
-updateImputeMutateDataTbl = function(input, output, session){
-  if(self$status$query(processName = "naMutated")){
-    output$tbl.imputeMutateData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$imputedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("imputationSiteMutationData"),
-              text = "Download"
-            ))#button
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersDetailTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersDetailTbl}{}}}
+\subsection{Method \code{updateImputeOutliersDetailTbl()}}{
+Updates the numerical outlier table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersDetailTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersDetailTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersDataTbl}{}}}
+\subsection{Method \code{updateImputeOutliersDataTbl()}}{
+Updates the numerical outliers data table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersDataTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersDataTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateFeature"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateFeature}{}}}
+\subsection{Method \code{updateImputeMutateFeature()}}{
+Updates the si.imputeMutateFeature shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateFeature(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateFeature(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateMethod"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateMethod}{}}}
+\subsection{Method \code{updateImputeMutateMethod()}}{
+Updates the si.imputeMutateMethod shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateMethod(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateMethod(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateSeed"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateSeed}{}}}
+\subsection{Method \code{updateImputeMutateSeed()}}{
+Updates the ni.imputeMutateSeed shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateSeed(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateSeed(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateIterations"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateIterations}{}}}
+\subsection{Method \code{updateImputeMutateIterations()}}{
+Updates the ni.imputeMutateIterations shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateIterations(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateIterations(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateGui"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateGui}{}}}
+\subsection{Method \code{updateImputeMutateGui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-resetImputeMutateGui"></a>}}
+\if{latex}{\out{\hypertarget{method-resetImputeMutateGui}{}}}
+\subsection{Method \code{resetImputeMutateGui()}}{
+Resets the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$resetImputeMutateGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$resetImputeMutateGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-imputeMutateMutate"></a>}}
+\if{latex}{\out{\hypertarget{method-imputeMutateMutate}{}}}
+\subsection{Method \code{imputeMutateMutate()}}{
+Calls the mutate imputation site routine of the instance variable imputer on the instance variable transformedData.
+Updates the instance class status.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeMutateMutate(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$imputeMutateMutate(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateGraphic}{}}}
+\subsection{Method \code{updateImputeMutateGraphic()}}{
+Updates the plt.imputeMutateSummary graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateStatisticsTbl}{}}}
+\subsection{Method \code{updateImputeMutateStatisticsTbl()}}{
+Updates the tbl.imputeMutateStatistics table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateStatisticsTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateDistributionTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateDistributionTbl}{}}}
+\subsection{Method \code{updateImputeMutateDistributionTbl()}}{
+Updates the tbl.imputeMutateDistribution table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateDistributionTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateDistributionTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateFeatureDetailGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateFeatureDetailGraphic}{}}}
+\subsection{Method \code{updateImputeMutateFeatureDetailGraphic()}}{
+Updates the plt.imputeMutateFeatureDetail graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateFeatureDetailGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateFeatureDetailTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateFeatureDetailTbl}{}}}
+\subsection{Method \code{updateImputeMutateFeatureDetailTbl()}}{
+Updates the tbl.imputeMutateFeatureDetail table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateFeatureDetailTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateFeatureDetailTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateDetailTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateDetailTbl}{}}}
+\subsection{Method \code{updateImputeMutateDetailTbl()}}{
+Updates the tbl.imputeMutateDetail table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateDetailTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateDetailTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateDataTbl}{}}}
+\subsection{Method \code{updateImputeMutateDataTbl()}}{
+Updates the tbl.imputeMutateData table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateDataTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateDataTbl(input, output, session)
 #' @description
 #' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
 #' Updates the instance class status.
@@ -4796,6 +4973,181 @@ updateOutliersMutateDataTbl = function(input, output, session){
     output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
   } #else
 }, #function
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-validate"></a>}}
+\if{latex}{\out{\hypertarget{method-validate}{}}}
+\subsection{Method \code{validate()}}{
+Calls the validate routine of the instance variable validator on the instance variables rawData and clenaedData.
+Updates the instance class status.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$validate(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$validate(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAnalysisValidationGui"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAnalysisValidationGui}{}}}
+\subsection{Method \code{updateAnalysisValidationGui()}}{
+Updates the si.analysisValidationFeature shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateAnalysisValidationGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateAnalysisValidationGu(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAnalysisValidationTestTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAnalysisValidationTestTbl}{}}}
+\subsection{Method \code{updateAnalysisValidationTestTbl()}}{
+Updtates the tbl.analysisValidationTest table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateAnalysisValidationTestTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateAnalysisValidationTestTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCentralMomentsOrgTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCentralMomentsOrgTbl}{}}}
+\subsection{Method \code{updateCentralMomentsOrgTbl()}}{
+Updtates the tbl.centralMomentsOrg table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCentralMomentsOrgTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCentralMomentsOrgTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCentralMomentsImpTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCentralMomentsImpTbl}{}}}
+\subsection{Method \code{updateCentralMomentsImpTbl()}}{
+Updtates the tbl.centralMomentsImp table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCentralMomentsImpTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCentralMomentsImpTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCentralMomentsDeltaTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCentralMomentsDeltaTbl}{}}}
+\subsection{Method \code{updateCentralMomentsDeltaTbl()}}{
+Updtates the tbl.centralMomentsDelta table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCentralMomentsDeltaTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCentralMomentsDeltaTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

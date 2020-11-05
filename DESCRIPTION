@@ -53,6 +53,7 @@ Collate:
     'pguReporter.R'
     'pguExporter.R'
     'pguRegressor.R'
+    'pguValidator.R'
     'pguImputation.R'
     'pguOutliers.R'
     'pguMissings.R'

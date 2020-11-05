@@ -60,6 +60,12 @@ x$detectOutliersParameter(data_df)
 idx <- x$outliersFeatureList(data)
 
 ## ------------------------------------------------
+## Method `pgu.outliers$featureOutlier`
+## ------------------------------------------------
+
+f <- x$featureOutlier(feature = "infected")
+
+## ------------------------------------------------
 ## Method `pgu.outliers$detectOutliers`
 ## ------------------------------------------------
 
@@ -93,13 +99,25 @@ x$dbscan_numeric(data_df,"infected")
 ## Method `pgu.outliers$detectBySvm`
 ## ------------------------------------------------
 
-x$detectByDBSCAN(data_df)
+x$detectBySvm(data_df)
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$svm_numeric`
 ## ------------------------------------------------
 
-x$dbscan_numeric(data_df,"infected")
+x$svm_numeric(data_df,"infected")
+
+## ------------------------------------------------
+## Method `pgu.outliers$detectByKnn`
+## ------------------------------------------------
+
+x$detectByKnn(data_df)
+
+## ------------------------------------------------
+## Method `pgu.outliers$knn_numeric`
+## ------------------------------------------------
+
+x$knn_numeric(data_df,"infected")
 
 ## ------------------------------------------------
 ## Method `pgu.outliers$setImputationSites`
@@ -224,6 +242,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-filterFeatures}{\code{pgu.outliers$filterFeatures()}}
 \item \href{#method-detectOutliersParameter}{\code{pgu.outliers$detectOutliersParameter()}}
 \item \href{#method-outliersFeatureList}{\code{pgu.outliers$outliersFeatureList()}}
+\item \href{#method-featureOutlier}{\code{pgu.outliers$featureOutlier()}}
 \item \href{#method-detectOutliers}{\code{pgu.outliers$detectOutliers()}}
 \item \href{#method-detectByGrubbs}{\code{pgu.outliers$detectByGrubbs()}}
 \item \href{#method-grubbs_numeric}{\code{pgu.outliers$grubbs_numeric()}}
@@ -231,6 +250,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-dbscan_numeric}{\code{pgu.outliers$dbscan_numeric()}}
 \item \href{#method-detectBySvm}{\code{pgu.outliers$detectBySvm()}}
 \item \href{#method-svm_numeric}{\code{pgu.outliers$svm_numeric()}}
+\item \href{#method-detectByKnn}{\code{pgu.outliers$detectByKnn()}}
+\item \href{#method-knn_numeric}{\code{pgu.outliers$knn_numeric()}}
 \item \href{#method-setImputationSites}{\code{pgu.outliers$setImputationSites()}}
 \item \href{#method-calcOutliersStatistics}{\code{pgu.outliers$calcOutliersStatistics()}}
 \item \href{#method-outlierTable}{\code{pgu.outliers$outlierTable()}}
@@ -450,6 +471,36 @@ Vector of row characteristics.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featureOutlier"></a>}}
+\if{latex}{\out{\hypertarget{method-featureOutlier}{}}}
+\subsection{Method \code{featureOutlier()}}{
+Returns the detected outliers of a given attribute.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$featureOutlier(feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{feature}}{The attribute to be analyzed
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The attribute's outliers
+(tibble::tibble)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{f <- x$featureOutlier(feature = "infected")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectOutliers"></a>}}
 \if{latex}{\out{\hypertarget{method-detectOutliers}{}}}
 \subsection{Method \code{detectOutliers()}}{
@@ -646,7 +697,7 @@ Display the progress if shiny is loaded.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectByDBSCAN(data_df)
+\preformatted{x$detectBySvm(data_df)
 }
 \if{html}{\out{</div>}}
 
@@ -684,7 +735,79 @@ A data frame comprising the information about detected anomalies of the feature.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$dbscan_numeric(data_df,"infected")
+\preformatted{x$svm_numeric(data_df,"infected")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-detectByKnn"></a>}}
+\if{latex}{\out{\hypertarget{method-detectByKnn}{}}}
+\subsection{Method \code{detectByKnn()}}{
+Identifies anomalies in the data frame based on knnO.
+Iterates over the whole data frame. Calls the object's public function
+\code{svm_numeric} until all features are analyzed.
+The cluster hyper parameter are defined in the instance variables \code{alpha} and \code{minSamples}.
+The results of the \code{knn_numeric} routine are added to the instance variable \code{outliers}.
+Display the progress if shiny is loaded.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$detectByKnn(data_df = "tbl_df", progress = "Process")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Data frame to be analyzed.
+(tibble::tibble)}
+
+\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+(shiny::Progress)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$detectByKnn(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-knn_numeric"></a>}}
+\if{latex}{\out{\hypertarget{method-knn_numeric}{}}}
+\subsection{Method \code{knn_numeric()}}{
+Identifies anomalies in a single feature of a data frame based on knnO.
+The cluster hyperparameter are defined in the instance variables \code{alpha} and \code{minSmaples}.
+Display the progress if shiny is loaded.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$knn_numeric(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Data frame to be analyzed.
+(tibble::tibble)}
+
+\item{\code{feature}}{Feature to be analyzed
+(character)}
+
+\item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
+(shiny::Progress)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A data frame comprising the information about detected anomalies of the feature.
+(tibble::tibble)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$knn_numeric(data_df,"infected")
 }
 \if{html}{\out{</div>}}
 

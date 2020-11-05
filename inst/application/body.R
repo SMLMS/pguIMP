@@ -576,6 +576,10 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           DT::dataTableOutput("tbl.imputeMissingsStatistics"),
           shiny::br(),
           shiny::br(),
+          shiny::h3("Missings Distribution"),
+          DT::dataTableOutput("tbl.imputeMissingsDistribution"),
+          shiny::br(),
+          shiny::br(),
           shiny::h3("Missings Details"),
           DT::dataTableOutput("tbl.imputeMissingsDetail"),
           shiny::br(),
@@ -698,87 +702,151 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
     )
   ),
 
+  shinydashboard::tabItem(
+    tabName = "tab_mutate_impute",
+    shiny::fluidPage(
+      width = 12,
+      title = "Mutate Imputation Sites",
+      shiny::fluidRow(
+        shiny::column(
+          width = menueColumnWidth,
+          shiny::h1("Mutate Imputation Sites"),
+          shiny::br(),
+          shiny::br(),
+          shiny::selectInput(
+            "si.imputeMutateMethod",
+            label = h5("Mutation Method"),
+            width = "100%",
+            choices = list(),
+            selected = 1
+          ),
+          shiny::numericInput(
+            "ni.imputeMutateSeed",
+            label = h5("Seed"),
+            width = "100%",
+            min = 1,
+            max = 1000,
+            step = 1,
+            value = 42
+          ),
+          shiny::numericInput(
+            "ni.imputeMutateIterations",
+            label = h5("Iterations"),
+            width = "100%",
+            min = 1,
+            max = 10,
+            step = 1,
+            value = 4
+          ),
+          shiny::selectInput(
+            "si.imputeMutateFeature",
+            label = h5("Feature"),
+            width = "100%",
+            choices = list(),
+            selected = 1
+          ),
+          shiny::actionButton(
+            inputId = "ab.imputeMutateMutate",
+            label = "mutate imputation sites",
+            width = "100%"
+          ),
+          shiny::actionButton(
+            inputId = "ab.imputeMutateReset",
+            label = "reset imputation settings",
+            width = "100%"
+          )
+        ),
+        shiny::column(
+          width = dataColumnWidth,
+          shiny::h3("Imputation Site Heatmap"),
+          shiny::plotOutput("plt.imputeMutateSummary"),
+          shiny::hr(),
+          shiny::fluidRow(
+            shiny::column(
+              width = 6,
+              shiny::h3("Feature Plot"),
+              shiny::plotOutput("plt.imputeMutateFeatureDetail")
+            ),
+            shiny::column(
+              width = 6,
+              shiny::h3("Feature Data"),
+              DT::dataTableOutput("tbl.imputeMutateFeatureDetail")
+            )
+          ),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Imputation Site Statistics"),
+          DT::dataTableOutput("tbl.imputeMutateStatistics"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Imputation Site Distribution"),
+          DT::dataTableOutput("tbl.imputeMutateDistribution"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Imputation Site Detail"),
+          DT::dataTableOutput("tbl.imputeMutateDetail"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Imputation Site Data"),
+          DT::dataTableOutput("tbl.imputeMutateData")
+        )
+      )
+    )
+  ),
 
-  # shinydashboard::tabItem(
-  #   tabName = "tab_mutate_impute",
-  #   shiny::fluidPage(
-  #     width = 12,
-  #     title = "Mutate Imputation Sites",
-  #     shiny::fluidRow(
-  #       shiny::column(
-  #         width = menueColumnWidth,
-  #         shiny::h1("Mutate Imputation Sites"),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::selectInput(
-  #           "si.imputeMutateMethod",
-  #           label = h5("Mutation Method"),
-  #           width = "100%",
-  #           choices = list(),
-  #           selected = 1
-  #         ),
-  #         shiny::numericInput(
-  #           "ni.imputeMutateSeed",
-  #           label = h5("Seed"),
-  #           width = "100%",
-  #           min = 1,
-  #           max = 1000,
-  #           step = 1,
-  #           value = 42
-  #         ),
-  #         shiny::numericInput(
-  #           "ni.imputeMutateIterations",
-  #           label = h5("Iterations"),
-  #           width = "100%",
-  #           min = 1,
-  #           max = 10,
-  #           step = 1,
-  #           value = 4
-  #         ),
-  #         shiny::selectInput(
-  #           "si.imputeMutateFeature",
-  #           label = h5("Feature"),
-  #           width = "100%",
-  #           choices = list(),
-  #           selected = 1
-  #         ),
-  #         shiny::actionButton(
-  #           inputId = "ab.imputeMutate",
-  #           label = "mutate imputation sites",
-  #           width = "100%"
-  #         ),
-  #         shiny::actionButton(
-  #           inputId = "ab.imputeMutateReset",
-  #           label = "reset imputation settings",
-  #           width = "100%"
-  #         )
-  #       ),
-  #       shiny::column(
-  #         width = dataColumnWidth,
-  #         shiny::fluidRow(
-  #           shiny::column(
-  #             width = 6,
-  #             shiny::h3("Feature Plot"),
-  #             shiny::plotOutput("plt.imputeMutateFeatureDetail")
-  #           ),
-  #           shiny::column(
-  #             width = 6,
-  #             shiny::h3("Feature Data"),
-  #             DT::dataTableOutput("tbl.imputeMutateFeatureDetail")
-  #           )
-  #         ),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::h3("Imputation Site Detail"),
-  #         DT::dataTableOutput("tbl.imputeMutateDetail"),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::h3("Imputation Site Data"),
-  #         DT::dataTableOutput("tbl.imputeMutateData")
-  #       )
-  #     )
-  #   )
-  # ),
+  shinydashboard::tabItem(
+    tabName = "tab_analysis_validation",
+    shiny::fluidPage(
+      width = 12,
+      title = "Validate Imputation Results",
+      shiny::fluidRow(
+        shiny::column(
+          width = menueColumnWidth,
+          shiny::selectInput(
+            "si.analysisValidationFeature",
+            label = h5("Feature"),
+            width = "100%",
+            choices = list(),
+            selected = 1
+          ),
+          shiny::br(),
+          shiny::br(),
+          shiny::actionButton(
+            inputId = "ab.validation",
+            label = "calculate",
+            width = "100%"
+          )
+        ),
+        shiny::column(
+          width = dataColumnWidth,
+          shiny::h3("Validation analysis results"),
+          shiny::plotOutput("plt.analysisValidationFeature"),
+          shiny::hr(),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Test results"),
+          DT::dataTableOutput("tbl.analysisValidationTest"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Central moments"),
+          shiny::fluidRow(
+            shiny::column(
+              width = 6,
+              shiny::h3("Raw data"),
+              DT::dataTableOutput("tbl.centralMomentsOrg")
+            ),
+            shiny::column(
+              width = 6,
+              shiny::h3("Imputed data"),
+              DT::dataTableOutput("tbl.centralMomentsImp")
+            )
+          ),
+          shiny::h3("Deviation"),
+          DT::dataTableOutput("tbl.centralMomentsDelta"),
+        )
+      )
+    )
+  ),
 
   # shinydashboard::tabItem(
   #   tabName = "tab_mutate_outliers",

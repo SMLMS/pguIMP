@@ -210,6 +210,7 @@ server <- function(input, output, session) {
     delegate$imputeMissingsDetect(input, output, session)
     delegate$updateImputeMissingsGraphic(input, output, session)
     delegate$updateImputeMissingsStatisticsTbl(input, output, session)
+    delegate$updateImputeMissingsDistributionTbl(input, output, session)
     delegate$updateImputeMissingsDetailTbl(input, output, session)
     delegate$updateImputeMissingsDataTbl(input, output, session)
     delegate$updateImputeOutliersGui(input, output, session)
@@ -225,60 +226,53 @@ server <- function(input, output, session) {
     delegate$imputeOutliersDetect(input, output, session)
     delegate$updateImputeOutliersGraphic(input, output, session)
     delegate$updateImputeOutliersFeatureGraphic(input, output, session)
-    # delegate$updateImputeMissingsStatisticsTbl(input, output, session)
-    # delegate$updateImputeMissingsDetailTbl(input, output, session)
-    # delegate$updateImputeMissingsDataTbl(input, output, session)
-    # delegate$updateImputeOutliersGui(input, output, session)
-    # delegate$hideOutdatedResults(input, output, session)
+    delegate$updateImputeOutliersFeatureTbl(input, output, session)
+    delegate$updateImputeOutliersStatisticsTbl(input, output, session)
+    delegate$updateImputeOutliersDetailTbl(input, output, session)
+    delegate$updateImputeOutliersDataTbl(input, output, session)
+    delegate$updateImputeMutateGui(input, output, session)
+    delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
 
+  shiny::observeEvent(input$si.imputeOutliersFeature, {
+    delegate$updateImputeOutliersFeatureGraphic(input, output, session)
+    delegate$updateImputeOutliersFeatureTbl(input, output, session)
+  })
 
-  # shiny::observeEvent(input$ab.imputeMutateReset, {
-  #   delegate$updateImputeMutateGui(input, output, session)
-  # })
-  #
-  # shiny::observeEvent(input$ab.imputeMutate, {
-  #   delegate$imputeMutate(input, output, session)
-  #   delegate$updateImputeMutateSeed(input, output, session)
-  #   delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
-  #   delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
-  #   delegate$updateImputeMutateDetailTbl(input, output, session)
-  #   delegate$updateImputeMutateDataTbl(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
-  #   analysisFinished(FALSE)
-  # })
-  #
-  # shiny::observeEvent(input$si.imputeMutateFeature, {
-  #   delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
-  #   delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
-  # })
 
-  # shiny::observeEvent(input$ab.outliersDetect, {
-  #   delegate$outliersDetect(input, output, session)
-  #   delegate$updateOutliersDetectGraphic(inpute, output, session)
-  #   delegate$updateOutliersDetectStatisticsTbl(input, output, session)
-  #   delegate$updateOutliersDetectDetailTbl(input, output, session)
-  #   delegate$updateOutliersDetectDataTbl(input, output, session)
-  #   delegate$updateOutliersMutateGui(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
-  #   analysisFinished(FALSE)
-  # })
+  shiny::observeEvent(input$ab.imputeMutateReset, {
+    delegate$resetImputeMutateGui(input, output, session)
+  })
 
-  # shiny::observeEvent(input$ab.outliersMutate, {
-  #   delegate$outliersMutate(input, output, session)
-  #   delegate$updateOutliersMutateSeed(input, output, session)
-  #   delegate$updateOutliersMutateFeatureDetailGraphic(input, output, session)
-  #   delegate$updateOutliersMutateFeatureDetailTbl(input, output, session)
-  #   delegate$updateOutliersMutateDetailTbl(input, output, session)
-  #   delegate$updateOutliersMutateDataTbl(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
-  #   analysisFinished(TRUE)
-  # })
-  #
-  # shiny::observeEvent(input$ab.outliersMutateReset, {
-  #   delegate$updateOutliersMutateGui(input, output, session)
-  # })
+  shiny::observeEvent(input$ab.imputeMutateMutate, {
+    delegate$imputeMutateMutate(input, output, session)
+    delegate$updateImputeMutateSeed(input, output, session)
+    delegate$updateImputeMutateGraphic(input, output, session)
+    delegate$updateImputeMutateStatisticsTbl(input, output, session)
+    delegate$updateImputeMutateDistributionTbl(input, output, session)
+    delegate$updateImputeMutateFeatureDetailGraphic(input, output, session)
+    delegate$updateImputeMutateFeatureDetailTbl(input, output, session)
+    delegate$updateImputeMutateDetailTbl(input, output, session)
+    delegate$updateImputeMutateDataTbl(input, output, session)
+    delegate$hideOutdatedResults(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$ab.validation, {
+    delegate$validate(input, output, session)
+    delegate$updateAnalysisValidationGui(input, output, session)
+    delegate$updateanalysisValidationGraphic(input, output, session)
+    delegate$updateAnalysisValidationTestTbl(input, output, session)
+    delegate$updateCentralMomentsOrgTbl(input, output, session)
+    delegate$updateCentralMomentsImpTbl(input, output, session)
+    delegate$updateCentralMomentsDeltaTbl(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$si.analysisValidationFeature, {
+    delegate$updateanalysisValidationGraphic(input, output, session)
+  })
 
   shiny::observeEvent(input$ab.correlation, {
     delegate$correlate(input, output, session)
