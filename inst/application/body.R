@@ -482,7 +482,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   ),
 
   shinydashboard::tabItem(
-    tabName = "tab_normalize_impute",
+    tabName = "tab_normalize_trafo",
     shiny::fluidPage(
       width = 12,
       title = "Normalization",
@@ -493,14 +493,14 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::br(),
           selectInput(
-            "si.imputeNormMethod",
+            "si.trafoNormMethod",
             label = h5("Normalization Type"),
             choices = list(),
             selected = 1,
             width = "100%"
           ),
           selectInput(
-            "si.imputeNormFeature",
+            "si.trafoNormFeature",
             label = h5("Feature"),
             choices = list(),
             selected = 1,
@@ -509,13 +509,13 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::hr(),
           shiny::actionButton(
-            inputId = "ab.imputeNormMutate",
+            inputId = "ab.trafoNormMutate",
             label = "mutate",
             width = "100%"
           ),
           shiny::hr(),
           shiny::actionButton(
-            inputId = "ab.imputeNormReset",
+            inputId = "ab.trafoNormReset",
             label = "reset",
             width = "100%"
           )
@@ -526,24 +526,24 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             shiny::column(
               width = 6,
               h3("Feature Plot"),
-              shiny::plotOutput("plt.imputeNormFeature")
+              shiny::plotOutput("plt.trafoNormFeature")
             ),
             shiny::column(
               width = 6,
               h3("Feature Statistics"),
-              DT::dataTableOutput("tbl.imputeNormFeatureStatistics")
+              DT::dataTableOutput("tbl.trafoNormFeatureStatistics")
             )
           ),
           shiny::br(),
           shiny::br(),
           shiny::h3("Model parameters"),
-          DT::dataTableOutput("tbl.imputeNormParameter"),
+          DT::dataTableOutput("tbl.trafoNormParameter"),
           shiny::br(),
           shiny::h3("Normalized data statistics"),
-          DT::dataTableOutput("tbl.imputeNormStatistics"),
+          DT::dataTableOutput("tbl.trafoNormStatistics"),
           shiny::br(),
           shiny::h3("Normalized data"),
-          DT::dataTableOutput("tbl.imputeNormData")
+          DT::dataTableOutput("tbl.trafoNormData")
         )
       )
     )
@@ -846,241 +846,79 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         )
       )
     )
-  ),
+  )
 
   # shinydashboard::tabItem(
-  #   tabName = "tab_mutate_outliers",
+  #   tabName = "tab_analysis_correlation",
   #   shiny::fluidPage(
   #     width = 12,
-  #     title = "Outliers",
+  #     title = "Correlation",
   #     shiny::fluidRow(
   #       shiny::column(
   #         width = menueColumnWidth,
-  #         shiny::h1("Mutate Outliers"),
-  #         shiny::selectInput(
-  #           "si.outliersMutateMethod",
-  #           label = h5("Mutation Method"),
-  #           width = "100%",
-  #           choices = list(),
-  #           selected = 1
-  #         ),
-  #         shiny::numericInput(
-  #           "ni.outliersMutateSeed",
-  #           label = h5("Seed"),
-  #           width = "100%",
-  #           min = 1,
-  #           max = 1000,
-  #           step = 1,
-  #           value = 42
-  #         ),
-  #         shiny::numericInput(
-  #           "ni.outliersMutateIterations",
-  #           label = h5("Iterations"),
-  #           width = "100%",
-  #           min = 1,
-  #           max = 10,
-  #           step = 1,
-  #           value = 4
-  #         ),
-  #         shiny::selectInput(
-  #           "si.outliersMutateFeature",
-  #           label = h5("Feature"),
-  #           width = "100%",
-  #           choices = list(),
-  #           selected = 1
-  #         ),
+  #         shiny::h1("Correlation"),
+  #         shiny::br(),
+  #         shiny::br(),
   #         shiny::actionButton(
-  #           inputId = "ab.outliersMutate",
-  #           label = "mutate imputation sites",
-  #           width = "100%"
-  #         ),
-  #         shiny::actionButton(
-  #           inputId = "ab.outliersMutateReset",
-  #           label = "reset imputation settings",
+  #           inputId = "ab.correlation",
+  #           label = h5("calculate"),
   #           width = "100%"
   #         )
   #       ),
   #       shiny::column(
   #         width = dataColumnWidth,
+  #         shiny::h3("Pearson"),
   #         shiny::fluidRow(
   #           shiny::column(
   #             width = 6,
-  #             shiny::h3("Feature Plot"),
-  #             shiny::plotOutput("plt.outliersMutateFeatureDetail")
+  #             shiny::h3("R"),
+  #             DT::dataTableOutput("tbl.correlationMatrixR")
   #           ),
   #           shiny::column(
   #             width = 6,
-  #             shiny::h3("Feature Data"),
-  #             DT::dataTableOutput("tbl.outliersMutateFeatureDetail")
+  #             shiny::h3("p value"),
+  #             DT::dataTableOutput("tbl.correlationMatrixPPearson")
   #           )
   #         ),
+  #         shiny::hr(),
   #         shiny::br(),
+  #         shiny::h3("Kendall"),
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Tau"),
+  #             DT::dataTableOutput("tbl.correlationMatrixTau")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("p value"),
+  #             DT::dataTableOutput("tbl.correlationMatrixPKendall")
+  #           )
+  #         ),
+  #         shiny::hr(),
   #         shiny::br(),
-  #         shiny::h3("Outlier Mutated Details"),
-  #         DT::dataTableOutput("tbl.outliersMutateDetail"),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::h3("Outlier Mutated Data"),
-  #         DT::dataTableOutput("tbl.outliersMutateData")
+  #         shiny::h3("Spearman"),
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Rho"),
+  #             DT::dataTableOutput("tbl.correlationMatrixRho")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("p value"),
+  #             DT::dataTableOutput("tbl.correlationMatrixPSpearman")
+  #           )
+  #         )
   #       )
   #     )
   #   )
   # ),
-  shinydashboard::tabItem(
-    tabName = "tab_analysis_correlation",
-    shiny::fluidPage(
-      width = 12,
-      title = "Correlation",
-      shiny::fluidRow(
-        shiny::column(
-          width = menueColumnWidth,
-          shiny::h1("Correlation"),
-          shiny::br(),
-          shiny::br(),
-          shiny::actionButton(
-            inputId = "ab.correlation",
-            label = h5("calculate"),
-            width = "100%"
-          )
-        ),
-        shiny::column(
-          width = dataColumnWidth,
-          shiny::h3("Pearson"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("R"),
-              DT::dataTableOutput("tbl.correlationMatrixR")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("p value"),
-              DT::dataTableOutput("tbl.correlationMatrixPPearson")
-            )
-          ),
-          shiny::hr(),
-          shiny::br(),
-          shiny::h3("Kendall"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("Tau"),
-              DT::dataTableOutput("tbl.correlationMatrixTau")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("p value"),
-              DT::dataTableOutput("tbl.correlationMatrixPKendall")
-            )
-          ),
-          shiny::hr(),
-          shiny::br(),
-          shiny::h3("Spearman"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("Rho"),
-              DT::dataTableOutput("tbl.correlationMatrixRho")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("p value"),
-              DT::dataTableOutput("tbl.correlationMatrixPSpearman")
-            )
-          )
-        )
-      )
-    )
-  ),
-  shinydashboard::tabItem(
-    tabName = "tab_analysis_regression",
-    shiny::fluidPage(
-      width = 12,
-      title = "Regression",
-      shiny::fluidRow(
-        shiny::column(
-          width = menueColumnWidth,
-          shiny::h1("Linear Regression"),
-          shiny::br(),
-          shiny::hr(),
-          shiny::br(),
-          shiny::selectInput(
-            "si.regressionAbs",
-            label = h5("Abscissa"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::selectInput(
-            "si.regressionOrd",
-            label = h5("Ordinate"),
-            width = "100%",
-            choices = list(),
-            selected = 1
-          ),
-          shiny::br(),
-          shiny::hr(),
-          shiny::br(),
-          shiny::actionButton(
-            inputId = "ab.regression",
-            label = h5("calculate"),
-            width = "100%"
-          )
-        ),
-        shiny::column(
-          width = dataColumnWidth,
-          shiny::h3("Model"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("Analysis"),
-              shiny::plotOutput("plt.regressionFeature")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("Parameter"),
-              DT::dataTableOutput("tbl.regressionFeature")
-            )
-          ),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Intercept"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("value"),
-              DT::dataTableOutput("tbl.regressionIntercept")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("p value"),
-              DT::dataTableOutput("tbl.regressionPIntercept")
-            )
-          ),
-          shiny::hr(),
-          shiny::br(),
-          shiny::h3("Slope"),
-          shiny::fluidRow(
-            shiny::column(
-              width = 6,
-              shiny::h3("value"),
-              DT::dataTableOutput("tbl.regressionSlope")
-            ),
-            shiny::column(
-              width = 6,
-              shiny::h3("p value"),
-              DT::dataTableOutput("tbl.regressionPSlope")
-            )
-          )
-        )
-      )
-    )
-  )
   # shinydashboard::tabItem(
-  #   tabName = "tab_export",
+  #   tabName = "tab_analysis_regression",
   #   shiny::fluidPage(
   #     width = 12,
-  #     title = "Export",
+  #     title = "Regression",
   #     shiny::fluidRow(
   #       shiny::column(
   #         width = menueColumnWidth,
@@ -1088,28 +926,78 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   #         shiny::br(),
   #         shiny::hr(),
   #         shiny::br(),
-  #         shiny::checkboxInput(
-  #           "cb.Export",
+  #         shiny::selectInput(
+  #           "si.regressionAbs",
+  #           label = h5("Abscissa"),
   #           width = "100%",
-  #           label = h5("Export model parameter"),
-  #           value = TRUE
-  #         ), #end checkboxInput
+  #           choices = list(),
+  #           selected = 1
+  #         ),
+  #         shiny::selectInput(
+  #           "si.regressionOrd",
+  #           label = h5("Ordinate"),
+  #           width = "100%",
+  #           choices = list(),
+  #           selected = 1
+  #         ),
   #         shiny::br(),
   #         shiny::hr(),
   #         shiny::br(),
-  #         shinyjs::useShinyjs(),
-  #         shiny::downloadButton(
-  #           'db.export',
-  #           width = "100%",
-  #           labe = h5('Download')
-  #         )#end downloadButton
-  #       ), #end column
+  #         shiny::actionButton(
+  #           inputId = "ab.regression",
+  #           label = h5("calculate"),
+  #           width = "100%"
+  #         )
+  #       ),
   #       shiny::column(
-  #         width = dataColumnWidth
-  #       )#end column
-  #     )#end fluidRow
-  #   )#end fluidPage
-  # )#end tabItem
+  #         width = dataColumnWidth,
+  #         shiny::h3("Model"),
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Analysis"),
+  #             shiny::plotOutput("plt.regressionFeature")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("Parameter"),
+  #             DT::dataTableOutput("tbl.regressionFeature")
+  #           )
+  #         ),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::h3("Intercept"),
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("value"),
+  #             DT::dataTableOutput("tbl.regressionIntercept")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("p value"),
+  #             DT::dataTableOutput("tbl.regressionPIntercept")
+  #           )
+  #         ),
+  #         shiny::hr(),
+  #         shiny::br(),
+  #         shiny::h3("Slope"),
+  #         shiny::fluidRow(
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("value"),
+  #             DT::dataTableOutput("tbl.regressionSlope")
+  #           ),
+  #           shiny::column(
+  #             width = 6,
+  #             shiny::h3("p value"),
+  #             DT::dataTableOutput("tbl.regressionPSlope")
+  #           )
+  #         )
+  #       )
+  #     )
+  #   )
+  # )
 ))
 
 

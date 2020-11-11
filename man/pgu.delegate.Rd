@@ -358,61 +358,61 @@ x$updateTrafoMutateGlobalTestsTbl(input, output, session)
 x$updateTrafoMutateGlobalDataTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormFeature`
+## Method `pgu.delegate$updateTrafoNormFeature`
 ## ------------------------------------------------
 
-x$updateImputeNormFeature(input, output, session)
+x$updateTrafoNormFeature(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormMethod`
+## Method `pgu.delegate$updateTrafoNormMethod`
 ## ------------------------------------------------
 
-x$updateImputeNormMethod(input, output, session)
+x$updateTrafoNormMethod(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormGui`
+## Method `pgu.delegate$updateTrafoNormGui`
 ## ------------------------------------------------
 
-x$updateImputeNormGui(input, output, session)
+x$updateTrafoNormGui(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$imputeNormMutate`
+## Method `pgu.delegate$trafoNormMutate`
 ## ------------------------------------------------
 
-x$imputeNormMutate(input, output, session)
+x$trafoNormMutate(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormFeatureGraphic`
+## Method `pgu.delegate$updateTrafoNormFeatureGraphic`
 ## ------------------------------------------------
 
-x$updateImputeNormFeatureGraphic(input, output, session)
+x$updateTrafoNormFeatureGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$resetImputeNormGui`
+## Method `pgu.delegate$resetTrafoNormGui`
 ## ------------------------------------------------
 
-x$resetImputeNormGui(input, output, session)
+x$resetTrafoNormGui(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormFeatureStatisticsTbl`
+## Method `pgu.delegate$updateTrafoNormFeatureStatisticsTbl`
 ## ------------------------------------------------
 
-x$updateImputeNormFeatureStatisticsTbl(input, output, session)
+x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormStatisticsTbl`
+## Method `pgu.delegate$updateTrafoNormStatisticsTbl`
 ## ------------------------------------------------
 
-x$updateImputeNormStatisticsTbl(input, output, session)
+x$updateTrafoNormStatisticsTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormParameterTbl`
+## Method `pgu.delegate$updateTrafoNormParameterTbl`
 ## ------------------------------------------------
 
-x$updateImputeNormParameterTbl(input, output, session)
+x$updateTrafoNormParameterTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateImputeNormDataTbl`
+## Method `pgu.delegate$updateTrafoNormDataTbl`
 ## ------------------------------------------------
 
 x$updateImputeNormDataTbl(input, output, session)
@@ -1083,7 +1083,13 @@ x$validate(input, output, session)
 ## Method `pgu.delegate$updateAnalysisValidationGui`
 ## ------------------------------------------------
 
-x$updateAnalysisValidationGu(input, output, session)
+x$updateAnalysisValidationGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateAnalysisValidationGraphic`
+## ------------------------------------------------
+
+x$updateAnalysisValidationGraphic(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateAnalysisValidationTestTbl`
@@ -1435,16 +1441,16 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateTrafoMutateGlobalQualityTbl}{\code{pgu.delegate$updateTrafoMutateGlobalQualityTbl()}}
 \item \href{#method-updateTrafoMutateGlobalTestsTbl}{\code{pgu.delegate$updateTrafoMutateGlobalTestsTbl()}}
 \item \href{#method-updateTrafoMutateGlobalDataTbl}{\code{pgu.delegate$updateTrafoMutateGlobalDataTbl()}}
-\item \href{#method-updateImputeNormFeature}{\code{pgu.delegate$updateImputeNormFeature()}}
-\item \href{#method-updateImputeNormMethod}{\code{pgu.delegate$updateImputeNormMethod()}}
-\item \href{#method-updateImputeNormGui}{\code{pgu.delegate$updateImputeNormGui()}}
-\item \href{#method-imputeNormMutate}{\code{pgu.delegate$imputeNormMutate()}}
-\item \href{#method-updateImputeNormFeatureGraphic}{\code{pgu.delegate$updateImputeNormFeatureGraphic()}}
-\item \href{#method-resetImputeNormGui}{\code{pgu.delegate$resetImputeNormGui()}}
-\item \href{#method-updateImputeNormFeatureStatisticsTbl}{\code{pgu.delegate$updateImputeNormFeatureStatisticsTbl()}}
-\item \href{#method-updateImputeNormStatisticsTbl}{\code{pgu.delegate$updateImputeNormStatisticsTbl()}}
-\item \href{#method-updateImputeNormParameterTbl}{\code{pgu.delegate$updateImputeNormParameterTbl()}}
-\item \href{#method-updateImputeNormDataTbl}{\code{pgu.delegate$updateImputeNormDataTbl()}}
+\item \href{#method-updateTrafoNormFeature}{\code{pgu.delegate$updateTrafoNormFeature()}}
+\item \href{#method-updateTrafoNormMethod}{\code{pgu.delegate$updateTrafoNormMethod()}}
+\item \href{#method-updateTrafoNormGui}{\code{pgu.delegate$updateTrafoNormGui()}}
+\item \href{#method-trafoNormMutate}{\code{pgu.delegate$trafoNormMutate()}}
+\item \href{#method-updateTrafoNormFeatureGraphic}{\code{pgu.delegate$updateTrafoNormFeatureGraphic()}}
+\item \href{#method-resetTrafoNormGui}{\code{pgu.delegate$resetTrafoNormGui()}}
+\item \href{#method-updateTrafoNormFeatureStatisticsTbl}{\code{pgu.delegate$updateTrafoNormFeatureStatisticsTbl()}}
+\item \href{#method-updateTrafoNormStatisticsTbl}{\code{pgu.delegate$updateTrafoNormStatisticsTbl()}}
+\item \href{#method-updateTrafoNormParameterTbl}{\code{pgu.delegate$updateTrafoNormParameterTbl()}}
+\item \href{#method-updateTrafoNormDataTbl}{\code{pgu.delegate$updateTrafoNormDataTbl()}}
 \item \href{#method-imputeMissingsDetect}{\code{pgu.delegate$imputeMissingsDetect()}}
 \item \href{#method-updateImputeMissingsGraphic}{\code{pgu.delegate$updateImputeMissingsGraphic()}}
 \item \href{#method-updateImputeMissingsStatisticsTbl}{\code{pgu.delegate$updateImputeMissingsStatisticsTbl()}}
@@ -1484,6 +1490,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeMutateDataTbl}{\code{pgu.delegate$updateImputeMutateDataTbl()}}
 \item \href{#method-validate}{\code{pgu.delegate$validate()}}
 \item \href{#method-updateAnalysisValidationGui}{\code{pgu.delegate$updateAnalysisValidationGui()}}
+\item \href{#method-updateAnalysisValidationGraphic}{\code{pgu.delegate$updateAnalysisValidationGraphic()}}
 \item \href{#method-updateAnalysisValidationTestTbl}{\code{pgu.delegate$updateAnalysisValidationTestTbl()}}
 \item \href{#method-updateCentralMomentsOrgTbl}{\code{pgu.delegate$updateCentralMomentsOrgTbl()}}
 \item \href{#method-updateCentralMomentsImpTbl}{\code{pgu.delegate$updateCentralMomentsImpTbl()}}
@@ -3174,12 +3181,12 @@ Updates the tbl.trafoMutateGlobalData table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormFeature"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormFeature}{}}}
-\subsection{Method \code{updateImputeNormFeature()}}{
-Updates the si.imputeNormFeature shiny widget.
+\if{html}{\out{<a id="method-updateTrafoNormFeature"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormFeature}{}}}
+\subsection{Method \code{updateTrafoNormFeature()}}{
+Updates the si.trafoNormFeature shiny widget.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeature(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormFeature(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3195,7 +3202,7 @@ Updates the si.imputeNormFeature shiny widget.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormFeature(input, output, session)
+\preformatted{x$updateTrafoNormFeature(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3203,12 +3210,12 @@ Updates the si.imputeNormFeature shiny widget.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormMethod"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormMethod}{}}}
-\subsection{Method \code{updateImputeNormMethod()}}{
-Updates the si.imputeNormMethod shiny widget.
+\if{html}{\out{<a id="method-updateTrafoNormMethod"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormMethod}{}}}
+\subsection{Method \code{updateTrafoNormMethod()}}{
+Updates the si.trafoNormMethod shiny widget.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormMethod(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormMethod(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3224,7 +3231,7 @@ Updates the si.imputeNormMethod shiny widget.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormMethod(input, output, session)
+\preformatted{x$updateTrafoNormMethod(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3232,12 +3239,12 @@ Updates the si.imputeNormMethod shiny widget.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormGui"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormGui}{}}}
-\subsection{Method \code{updateImputeNormGui()}}{
+\if{html}{\out{<a id="method-updateTrafoNormGui"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormGui}{}}}
+\subsection{Method \code{updateTrafoNormGui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormGui(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormGui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3253,7 +3260,7 @@ Updates the gui.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormGui(input, output, session)
+\preformatted{x$updateTrafoNormGui(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3261,13 +3268,13 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-imputeNormMutate"></a>}}
-\if{latex}{\out{\hypertarget{method-imputeNormMutate}{}}}
-\subsection{Method \code{imputeNormMutate()}}{
+\if{html}{\out{<a id="method-trafoNormMutate"></a>}}
+\if{latex}{\out{\hypertarget{method-trafoNormMutate}{}}}
+\subsection{Method \code{trafoNormMutate()}}{
 Calls the scale routine of the instance variable normalizer on the instance variable transformedData.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeNormMutate(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$trafoNormMutate(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3283,7 +3290,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeNormMutate(input, output, session)
+\preformatted{x$trafoNormMutate(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3291,12 +3298,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormFeatureGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormFeatureGraphic}{}}}
-\subsection{Method \code{updateImputeNormFeatureGraphic()}}{
+\if{html}{\out{<a id="method-updateTrafoNormFeatureGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormFeatureGraphic}{}}}
+\subsection{Method \code{updateTrafoNormFeatureGraphic()}}{
 Updates the impute norm feature compound graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeatureGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormFeatureGraphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3312,7 +3319,7 @@ Updates the impute norm feature compound graphic.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormFeatureGraphic(input, output, session)
+\preformatted{x$updateTrafoNormFeatureGraphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3320,12 +3327,12 @@ Updates the impute norm feature compound graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetImputeNormGui"></a>}}
-\if{latex}{\out{\hypertarget{method-resetImputeNormGui}{}}}
-\subsection{Method \code{resetImputeNormGui()}}{
+\if{html}{\out{<a id="method-resetTrafoNormGui"></a>}}
+\if{latex}{\out{\hypertarget{method-resetTrafoNormGui}{}}}
+\subsection{Method \code{resetTrafoNormGui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$resetImputeNormGui(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$resetTrafoNormGui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3341,7 +3348,7 @@ Updates the gui.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetImputeNormGui(input, output, session)
+\preformatted{x$resetTrafoNormGui(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3349,13 +3356,13 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormFeatureStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormFeatureStatisticsTbl}{}}}
-\subsection{Method \code{updateImputeNormFeatureStatisticsTbl()}}{
+\if{html}{\out{<a id="method-updateTrafoNormFeatureStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormFeatureStatisticsTbl}{}}}
+\subsection{Method \code{updateTrafoNormFeatureStatisticsTbl()}}{
 Updates the numerical impute norm analysis table for a user defined feature.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormFeatureStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3371,7 +3378,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormFeatureStatisticsTbl(input, output, session)
+\preformatted{x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3379,13 +3386,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormStatisticsTbl}{}}}
-\subsection{Method \code{updateImputeNormStatisticsTbl()}}{
+\if{html}{\out{<a id="method-updateTrafoNormStatisticsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormStatisticsTbl}{}}}
+\subsection{Method \code{updateTrafoNormStatisticsTbl()}}{
 Updates the numerical impute norm analysis table.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3401,7 +3408,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormStatisticsTbl(input, output, session)
+\preformatted{x$updateTrafoNormStatisticsTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3409,13 +3416,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormParameterTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormParameterTbl}{}}}
-\subsection{Method \code{updateImputeNormParameterTbl()}}{
+\if{html}{\out{<a id="method-updateTrafoNormParameterTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormParameterTbl}{}}}
+\subsection{Method \code{updateTrafoNormParameterTbl()}}{
 Updates the impute norm parameter table.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormParameterTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormParameterTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3431,7 +3438,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormParameterTbl(input, output, session)
+\preformatted{x$updateTrafoNormParameterTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3439,13 +3446,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeNormDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeNormDataTbl}{}}}
-\subsection{Method \code{updateImputeNormDataTbl()}}{
+\if{html}{\out{<a id="method-updateTrafoNormDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoNormDataTbl}{}}}
+\subsection{Method \code{updateTrafoNormDataTbl()}}{
 Updates the impute norm scaled data table.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeNormDataTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoNormDataTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -5031,7 +5038,36 @@ Updates the si.analysisValidationFeature shiny widget.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateAnalysisValidationGu(input, output, session)
+\preformatted{x$updateAnalysisValidationGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateAnalysisValidationGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateAnalysisValidationGraphic}{}}}
+\subsection{Method \code{updateAnalysisValidationGraphic()}}{
+Updates the plt.analysisValidationFeature shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateAnalysisValidationGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateAnalysisValidationGraphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 

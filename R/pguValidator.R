@@ -14,6 +14,7 @@
 #'
 #' @import R6
 #' @import tidyverse
+#' @import grid
 #' @import gridExtra
 #' @import stats
 #' @import e1071
@@ -300,21 +301,154 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                # ####################
                                # # output functions #
                                # ####################
-                               featurePdf = function(org = "numeric", imp = "numeric", feature = "character"){
+                               #' @description
+                               #' Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
+                               #' Returns the plot
+                               #' @param data_df
+                               #' dataframe to be plotted
+                               #' (tibble::tibble)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featurePdf(data_df)
+                               featurePdf = function(data_df = "tbl_df"){
+                                 title_str <- sprintf("probability density")
+                                 p <- data_df %>%
+                                   dplyr::select(c("x", "org_pdf", "imp_pdf")) %>%
+                                   dplyr::rename(original = org_pdf) %>%
+                                   dplyr::rename(imputed = imp_pdf) %>%
+                                   tidyr::gather(key = "type", value = "pdf", -x, na.rm = TRUE) %>%
+                                   ggplot2::ggplot() +
+                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=pdf, color=type, linetype = type), size = 1.5) +
+                                   ggplot2::ggtitle(title_str) +
+                                   ggplot2::xlab("value")
+                                 return(p)
+                               }, #featurePdf
 
-                               }
+                               #' @description
+                               #' Receives a dataframe and plost the feature 'x' against the features 'org_cdf' and 'imp_cdf'.
+                               #' Returns the plot
+                               #' @param data_df
+                               #' dataframe to be plotted
+                               #' (tibble::tibble)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featureCdf(data_df)
+                               featureCdf = function(data_df = "tbl_df"){
+                                 title_str <- sprintf("cumulative density")
+                                 p <- data_df %>%
+                                   dplyr::select(c("x", "org_cdf", "imp_cdf")) %>%
+                                   dplyr::rename(original = org_cdf) %>%
+                                   dplyr::rename(imputed = imp_cdf) %>%
+                                   tidyr::gather(key = "type", value = "cdf", -x, na.rm = TRUE) %>%
+                                   ggplot2::ggplot() +
+                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=cdf, color=type,  linetype = type), size = 1.5) +
+                                   ggplot2::ggtitle(title_str) +
+                                   ggplot2::xlab("value")
+                                 return(p)
+                               }, #featureCdf
 
+                               #' @description
+                               #' Receives two numeric vectors 'org' and 'imp'. Plots the qq-plot of both vectors.
+                               #' Returns the plot
+                               #' @param org
+                               #' Numric vector comprising the original data.
+                               #' (numeric)
+                               #' @param imp
+                               #' Numeric vector comprising the imputed data.
+                               #' (numeric)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
+                               featureQQ = function(org = "numeric", imp = "numeric"){
+                                 title_str <- sprintf("qq-plot")
+
+                                 min_val <- min(min(org), min(imp))
+                                 max_val <- max(max(org), max(imp))
+
+                                 p <- tibble::as_tibble(qqplot(org, imp, plot.it=FALSE)) %>%
+                                   ggplot2::ggplot() +
+                                   ggplot2::geom_point(mapping = ggplot2::aes(x=x, y=y)) +
+                                   ggplot2::geom_abline(intercept = 0, slope = 1) +
+                                   ggplot2::ggtitle(title_str) +
+                                   ggplot2::xlab("orgiginal") +
+                                   ggplot2::ylab("imputed")
+
+                                 return(p)
+                               }, #featureQQ
+
+                               #' @description
+                               #' Receives two numeric dataframes 'org_df' and 'imp_df', and a feature name.
+                               #' Creates a compund plot of the validation results for the given feature..
+                               #' Returns the plot
+                               #' @param org_df
+                               #' Dataframe comprising the original data.
+                               #' (tibble::tibble)
+                               #' @param imp_df
+                               #' Dataframe comprising the imputed data.
+                               #' (tibble::tibble)
+                               #' @param feature
+                               #' Feature name.
+                               #' (character)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
                                featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", feature = "character"){
+                                 title_str <- sprintf("Imputation quality analysis of %s", feature)
+
                                  org <- org_df %>%
+                                   dplyr::select(feature) %>%
+                                   tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
                                  imp <- imp_df %>%
+                                   dplyr::select(feature) %>%
+                                   tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
-                                 p1 <- self$featurePdf(org, imp, feature)
 
-                                 return(p1)
-                               }
+                                 org_hist <- org %>%
+                                   hist(plot = FALSE)
+                                 org_min <- org_hist$breaks[1]
+                                 org_max <- org_hist$breaks[length(org_hist$breaks)]
+
+                                 imp_hist <- imp %>%
+                                   hist(plot = FALSE)
+                                 imp_min <- imp_hist$breaks[1]
+                                 imp_max <- imp_hist$breaks[length(org_hist$breaks)]
+
+                                 data_min <- min(c(org_min, imp_min))
+                                 data_max <- max(c(org_max, imp_max))
+
+                                 print(data_max)
+
+                                 org_pdf_obj <- density(org, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
+                                 imp_pdf_obj <- density(imp, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
+
+                                 dist_df <- tibble::tibble(x = org_pdf_obj$x,
+                                                           org_pdf = org_pdf_obj$y,
+                                                           imp_pdf = imp_pdf_obj$y)
+                                 dist_df <- dist_df %>%
+                                   dplyr::mutate(org_cdf = cumsum(org_pdf)*abs(x[2] - x[1])) %>%
+                                   dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
+
+                                 p1 <- self$featurePdf(dist_df) +
+                                   ggplot2::theme(legend.position = "none")
+                                 p2 <- self$featureCdf(dist_df) +
+                                   ggplot2::theme(legend.position = "top")
+                                 p3 <- self$featureQQ(org, imp)
+                                 p <- gridExtra::grid.arrange(p1,p2,p3,
+                                                              layout_matrix = rbind(c(1,1,2),c(1,1,3)),
+                                                              top = grid::textGrob(title_str, gp = grid::gpar(fontsize=20)))
+                                 return(p)
+                               } #featurePlot
 
                              )#public
 )# class

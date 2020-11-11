@@ -154,7 +154,7 @@ server <- function(input, output, session) {
     delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
     delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
     delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
-    delegate$updateImputeNormGui(input, output, session)
+    delegate$updateTrafoNormGui(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
@@ -169,7 +169,7 @@ server <- function(input, output, session) {
     delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
     delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
     delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
-    delegate$updateImputeNormGui(input, output, session)
+    delegate$updateTrafoNormGui(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
@@ -185,25 +185,25 @@ server <- function(input, output, session) {
     delegate$resetTrafoMutateGui(input, output, session)
   })
 
-  shiny::observeEvent(input$ab.imputeNormMutate,{
-    delegate$imputeNormMutate(input, output, session)
-    delegate$updateImputeNormFeatureGraphic(input, output, session)
-    delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)
-    delegate$updateImputeNormParameterTbl(input, output, session)
-    delegate$updateImputeNormStatisticsTbl(input, output, session)
-    delegate$updateImputeNormDataTbl(input, output, session)
+  shiny::observeEvent(input$ab.trafoNormMutate,{
+    delegate$trafoNormMutate(input, output, session)
+    delegate$updateTrafoNormFeatureGraphic(input, output, session)
+    delegate$updateTrafoNormFeatureStatisticsTbl(input, output, session)
+    delegate$updateTrafoNormParameterTbl(input, output, session)
+    delegate$updateTrafoNormStatisticsTbl(input, output, session)
+    delegate$updateTrafoNormDataTbl(input, output, session)
     delegate$hideOutdatedResults(input, output, session)
     analysisFinished(FALSE)
   })
 
   shiny::observeEvent(input$si.imputeNormFeature, {
-    delegate$updateImputeNormFeatureGraphic(input, output, session)
-    delegate$updateImputeNormFeatureStatisticsTbl(input, output, session)
-    delegate$resetImputeNormGui(input,output, session)
+    delegate$updateTrafoNormFeatureGraphic(input, output, session)
+    delegate$updateTrafoNormFeatureStatisticsTbl(input, output, session)
+    delegate$resetTrafoNormGui(input,output, session)
   })
 
   shiny::observeEvent(input$ab.imputeNormReset, {
-    delegate$resetImputeNormGui(input, output, session)
+    delegate$resetTrafoNormGui(input, output, session)
   })
 
   shiny::observeEvent(input$ab.imputeMissingsDetect, {
@@ -262,51 +262,52 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$ab.validation, {
     delegate$validate(input, output, session)
     delegate$updateAnalysisValidationGui(input, output, session)
-    delegate$updateanalysisValidationGraphic(input, output, session)
+    delegate$updateAnalysisValidationGraphic(input, output, session)
     delegate$updateAnalysisValidationTestTbl(input, output, session)
     delegate$updateCentralMomentsOrgTbl(input, output, session)
     delegate$updateCentralMomentsImpTbl(input, output, session)
     delegate$updateCentralMomentsDeltaTbl(input, output, session)
-    analysisFinished(FALSE)
+    delegate$hideOutdatedResults(input, output, session)
+    analysisFinished(TRUE)
   })
 
   shiny::observeEvent(input$si.analysisValidationFeature, {
-    delegate$updateanalysisValidationGraphic(input, output, session)
+    delegate$updateAnalysisValidationGraphic(input, output, session)
   })
 
-  shiny::observeEvent(input$ab.correlation, {
-    delegate$correlate(input, output, session)
-    delegate$updateCorrelationMatrixPPearsonTbl(input, output, session)
-    delegate$updateCorrelationMatrixRTbl(input, output, session)
-    delegate$updateCorrelationMatrixPKendallTbl(input, output, session)
-    delegate$updateCorrelationMatrixTauTbl(input, output, session)
-    delegate$updateCorrelationMatrixPSpearmanTbl(input, output, session)
-    delegate$updateCorrelationMatrixRhoTbl(input, output, session)
-    delegate$hideOutdatedResults(input, output, session)
-  })
-
-  shiny::observeEvent(input$ab.regression, {
-    delegate$regression(input, output, session)
-    delegate$updateRegressionGui(input, output, session)
-    delegate$updateRegressionGraphic(input, output, session)
-    delegate$updateRegressionModelTbl(input, output, session)
-    delegate$updateRegressionInterceptTbl(input, output, session)
-    delegate$updateRegressionPInterceptTbl(input, output, session)
-    delegate$updateRegressionSlopeTbl(input, output, session)
-    delegate$updateRegressionPSlopeTbl(input, output, session)
-    delegate$hideOutdatedResults(input, output, session)
-  })
-
-  shiny::observeEvent(input$si.regressionAbs, {
-    delegate$updateRegressionOrdinate(input, output, session)
-    delegate$updateRegressionGraphic(input, output, session)
-    delegate$updateRegressionModelTbl(input, output, session)
-  })
-
-  shiny::observeEvent(input$si.regressionOrd, {
-    delegate$updateRegressionGraphic(input, output, session)
-    delegate$updateRegressionModelTbl(input, output, session)
-  })
+  # shiny::observeEvent(input$ab.correlation, {
+  #   delegate$correlate(input, output, session)
+  #   delegate$updateCorrelationMatrixPPearsonTbl(input, output, session)
+  #   delegate$updateCorrelationMatrixRTbl(input, output, session)
+  #   delegate$updateCorrelationMatrixPKendallTbl(input, output, session)
+  #   delegate$updateCorrelationMatrixTauTbl(input, output, session)
+  #   delegate$updateCorrelationMatrixPSpearmanTbl(input, output, session)
+  #   delegate$updateCorrelationMatrixRhoTbl(input, output, session)
+  #   delegate$hideOutdatedResults(input, output, session)
+  # })
+  #
+  # shiny::observeEvent(input$ab.regression, {
+  #   delegate$regression(input, output, session)
+  #   delegate$updateRegressionGui(input, output, session)
+  #   delegate$updateRegressionGraphic(input, output, session)
+  #   delegate$updateRegressionModelTbl(input, output, session)
+  #   delegate$updateRegressionInterceptTbl(input, output, session)
+  #   delegate$updateRegressionPInterceptTbl(input, output, session)
+  #   delegate$updateRegressionSlopeTbl(input, output, session)
+  #   delegate$updateRegressionPSlopeTbl(input, output, session)
+  #   delegate$hideOutdatedResults(input, output, session)
+  # })
+  #
+  # shiny::observeEvent(input$si.regressionAbs, {
+  #   delegate$updateRegressionOrdinate(input, output, session)
+  #   delegate$updateRegressionGraphic(input, output, session)
+  #   delegate$updateRegressionModelTbl(input, output, session)
+  # })
+  #
+  # shiny::observeEvent(input$si.regressionOrd, {
+  #   delegate$updateRegressionGraphic(input, output, session)
+  #   delegate$updateRegressionModelTbl(input, output, session)
+  # })
 
   shiny::observe({
     if (analysisFinished()) {

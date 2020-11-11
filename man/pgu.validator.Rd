@@ -63,6 +63,30 @@ x$centralMomentsFeature(values, feature)
 ## ------------------------------------------------
 
 x$validate(org, imp, progress)
+
+## ------------------------------------------------
+## Method `pgu.validator$featurePdf`
+## ------------------------------------------------
+
+p <- x$featurePdf(data_df)
+
+## ------------------------------------------------
+## Method `pgu.validator$featureCdf`
+## ------------------------------------------------
+
+p <- x$featureCdf(data_df)
+
+## ------------------------------------------------
+## Method `pgu.validator$featureQQ`
+## ------------------------------------------------
+
+p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
+
+## ------------------------------------------------
+## Method `pgu.validator$featurePlot`
+## ------------------------------------------------
+
+p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -104,6 +128,10 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-wilcoxonTestFeature}{\code{pgu.validator$wilcoxonTestFeature()}}
 \item \href{#method-centralMomentsFeature}{\code{pgu.validator$centralMomentsFeature()}}
 \item \href{#method-validate}{\code{pgu.validator$validate()}}
+\item \href{#method-featurePdf}{\code{pgu.validator$featurePdf()}}
+\item \href{#method-featureCdf}{\code{pgu.validator$featureCdf()}}
+\item \href{#method-featureQQ}{\code{pgu.validator$featureQQ()}}
+\item \href{#method-featurePlot}{\code{pgu.validator$featurePlot()}}
 \item \href{#method-clone}{\code{pgu.validator$clone()}}
 }
 }
@@ -312,16 +340,20 @@ using a two-sided Kolmorogow-Smirnow test and a two-sided Wilcoxon/Mann-Whitney 
 The result is stored in the instance variables \code{testStatistics_df}and `distributionStatistics_df`.
 Displays the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$validate(org = "tbl_df", imp = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$validate(
+  org_df = "tbl_df",
+  imp_df = "tbl_df",
+  progress = "Progress"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{org}}{Original dataframe to be analzed.
+\item{\code{org_df}}{Original dataframe to be analzed.
 (tibble::tibble)}
 
-\item{\code{imp}}{Imputed dataframe to be analyzed.
+\item{\code{imp_df}}{Imputed dataframe to be analyzed.
 (tibble::tibble)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
@@ -332,6 +364,144 @@ Displays the progress if shiny is loaded.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$validate(org, imp, progress)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featurePdf"></a>}}
+\if{latex}{\out{\hypertarget{method-featurePdf}{}}}
+\subsection{Method \code{featurePdf()}}{
+Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
+Returns the plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePdf(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{dataframe to be plotted
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featurePdf(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featureCdf"></a>}}
+\if{latex}{\out{\hypertarget{method-featureCdf}{}}}
+\subsection{Method \code{featureCdf()}}{
+Receives a dataframe and plost the feature 'x' against the features 'org_cdf' and 'imp_cdf'.
+Returns the plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featureCdf(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{dataframe to be plotted
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featureCdf(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featureQQ"></a>}}
+\if{latex}{\out{\hypertarget{method-featureQQ}{}}}
+\subsection{Method \code{featureQQ()}}{
+Receives two numeric vectors 'org' and 'imp'. Plots the qq-plot of both vectors.
+Returns the plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featureQQ(org = "numeric", imp = "numeric")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{org}}{Numric vector comprising the original data.
+(numeric)}
+
+\item{\code{imp}}{Numeric vector comprising the imputed data.
+(numeric)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featurePlot"></a>}}
+\if{latex}{\out{\hypertarget{method-featurePlot}{}}}
+\subsection{Method \code{featurePlot()}}{
+Receives two numeric dataframes 'org_df' and 'imp_df', and a feature name.
+Creates a compund plot of the validation results for the given feature..
+Returns the plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePlot(
+  org_df = "tbl_df",
+  imp_df = "tbl_df",
+  feature = "character"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{org_df}}{Dataframe comprising the original data.
+(tibble::tibble)}
+
+\item{\code{imp_df}}{Dataframe comprising the imputed data.
+(tibble::tibble)}
+
+\item{\code{feature}}{Feature name.
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
 }
 \if{html}{\out{</div>}}
 

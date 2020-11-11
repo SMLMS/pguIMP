@@ -2105,11 +2105,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               }#else
                             }, #function
 
-                            ##############################
-                            # impute normalize functions #
-                            ##############################
+                            #############################
+                            # trafo normalize functions #
+                            #############################
                             #' @description
-                            #' Updates the si.imputeNormFeature shiny widget.
+                            #' Updates the si.trafoNormFeature shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2117,18 +2117,18 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormFeature(input, output, session)
-                            updateImputeNormFeature = function(input, output, session){
+                            #' x$updateTrafoNormFeature(input, output, session)
+                            updateTrafoNormFeature = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 shiny::updateSelectInput(session,
-                                                         "si.imputeNormFeature",
+                                                         "si.trafoNormFeature",
                                                          choices = self$transformedData$numericFeatureNames,
                                                          selected = self$transformedData$numericFeatureNames[1])
                               }#if
                             }, #function
 
                             #' @description
-                            #' Updates the si.imputeNormMethod shiny widget.
+                            #' Updates the si.trafoNormMethod shiny widget.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -2136,11 +2136,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormMethod(input, output, session)
-                            updateImputeNormMethod = function(input, output, session){
+                            #' x$updateTrafoNormMethod(input, output, session)
+                            updateTrafoNormMethod = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 shiny::updateSelectInput(session,
-                                                         "si.imputeNormMethod",
+                                                         "si.trafoNormMethod",
                                                          choices = self$normalizer$normAgentAlphabet,
                                                          selected = self$normalizer$normAgent
                                 )
@@ -2156,11 +2156,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormGui(input, output, session)
-                            updateImputeNormGui = function(input, output, session){
+                            #' x$updateTrafoNormGui(input, output, session)
+                            updateTrafoNormGui = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
-                                self$updateImputeNormMethod(input, output, session)
-                                self$updateImputeNormFeature(input, output, session)
+                                self$updateTrafoNormMethod(input, output, session)
+                                self$updateTrafoNormFeature(input, output, session)
                               }#if
                             }, #function
 
@@ -2174,10 +2174,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$imputeNormMutate(input, output, session)
-                            imputeNormMutate = function(input, output, session){
+                            #' x$trafoNormMutate(input, output, session)
+                            trafoNormMutate = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
-                                private$.normalizer$setNormAgent <- input$si.imputeNormMethod
+                                private$.normalizer$setNormAgent <- input$si.trafoNormMethod
 
                                 self$transformedData$numericData() %>%
                                   private$.normalizer$detectNormParameter()
@@ -2206,16 +2206,16 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormFeatureGraphic(input, output, session)
-                            updateImputeNormFeatureGraphic = function(input, output, session){
+                            #' x$updateTrafoNormFeatureGraphic(input, output, session)
+                            updateTrafoNormFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
-                                output$plt.imputeNormFeature <- shiny::renderPlot(
-                                  self$normalizer$featurePlot(data_df = self$normalizedData$rawData, feature = input$si.imputeNormFeature),
+                                output$plt.trafoNormFeature <- shiny::renderPlot(
+                                  self$normalizer$featurePlot(data_df = self$normalizedData$rawData, feature = input$si.trafoNormFeature),
                                   height = 425
                                 )#output
                               }#if
                               else{
-                                output$plt.imputeNormFeature <- shiny::renderPlot(NULL)
+                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL)
                               }#else
                             }, #function
 
@@ -2228,10 +2228,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$resetImputeNormGui(input, output, session)
-                            resetImputeNormGui = function(input, output, session){
+                            #' x$resetTrafoNormGui(input, output, session)
+                            resetTrafoNormGui = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
-                                self$updateImputeNormMethod(input, output, session)
+                                self$updateTrafoNormMethod(input, output, session)
                               }#if
                             }, #function
 
@@ -2245,12 +2245,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormFeatureStatisticsTbl(input, output, session)
-                            updateImputeNormFeatureStatisticsTbl = function(input, output, session){
+                            #' x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
+                            updateTrafoNormFeatureStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
-                                output$tbl.imputeNormFeatureStatistics <- DT::renderDataTable({
+                                output$tbl.trafoNormFeatureStatistics <- DT::renderDataTable({
                                   self$normalizedData$dataStatistics() %>%
-                                    dplyr::filter(Value == input$si.imputeNormFeature) %>%
+                                    dplyr::filter(Value == input$si.trafoNormFeature) %>%
                                     dplyr::select_if(is.numeric) %>%
                                     tidyr::pivot_longer(cols = dplyr::everything()) %>%
                                     dplyr::rename(statistics = "name") %>%
@@ -2266,7 +2266,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 })
                               }#if
                               else{
-                                output$tbl.imputeNormFeatureStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormFeatureStatistics <- DT::renderDataTable(NULL)
                               }#else
                             }, #function
 
@@ -2280,10 +2280,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormStatisticsTbl(input, output, session)
-                            updateImputeNormStatisticsTbl = function(input, output, session){
+                            #' x$updateTrafoNormStatisticsTbl(input, output, session)
+                            updateTrafoNormStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
-                                output$tbl.imputeNormStatistics <- DT::renderDataTable({
+                                output$tbl.trafoNormStatistics <- DT::renderDataTable({
                                   self$normalizedData$dataStatistics() %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -2303,7 +2303,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 })
                               }#if
                               else{
-                                output$tbl.imputeNormStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormStatistics <- DT::renderDataTable(NULL)
                               }#else
                             }, #function
 
@@ -2317,10 +2317,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateImputeNormParameterTbl(input, output, session)
-                            updateImputeNormParameterTbl = function(input, output, session){
+                            #' x$updateTrafoNormParameterTbl(input, output, session)
+                            updateTrafoNormParameterTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
-                                output$tbl.imputeNormParameter <- DT::renderDataTable({
+                                output$tbl.trafoNormParameter <- DT::renderDataTable({
                                   self$normalizer$normParameter %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -2340,7 +2340,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 })
                               }#if
                               else{
-                                output$tbl.imputeNormParameter <- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormParameter <- DT::renderDataTable(NULL)
                               }#else
                             },#function
 
@@ -2355,9 +2355,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateImputeNormDataTbl(input, output, session)
-                            updateImputeNormDataTbl = function(input, output, session){
+                            updateTrafoNormDataTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
-                                output$tbl.imputeNormData <- DT::renderDataTable({
+                                output$tbl.trafoNormData <- DT::renderDataTable({
                                   self$normalizedData$rawData %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -2377,7 +2377,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 })
                               }#if
                               else{
-                                output$tbl.imputeNormData <- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormData <- DT::renderDataTable(NULL)
                               }#else
                             },#function
 
@@ -3250,7 +3250,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 )
                               }#if
                               else{
-                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL)
+                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL)
                               }#else
                             }, #function
 
@@ -3973,12 +3973,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateanalysisValidationGraphic(input, output, session)
-                            updateanalysisValidationGraphic = function(input, output, session){
+                            #' x$updateAnalysisValidationGraphic(input, output, session)
+                            updateAnalysisValidationGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.analysisValidationFeature <- shiny::renderPlot(
                                   self$validator$featurePlot(org_df = self$rawData$numericData(),
-                                                             org_df = self$cleanedData$numericData(),
+                                                             imp_df = self$cleanedData$numericData(),
                                                              feature = input$si.analysisValidationFeature)
                                 )#output
                               }#if
@@ -4154,12 +4154,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$correlate(input, output, session)
                             correlate = function(input, output, session){
-                              if(self$status$query(processName = "outliersMutated")){
+                              if(self$status$query(processName = "validated")){
                                 progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
                                 progress$set(message = "Calculate Correlation", value = 1)
                                 on.exit(progress$close())
                                 # self$cleanedData$numericData() %>%
-                                self$revisedData$numericData() %>%
+                                self$cleanedData$numericData() %>%
                                   dplyr::select_if(function(x){!all(is.na(x))}) %>%
                                   private$.correlator$resetCorrelator(progress = progress)
                                 private$.status$update(processName = "correlated", value = TRUE)
@@ -4417,7 +4417,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 progress$set(message = "Calculate Regression", value = 1)
                                 on.exit(progress$close())
                                 # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.regressor$resetRegressor(data = self$revisedData$numericData(), progress = progress)
+                                private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
                                 private$.status$update(processName = "regression", value = TRUE)
                               }#if
                               else{
@@ -4494,8 +4494,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateRegressionGraphic = function(input, output, session){
                               if(self$status$query(processName = "regression")){
                                 output$plt.regressionFeature <- shiny::renderPlot(
-                                  # self$regressor$plotModel(data = self$cleanedData$numericData(),
-                                  self$regressor$plotModel(data = self$revisedData$numericData(),
+                                  self$regressor$plotModel(data = self$cleanedData$numericData(),
                                                            abscissa = input$si.regressionAbs,
                                                            ordinate = input$si.regressionOrd)
                                 )#output
@@ -5082,9 +5081,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             hideOutdatedResults = function(input, output, session){
                               if(!private$.status$query(processName = "dataImported")){
                                 output$tbl.rawDataInfo <- DT::renderDataTable(NULL)
-                                output$tbl.loqInfo <- DT::renderDataTable(NULL)
                                 output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.filter <- DT::renderDataTable(NULL)
+                              }#if
+                              if(!private$.status$query(processName = "loqImported")){
+                                output$tbl.loqInfo <- DT::renderDataTable(NULL)
                               }#if
                               if(!private$.status$query(processName = "metadataImported")){
                                 output$tbl.metadataInfo <- DT::renderDataTable(NULL)
@@ -5129,52 +5130,58 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.trafoMutateGlobalData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "normalized")){
-                                output$plt.imputeNormFeature <- shiny::renderPlot(NULL)
-                                output$tbl.imputeNormFeatureStatistics<- DT::renderDataTable(NULL)
-                                output$tbl.imputeNormParameter<- DT::renderDataTable(NULL)
-                                output$tbl.imputeNormStatistics<- DT::renderDataTable(NULL)
-                                output$tbl.imputeNormData<- DT::renderDataTable(NULL)
+                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL)
+                                output$tbl.trafoNormFeatureStatistics<- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormParameter<- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormStatistics<- DT::renderDataTable(NULL)
+                                output$tbl.trafoNormData<- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "naDetected")){
-                                output$plt.imputeDetectSummary <- shiny::renderPlot(NULL)
-                                output$tbl.imputeDetectStatistics <- DT::renderDataTable(NULL)
-                                output$tbl.imputeDetectDetail <- DT::renderDataTable(NULL)
-                                output$tbl.imputeDetectData <- DT::renderDataTable(NULL)
+                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL)
+                                output$tbl.imputeMissingsStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMissingsDistribution <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMissingsDetail <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
                               }#if
-                              # if(!self$status$query(processName = "naMutated")){
-                              #   output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
-                              #   output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(NULL)
-                              #   output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
-                              #   output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
-                              # }#if
                               if(!self$status$query(processName = "outliersDetected")){
-                                output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
-                                output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
-                                output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
-                                output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
+                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL)
+                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL)
+                                output$tbl.outliersImputeFeature <- DT::renderDataTable(NULL)
+                                output$tbl.outliersImputeStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.outliersImputeDetail <- DT::renderDataTable(NULL)
+                                output$tbl.outliersImputeData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "imputed")){
-                                output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
-                                output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
-                                output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
-                                output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
+                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL)
+                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
+                                output$tbl.imputeMutateFeatureDetail<- DT::renderDataTable(NULL)
+                                output$tbl.imputeMutateStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMutateDistribution <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMutateDetail <- DT::renderDataTable(NULL)
+                                output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
                               }#if
-                              if(!self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
-                              }#if
-                              if(!self$status$query(processName = "regression")){
-                                output$plt.regressionFeature <- shiny::renderPlot(NULL)
-                                output$tbl.regressionFeature <- DT::renderDataTable(NULL)
-                                output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
-                                output$tbl.regressionSlope <- DT::renderDataTable(NULL)
-                                output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
-                              }#if
+                              if(!self$status$query(processName = "validated")){
+                                output$plt.analysisValidationFeature <- shiny::renderPlot(NULL)
+                                output$tbl.analysisValidationTest <- DT::renderDataTable(NULL)
+                                output$tbl.centralMomentsOrg <- DT::renderDataTable(NULL)
+                                output$tbl.centralMomentsImp <- DT::renderDataTable(NULL)
+                              } #if
+                              # if(!self$status$query(processName = "correlated")){
+                              #   output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
+                              #   output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
+                              #   output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
+                              #   output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
+                              #   output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
+                              #   output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
+                              # }#if
+                              # if(!self$status$query(processName = "regression")){
+                              #   output$plt.regressionFeature <- shiny::renderPlot(NULL)
+                              #   output$tbl.regressionFeature <- DT::renderDataTable(NULL)
+                              #   output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
+                              #   output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
+                              #   output$tbl.regressionSlope <- DT::renderDataTable(NULL)
+                              #   output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
+                              # }#if
                             }#function
                           )#public
 )#class
