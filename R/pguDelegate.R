@@ -4856,6 +4856,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                       selection = list(target = "column"),
                                       filter = "top",
                                       options = list(
+                                        stateSave = TRUE,
                                         scrollX = TRUE,
                                         scrollY = '45vh',
                                         paging = FALSE,
@@ -5034,16 +5035,27 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @description
                             #' Exports a report on the pguIMP analysis
                             #' in pdf format.
+                            #' @param input
+                            #' Pointer to shiny input
                             #' @param file
                             #' export filename
                             #' (character)
                             #' @examples
-                            #' x$write_report(file="report.pdf")
-                            writeReport = function(file){
-                              if(self$status$query(processName = "outliersMutated")){
+                            #' x$write_report(input, file="report.pdf")
+                            writeReport = function(input, file){
+                              print("state")
+                              print(str(input$tbl.filter_search_columns))
+                              if(self$status$query(processName = "validated")){
                                 private$.reporter$setFilename <- file
                                 analysis_parameter <- tibble::tibble(
                                   parameter = c("value"),
+                                  fileName = c(self$fileName$fileName),
+                                  numberOfInstances = c(nrow(self$rawData$rawData)),
+                                  numberOfFeatures = c(length(self$rawData$featureNames)),
+                                  numberOfMetaFeatures = c(length(self$metadata$featureNames)),
+                                  numberOfNumericFeatures = c(length(self$rawData$numericFeatureNames)),
+                                  numberOfNonNumericFeatures = c(length(self$rawData$nonNumericFeatureNames)),
+                                  totalNumberOfMissings = c(sum(is.na(self$rawData$rawData))),
                                   loq_na_handling = c(self$loq$naHandlingAgent),
                                   lloq_substitute = c(self$loq$lloqSubstituteAgent),
                                   uloq_substitute = c(self$loq$uloqSubstituteAgent),
@@ -5055,7 +5067,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   outlier_iterations = c(self$outliers$iterations)
                                 )
 
-                                list(trafo_parameter = self$transformator$trafoParameter,
+                                list(filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
+                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)),
+                                     trafo_parameter = self$transformator$trafoParameter,
                                      model_parameter = self$model$modelParameterData(),
                                      model_quality = self$model$modelQualityData(),
                                      model_statistics = self$model$testResultData(),

@@ -334,7 +334,7 @@ server <- function(input, output, session) {
       delegate$reportFileName(input, output, session)
     },
     content = function(file){
-      delegate$writeReport(file)
+      delegate$writeReport(input, file)
     }
   )
 

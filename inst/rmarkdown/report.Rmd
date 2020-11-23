@@ -13,6 +13,7 @@ output:
     keep_md: FALSE
     toc_depth: 2
 params:
+ filter_parameter: !r tibble::tibble
  trafo_parameter: !r tibble::tibble
  model_parameter: !r tibble::tibble
  model_quality: !r tibble::tibble
@@ -41,7 +42,22 @@ pagebreak <- function() {
 
 
 \newpage
+# Data set
+Analysis report of the data set loaded from the file `r params$analysis_parameter$fileName`. The data set comprises `r params$analysis_parameter$numberOfInstances` instances that are characterized by `r params$analysis_parameter$numberOfFeatures`. `r params$analysis_parameter$numberOfMetaFeatures` of these features are defined as meta-features. The features are are split into `r params$analysis_parameter$numberOfNumericFeatures` numeric features, and `r params$analysis_parameter$numberOfNonNumericFeatures` non numeric features. The data set is missing `r params$analysis_parameter$totalNumberOfMissings` values. The analysis was prepared on `r format(Sys.time(), '%d %B, %Y')`.
+
+
+# Filter
+The filtered data set comprises ...
+```{r, message = FALSE, echo=FALSE, eval=TRUE}
+
+params$filter_parameter %>%
+  knitr::kable(caption = "Filter stuff")
+```
+
+# Limits of quantification
+
 # Data transformation
+
 ## Data transformation parameter
 Information about the user-selected data transformation methods.
 ```{r, message = FALSE, echo=FALSE, eval=TRUE}

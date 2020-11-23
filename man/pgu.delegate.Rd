@@ -1281,7 +1281,7 @@ y <- x$reportFileName(input, output, session)
 ## Method `pgu.delegate$writeReport`
 ## ------------------------------------------------
 
-x$write_report(file="report.pdf")
+x$write_report(input, file="report.pdf")
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$hideOutdatedResults`
@@ -5987,12 +5987,14 @@ export filename
 Exports a report on the pguIMP analysis
 in pdf format.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$writeReport(file)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$writeReport(input, file)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{input}}{Pointer to shiny input}
+
 \item{\code{file}}{export filename
 (character)}
 }
@@ -6000,7 +6002,7 @@ in pdf format.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$write_report(file="report.pdf")
+\preformatted{x$write_report(input, file="report.pdf")
 }
 \if{html}{\out{</div>}}
 
