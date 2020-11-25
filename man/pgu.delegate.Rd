@@ -496,6 +496,18 @@ x$updateImputeOutliersGamma(input, output, session)
 x$updateImputeOutliersNu(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersCutoff`
+## ------------------------------------------------
+
+x$updateImputeOutliersCutoff(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeOutliersK`
+## ------------------------------------------------
+
+x$updateImputeOutliersK(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeOutliersSeed`
 ## ------------------------------------------------
 
@@ -1269,7 +1281,7 @@ y <- x$exportFileName(input, output, session)
 ## Method `pgu.delegate$exportData`
 ## ------------------------------------------------
 
-x$exportData(file="result.xlsx")
+x$exportData(input, file="result.xlsx")
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$reportFileName`
@@ -1464,6 +1476,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeOutliersMinSamples}{\code{pgu.delegate$updateImputeOutliersMinSamples()}}
 \item \href{#method-updateImputeOutliersGamma}{\code{pgu.delegate$updateImputeOutliersGamma()}}
 \item \href{#method-updateImputeOutliersNu}{\code{pgu.delegate$updateImputeOutliersNu()}}
+\item \href{#method-updateImputeOutliersCutoff}{\code{pgu.delegate$updateImputeOutliersCutoff()}}
+\item \href{#method-updateImputeOutliersK}{\code{pgu.delegate$updateImputeOutliersK()}}
 \item \href{#method-updateImputeOutliersSeed}{\code{pgu.delegate$updateImputeOutliersSeed()}}
 \item \href{#method-updateImputeOutliersGui}{\code{pgu.delegate$updateImputeOutliersGui()}}
 \item \href{#method-resetImputeOutliersGui}{\code{pgu.delegate$resetImputeOutliersGui()}}
@@ -3854,6 +3868,64 @@ Updates the ni.imputeOutliersNu shiny widget.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersCutoff"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersCutoff}{}}}
+\subsection{Method \code{updateImputeOutliersCutoff()}}{
+Updates the ni.imputeOutliersCutoff shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersCutoff(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersCutoff(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeOutliersK"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeOutliersK}{}}}
+\subsection{Method \code{updateImputeOutliersK()}}{
+Updates the ni.imputeOutliersK shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersK(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeOutliersK(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersSeed"></a>}}
 \if{latex}{\out{\hypertarget{method-updateImputeOutliersSeed}{}}}
 \subsection{Method \code{updateImputeOutliersSeed()}}{
@@ -5927,12 +5999,14 @@ export filename
 \subsection{Method \code{exportData()}}{
 Exports the pguIMP analysis results
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$exportData(file)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$exportData(input, file)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{input}}{Pointer to shiny input}
+
 \item{\code{file}}{export filename
 (character)}
 }
@@ -5940,7 +6014,7 @@ Exports the pguIMP analysis results
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$exportData(file="result.xlsx")
+\preformatted{x$exportData(input, file="result.xlsx")
 }
 \if{html}{\out{</div>}}
 

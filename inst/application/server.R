@@ -325,7 +325,7 @@ server <- function(input, output, session) {
       delegate$exportFileName(input, output, session)
     },
     content = function(file){
-      delegate$exportData(file)
+      delegate$exportData(input, file)
     }
   )
 

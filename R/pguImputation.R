@@ -20,7 +20,6 @@
 #' @import DMwR
 #' @import mice
 #' @import RWeka
-#' @import mice
 #' @import Amelia
 #' @import psych
 #' @import VIM
@@ -94,7 +93,15 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' Sets the instance variable seed.
                                  #' (numeric)
                                  setSeed = function(value = "numeric"){
-                                   private$.seed <- value
+                                   if(value < 1){
+                                     private$.seed <- 1
+                                   }
+                                   else if (value > 100){
+                                     private$.seed <- 100
+                                   }
+                                   else{
+                                     private$.seed <- value
+                                   }
                                  },
                                  #' @field iterations
                                  #' Returns the instance variable iterations.
@@ -106,7 +113,15 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' Sets the instance variable iterations.
                                  #' (numeric)
                                  setIterations = function(value = "numeric"){
-                                   private$.iterations <- value
+                                   if(value < 1){
+                                     private$.iterations <- 1
+                                   }
+                                   else if (value > 100){
+                                     private$.iterations<- 100
+                                   }
+                                   else{
+                                     private$.iterations <- value
+                                   }
                                  },
                                  #' @field amv
                                  #' Returns the instance variable amv.

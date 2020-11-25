@@ -68,7 +68,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .outliers = "pgu.outliers",
                             .imputer = "pgu.imputation",
                             .imputedData = "pgu.data",
-                            .revisedData = "pgu.data",
+                            # .revisedData = "pgu.data",
                             .cleanedData = "pgu.data",
                             .validator = "pgu.validatior",
                             .correlator = "pgu.correlator",
@@ -2591,7 +2591,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 shiny::updateSelectInput(session,
                                                          "si.imputeOutliersMethod",
                                                          choices = self$outliers$outliersAgentAlphabet,
-                                                         selected = self$otliers$outliersAgent
+                                                         selected = self$outliers$outliersAgent
                                 )
                               }#if
                             }, #function
@@ -2706,6 +2706,42 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             #' @description
+                            #' Updates the ni.imputeOutliersCutoff shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeOutliersCutoff(input, output, session)
+                            updateImputeOutliersCutoff = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeOutliersCutoff",
+                                                          value = self$outliers$cutoff)
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the ni.imputeOutliersK shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeOutliersK(input, output, session)
+                            updateImputeOutliersK = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeOutliersK",
+                                                          value = self$outliers$k)
+                              }#if
+                            }, #function
+
+                            #' @description
                             #' Updates the ni.imputeOutliersSeed shiny widget.
                             #' @param input
                             #' Pointer to shiny input
@@ -2742,6 +2778,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 self$updateImputeOutliersMinSamples(input, output, session)
                                 self$updateImputeOutliersGamma(input, output, session)
                                 self$updateImputeOutliersNu(input, output, session)
+                                self$updateImputeOutliersCutoff(input, output, session)
+                                self$updateImputeOutliersK(input, output, session)
                                 self$updateImputeOutliersSeed(input, output, session)
                               }#if
                             }, #function
@@ -2764,6 +2802,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 self$updateImputeOutliersMinSamples(input, output, session)
                                 self$updateImputeOutliersGamma(input, output, session)
                                 self$updateImputeOutliersNu(input, output, session)
+                                self$updateImputeOutliersCutoff(input, output, session)
+                                self$updateImputeOutliersK(input, output, session)
                                 self$updateImputeOutliersSeed(input, output, session)
                               }#if
                             },#function
@@ -2788,7 +2828,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 private$.outliers$setMinSamples <- input$ni.imputeOutliersMinSamples
                                 private$.outliers$setGamma <- input$ni.imputeOutliersGamma
                                 private$.outliers$setNu <- input$ni.imputeOutliersNu
+                                private$.outliers$setCutoff <- input$ni.imputeOutliersCutoff
+                                private$.outliers$setK <- input$ni.imputeOutliersK
                                 private$.outliers$setSeed <- input$ni.imputeOutliersSeed
+
+                                self$resetImputeOutliersGui(input, output, session)
 
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
                                 progress$set(message = "Searching for anomalies", value = 1)
@@ -4978,33 +5022,51 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param file
                             #' export filename
                             #' (character)
+                            #' @param input
+                            #' Pointer to shiny input
                             #' @examples
-                            #' x$exportData(file="result.xlsx")
-                            exportData = function(file){
-                              if(self$status$query(processName = "outliersMutated")){
+                            #' x$exportData(input, file="result.xlsx")
+                            exportData = function(input, file){
+                              if(self$status$query(processName = "validated")){
                                 private$.exporter$setFileName <- file
-                                analysis_parameter <- tibble::tibble(
-                                  parameter = c("value"),
+                                gui_parameter <- tibble::tibble(
+                                  # parameter = c("value"),
                                   loq_na_handling = c(self$loq$naHandlingAgent),
                                   lloq_substitute = c(self$loq$lloqSubstituteAgent),
                                   uloq_substitute = c(self$loq$uloqSubstituteAgent),
+                                  normalization_type = c(self$normalizer$normAgent),
+                                  # outlier_method = c(self$outliers$cleaningAgent),
+                                  # outier_seed = c(self$outliers$seed),
+                                  # outlier_iterations = c(self$outliers$iterations),
                                   imputation_method = c(self$imputer$imputationAgent),
                                   imputation_seed = c(self$imputer$seed),
-                                  imputation_iterations = c(self$imputer$iterations),
-                                  outlier_method = c(self$outliers$cleaningAgent),
-                                  outier_seed = c(self$outliers$seed),
-                                  outlier_iterations = c(self$outliers$iterations)
+                                  imputation_iterations = c(self$imputer$iterations)
                                 )
 
-                                list(raw_data = self$cleanedData$rawData,
-                                     loq = self$loq$loq,
+                                gui_parameter <- tibble::as_tibble(cbind(parameter = names(gui_parameter), t(gui_parameter)))
+                                colnames(gui_parameter) <- c("parameter", "value")
+
+                                list(giu_parameter = gui_parameter,
+                                     filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
+                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)),
                                      metadata = self$filteredMetadata$rawData,
-                                     transfromed_data = self$revisedData$rawData,
+                                     filtered = self$filteredData$rawData,
+                                     loq = self$loq$loq,
+                                     loq_statistics = self$loq$loqStatistics,
+                                     loq_mutated = self$loqMutatedData$rawData,
                                      trafo_parameter = self$transformator$trafoParameter,
+                                     transfromed = self$transformedData$rawData,
                                      model_parameter = self$model$modelParameterData(),
                                      model_quality = self$model$modelQualityData(),
                                      model_statistics = self$model$testResultData(),
-                                     analysis_parameter = analysis_parameter
+                                     normalization_parameter = self$normalizer$normParameter,
+                                     normalized = self$normalizedData$rawData,
+                                     missing_statistics = self$missings$imputationParameter,
+                                     outliers_statistics = self$outliers$outliersStatistics,
+                                     imputation_statistics = self$imputer$imputationStatistics,
+                                     imputed = self$imputedData$rawData,
+                                     cleaned = self$cleanedData$rawData,
+                                     validation = self$validator$testStatistics_df
                                 ) %>%
                                   self$exporter$writeDataToExcel()
                               }#if
@@ -5068,7 +5130,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 )
 
                                 list(filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
-                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)),
+                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)) %>%
+                                       dplyr::filter(filter_parameter != ""),
                                      trafo_parameter = self$transformator$trafoParameter,
                                      model_parameter = self$model$modelParameterData(),
                                      model_quality = self$model$modelQualityData(),

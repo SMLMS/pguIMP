@@ -125,7 +125,9 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                                                   output_format = "pdf_document",
                                                   output_file = self$filename,
                                                   params = obj,
-                                                  clean = TRUE)
+                                                  clean = TRUE,
+                                                  run_pandoc = TRUE,
+                                                  runtime = "static")
                               }
                             )
 )

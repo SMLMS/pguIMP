@@ -113,12 +113,15 @@ pgu.exporter <- R6::R6Class("pgu.exporter",
                               #' @examples
                               #' data <- tibble::tibble()
                               #' x$writeDataToExcel(obj = data)
-                              writeDataToExcel = function(obj = "tbl_df"){
+                              writeDataToExcel = function(obj = "list"){
+                                print("write obj")
+                                print(typeof(obj))
                                 writexl::write_xlsx(obj,
                                                     path = self$fileName,
                                                     col_names = TRUE,
                                                     format_headers = TRUE
                                 )
+                                print("done")
                               }
                             )#public
 )#R6Class

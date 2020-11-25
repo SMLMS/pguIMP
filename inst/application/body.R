@@ -310,85 +310,85 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
     )
   ),
 
-  shinydashboard::tabItem(
-    tabName = "tab_detect_trafo",
-    shiny::fluidPage(
-      width = 12,
-      title = "Parameter Wizard",
-      shiny::fluidRow(
-        shiny::column(
-          width = menueColumnWidth,
-          shiny::h1("Detect Model Parameter"),
-          shiny::br(),
-          shiny::br(),
-          shiny::checkboxInput(
-            "cb.wizardLog",
-            width = "100%",
-            label = h5("Log"),
-            value = TRUE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardRoot",
-            width = "100%",
-            label = h5("Root"),
-            value = TRUE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardArcsine",
-            width = "100%",
-            label = h5("arcsine"),
-            value = TRUE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardInverse",
-            width = "100%",
-            label = h5("inverse"),
-            value = TRUE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardTLOP",
-            width = "100%",
-            label = h5("tuckeyLOP"),
-            value = FALSE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardBoxCox",
-            width = "100%",
-            label = h5("boxCox"),
-            value = FALSE
-          ),
-          shiny::checkboxInput(
-            "cb.wizardMirror",
-            width = "100%",
-            label = h5("mirror"),
-            value = FALSE
-          ),
-          shiny::br(),
-          shiny::br(),
-          shiny::actionButton(
-            inputId = "ab.wizardOptimize",
-            label = "optimize",
-            width = "100%"
-          ),
-          shiny::br(),
-          shiny::br(),
-          shiny::actionButton(
-            inputId = "ab.wizardReset",
-            label = "reset",
-            width = "100%"
-          )
-        ),
-        shiny::column(
-          width = dataColumnWidth,
-          shiny::h3("Optimal Transformations"),
-          DT::dataTableOutput("tbl.trafoDetectTypes"),
-          shiny::br(),
-          shiny::h3("Optimized Transformation Parameters"),
-          DT::dataTableOutput("tbl.trafoDetectParameters")
-        )
-      )
-    )
-  ),
+  # shinydashboard::tabItem(
+  #   tabName = "tab_detect_trafo",
+  #   shiny::fluidPage(
+  #     width = 12,
+  #     title = "Parameter Wizard",
+  #     shiny::fluidRow(
+  #       shiny::column(
+  #         width = menueColumnWidth,
+  #         shiny::h1("Detect Model Parameter"),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::checkboxInput(
+  #           "cb.wizardLog",
+  #           width = "100%",
+  #           label = h5("Log"),
+  #           value = TRUE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardRoot",
+  #           width = "100%",
+  #           label = h5("Root"),
+  #           value = TRUE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardArcsine",
+  #           width = "100%",
+  #           label = h5("arcsine"),
+  #           value = TRUE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardInverse",
+  #           width = "100%",
+  #           label = h5("inverse"),
+  #           value = TRUE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardTLOP",
+  #           width = "100%",
+  #           label = h5("tuckeyLOP"),
+  #           value = FALSE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardBoxCox",
+  #           width = "100%",
+  #           label = h5("boxCox"),
+  #           value = FALSE
+  #         ),
+  #         shiny::checkboxInput(
+  #           "cb.wizardMirror",
+  #           width = "100%",
+  #           label = h5("mirror"),
+  #           value = FALSE
+  #         ),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::actionButton(
+  #           inputId = "ab.wizardOptimize",
+  #           label = "optimize",
+  #           width = "100%"
+  #         ),
+  #         shiny::br(),
+  #         shiny::br(),
+  #         shiny::actionButton(
+  #           inputId = "ab.wizardReset",
+  #           label = "reset",
+  #           width = "100%"
+  #         )
+  #       ),
+  #       shiny::column(
+  #         width = dataColumnWidth,
+  #         shiny::h3("Optimal Transformations"),
+  #         DT::dataTableOutput("tbl.trafoDetectTypes"),
+  #         shiny::br(),
+  #         shiny::h3("Optimized Transformation Parameters"),
+  #         DT::dataTableOutput("tbl.trafoDetectParameters")
+  #       )
+  #     )
+  #   )
+  # ),
 
   shinydashboard::tabItem(
     tabName = "tab_mutate_trafo",
@@ -618,37 +618,72 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             width = "100%"
           ),
           shiny::hr(),
+          shiny::h3("Grubbs parameters"),
           shiny::numericInput(
             "ni.imputeOutliersAlpha",
             label = h5("alpha"),
             value = 0.05,
-            min = 0.0,
-            max = 1.0,
-            step = 0.01,
+            min = 0.001,
+            max = 0.999,
+            step = 0.001,
             width = "100%"
           ),
+          shiny::hr(),
+          shiny::h3("DBSCAN parameters"),
           shiny::numericInput(
             "ni.imputeOutliersEpsilon",
             label = h5("espilon"),
-            value = 1.66,
+            value = 0.1,
+            min = 0.001,
+            step = 0.001,
             width = "100%"
           ),
           shiny::numericInput(
             "ni.imputeOutliersMinSamples",
             label = h5("minSamples"),
             value = 5,
+            min = 1,
+            max = 100,
+            step = 1,
             width = "100%"
           ),
+          shiny::hr(),
+          shiny::h3("SVM parameters"),
           shiny::numericInput(
             "ni.imputeOutliersGamma",
             label = h5("gamma"),
             value = 0.05,
+            min = 0.001,
+            step = 0.001,
             width = "100%"
           ),
           shiny::numericInput(
             "ni.imputeOutliersNu",
             label = h5("nu"),
             value = 0.95,
+            min = 0.001,
+            max = 0.999,
+            step = 0.001,
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::h3("KNN parameters"),
+          shiny::numericInput(
+            "ni.imputeOutliersCutoff",
+            label = h5("cutoff"),
+            value = 0.95,
+            min = 0.001,
+            max = 0.999,
+            step = 0.001,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.imputeOutliersK",
+            label = h5("k"),
+            value = 5,
+            min = 1,
+            max = 100,
+            step = 1,
             width = "100%"
           ),
           shiny::numericInput(

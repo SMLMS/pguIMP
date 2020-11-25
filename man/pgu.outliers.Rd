@@ -224,6 +224,18 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setNu}}{Set the instance variable nu.
 (numeric)}
 
+\item{\code{k}}{Returns the instance variable k
+(integer)}
+
+\item{\code{setK}}{Sets the instance variable k.
+(integer)}
+
+\item{\code{cutoff}}{Returns the instance variable cutoff.
+(numeric)}
+
+\item{\code{setCutoff}}{Sets the instance variable cutoff.
+(numeric)}
+
 \item{\code{seed}}{Returns the instance variable seed.
 (integer)}
 
@@ -275,6 +287,8 @@ Creates and returns a new \code{pgu.outliers} object.
   minSamples = 4,
   gamma = 0.05,
   nu = 0.1,
+  k = 4,
+  cutoff = 0.95,
   seed = 42
 )}\if{html}{\out{</div>}}
 }
@@ -298,6 +312,12 @@ Creates and returns a new \code{pgu.outliers} object.
 (numeric)}
 
 \item{\code{nu}}{Initial definition of the instance variable nu.
+(numeric)}
+
+\item{\code{k}}{Initial definition of the instance variable k.
+(integer)}
+
+\item{\code{cutoff}}{Initial definition of the instance variable cutoff.
 (numeric)}
 
 \item{\code{seed}}{Initial definition of the instance variable seed.

@@ -43,6 +43,8 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               .minSamples = "integer",
                               .gamma = "numeric",
                               .nu = "numeric",
+                              .k = "integer",
+                              .cutoff = "numeric",
                               .seed = "integer"
                             ),
                             ##################
@@ -101,7 +103,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable alpha.
                               #' (numeric)
                               setAlpha = function(value = "numeric"){
-                                private$.alpha <- value
+                                if(value < 0){
+                                  private$.alpha <- 0.001
+                                }
+                                else if(value > 0.999){
+                                  private$.alpha <- 0.999
+                                }
+                                else{
+                                  private$.alpha <- value
+                                }
                               },
                               #' @field epsilon
                               #' Returns the instance variable epsilon.
@@ -113,7 +123,12 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable epsilon.
                               #' (numeric)
                               setEpsilon = function(value = "numeric"){
-                                private$.epsilon <- value
+                                if(value < 0.001){
+                                  private$.epsilon <- 0.001
+                                }
+                                else{
+                                  private$.epsilon <- value
+                                }
                               },
                               #' @field minSamples
                               #' Returns the instance variable minSamples.
@@ -125,7 +140,12 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable minSamples.
                               #' (integer)
                               setMinSamples = function(value = "integer"){
-                                private$.minSamples <- value
+                                if(value < 1){
+                                  private$.minSamples <- 1
+                                }
+                                else{
+                                  private$.minSamples <- value
+                                }
                               },
                               #' @field gamma
                               #' Returns the instance variable gamma.
@@ -137,7 +157,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable gamma.
                               #' (numeric)
                               setGamma = function(value = "numeric"){
-                                private$.gamma <- value
+                                if(value < 0.001){
+                                  private$.gamma <- 0.001
+                                }
+                                else if(value > 0.999){
+                                  private$.gamma <- 0.999
+                                }
+                                else{
+                                  private$.gamma <- value
+                                }
                               },
                               #' @field nu
                               #' Returns the instance variable nu.
@@ -149,7 +177,52 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable nu.
                               #' (numeric)
                               setNu = function(value = "numeric"){
-                                private$.nu <- value
+                                if(value < 0.001){
+                                  private$.nu <- 0.001
+                                }
+                                else if(value > 0.999){
+                                  private$.nu <- 0.999
+                                }
+                                else{
+                                  private$.nu <- value
+                                }
+                              },
+                              #' @field k
+                              #' Returns the instance variable k
+                              #' (integer)
+                              k = function(){
+                                return(private$.k)
+                              },
+                              #' @field setK
+                              #' Sets the instance variable k.
+                              #' (integer)
+                              setK = function(value = "integer"){
+                                if(value < 1){
+                                  private$.k <- 1
+                                }
+                                else{
+                                  private$.k <- value
+                                }
+                              },
+                              #' @field cutoff
+                              #' Returns the instance variable cutoff.
+                              #' (numeric)
+                              cutoff = function(){
+                                return(private$.cutoff)
+                              },
+                              #' @field setCutoff
+                              #' Sets the instance variable cutoff.
+                              #' (numeric)
+                              setCutoff = function(value = "numeric"){
+                                if(value < 0.001){
+                                  private$.cutoff <- 0.001
+                                }
+                                else if(value > 0.999){
+                                  private$.cutoff <- 0.999
+                                }
+                                else{
+                                  private$.cutoff <- value
+                                }
                               },
                               #' @field seed
                               #' Returns the instance variable seed.
@@ -161,7 +234,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Set the instance variable seed.
                               #' (integer)
                               setSeed = function(value = "integer"){
-                                private$.seed <- value
+                                if(value < 1){
+                                  private$.seed <- 1
+                                }
+                                else if (value > 100){
+                                  private$.seed <- 100
+                                }
+                                else{
+                                  private$.seed <- value
+                                }
                               }
                             ),#active
                             ###################
@@ -188,6 +269,12 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @param nu
                               #' Initial definition of the instance variable nu.
                               #' (numeric)
+                              #' @param cutoff
+                              #' Initial definition of the instance variable cutoff.
+                              #' (numeric)
+                              #' @param k
+                              #' Initial definition of the instance variable k.
+                              #' (integer)
                               #' @param seed
                               #' Initial definition of the instance variable seed.
                               #' (integer)
@@ -197,13 +284,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @examples
                               #' y <- tibble:tibble()
                               #' x <- pguIMP:pgu.outliers$new(data_df = y)
-                              initialize = function(data_df = "tbl_df", alpha = 0.05, epsilon = 0.1, minSamples = 4, gamma = 0.05, nu=0.1, seed = 42){
-                                private$.alpha <- alpha
-                                private$.epsilon <- epsilon
-                                private$.minSamples <- minSamples
-                                private$.gamma <- gamma
-                                private$.nu <- nu
-                                private$.seed <- seed
+                              initialize = function(data_df = "tbl_df", alpha = 0.05, epsilon = 0.1, minSamples = 4, gamma = 0.05, nu=0.1, k=4, cutoff=0.95, seed = 42){
+                                self$setAlpha <- alpha
+                                self$setEpsilon <- epsilon
+                                self$setMinSamples <- minSamples
+                                self$setGamma <- gamma
+                                self$setNu <- nu
+                                self$setK <- k
+                                self$setCutoff <- cutoff
+                                self$setSeed <- seed
                                 private$.outliersAgentAlphabet <-c("none", "Grubbs", "DBSCAN", "SVM", "knn")
                                 self$setOutliersAgent <- "none"
                                 if(!tibble::is_tibble(data_df)){
@@ -237,6 +326,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 uString <- sprintf("%s\nGrubbs parameter:\nalpha: %.3e\n", uString, self$alpha)
                                 uString <- sprintf("%s\nDBSCAN parameter\nepsilon: %.3e\nminSamples: %i\n", uString, self$epsilon, self$minSamples)
                                 uString <- sprintf("%s\nSVM parameter\ngamma: %.3e\nnu: %.3e\n", uString, self$gamma, self$nu)
+                                uString <- sprintf("%s\nKNN parameter\ncutoff: %.3e\nk: %i\n", uString, self$cutoff, self$k)
                                 cat(uString)
                                 print(self$outliers)
                                 print(self$outliersParameter)
@@ -707,11 +797,11 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   as.numeric() %>%
                                   mean()
 
-                                svm_model <- feature_df %>%
-                                  e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
+                                # svm_model <- feature_df %>%
+                                #   e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
 
                                 knn_model <- feature_df %>%
-                                  OutlierDetection::nnk(k=self$minSamples, cutoff = 1.0 - self$alpha)
+                                  OutlierDetection::nnk(k=self$k, cutoff = self$cutoff)
 
 
                                 outliers_df <- tibble::tibble(measurement = numeric(0),

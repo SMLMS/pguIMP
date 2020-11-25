@@ -153,7 +153,7 @@ extracts the suffix from the fileName
 \subsection{Method \code{writeDataToExcel()}}{
 writes tibble to an excel file of the name fileName.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.exporter$writeDataToExcel(obj = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.exporter$writeDataToExcel(obj = "list")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
