@@ -103,8 +103,6 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                               #' x$write_report(obj)
                               write_report = function(obj){
                                 report_dir <- tempdir()
-                                print("report dir")
-                                print(report_dir)
 
                                 report_file <- system.file("inst", "rmarkdown", "report.Rmd", package = "pguIMP")
                                 header_file <- system.file("inst", "rmarkdown", "header.tex", package = "pguIMP")
@@ -121,7 +119,7 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                                 file.copy(impressum_file, impressum_file_tmp, overwrite = TRUE)
                                 file.copy(title_file, title_file_tmp, overwrite = TRUE)
 
-                                rmarkdown::render(report_file_tmp,
+                                rmarkdown::render(report_file,
                                                   output_format = "pdf_document",
                                                   output_file = self$filename,
                                                   params = obj,

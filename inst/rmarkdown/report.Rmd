@@ -14,10 +14,16 @@ output:
     toc_depth: 2
 params:
  filter_parameter: !r tibble::tibble
+ loq_statistics: !r tibble::tibble
  trafo_parameter: !r tibble::tibble
  model_parameter: !r tibble::tibble
  model_quality: !r tibble::tibble
  model_statistics: !r tibble::tibble
+ normalization_parameter: !r tibble::tibble
+ missing_statistics: !r tibble::tibble
+ outliers_statistics: !r tibble::tibble
+ imputation_statistics: !r tibble::tibble
+ validation: !r tibble::tibble
  analysis_parameter: !r tibble::tibble
 ---
 
@@ -78,7 +84,3 @@ Here, $\mu$ defines the expectation value, and $\mu$ defines the standard deviat
 
 params$model_parameter %>%
   knitr::kable(caption = "Model parameter of transformed data (mu := $\\mu$, sigma := $\\sigma$).")
-```
-
-
-

@@ -236,7 +236,7 @@ pgu.file <- R6::R6Class("pgu.file",
                             private$.baseName <- character(length(0))
                             private$.folderName <- character(length(0))
                             private$.suffix <- character(length(0))
-                            private$.exportType <- character(length(0))
+                            private$.exportType <- "pguIMP"
                             private$.sheetIndex <- 0
                             private$.dataSheet <- "raw_data"
                             private$.loqSheet <- "loq"

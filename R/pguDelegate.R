@@ -5013,7 +5013,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             exportFileName = function(input, output, session){
                               private$.fileName$setSuffix <- "xlsx"
                               private$.fileName$updateTimeString()
-                              private$.fileName$exportFileName() %>%
+                              private$.fileName$mergeFileName()
+                              private$.fileName$fileName %>%
                                 return()
                             }, #function
 
@@ -5030,28 +5031,35 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "validated")){
                                 private$.exporter$setFileName <- file
                                 gui_parameter <- tibble::tibble(
-                                  # parameter = c("value"),
                                   loq_na_handling = c(self$loq$naHandlingAgent),
                                   lloq_substitute = c(self$loq$lloqSubstituteAgent),
                                   uloq_substitute = c(self$loq$uloqSubstituteAgent),
                                   normalization_type = c(self$normalizer$normAgent),
-                                  # outlier_method = c(self$outliers$cleaningAgent),
-                                  # outier_seed = c(self$outliers$seed),
-                                  # outlier_iterations = c(self$outliers$iterations),
+                                  anomalies_method = c(self$outliers$outliersAgent),
+                                  alpha = c(self$outliers$alpha),
+                                  epsilon= c(self$outliers$epsilon),
+                                  minSamples = c(self$outliers$minSamples),
+                                  gamma = c(self$outliers$gamma),
+                                  nu = c(self$outliers$nu),
+                                  cutoff = c(self$outliers$cutoff),
+                                  k = c(self$outliers$k),
+                                  anomalies_seed = c(self$outliers$seed),
                                   imputation_method = c(self$imputer$imputationAgent),
                                   imputation_seed = c(self$imputer$seed),
-                                  imputation_iterations = c(self$imputer$iterations)
+                                  iterations = c(self$imputer$iterations)
                                 )
 
                                 gui_parameter <- tibble::as_tibble(cbind(parameter = names(gui_parameter), t(gui_parameter)))
                                 colnames(gui_parameter) <- c("parameter", "value")
 
-                                list(giu_parameter = gui_parameter,
+                                list(raw_data = self$cleanedData$rawData,
+                                     loq = self$loq$loq,
+                                     metadata = self$filteredMetadata$rawData,
+                                     giu_parameter = gui_parameter,
                                      filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
                                                                        filter_parameter = as.vector(input$tbl.filter_search_columns)),
-                                     metadata = self$filteredMetadata$rawData,
+
                                      filtered = self$filteredData$rawData,
-                                     loq = self$loq$loq,
                                      loq_statistics = self$loq$loqStatistics,
                                      loq_mutated = self$loqMutatedData$rawData,
                                      trafo_parameter = self$transformator$trafoParameter,
@@ -5065,7 +5073,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                      outliers_statistics = self$outliers$outliersStatistics,
                                      imputation_statistics = self$imputer$imputationStatistics,
                                      imputed = self$imputedData$rawData,
-                                     cleaned = self$cleanedData$rawData,
                                      validation = self$validator$testStatistics_df
                                 ) %>%
                                   self$exporter$writeDataToExcel()
@@ -5091,7 +5098,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             reportFileName = function(input, output, session){
                               private$.fileName$setSuffix <- "pdf"
                               private$.fileName$updateTimeString()
-                              private$.fileName$exportFileName() %>%
+                              private$.fileName$mergeFileName()
+                              private$.fileName$fileName %>%
                                 return()
                             }, #function
                             #' @description
@@ -5110,32 +5118,36 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "validated")){
                                 private$.reporter$setFilename <- file
                                 analysis_parameter <- tibble::tibble(
-                                  parameter = c("value"),
-                                  fileName = c(self$fileName$fileName),
-                                  numberOfInstances = c(nrow(self$rawData$rawData)),
-                                  numberOfFeatures = c(length(self$rawData$featureNames)),
-                                  numberOfMetaFeatures = c(length(self$metadata$featureNames)),
-                                  numberOfNumericFeatures = c(length(self$rawData$numericFeatureNames)),
-                                  numberOfNonNumericFeatures = c(length(self$rawData$nonNumericFeatureNames)),
-                                  totalNumberOfMissings = c(sum(is.na(self$rawData$rawData))),
                                   loq_na_handling = c(self$loq$naHandlingAgent),
                                   lloq_substitute = c(self$loq$lloqSubstituteAgent),
                                   uloq_substitute = c(self$loq$uloqSubstituteAgent),
+                                  normalization_type = c(self$normalizer$normAgent),
+                                  anomalies_method = c(self$outliers$outliersAgent),
+                                  alpha = c(self$outliers$alpha),
+                                  epsilon= c(self$outliers$epsilon),
+                                  minSamples = c(self$outliers$minSamples),
+                                  gamma = c(self$outliers$gamma),
+                                  nu = c(self$outliers$nu),
+                                  cutoff = c(self$outliers$cutoff),
+                                  k = c(self$outliers$k),
+                                  anomalies_seed = c(self$outliers$seed),
                                   imputation_method = c(self$imputer$imputationAgent),
                                   imputation_seed = c(self$imputer$seed),
-                                  imputation_iterations = c(self$imputer$iterations),
-                                  outlier_method = c(self$outliers$cleaningAgent),
-                                  outier_seed = c(self$outliers$seed),
-                                  outlier_iterations = c(self$outliers$iterations)
+                                  iterations = c(self$imputer$iterations)
                                 )
 
                                 list(filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
-                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)) %>%
-                                       dplyr::filter(filter_parameter != ""),
+                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)),
+                                     loq_statistics = self$loq$loqStatistics,
                                      trafo_parameter = self$transformator$trafoParameter,
                                      model_parameter = self$model$modelParameterData(),
                                      model_quality = self$model$modelQualityData(),
                                      model_statistics = self$model$testResultData(),
+                                     normalization_parameter = self$normalizer$normParameter,
+                                     missing_statistics = self$missings$imputationParameter,
+                                     outliers_statistics = self$outliers$outliersStatistics,
+                                     imputation_statistics = self$imputer$imputationStatistics,
+                                     validation = self$validator$testStatistics_df,
                                      analysis_parameter = analysis_parameter
                                 ) %>%
                                   self$reporter$write_report()

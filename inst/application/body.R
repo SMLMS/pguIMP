@@ -171,16 +171,16 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::br(),
           shiny::selectInput(
-            "si.loqNaHandling",
+            "si.loqDetectFeature",
             width = '100%',
-            label = h5("NA Handling"),
+            label = h5("Feature"),
             choices = list(),
             selected = 1
           ),
           shiny::selectInput(
-            "si.loqDetectFeature",
+            "si.loqNaHandling",
             width = '100%',
-            label = h5("Feature"),
+            label = h5("NA Handling"),
             choices = list(),
             selected = 1
           ),
@@ -243,6 +243,13 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::br(),
           shiny::selectInput(
+            "si.loqMutateFeature",
+            width = '100%',
+            label = h5("Feature"),
+            choices = list(),
+            selected = 1
+          ),
+          shiny::selectInput(
             "si.lloqSubstitute",
             width = '100%',
             label = h5("LLOQ Substitute"),
@@ -253,13 +260,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             "si.uloqSubstitute",
             width = '100%',
             label = h5("ULOQ Substitute"),
-            choices = list(),
-            selected = 1
-          ),
-          shiny::selectInput(
-            "si.loqMutateFeature",
-            width = '100%',
-            label = h5("Feature"),
             choices = list(),
             selected = 1
           ),
@@ -493,15 +493,15 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::br(),
           selectInput(
-            "si.trafoNormMethod",
-            label = h5("Normalization Type"),
+            "si.trafoNormFeature",
+            label = h5("Feature"),
             choices = list(),
             selected = 1,
             width = "100%"
           ),
           selectInput(
-            "si.trafoNormFeature",
-            label = h5("Feature"),
+            "si.trafoNormMethod",
+            label = h5("Normalization Type"),
             choices = list(),
             selected = 1,
             width = "100%"
@@ -603,6 +603,13 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::hr(),
           selectInput(
+            "si.imputeOutliersFeature",
+            label = h5("Feature"),
+            choices = list(),
+            selected = 1,
+            width = "100%"
+          ),
+          selectInput(
             "si.imputeOutliersMethod",
             label = h5("Detection Method"),
             choices = list(),
@@ -610,13 +617,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             width = "100%"
           ),
           shiny::hr(),
-          selectInput(
-            "si.imputeOutliersFeature",
-            label = h5("Feature"),
-            choices = list(),
-            selected = 1,
-            width = "100%"
-          ),
           shiny::hr(),
           shiny::h3("Grubbs parameters"),
           shiny::numericInput(
@@ -688,7 +688,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::numericInput(
             "ni.imputeOutliersSeed",
-            label = h5("seed"),
+            label = h5("anomalies seed"),
             value = 42,
             width = "100%"
           ),
@@ -749,6 +749,13 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::br(),
           shiny::selectInput(
+            "si.imputeMutateFeature",
+            label = h5("Feature"),
+            width = "100%",
+            choices = list(),
+            selected = 1
+          ),
+          shiny::selectInput(
             "si.imputeMutateMethod",
             label = h5("Mutation Method"),
             width = "100%",
@@ -757,7 +764,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::numericInput(
             "ni.imputeMutateSeed",
-            label = h5("Seed"),
+            label = h5("imputation seed"),
             width = "100%",
             min = 1,
             max = 1000,
@@ -772,13 +779,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             max = 10,
             step = 1,
             value = 4
-          ),
-          shiny::selectInput(
-            "si.imputeMutateFeature",
-            label = h5("Feature"),
-            width = "100%",
-            choices = list(),
-            selected = 1
           ),
           shiny::actionButton(
             inputId = "ab.imputeMutateMutate",
