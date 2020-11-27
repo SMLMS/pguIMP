@@ -349,8 +349,7 @@ pgu.file <- R6::R6Class("pgu.file",
                           #' @examples
                           #' x$exportFileName(value = "infected")
                           exportFileName = function(){
-                            sprintf("%s/%s_%s_%s.%s",
-                                    self$folderName,
+                            sprintf("%s_%s_%s.%s",
                                     self$baseName,
                                     self$exportType,
                                     self$timeString,

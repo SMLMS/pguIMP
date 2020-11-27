@@ -5013,8 +5013,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             exportFileName = function(input, output, session){
                               private$.fileName$setSuffix <- "xlsx"
                               private$.fileName$updateTimeString()
-                              private$.fileName$mergeFileName()
-                              private$.fileName$fileName %>%
+                              # private$.fileName$mergeFileName()
+                              private$.fileName$exportFileName() %>%
                                 return()
                             }, #function
 
@@ -5098,8 +5098,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             reportFileName = function(input, output, session){
                               private$.fileName$setSuffix <- "pdf"
                               private$.fileName$updateTimeString()
-                              private$.fileName$mergeFileName()
-                              private$.fileName$fileName %>%
+                              # private$.fileName$mergeFileName()
+                              private$.fileName$exportFileName() %>%
                                 return()
                             }, #function
                             #' @description
@@ -5118,6 +5118,16 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "validated")){
                                 private$.reporter$setFilename <- file
                                 analysis_parameter <- tibble::tibble(
+                                  fileName = c(self$fileName$fileName),
+                                  numberOfInstances = c(nrow(self$rawData$rawData)),
+                                  numberOfFeatures = c(ncol(self$rawData$rawData)),
+                                  numberOfMetaFeatures = c(ncol(self$metadata$rawData)),
+                                  numberOfNumericFeatures = c(length(self$rawData$numericFeatureNames)),
+                                  numberOfNonNumericFeatures = c(length(self$rawData$nonNumericFeatureNames)),
+                                  totalNumberOfMissings = c(self$rawData$rawData %>%
+                                                              dplyr::select(dplyr::everything()) %>%  # replace to your needs
+                                                              dplyr::summarise_all(~ sum(is.na(.x))) %>%
+                                                              sum()),
                                   loq_na_handling = c(self$loq$naHandlingAgent),
                                   lloq_substitute = c(self$loq$lloqSubstituteAgent),
                                   uloq_substitute = c(self$loq$uloqSubstituteAgent),
@@ -5137,7 +5147,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 )
 
                                 list(filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
-                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)),
+                                                                       filter_parameter = as.vector(input$tbl.filter_search_columns)) %>%
+                                       dplyr::filter(filter_parameter != ""),
+                                     selected_features = self$filteredData$numericFeatureNames,
                                      loq_statistics = self$loq$loqStatistics,
                                      trafo_parameter = self$transformator$trafoParameter,
                                      model_parameter = self$model$modelParameterData(),

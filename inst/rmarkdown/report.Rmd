@@ -11,9 +11,11 @@ output:
     number_sections: TRUE
     fig_caption: TRUE
     keep_md: FALSE
+    keep_tex: FALSE
     toc_depth: 2
 params:
  filter_parameter: !r tibble::tibble
+ selected_features: !r character
  loq_statistics: !r tibble::tibble
  trafo_parameter: !r tibble::tibble
  model_parameter: !r tibble::tibble
@@ -33,6 +35,7 @@ params:
 library(tidyverse)
 library(knitr)
 knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
+
 ```
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.pos = 'H')
@@ -49,38 +52,145 @@ pagebreak <- function() {
 
 \newpage
 # Data set
-Analysis report of the data set loaded from the file `r params$analysis_parameter$fileName`. The data set comprises `r params$analysis_parameter$numberOfInstances` instances that are characterized by `r params$analysis_parameter$numberOfFeatures`. `r params$analysis_parameter$numberOfMetaFeatures` of these features are defined as meta-features. The features are are split into `r params$analysis_parameter$numberOfNumericFeatures` numeric features, and `r params$analysis_parameter$numberOfNonNumericFeatures` non numeric features. The data set is missing `r params$analysis_parameter$totalNumberOfMissings` values. The analysis was prepared on `r format(Sys.time(), '%d %B, %Y')`.
+Analysis report of the data set loaded from the file `r params$analysis_parameter$fileName`. The data set comprises `r params$analysis_parameter$numberOfInstances` instances that are characterized by `r params$analysis_parameter$numberOfFeatures` features, from which `r params$analysis_parameter$numberOfMetaFeatures` are defined as meta-features. The features are further split into `r params$analysis_parameter$numberOfNumericFeatures` numeric features, and `r params$analysis_parameter$numberOfNonNumericFeatures` non numeric features. The data set is missing `r params$analysis_parameter$totalNumberOfMissings` values. The analysis was prepared on `r format(Sys.time(), '%d %B, %Y')`.
 
-
-# Filter
-The filtered data set comprises ...
-```{r, message = FALSE, echo=FALSE, eval=TRUE}
-
+\newpage
+# Filter {#test-label}
+The data set was filtered using the parameters described in Table \ref{tab:filter}.
+```{r filter, message = FALSE, echo=FALSE, eval=TRUE}
 params$filter_parameter %>%
-  knitr::kable(caption = "Filter stuff")
+  knitr::kable(caption = "User defined filter set.")%>%
+  kable_styling(latex_options = "scale_down")
 ```
 
+The following features were selected:
+
+```{r, results='asis', message = FALSE, echo=FALSE, eval=TRUE}
+cat(paste("- ", params$selected_features), sep = "\n")
+```
+
+\newpage
 # Limits of quantification
+Missing values have been indicated as `r params$analysis_parameter$loq_na_handling`. The LLOQ substitute was defined as `r params$analysis_parameter$lloq_substitute`. The ULOQ substitute was defined as `r params$analysis_parameter$uloq_substitute`. The statistics of the LOQ detection procedure are listed in table \ref{tab:detect-loq}.
+```{r detect-loq, message = FALSE, echo=FALSE, eval=TRUE, size="small"}
+params$loq_statistics %>%
+  knitr::kable(caption = "Result of the LOQ detection analysis.")%>%
+  kable_styling(latex_options = "scale_down")
+```
 
+\newpage
 # Data transformation
-
-## Data transformation parameter
-Information about the user-selected data transformation methods.
-```{r, message = FALSE, echo=FALSE, eval=TRUE}
-
+The transformation procedure was performed using the parameters listed in table \ref{tab:trafo-para}.
+```{r trafo-para, message = FALSE, echo=FALSE, eval=TRUE}
 params$trafo_parameter %>%
-  knitr::kable(caption = "The famous iris data set")
+  knitr::kable(caption = "User defined transformation parameter.")%>%
+  kable_styling(latex_options = "scale_down")
 ```
 
 ## Modeling
-The transformed data are fitted to the model of a normal distribution (see eq. \@ref(eq:normal)).
-$$
+The transformed data are fitted to the model of a normal distribution (see eq. \ref{eq:normal}).
+\begin{align}
 p\left(x | \mu, \sigma \right) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\left(\frac{\left(x-\mu \right)^2}{2\sigma^{2}} \right)}
 \label{eq:normal}
-$$
-Here, $\mu$ defines the expectation value, and $\mu$ defines the standard deviation of the model. The determined model parameters for the transformed data are listed below.
+\end{align}
+Here, $\mu$ defines the expectation value, and $\sigma$ defines the standard deviation of the model. The likelihood $p\left(x | \mu, \sigma \right)$ was optimized on the transformed data regarding to the model parameters $\mu$ and $\sigma$ in order to determine the model parameters $\hat{\mu}$ and $\hat{\sigma}$ that maximize the likelihood $\hat{L} = p\left(x | \hat{\mu}, \hat{\sigma} \right)$.
 
-```{r, message = FALSE, echo=FALSE, eval=TRUE}
-
+The determined model parameters for the transformed data are listed in table \ref{tab:model-para}.
+```{r model-para, message = FALSE, echo=FALSE, eval=TRUE}
 params$model_parameter %>%
-  knitr::kable(caption = "Model parameter of transformed data (mu := $\\mu$, sigma := $\\sigma$).")
+  knitr::kable(caption = "Model parameter of transformed feature distributions.")%>%
+  kable_styling(latex_options = "scale_down")
+```
+
+## Quality ensurance of modeling procedure
+The model quality is estimated on the Bayesian Information Criterion (BIC), the Akaike Information Criterion (AIC), and the Root Mean Squared Error (RMSE). The BIC is calculated as depicted in equation \ref{eq:bic}.
+\begin{align}
+\text{BIC} &= k\ln(n)-2\ln(\hat{L})
+\label{eq:bic}
+\end{align}
+with:
+\begin{itemize}
+\item $k :=$ the number of parameters estimated by the model.
+\item $n :=$ the number of instances in the feature.
+\item $\hat{L} :=$ the maximum likelihood function of the model.
+\end{itemize}
+
+The AIC is calculated as depicted in equation \ref{eq:aic}.
+\begin{align}
+\text{AIC} &= 2k-2\ln(\hat{L})
+\label{eq:aic}
+\end{align}
+with:
+\begin{itemize}
+\item $k :=$ the number of parameters estimated by the model.
+\item $\hat{L} :=$ the maximum likelihood function of the model.
+\end{itemize}
+
+
+The RSME is calculated as depicted in equation \ref{eq:rmse}.
+\begin{align}
+\text{RMSE} &= \sqrt{\sum^{n}_{i}\frac{\left(\hat{x}_{i} - x_{i} \right)^{2}}{n}}
+\label{eq:rmse}
+\end{align}
+with:
+\begin{itemize}
+\item $n :=$ the number of instances in the feature.
+\item $i :=$ running parameter.
+\item $x_{i} :=$ observed values.
+\item $\hat{x}_{i} :=$ predicted vales.
+\end{itemize}
+
+The model quality is listed in table \ref{tab:model-qual}. 
+```{r model-qual, message = FALSE, echo=FALSE, eval=TRUE}
+params$model_quality %>%
+  knitr::kable(caption = "Model quality.")%>%
+  kable_styling(latex_options = "scale_down")
+```
+
+## Statistics of modeling procedure
+The statistics of the fitting modeling procedure are listed in table \ref{tab:model-stats}.
+```{r model-stats, message = FALSE, echo=FALSE, eval=TRUE}
+params$model_statistics %>%
+  knitr::kable(caption = "Statistics of modeling procedure.")%>%
+  kable_styling(latex_options = "scale_down")
+```
+
+\newpage
+## Rescaling
+
+Min-max scaling
+\begin{align}
+x' &= \frac{x - \text{min}\left( x\right)}{\text{max}\left( x\right) - \text{min}\left( x\right)}
+\label{eq:minMax}
+\end{align}
+with:
+\begin{itemize}
+\item $x :=$ observed values.
+\item $\text{max}(x) :=$ maximum of $x$.
+\item $\text{min}(x) :=$ minimum of $x$.
+\end{itemize}
+
+Mean-scaling
+\begin{align}
+x' &= \frac{x - \overline{x}}{\text{max}\left( x\right) - \text{min}\left( x\right)}
+\label{eq:minMax}
+\end{align}
+with:
+\begin{itemize}
+\item $x :=$ observed values.
+\item $\overline{x} :=$ average of $x$.
+\item $\text{max}(x) :=$ maximum of $x$.
+\item $\text{min}(x) :=$ minimum of $x$.
+\end{itemize}
+
+z Transformation.
+\begin{align}
+x' &= \frac{x - \overline{x}}{\sigma}
+\label{eq:minMax}
+\end{align}
+with:
+\begin{itemize}
+\item $x :=$ observed values.
+\item $\overline{x} :=$ average of $x$.
+\item $\sigma :=$ standard deviation of $x$.
+\end{itemize}
