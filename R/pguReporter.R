@@ -14,6 +14,8 @@
 #' @import tidyverse
 #' @import shiny
 #' @import rmarkdown
+#' @import knitr
+#' @import kableExtra
 #'
 #' @include pguStatus.R
 #' @include pguImporter.R

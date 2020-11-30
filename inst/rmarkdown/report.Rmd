@@ -34,6 +34,7 @@ params:
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(knitr)
+library(kableExtra)
 knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
 
 ```
@@ -59,8 +60,8 @@ Analysis report of the data set loaded from the file `r params$analysis_paramete
 The data set was filtered using the parameters described in Table \ref{tab:filter}.
 ```{r filter, message = FALSE, echo=FALSE, eval=TRUE}
 params$filter_parameter %>%
-  knitr::kable(caption = "User defined filter set.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "User defined filter set.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
 The following features were selected:
@@ -74,8 +75,8 @@ cat(paste("- ", params$selected_features), sep = "\n")
 Missing values have been indicated as `r params$analysis_parameter$loq_na_handling`. The LLOQ substitute was defined as `r params$analysis_parameter$lloq_substitute`. The ULOQ substitute was defined as `r params$analysis_parameter$uloq_substitute`. The statistics of the LOQ detection procedure are listed in table \ref{tab:detect-loq}.
 ```{r detect-loq, message = FALSE, echo=FALSE, eval=TRUE, size="small"}
 params$loq_statistics %>%
-  knitr::kable(caption = "Result of the LOQ detection analysis.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "Result of the LOQ detection analysis.")%>%
+  kableExtra::kable_styling(latex_options = c("scale_down","HOLD_position"))
 ```
 
 \newpage
@@ -83,8 +84,8 @@ params$loq_statistics %>%
 The transformation procedure was performed using the parameters listed in table \ref{tab:trafo-para}.
 ```{r trafo-para, message = FALSE, echo=FALSE, eval=TRUE}
 params$trafo_parameter %>%
-  knitr::kable(caption = "User defined transformation parameter.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "User defined transformation parameter.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
 ## Modeling
@@ -98,8 +99,8 @@ Here, $\mu$ defines the expectation value, and $\sigma$ defines the standard dev
 The determined model parameters for the transformed data are listed in table \ref{tab:model-para}.
 ```{r model-para, message = FALSE, echo=FALSE, eval=TRUE}
 params$model_parameter %>%
-  knitr::kable(caption = "Model parameter of transformed feature distributions.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "Model parameter of transformed feature distributions.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
 ## Quality ensurance of modeling procedure
@@ -143,25 +144,25 @@ with:
 The model quality is listed in table \ref{tab:model-qual}. 
 ```{r model-qual, message = FALSE, echo=FALSE, eval=TRUE}
 params$model_quality %>%
-  knitr::kable(caption = "Model quality.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "Model quality.")%>%
+  kableExtra::kable_styling(latex_options = c("scale_down","HOLD_position"))
 ```
 
 ## Statistics of modeling procedure
-The statistics of the fitting modeling procedure are listed in table \ref{tab:model-stats}.
+The statistics of the modeling procedure are listed in table \ref{tab:model-stats}.
 ```{r model-stats, message = FALSE, echo=FALSE, eval=TRUE}
 params$model_statistics %>%
-  knitr::kable(caption = "Statistics of modeling procedure.")%>%
-  kable_styling(latex_options = "scale_down")
+  knitr::kable(format="latex", caption = "Statistics of modeling procedure.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
 ```
 
 \newpage
 ## Rescaling
-
+The selected rescaling method was `r params$analysis_parameter$normalization_type`. The choices for rescaling are min-max scaling, mean scaling and a z transformation. The mathematical implementation of min-max scaling is described in equation \ref{eq:min-max-scaling}.
 Min-max scaling
 \begin{align}
 x' &= \frac{x - \text{min}\left( x\right)}{\text{max}\left( x\right) - \text{min}\left( x\right)}
-\label{eq:minMax}
+\label{eq:min-max-scaling}
 \end{align}
 with:
 \begin{itemize}
@@ -170,10 +171,10 @@ with:
 \item $\text{min}(x) :=$ minimum of $x$.
 \end{itemize}
 
-Mean-scaling
+The mathematical implementation of mean scaling is described in equation \ref{eq:mean-scaling}.
 \begin{align}
 x' &= \frac{x - \overline{x}}{\text{max}\left( x\right) - \text{min}\left( x\right)}
-\label{eq:minMax}
+\label{eq:mean-scaling}
 \end{align}
 with:
 \begin{itemize}
@@ -183,10 +184,10 @@ with:
 \item $\text{min}(x) :=$ minimum of $x$.
 \end{itemize}
 
-z Transformation.
+The mathematical implementation of the z-transformation is described in equation \ref{eq:z-transformation}.
 \begin{align}
 x' &= \frac{x - \overline{x}}{\sigma}
-\label{eq:minMax}
+\label{eq:z-transformation}
 \end{align}
 with:
 \begin{itemize}
