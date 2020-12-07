@@ -288,7 +288,8 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                    if (value < 0.0){
                                      c <- (-1.0 * value) + 1
                                    }#if
-                                   else if(dplyr::near(0.0, value)){
+                                   # else if(dplyr::near(0.0, value)){
+                                   else if((value>=0.0) & (value<1.0)){
                                      c <- value + 1
                                    }#else if
                                    return(c)
@@ -521,15 +522,17 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  optimizeTukeyLadderOfPowers = function(value = "numeric"){
                                    lambda <- 1.0
                                    tryCatch({
-                                     lambda <- rcompanion::transformTukey(value,
-                                                                          start = -10,
-                                                                          end = 10,
-                                                                          int = 0.025,
-                                                                          plotit = FALSE,
-                                                                          verbose = FALSE,
-                                                                          quiet = TRUE,
-                                                                          statistic = 1,
-                                                                          returnLambda = TRUE)
+                                     lambda <-
+                                       value %>%
+                                       purrr::discard(is.na) %>%
+                                         rcompanion::transformTukey(start = -10,
+                                                                    end = 10,
+                                                                    int = 0.025,
+                                                                    plotit = FALSE,
+                                                                    verbose = FALSE,
+                                                                    quiet = TRUE,
+                                                                    statistic = 1,
+                                                                    returnLambda = TRUE)
                                      return(lambda)
                                    },
                                    warning = function(w) {

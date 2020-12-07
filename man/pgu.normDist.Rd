@@ -185,6 +185,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{degOfFreedom}}{Returns the instance variable degOfFreedom.
 (numeric)}
 
+\item{\code{n}}{Returns the instance variable n.
+(integer)}
+
 \item{\code{bic}}{Returns the instance variable bic.
 (numeric)}
 

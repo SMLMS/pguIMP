@@ -623,9 +623,9 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             "ni.imputeOutliersAlpha",
             label = h5("alpha"),
             value = 0.05,
-            min = 0.001,
-            max = 0.999,
-            step = 0.001,
+            min = 0.01,
+            max = 0.99,
+            step = 0.01,
             width = "100%"
           ),
           shiny::hr(),
@@ -634,8 +634,8 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             "ni.imputeOutliersEpsilon",
             label = h5("espilon"),
             value = 0.1,
-            min = 0.001,
-            step = 0.001,
+            min = 0.01,
+            step = 0.01,
             width = "100%"
           ),
           shiny::numericInput(
@@ -643,7 +643,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             label = h5("minSamples"),
             value = 5,
             min = 1,
-            max = 100,
+            max = 10,
             step = 1,
             width = "100%"
           ),
@@ -653,17 +653,17 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             "ni.imputeOutliersGamma",
             label = h5("gamma"),
             value = 0.05,
-            min = 0.001,
-            step = 0.001,
+            min = 0.01,
+            step = 0.01,
             width = "100%"
           ),
           shiny::numericInput(
             "ni.imputeOutliersNu",
             label = h5("nu"),
             value = 0.95,
-            min = 0.001,
-            max = 0.999,
-            step = 0.001,
+            min = 0.01,
+            max = 0.99,
+            step = 0.01,
             width = "100%"
           ),
           shiny::hr(),
@@ -671,10 +671,10 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::numericInput(
             "ni.imputeOutliersCutoff",
             label = h5("cutoff"),
-            value = 0.95,
-            min = 0.001,
-            max = 0.999,
-            step = 0.001,
+            value = 0.99,
+            min = 0.01,
+            max = 0.99,
+            step = 0.01,
             width = "100%"
           ),
           shiny::numericInput(
@@ -682,7 +682,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             label = h5("k"),
             value = 5,
             min = 1,
-            max = 100,
+            max = 10,
             step = 1,
             width = "100%"
           ),
@@ -763,6 +763,24 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = 1
           ),
           shiny::numericInput(
+            "ni.imputeMutateNPred",
+            label = h5("number of predictors"),
+            width = "100%",
+            min = 1,
+            max = 20,
+            step =1,
+            value = 10
+          ),
+          shiny::numericInput(
+            "ni.imputeMutateOutfluxThr",
+            label = h5("outflux threshold"),
+            width = "100%",
+            min = 0.1,
+            max = 1.0,
+            step = 0.01,
+            value = 0.5
+          ),
+          shiny::numericInput(
             "ni.imputeMutateSeed",
             label = h5("imputation seed"),
             width = "100%",
@@ -795,6 +813,9 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           width = dataColumnWidth,
           shiny::h3("Imputation Site Heatmap"),
           shiny::plotOutput("plt.imputeMutateSummary"),
+          shiny::hr(),
+          shiny::h3("Flux plot"),
+          shiny::plotOutput("plt.imputeMutateFlux"),
           shiny::hr(),
           shiny::fluidRow(
             shiny::column(

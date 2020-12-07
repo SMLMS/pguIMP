@@ -25,6 +25,7 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                               private = list(
                                 .normAgentAlphabet = "character",
                                 .normAgent = "factor",
+                                .features = "character",
                                 .normParameter = "tbl_df"
                               ),
                               ##################
@@ -47,6 +48,12 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 setNormAgent = function(agent = "character") {
                                   private$.normAgent <- factor(agent, levels = self$normAgentAlphabet)
+                                },
+                                #' @field features
+                                #' Returns instance variable features.
+                                #' (character)
+                                features = function(){
+                                  return(private$.features)
                                 },
                                 #' @field normParameter
                                 #' Returns the instance variable normParameter.
@@ -73,11 +80,12 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                   if(!tibble::is_tibble(data_df)){
                                     data_df <- tibble::tibble(names <- "none",
                                                            values <- c(NA))
-                                    private$.normParameter <- tibble::tibble(deatures = "none",
-                                                                             min = NA,
-                                                                             max = NA,
-                                                                             mean = NA,
-                                                                             sigma = NA)
+                                    private$.normParameter <- tibble::tibble(feature = character(0),
+                                                                             max = numeric(0),
+                                                                             mean = numeric(0),
+                                                                             min = numeric(0),
+                                                                             sigma = numeric(0))
+                                    private$.features <- character(0)
                                   } else{
                                     self$detectNormParameter(data_df)
                                   }
@@ -125,11 +133,16 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 detectNormParameter = function(data_df  = "tbl_df"){
                                   private$.normParameter <- data_df %>%
                                     dplyr::select_if(is.numeric) %>%
+                                    tidyr::gather(key = "feature", value = "value") %>%
+                                    dplyr::group_by(feature) %>%
                                     dplyr::summarise_all(c(min=min, max=max, mean=mean, sigma=sd), na.rm = TRUE) %>%
-                                    tidyr::pivot_longer(cols = dplyr::everything(),
-                                                        names_sep = "_",
-                                                        names_to  = c("features", ".value"))
+                                    tidyr::pivot_longer(cols = -c("feature")) %>%
+                                    tidyr::spread(key = name, value = value)
 
+                                  private$.features <- self$normParameter %>%
+                                    dplyr::select(feature) %>%
+                                    dplyr::pull() %>%
+                                    unique()
                                 }, #function
 
                                 #' @description
@@ -162,9 +175,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$scale_minMax(data_df)
                                 scale_minMax = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$scale_minMax_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$scale_minMax_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -182,19 +196,20 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' A min-max normalized version of the numeric object
                                 #' @examples
                                 #' x$scale_minMax_numeric(values)
-                                scale_minMax_numeric = function(values = "numeric", feature = character){
+                                scale_minMax_numeric = function(values = "numeric", feature = "character"){
                                   min_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(min) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("min") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   max_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(max) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("max") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   scaled_values <- (values - min_val) / (max_val - min_val)
-
                                   return(scaled_values)
                                 }, #function
 
@@ -208,9 +223,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$scale_mean(data_df)
                                 scale_mean = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$scale_mean_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$scale_mean_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -230,18 +246,21 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' x$scale_mean_numeric(values)
                                 scale_mean_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(min) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("min") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   max_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(max) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("max") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   mean_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(mean) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("mean") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   scaled_values <- (values - mean_val) / (max_val - min_val)
@@ -259,9 +278,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$scale_zScore(data_df)
                                 scale_zScore = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$scale_zScore_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$scale_zScore_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -281,13 +301,15 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' x$scale_zScore_numeric(values)
                                 scale_zScore_numeric = function(values = "numeric", feature = character){
                                   mean_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(mean) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("mean") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   sigma_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(sigma) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("sigma") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   scaled_values <- (values - mean_val) / (sigma_val)
@@ -325,9 +347,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$rescale_minMax(data_df)
                                 rescale_minMax = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$rescale_minMax_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$rescale_minMax_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -347,13 +370,15 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' x$rescale_minMax_numeric(values)
                                 rescale_minMax_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(min) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("min") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   max_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(max) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("max") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   rescaled_values <- (values * (max_val - min_val)) + min_val
@@ -371,9 +396,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$rescale_mean(data_df)
                                 rescale_mean = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$rescale_mean_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$rescale_mean_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -393,18 +419,21 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' x$rescale_mean_numeric(values)
                                 rescale_mean_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(min) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("min") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   max_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(max) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("max") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   mean_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(mean) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("mean") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   rescaled_values <- (values * (max_val - min_val)) + mean_val
@@ -422,9 +451,10 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @examples
                                 #' x$rescale_zScore(data_df)
                                 rescale_zScore = function(data_df = "tbl_df"){
-                                  for (feature in self$normParameter[["features"]]){
+                                  for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
-                                      data_df[feature] <- self$rescale_zScore_numeric(data_df[[feature]], feature)
+                                      data_df <- data_df %>%
+                                        dplyr::mutate(!!feature := self$rescale_zScore_numeric(data_df[[feature]], feature))
                                     } #if
                                   } #for
                                   return(data_df)
@@ -444,13 +474,15 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' x$rescale_zScore_numeric(values)
                                 rescale_zScore_numeric = function(values = "numeric", feature = character){
                                   mean_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(mean) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("mean") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   sigma_val <- self$normParameter %>%
-                                    dplyr::filter(features == feature) %>%
-                                    dplyr::select(sigma) %>%
+                                    dplyr::filter(feature == !!feature) %>%
+                                    dplyr::select("sigma") %>%
+                                    dplyr::pull() %>%
                                     as.numeric()
 
                                   rescaled_values <- (values * sigma_val) + mean_val

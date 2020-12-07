@@ -4,20 +4,16 @@
 \alias{dLogLikelihood}
 \title{dLogLikelihood}
 \usage{
-dLogLikelihood(x = "numeric", mu = "numeric", sigma = "numeric", log = TRUE)
+dLogLikelihood(x = "numeric", pars = c(mu = 0, sigma = 1))
 }
 \arguments{
 \item{x}{The x-value.
 (numeric)}
 
-\item{mu}{The expextation value.
+\item{pars}{Numeric vector with two entries
+1: The expextation value.
+2: The standard deviation.
 (numeric)}
-
-\item{sigma}{The standard deviation.
-(numeric)}
-
-\item{log}{Indicate to calculate the log likelihood
-(logical)}
 }
 \value{
 The logLikelihood.
@@ -27,7 +23,7 @@ The logLikelihood.
 Calculates the logLikelihood.
 }
 \examples{
-y <- dLogLikelihood(x=5, mu=0.0, sigma=1.0)
+y <- dLogLikelihood(x=5, pars = c(mu=0.0, sigma=1.0))
 
 }
 \author{

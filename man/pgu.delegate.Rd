@@ -610,6 +610,12 @@ x$resetImputeMutateGui(input, output, session)
 x$imputeMutateMutate(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateImputeFluxGraphic`
+## ------------------------------------------------
+
+x$updateImputeFluxGraphic(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMutateGraphic`
 ## ------------------------------------------------
 
@@ -1495,6 +1501,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeMutateGui}{\code{pgu.delegate$updateImputeMutateGui()}}
 \item \href{#method-resetImputeMutateGui}{\code{pgu.delegate$resetImputeMutateGui()}}
 \item \href{#method-imputeMutateMutate}{\code{pgu.delegate$imputeMutateMutate()}}
+\item \href{#method-updateImputeFluxGraphic}{\code{pgu.delegate$updateImputeFluxGraphic()}}
 \item \href{#method-updateImputeMutateGraphic}{\code{pgu.delegate$updateImputeMutateGraphic()}}
 \item \href{#method-updateImputeMutateStatisticsTbl}{\code{pgu.delegate$updateImputeMutateStatisticsTbl()}}
 \item \href{#method-updateImputeMutateDistributionTbl}{\code{pgu.delegate$updateImputeMutateDistributionTbl()}}
@@ -4415,6 +4422,35 @@ Updates the instance class status.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$imputeMutateMutate(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeFluxGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeFluxGraphic}{}}}
+\subsection{Method \code{updateImputeFluxGraphic()}}{
+Updates the plt.imputeMutateFlux graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeFluxGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeFluxGraphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 

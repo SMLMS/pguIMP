@@ -2882,7 +2882,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersImputeFeature <- shiny::renderPlot(
                                     self$outliers$featurePlot(data_df = self$normalizedData$numericData(),
-                                                              feature = input$si.imputeOutliersFeature)
+                                                              feature = input$si.imputeOutliersFeature),
+                                    bg="transparent"
                                 )
                               }#if
                               else{
@@ -3224,6 +3225,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             imputeMutateMutate = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
+                                private$.imputer$setNPred <- input$ni.imputeMutateNPred
+                                private$.imputer$setOutflux_thr <- input$ni.imputeMutateOutfluxThr
                                 private$.imputer$setSeed <- input$ni.imputeMutateSeed
                                 private$.imputer$setIterations <- input$ni.imputeMutateIterations
 
@@ -3231,6 +3234,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                                                        outliers_df = private$.outliers$outliers)
 
                                 private$.imputer$analyzeImputationSites(data_df = self$normalizedData$numericData())
+
+                                private$.imputer$detectPredictors(data_df = self$normalizedData$numericData())
 
                                 progress <- shiny::Progress$new(session, min = 0, max = 1)
                                 progress$set(message = "Mutate imputation sites", value = 0)
@@ -3245,16 +3250,22 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                                        as.character()) %>%
                                   dplyr::select(c(!!name, self$normalizedData$numericFeatureNames))
 
-                                private$.cleanedData$setRawData <- self$imputedData$numericData() %>%
-                                  self$normalizer$rescale_data() %>%
-                                  self$transformator$reverseMutateData() %>%
-                                  tibble::add_column(!! name := self$imputedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+                                if(self$imputer$success){
+                                  private$.cleanedData$setRawData <- self$imputedData$numericData() %>%
+                                    self$normalizer$rescale_data() %>%
+                                    self$transformator$reverseMutateData() %>%
+                                    tibble::add_column(!! name := self$imputedData$rawData %>%
+                                                         dplyr::select(!!name) %>%
+                                                         unlist() %>%
+                                                         as.character()) %>%
+                                    dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
 
-                                private$.status$update(processName = "imputed", value = TRUE)
+                                  private$.status$update(processName = "imputed", value = TRUE)
+                                }
+                                else{
+                                  private$.status$update(processName = "imputed", value = FALSE)
+                                  shiny::showNotification(paste("Solution of imputation mutate procedure was not satisfactoy. Pleas refine your variables or method and try again. See the Help Webpage of pguIMP for help with the variabes."),type = "error", duration = 20)
+                                }
 
                                 # progress <- shiny::Progress$new(session, min = 1, max = length(self$normalizedData$numericFeatureNames))
                                 # progress$set(message = "Impute Data", value = 0)
@@ -3278,6 +3289,28 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             #' @description
+                            #' Updates the plt.imputeMutateFlux graphic.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeFluxGraphic(input, output, session)
+                            updateImputeFluxGraphic = function(input, output, session){
+                              if(self$status$query(processName = "imputed")){
+                                output$plt.imputeMutateFlux <- shiny::renderPlot(
+                                  self$imputer$fluxPlot(),
+                                  bg="transparent"
+                                )
+                              }#if
+                              else{
+                                output$plt.imputeMutateFlux <- shiny::renderPlot(NULL,bg="transparent")
+                              }#else
+                            }, #function
+
+                            #' @description
                             #' Updates the plt.imputeMutateSummary graphic.
                             #' @param input
                             #' Pointer to shiny input
@@ -3290,11 +3323,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMutateGraphic = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateSummary <- shiny::renderPlot(
-                                  self$imputer$imputationSiteHeatMap()
+                                  self$imputer$imputationSiteHeatMap(),
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL)
+                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 

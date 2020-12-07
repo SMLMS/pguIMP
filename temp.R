@@ -1,447 +1,258 @@
-library(R6)
-library (tidyverse)
-library (grid)
-library (gridExtra)
-library (stats)
-library (e1071)
+library("tidyverse")
+library("mice")
 
+fileName <- "/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx"
 
-pgu.validator <- R6::R6Class("pgu.validator",
-                             ####################
-                             # instance variables
-                             ####################
-                             private = list(
-                               .testStatistics_df = "tbl_df",
-                               .centralMoments_org = "tbl_df",
-                               .centralMoments_imp = "tbl_df",
-                               .centralMoments_delta = "tbl_df",
-                               .features = "character",
-                               .seed = "integer"
-                             ), #private
-                             ##################
-                             # accessor methods
-                             ##################
-                             active = list(
-                               #' @field testStatistics_df
-                               #' Returns the instance variable `testStatistics_df`.
-                               #' (tibble::tibble)
-                               testStatistics_df = function(){
-                                 return(private$.testStatistics_df)
-                               },
-                               #' @field centralMoments_org
-                               #' Returns the instance variable `centralMoments_org`
-                               #' (tibble::tibble)
-                               centralMoments_org = function(){
-                                 return(private$.centralMoments_org)
-                               },
-                               #' @field centralMoments_imp
-                               #' Returns the instance variable `centralMoments_imp`
-                               #' (tibble::tibble)
-                               centralMoments_imp = function(){
-                                 return(private$.centralMoments_imp)
-                               },
-                               #' @field centralMoments_delta
-                               #' Returns the instance variable `centralMoments_delta`
-                               #' (tibble::tibble)
-                               centralMoments_delta = function(){
-                                 return(private$.centralMoments_delta)
-                               },
-                               #' @field features
-                               #' Returns the instance variable `features`
-                               #' (character)
-                               features = function(){
-                                 return(private$.features)
-                               },
-                               #' @field seed
-                               #' Returns the instance variable seed
-                               #' (integer)
-                               seed = function(){
-                                 return(private$.seed)
-                               },
-                               #' @field setSeed
-                               #' Sets the instance variable seed.
-                               #' (numeric)
-                               setSeed = function(value = "numeric"){
-                                 private$.seed <- value
-                               }
-                             ),#active
-                             ###################
-                             # memory management
-                             ###################
-                             public = list(
-                               #' @description
-                               #' Creates and returns a new `pgu.validator` object.
-                               #' @param seed
-                               #' Set the instance variable `seed`.
-                               #' (integer)
-                               #' @return
-                               #' A new `pgu.validator` object.
-                               #' (pguIMP::pgu.validator)
-                               #' @examples
-                               #' x <- pguIMP:pgu.validator$new(seed = 42)
-                               initialize = function(seed = 42){
-                                 self$setSeed <- seed
-                                 self$resetValidator()
-                               },
-                               #' @description
-                               #' Clears the heap and
-                               #' indicates that instance of `pgu.validator` is removed from heap.
-                               finalize = function(){
-                                 print("Instance of pgu.validator removed from heap")
-                               },
-                               ##########################
-                               # print instance variables
-                               ##########################
-                               #' @description
-                               #' Prints instance variables of a `pgu.validator` object.
-                               #' @return
-                               #' string
-                               #' @examples
-                               #' x$print()
-                               #' print(x)
-                               print = function(){
-                                 rString <- sprintf("\npgu.validator:\n")
-                                 cat(rString)
-                                 print(self$features)
-                                 print(self$testStatistics_df)
-                                 print(self$centralMoments_org)
-                                 print(self$centralMoments_imp)
-                                 print(self$centralMoments_delta)
-                                 cat("\n\n")
-                                 invisible(self)
-                               }, #function
-                               ####################
-                               # public functions #
-                               ####################
-                               #' @description
-                               #' Resets instance variables
-                               #' @examples
-                               #' x$resetValidator()
-                               resetValidator = function(){
-                                 private$.testStatistics_df <- tibble::tibble(feature = character(0),
-                                                                              d.Kolmogorow = numeric(0),
-                                                                              p.Kolmogorow = numeric(0),
-                                                                              w.Wilcoxon = numeric(0),
-                                                                              p.Wilcoxon = numeric(0))
-                                 private$.centralMoments_org <- tibble::tibble(feature = character(0),
-                                                                               m1.mean = numeric(0),
-                                                                               m2.variance = numeric(0),
-                                                                               m3.skewness = numeric(0),
-                                                                               m4.kurtosis = numeric(0))
-                                 private$.centralMoments_imp <- tibble::tibble(feature = character(0),
-                                                                               m1.mean = numeric(0),
-                                                                               m2.variance = numeric(0),
-                                                                               m3.skewness = numeric(0),
-                                                                               m4.kurtosis = numeric(0))
-                                 private$.centralMoments_delta <- tibble::tibble(feature = character(0),
-                                                                                 d1.mean = numeric(0),
-                                                                                 d2.variance = numeric(0),
-                                                                                 d3.skewness = numeric(0),
-                                                                                 d4.kurtosis = numeric(0))
-                                 private$.features <- character(0)
-                               }, #resetValidator
+data_df <- readxl::read_xlsx(path = fileName,
+                             sheet = 1)
 
-                               #' @description
-                               #' Performs a comparison between the original and the imputated distribution of a given feature
-                               #' using a two-sided Kolmorogow-Smirnow test with simulated p-vaue distribution.
-                               #' @param org
-                               #' Original data to be analzed.
-                               #' (numeric)
-                               #' @param imp
-                               #' Imputed data to be analyzed.
-                               #' (numeric)
-                               #' @param feature
-                               #' Feature name of the analyzed distributions.
-                               #' (character)
-                               #' @return
-                               #' One row dataframe comprising the test results.
-                               #' (tibble::tibble)
-                               #' @examples
-                               #' x$kolmogorowTestFeature(org, imp, feature)
-                               kolmogorowTestFeature = function(org = "numeric", imp = "numeric", feature = "character"){
-                                 test_obj <- stats::ks.test(x = org,
-                                                            y = imp,
-                                                            alternative = "two.sided",
-                                                            simulate.p.value=TRUE,
-                                                            B=2000)
-                                 print(test_obj)
-                                 tibble::tibble(feature = c(feature),
-                                                d.Kolmogorow = c(test_obj$statistic),
-                                                p.Kolmogorow = c(test_obj$p.value)) %>%
-                                   return()
-                               }, #kolmogorovTestFeature
+data_transformed_df <- data_df %>%
+  dplyr::select(-c("Sample Name")) %>%
+  dplyr::mutate_all(log)
 
-                               #' @description
-                               #' Performs a comparison between the original and the imputated distribution of a given feature
-                               #' using a two-sided Wilcoxon/Mann-Whitney test.
-                               #' @param org
-                               #' Original data to be analzed.
-                               #' (numeric)
-                               #' @param imp
-                               #' Imputed data to be analyzed.
-                               #' (numeric)
-                               #' @param feature
-                               #' Feature name of the analyzed distributions.
-                               #' (character)
-                               #' @return
-                               #' One row dataframe comprising the test results.
-                               #' (tibble::tibble)
-                               #' @examples
-                               #' x$wilcoxonTestFeature(org, imp, feature)
-                               wilcoxonTestFeature = function(org = "numeric", imp = "numeric", feature = "character"){
-                                 test_obj <- stats::wilcox.test(x = org,
-                                                                y = imp,
-                                                                alternative = "two.sided")
-                                 print(test_obj)
-                                 tibble::tibble(feature = c(feature),
-                                                w.Wilcoxon = c(test_obj$statistic),
-                                                p.Wilcoxon = c(test_obj$p.value)) %>%
-                                   return()
-                               }, #wilcoxonTestFeature
+n_row <- nrow(data_transformed_df)
+n_column <- ncol(data_transformed_df)
 
-                               #' @description
-                               #' Estimates estimates the central moments of the given distribution.
-                               #' @param values
-                               #' Data to be analzed.
-                               #' (numeric)
-                               #' @param feature
-                               #' Feature name of the analyzed distributions.
-                               #' (character)
-                               #' @return
-                               #' One row dataframe comprising the statistics.
-                               #' (tibble::tibble)
-                               #' @examples
-                               #' x$centralMomentsFeature(values, feature)
-                               centralMomentsFeature = function(values = "numeric",feature = "character"){
-                                 cMoment_1 <- mean(values, na.rm = TRUE)
-                                 cMoment_2 <- sd(values, na.rm = TRUE)^2
-                                 cMoment_3 <- e1071::skewness(values, na.rm = TRUE)
-                                 cMoment_4 <- e1071::kurtosis(values, na.rm = TRUE)
+data_transformed_df %>%
+  mice::fluxplot()
 
-                                 tibble::tibble(feature = feature,
-                                                m1.mean = c(cMoment_1),
-                                                m2.variance = c(cMoment_2),
-                                                m3.skewness = c(cMoment_3),
-                                                m4.kurtosis = c(cMoment_4)) %>%
-                                   return()
-                               }, #statisticsFeature
+seed <- 42
+set.seed(seed)
+fx1_df <- data_transformed_df %>%
+  mice::flux() %>%
+  tibble::rownames_to_column() %>%
+  tibble::as_tibble()
 
-                               #' @description
-                               #' Validates the feature distributions of the original and the imputated dataframe``
-                               #' using a two-sided Kolmorogow-Smirnow test and a two-sided Wilcoxon/Mann-Whitney test.
-                               #' The result is stored in the instance variables `testStatistics_df`and `distributionStatistics_df`.
-                               #' Displays the progress if shiny is loaded.
-                               #' @param org_df
-                               #' Original dataframe to be analzed.
-                               #' (tibble::tibble)
-                               #' @param imp_df
-                               #' Imputed dataframe to be analyzed.
-                               #' (tibble::tibble)
-                               #' @param progress
-                               #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-                               #' (shiny::Progress)
-                               #' @examples
-                               #' x$validate(org, imp, progress)
-                               validate = function(org_df = "tbl_df", imp_df = "tbl_df", progress = "Progress"){
-                                 self$resetValidator()
-                                 set.seed(self$seed)
-                                 private$.features <- imp_df %>%
-                                   dplyr::select_if(is.numeric) %>%
-                                   colnames()
-                                 for(feature in self$features){
-                                   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                     progress$inc(1.0/length(self$features))
-                                   }#if
-                                   org_temp <- org_df %>%
-                                     dplyr::select(feature) %>%
-                                     tidyr::drop_na() %>%
-                                     dplyr::pull(feature)
-                                   imp_temp <- imp_df %>%
-                                     dplyr::select(feature) %>%
-                                     tidyr::drop_na() %>%
-                                     dplyr::pull(feature)
-                                   kolmogorow_df <- self$kolmogorowTestFeature(org_temp, imp_temp, feature)
-                                   wilcoxon_df <- self$wilcoxonTestFeature(org_temp, imp_temp, feature)
-                                   test_df <- kolmogorow_df %>%
-                                     dplyr::right_join(wilcoxon_df, by = "feature")
-                                   private$.testStatistics_df <- self$testStatistics_df %>%
-                                     tibble::add_row(test_df)
+outlist1 <- fx1_df %>%
+  dplyr::filter(outflux < 0.5) %>%
+  dplyr::select(rowname) %>%
+  dplyr::pull()
 
-                                   private$.centralMoments_org <- private$.centralMoments_org %>%
-                                     tibble::add_row(self$centralMomentsFeature(org_temp, feature))
+fx2_df <- data_transformed_df %>%
+  dplyr::select(-dplyr::all_of(outlist1)) %>%
+  mice::flux() %>%
+  tibble::rownames_to_column() %>%
+  tibble::as_tibble()
 
-                                   private$.centralMoments_imp <- private$.centralMoments_imp %>%
-                                     tibble::add_row(self$centralMomentsFeature(imp_temp, feature))
-                                 }#for
-                                 private$.centralMoments_delta <- tibble::tibble(feature = self$features,
-                                                                                 d1.mean = abs(self$centralMoments_org[["m1.mean"]] - self$centralMoments_imp[["m1.mean"]]),
-                                                                                 d2.variance = abs(self$centralMoments_org[["m2.variance"]] - self$centralMoments_imp[["m2.variance"]]),
-                                                                                 d3.skewness = abs(self$centralMoments_org[["m3.skewness"]] - self$centralMoments_imp[["m3.skewness"]]),
-                                                                                 d4.kurtosis = abs(self$centralMoments_org[["m4.kurtosis"]] - self$centralMoments_imp[["m4.kurtosis"]]))
-                               }, #validate
+outlist2 <- fx2_df %>%
+  dplyr::filter(outflux < 0.5) %>%
+  dplyr::select(rowname) %>%
+  dplyr::pull()
 
-                               # ####################
-                               # # output functions #
-                               # ####################
-                               #' @description
-                               #' Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
-                               #' Returns the plot
-                               #' @param data_df
-                               #' dataframe to be plotted
-                               #' (tibble::tibble)
-                               #' @return
-                               #' A ggplot2 object
-                               #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featurePdf(data_df)
-                               featurePdf = function(data_df = "tbl_df"){
-                                 title_str <- sprintf("probability density")
-                                 p <- data_df %>%
-                                   dplyr::select(c("x", "org_pdf", "imp_pdf")) %>%
-                                   dplyr::rename(original = org_pdf) %>%
-                                   dplyr::rename(imputed = imp_pdf) %>%
-                                   tidyr::gather(key = "type", value = "pdf", -x, na.rm = TRUE) %>%
-                                   ggplot2::ggplot() +
-                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=pdf, color=type)) +
-                                   ggplot2::ggtitle(title_str) +
-                                   ggplot2::xlab("value")
-                                 return(p)
-                               }, #featurePdf
+outlist <- unique(c(outlist1, outlist2))
 
-                               #' @description
-                               #' Receives a dataframe and plost the feature 'x' against the features 'org_cdf' and 'imp_cdf'.
-                               #' Returns the plot
-                               #' @param data_df
-                               #' dataframe to be plotted
-                               #' (tibble::tibble)
-                               #' @return
-                               #' A ggplot2 object
-                               #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featureCdf(data_df)
-                               featureCdf = function(data_df = "tbl_df"){
-                                 title_str <- sprintf("cumulative density")
-                                 p <- data_df %>%
-                                   dplyr::select(c("x", "org_cdf", "imp_cdf")) %>%
-                                   dplyr::rename(original = org_cdf) %>%
-                                   dplyr::rename(imputed = imp_cdf) %>%
-                                   tidyr::gather(key = "type", value = "cdf", -x, na.rm = TRUE) %>%
-                                   ggplot2::ggplot() +
-                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=cdf, color=type)) +
-                                   ggplot2::ggtitle(title_str) +
-                                   ggplot2::xlab("value")
-                                 return(p)
-                               }, #featureCdf
+data_filtered_df <- data_transformed_df %>%
+  dplyr::select(-dplyr::all_of(outlist))
 
-                               #' @description
-                               #' Receives two numeric vectors 'org' and 'imp'. Plots the qq-plot of both vectors.
-                               #' Returns the plot
-                               #' @param org
-                               #' Numric vector comprising the original data.
-                               #' (numeric)
-                               #' @param imp
-                               #' Numeric vector comprising the imputed data.
-                               #' (numeric)
-                               #' @return
-                               #' A ggplot2 object
-                               #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
-                               featureQQ = function(org = "numeric", imp = "numeric"){
-                                 title_str <- sprintf("qq-plot")
+mean_number_of_predictors = function(data_df, minpuc, mincor){
+  pred <- data_df %>%
+    mice::quickpred(minpuc = minpuc, mincor = mincor)
 
-                                 min_val <- min(min(org), min(imp))
-                                 max_val <- max(max(org), max(imp))
+  pred_dist <- table(rowSums(pred))
 
-                                 p <- tibble::as_tibble(qqplot(org, imp, plot.it=FALSE)) %>%
-                                   ggplot2::ggplot() +
-                                   ggplot2::geom_point(mapping = ggplot2::aes(x=x, y=y)) +
-                                   ggplot2::geom_abline(intercept = 0, slope = 1) +
-                                   ggplot2::ggtitle(title_str) +
-                                   ggplot2::xlab("orgiginal") +
-                                   ggplot2::ylab("imputed")
-
-                                 return(p)
-                               }, #featureQQ
-
-                               #' @description
-                               #' Receives two numeric dataframes 'org_df' and 'imp_df', and a feature name.
-                               #' Creates a compund plot of the validation results for the given feature..
-                               #' Returns the plot
-                               #' @param org_df
-                               #' Dataframe comprising the original data.
-                               #' (tibble::tibble)
-                               #' @param imp_df
-                               #' Dataframe comprising the imputed data.
-                               #' (tibble::tibble)
-                               #' @param feature
-                               #' Feature name.
-                               #' (character)
-                               #' @return
-                               #' A ggplot2 object
-                               #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
-                               featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", feature = "character"){
-                                 title_str <- sprintf("Imputation quality analysis of %s", feature)
-
-                                 org <- org_df %>%
-                                   dplyr::select(feature) %>%
-                                   tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   as.numeric()
-                                 imp <- imp_df %>%
-                                   dplyr::select(feature) %>%
-                                   tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   as.numeric()
-
-                                 org_hist <- org %>%
-                                   hist(plot = FALSE)
-                                 org_min <- org_hist$breaks[1]
-                                 org_max <- org_hist$breaks[length(org_hist$breaks)]
-
-                                 imp_hist <- imp %>%
-                                   hist(plot = FALSE)
-                                 imp_min <- imp_hist$breaks[1]
-                                 imp_max <- imp_hist$breaks[length(org_hist$breaks)]
-
-                                 data_min <- min(c(org_min, imp_min))
-                                 data_max <- max(c(org_max, imp_max))
-
-                                 print(data_max)
-
-                                 org_pdf_obj <- density(org, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
-                                 imp_pdf_obj <- density(imp, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
-
-                                 dist_df <- tibble::tibble(x = org_pdf_obj$x,
-                                                           org_pdf = org_pdf_obj$y,
-                                                           imp_pdf = imp_pdf_obj$y)
-                                 dist_df <- dist_df %>%
-                                   dplyr::mutate(org_cdf = cumsum(org_pdf)*abs(x[2] - x[1])) %>%
-                                   dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
-
-                                 p1 <- self$featurePdf(dist_df, feature) +
-                                   ggplot2::theme(legend.position = "none")
-                                 p2 <- self$featureCdf(dist_df, feature) +
-                                   ggplot2::theme(legend.position = "bottom")
-                                 p3 <- self$featureQQ(org, imp, feature)
-                                 p <- gridExtra::grid.arrange(p1,p2,p3,
-                                                              layout_matrix = rbind(c(1,1,2),c(1,1,3)),
-                                                              top = grid::textGrob(title_str, gp = grid::gpar(fontsize=20)))
-                                 return(p)
-                               } #featurePlot
-
-                             )#public
-)# class
-
-
-main = function() {
-  org_df <- tibble::tibble(infected = rnorm(1000, mean=100.0, sd=12))
-  imp_df <- tibble::tibble(infected = rnorm(1000, mean=100.0, sd=10))
-  validator <- pgu.validator$new()
-  validator$validate(org_df, imp_df)
-  validator$featurePlot(org_df, imp_df, "infected")
+  sum(as.numeric(names(pred_dist)) * as.numeric(pred_dist)) / sum(as.numeric(pred_dist)[2:length(pred_dist)]) %>%
+    return()
 }
 
-main()
+quickpred_df <- tidyr::expand_grid(minpuc = seq(from=0.1, to=0.9, by=0.1),
+                                   mincor = seq(from=0.1, to=0.9, by=0.1))
+
+
+quickpred_df <- quickpred_df %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(mean = mean_number_of_predictors(data_filtered_df, minpuc, mincor)) %>%
+  dplyr::ungroup()
+
+quickpred_para <- quickpred_df %>%
+  tidyr::drop_na() %>%
+  dplyr::slice(which.min(abs(quickpred_df$mean - 15)))
+
+
+minpuc <- quickpred_para$minpuc
+mincor <- quickpred_para$mincor
+
+
+pred <- data_transformed_df %>%
+  mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = outlist)
+
+# mice_model <- data_transformed_df %>%
+#   mice::mice(method = "cart", pred = pred, seed = seed, printFlag = FALSE)
+#
+# data_imputed_df <- mice_model %>%
+#   mice::complete()
+#
+# data_imputed_df %>%
+#   tibble::as_tibble()
+
+# iterations <- 2
+# stats0 <- data_transformed_df %>%
+#   dplyr::select(c("TG_44.0")) %>%
+#   unlist() %>%
+#   psych::describe()
+# print(stats0)
+#
+# stats_mat <- matrix(NA, ncol= iterations, nrow = 13)
+# stats_mat
+#
+# for (i in seq(1, iterations)){
+#   mice_model <- data_transformed_df %>%
+#     mice::mice(method = "cart", pred = pred, seed = seed+i, printFlag = FALSE)
+#
+#   stats_mat[,i] <- mice_model %>%
+#     mice::complete() %>%
+#     dplyr::select(c("TG_44.0")) %>%
+#     unlist() %>%
+#     psych::describe() %>%
+#     unlist()
+# }
+# stats_mat
+#
+# diffMat <- stats_mat %>%
+#   sweep(MARGIN = 1, STATS = unlist(stats0), FUN = "-") %>%
+#   abs()
+#
+# diffMat
+#
+# ranks <- diffMat %>%
+#   apply(MARGIN = 1, FUN = function(x)rank(x, ties.method = "min"))
+#
+# ranks
+#
+# ranks %>%
+#   rowSums() %>%
+#   which.min()
+
+seed <- 42
+iterations <- 10
+
+# Calculate Errors
+stats0_mat <- data_transformed_df %>%
+  psych::describe(na.rm=TRUE) %>%
+  as.matrix()
+
+stats_mat_list = list()
+diff_mat_list = list()
+for (i in seq(1, iterations)){
+  mice_model <- data_transformed_df %>%
+    mice::mice(method = "cart", pred = pred, seed = seed+i, printFlag = FALSE)
+
+  stats_mat_list[[i]] <- mice_model %>%
+    mice::complete() %>%
+    psych::describe(na.rm=TRUE) %>%
+    as.matrix()
+
+  diff_mat_list[[i]] <- stats0_mat - stats_mat_list[[i]]
+}
+
+# Calculate Ranks
+cumulative_diff_df <- tibble::tibble(statistics = colnames(diff_mat_list[[1]]))
+for(i in seq(iterations)){
+  diff_sum <- rep(0.0, times=13)
+  for(j in seq(1, ncol(data_transformed_df))){
+    diff_sum <- diff_sum + (diff_mat_list[[i]][j,])^2
+  }
+  feature_name <- sprintf("iter_%i", i)
+  cumulative_diff_df <- cumulative_diff_df %>%
+    dplyr::mutate(!!feature_name := sqrt(diff_sum))
+}
+cumulative_diff_df
+
+ranks_mat <- cumulative_diff_df %>%
+  dplyr::select(-c("statistics")) %>%
+  apply(MARGIN = 1, FUN = function(x)rank(x, ties.method = "min"))
+
+# determine optimal seed
+seed_additive <- ranks_mat %>%
+  rowSums() %>%
+  which.min() %>%
+  as.integer()
+
+ranks_mat
+
+seed_additive
+
+# mc
+# Calculate Errors
+stats0_mat <- data_transformed_df %>%
+  psych::describe(na.rm=TRUE) %>%
+  as.matrix()
+
+stats_mat_list = list()
+diff_mat_list = list()
+for(i in seq(iterations)){
+  set.seed(self$seed + i)
+  for(feature in colnames(data_transformed_df)){
+    mu <- data_transformed_df %>%
+      dplyr::select(feature) %>%
+      tidyr::drop_na() %>%
+      dplyr::pull(feature) %>%
+      as.double() %>%
+      mean()
+
+    sigma <- data_transformed_df %>%
+      dplyr::select(feature) %>%
+      tidyr::drop_na() %>%
+      dplyr::pull(feature) %>%
+      as.double() %>%
+      sd()
+
+
+  }
+}
+
+
+# M5p tree
+imputed_df <- data_transformed_df
+for(feature in colnames(data_transformed_df)){
+  na_idx <- data_transformed_df %>%
+    dplyr::pull(feature) %>%
+    as.numeric() %>%
+    is.na() %>%
+    which()
+
+  if((length(na_idx)<1) | length(na_idx) == nrow(data_transformed_df)){
+    next
+  }#if
+
+  predictor_idx <- pred[feature,] %>%
+    as.logical()
+
+  predictor_names <- colnames(pred)[predictor_idx]
+
+  #split in train and prediction data
+  train_df <- data_transformed_df %>%
+    dplyr::select(dplyr::all_of(c(feature, predictor_names))) %>%
+    dplyr::slice(-na_idx)
+
+  na_df <- data_transformed_df %>%
+    dplyr::select(dplyr::all_of(c(feature, predictor_names))) %>%
+    dplyr::slice(na_idx)
+
+  # if predictor selection fails, take all features as predictors
+  if(ncol(na_df) <2){
+    print(feature)
+    train_df <- data_transformed_df %>%
+      dplyr::slice(-na_idx)
+
+    na_df <- data_transformed_df %>%
+      dplyr::slice(na_idx)
+  }
+
+  print(feature)
+  m5p_model <- sprintf("%s ~ .", feature) %>%
+    stats::as.formula() %>%
+    RWeka::M5P(data=train_df)
+
+  imputed_values <- predict(m5p_model, newdata = na_df)
+
+  print(feature)
+  print(imputed_values)
+
+  for (j in 1:length(na_idx)){
+    imputed_df[[na_idx[j], feature]] <- imputed_values[j]
+  }#for
+}
+
+
+pred %>%
+  rowSums()

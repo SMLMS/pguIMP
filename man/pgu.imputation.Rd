@@ -248,6 +248,18 @@ detectImputationSites = function(data = "tbl_df"){
 
 
 ## ------------------------------------------------
+## Method `pgu.imputation$average_number_of_predictors`
+## ------------------------------------------------
+
+x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
+
+## ------------------------------------------------
+## Method `pgu.imputation$detectPredictors`
+## ------------------------------------------------
+
+x$detectPredictors(data_df)
+
+## ------------------------------------------------
 ## Method `pgu.imputation$handleImputationSites`
 ## ------------------------------------------------
 
@@ -431,6 +443,13 @@ x$featureBoxPlotWithSubset() \%>\%
 
 x$featurePlot() \%>\%
  show()
+
+## ------------------------------------------------
+## Method `pgu.imputation$fluxPlot`
+## ------------------------------------------------
+
+x$fluxPlot() \%>\%
+ show()
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -456,6 +475,27 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setImputationAgent}}{Sets the instance variable imputationAgent.
 (character)}
 
+\item{\code{flux_df}}{Returns the instance variable flux_df
+(tibble::tible)}
+
+\item{\code{outflux_thr}}{Returns the instance variable outflux_thr.
+(numeric)}
+
+\item{\code{setOutflux_thr}}{Sets the instance variable outflux_thr.
+(numeric)}
+
+\item{\code{nPred}}{Returns the instance variable nPred.
+(integer)}
+
+\item{\code{setNPred}}{Sets the instance variable nPred.
+(integer)}
+
+\item{\code{pred_mat}}{Returns the instance variable pred_mat.
+(matrix)}
+
+\item{\code{exclude_vec}}{Returns the instance variable exclude_vec
+(character)}
+
 \item{\code{seed}}{Returns the instance variable seed.
 (numeric)}
 
@@ -470,6 +510,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 
 \item{\code{amv}}{Returns the instance variable amv.
 (numeric)}
+
+\item{\code{success}}{Returns the instance variable success.
+(logical)}
 }
 \if{html}{\out{</div>}}
 }
@@ -486,6 +529,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-analyzeImputationSites}{\code{pgu.imputation$analyzeImputationSites()}}
 \item \href{#method-imputationSiteIdxByFeature}{\code{pgu.imputation$imputationSiteIdxByFeature()}}
 \item \href{#method-nanFeatureList}{\code{pgu.imputation$nanFeatureList()}}
+\item \href{#method-average_number_of_predictors}{\code{pgu.imputation$average_number_of_predictors()}}
+\item \href{#method-detectPredictors}{\code{pgu.imputation$detectPredictors()}}
 \item \href{#method-handleImputationSites}{\code{pgu.imputation$handleImputationSites()}}
 \item \href{#method-imputeByMedian}{\code{pgu.imputation$imputeByMedian()}}
 \item \href{#method-imputeByMean}{\code{pgu.imputation$imputeByMean()}}
@@ -498,6 +543,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-featureBarPlot}{\code{pgu.imputation$featureBarPlot()}}
 \item \href{#method-featureBoxPlotWithSubset}{\code{pgu.imputation$featureBoxPlotWithSubset()}}
 \item \href{#method-featurePlot}{\code{pgu.imputation$featurePlot()}}
+\item \href{#method-fluxPlot}{\code{pgu.imputation$fluxPlot()}}
 \item \href{#method-clone}{\code{pgu.imputation$clone()}}
 }
 }
@@ -507,7 +553,13 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Method \code{new()}}{
 Creates and returns a new \code{pgu.imputation} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$new(seed = 42, iterations = 4, imputationAgent = "none")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$new(
+  seed = 42,
+  iterations = 4,
+  imputationAgent = "none",
+  nPred = 10,
+  outflux_thr = 0.5
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -525,6 +577,11 @@ Default is 4.
 Default is "none".
 Options are: ""none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", "cart", "randomForest", "M5P".
 (string)}
+
+\item{\code{nPred}}{Initially sets the instance variable nPred.
+(integer)}
+
+\item{\code{outflux_thr}}{Initially sets the instance fariable outflux_thr}
 }
 \if{html}{\out{</div>}}
 }
@@ -956,6 +1013,79 @@ detectImputationSites = function(data = "tbl_df"){
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-average_number_of_predictors"></a>}}
+\if{latex}{\out{\hypertarget{method-average_number_of_predictors}{}}}
+\subsection{Method \code{average_number_of_predictors()}}{
+Calculates the average number of predictors for a given dataframe and minpuc and mincor variables
+using the mice::quickpred routine.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$average_number_of_predictors(
+  data_df = "tbl_df",
+  minpuc = 0,
+  mincor = 0.1
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The dataframe to be analyzed
+(tibble::tibble)}
+
+\item{\code{minpuc}}{Specifies the minimum threshold for the proportion of usable cases.
+(numeric)}
+
+\item{\code{mincor}}{Specifies the minimum threshold against which the absolute correlation in the dataframe is compared.
+(numeric)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Average_number_of_predictors.
+(numeric)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-detectPredictors"></a>}}
+\if{latex}{\out{\hypertarget{method-detectPredictors}{}}}
+\subsection{Method \code{detectPredictors()}}{
+Identifies possible predictors for each feature.
+Analysis results are written to the instance variable pred_mat.
+Intermediate analysis results are an influx/outflux dataframe
+that is written to the instance variable flux_df and
+detect predictors and a list of features that is excluded from
+the search for possible predictors that is written to the
+instance variable exclude_vec.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$detectPredictors(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The dataframe to be analyzed.
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$detectPredictors(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-handleImputationSites"></a>}}
 \if{latex}{\out{\hypertarget{method-handleImputationSites}{}}}
 \subsection{Method \code{handleImputationSites()}}{
@@ -1181,11 +1311,7 @@ The run with the best result is identified and used for substitution.
 Returns the cleaned dataframe.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$imputeByMice(
-  data_df,
-  method = "character",
-  progress = "Progress"
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$imputeByMice(data_df, progress = "Progress")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -1193,9 +1319,6 @@ Display the progress if shiny is loaded.
 \describe{
 \item{\code{data_df}}{The data frame to be analyzed.
 (tibble::tibble)}
-
-\item{\code{method}}{One of the methods supported by the mice package.
-(character)}
 
 \item{\code{progress}}{If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
 (shiny::Progress)}
@@ -1223,7 +1346,7 @@ Substitutes imputation sites by predictions of a M5P tree trained on the whole d
 Returns the cleaned dataframe.
 Display the progress if shiny is loaded.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$imputeByM5P(data_df = "tl_df", progress = "Progress")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$imputeByM5P(data_df = "tbl_df", progress = "Progress")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -1480,6 +1603,29 @@ A composite plot.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$featurePlot() \%>\%
+ show()
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-fluxPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-fluxPlot}{}}}
+\subsection{Method \code{fluxPlot()}}{
+Displays an influx/outflux plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$fluxPlot()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A composite plot.
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$fluxPlot() \%>\%
  show()
 }
 \if{html}{\out{</div>}}

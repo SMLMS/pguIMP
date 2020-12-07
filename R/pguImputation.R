@@ -39,9 +39,15 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  .imputationSiteDistribution = "matrix",
                                  .imputationAgentAlphabet = "character",
                                  .imputationAgent = "factor",
+                                 .flux_df = "tbl_df",
+                                 .outflux_thr = "numeric",
+                                 .nPred = "integer",
+                                 .pred_mat = "matrix",
+                                 .exclude_vec = "character",
                                  .seed = "numeric",
                                  .iterations = "numeric",
-                                 .amv = "ANY"
+                                 .amv = "ANY",
+                                 .success = "logical"
                                ),
                               ##################
                               # accessor methods
@@ -82,6 +88,48 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' (character)
                                  setImputationAgent = function(agent = "character") {
                                    private$.imputationAgent <- factor(agent, levels = self$imputationAgentAlphabet)
+                                 },
+                                 #' @field flux_df
+                                 #' Returns the instance variable flux_df
+                                 #' (tibble::tible)
+                                 flux_df = function(){
+                                   return(private$.flux_df)
+                                 },
+                                 #' @field outflux_thr
+                                 #' Returns the instance variable outflux_thr.
+                                 #' (numeric)
+                                 outflux_thr = function(){
+                                   return(private$.outflux_thr)
+                                 },
+                                 #' @field setOutflux_thr
+                                 #' Sets the instance variable outflux_thr.
+                                 #' (numeric)
+                                 setOutflux_thr = function(value = numeric){
+                                   private$.outflux_thr <- as.numeric(value)
+                                 },
+                                 #' @field nPred
+                                 #' Returns the instance variable nPred.
+                                 #' (integer)
+                                 nPred = function(){
+                                   return(private$.nPred)
+                                 },
+                                 #' @field setNPred
+                                 #' Sets the instance variable nPred.
+                                 #' (integer)
+                                 setNPred = function(value = "integer"){
+                                   private$.nPred <- as.integer(value)
+                                 },
+                                 #' @field pred_mat
+                                 #' Returns the instance variable pred_mat.
+                                 #' (matrix)
+                                 pred_mat = function(){
+                                   return(private$.pred_mat)
+                                 },
+                                 #' @field exclude_vec
+                                 #' Returns the instance variable exclude_vec
+                                 #' (character)
+                                 exclude_vec = function(){
+                                   return(private$.exclude_vec)
                                  },
                                  #' @field seed
                                  #' Returns the instance variable seed.
@@ -128,6 +176,12 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' (numeric)
                                  amv = function(){
                                    return(private$.amv)
+                                 },
+                                 #' @field success
+                                 #' Returns the instance variable success.
+                                 #' (logical)
+                                 success = function(){
+                                   return(private$.success)
                                  }
                                  ),
                               ###################
@@ -149,16 +203,27 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' Default is "none".
                                  #' Options are: ""none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", "cart", "randomForest", "M5P".
                                  #' (string)
+                                 #' @param nPred
+                                 #' Initially sets the instance variable nPred.
+                                 #' (integer)
+                                 #' @param outflux_thr
+                                 #' Initially sets the instance fariable outflux_thr
                                  #' @return
                                  #' A new `pgu.imputation` object.
                                  #' (pguIMP::pgu.imputation)
                                  #' @examples
                                  #' x <- pguIMP:pgu.imputation$new()
-                                 initialize = function(seed = 42, iterations = 4, imputationAgent = "none"){
-                                   private$.imputationAgentAlphabet <- c("none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", "cart", "randomForest", "M5P")
+                                 initialize = function(seed = 42, iterations = 4, imputationAgent = "none", nPred = 10, outflux_thr = 0.5){
+                                   private$.imputationAgentAlphabet <- c("none", "median", "mean", "mu", "mc", "knn", "pmm", "cart", "rf", "M5P")
                                    self$setSeed <- seed
                                    self$setIterations <- iterations
                                    self$setImputationAgent <- imputationAgent
+                                   self$setNPred <- nPred
+                                   self$setOutflux_thr <- outflux_thr
+                                   private$.success <- FALSE
+                                   private$.pred_mat <- matrix()
+                                   private$.flux_df <- tibble::tibble()
+                                   private$.exclude_vec <- character(0)
                                    self$gatherImputationSites()
                                    self$gatherImputationSiteStatistics()
                                    self$gatherImputationSiteDistribution()
@@ -560,6 +625,80 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #'     dplyr::mutate(features = self$imputationParameter[["features"]][col])
                                  #' }, #function
                                  #'
+
+                                 #####################
+                                 # detect predictors #
+                                 #####################
+
+                                 #' @description
+                                 #' Calculates the average number of predictors for a given dataframe and minpuc and mincor variables
+                                 #' using the mice::quickpred routine.
+                                 #' @param data_df
+                                 #' The dataframe to be analyzed
+                                 #' (tibble::tibble)
+                                 #' @param minpuc
+                                 #' Specifies the minimum threshold for the proportion of usable cases.
+                                 #' (numeric)
+                                 #' @param mincor
+                                 #' Specifies the minimum threshold against which the absolute correlation in the dataframe is compared.
+                                 #' (numeric)
+                                 #' @return
+                                 #' Average_number_of_predictors.
+                                 #' (numeric)
+                                 #' @examples
+                                 #' x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
+                                 average_number_of_predictors = function(data_df = "tbl_df", minpuc = 0, mincor = 0.1){
+                                   pred_dist <- data_df %>%
+                                     dplyr::select(-dplyr::all_of(self$exclude_vec)) %>%
+                                     mice::quickpred(minpuc = minpuc, mincor = mincor) %>%
+                                     rowSums() %>%
+                                     table()
+
+                                   sum(as.numeric(names(pred_dist)) * as.numeric(pred_dist)) / sum(as.numeric(pred_dist)[2:length(pred_dist)]) %>%
+                                     return()
+                                 }, #function
+
+                                 #' @description
+                                 #' Identifies possible predictors for each feature.
+                                 #' Analysis results are written to the instance variable pred_mat.
+                                 #' Intermediate analysis results are an influx/outflux dataframe
+                                 #' that is written to the instance variable flux_df and
+                                 #' detect predictors and a list of features that is excluded from
+                                 #' the search for possible predictors that is written to the
+                                 #' instance variable exclude_vec.
+                                 #' @param data_df
+                                 #' The dataframe to be analyzed.
+                                 #' (tibble::tibble)
+                                 #' @examples
+                                 #' x$detectPredictors(data_df)
+                                 detectPredictors = function(data_df = "tbl_df"){
+                                   private$.flux_df <- data_df %>%
+                                     mice::flux() %>%
+                                     tibble::rownames_to_column() %>%
+                                     tibble::as_tibble()
+
+                                   private$.exclude_vec <- self$flux_df %>%
+                                     dplyr::filter(outflux < self$outflux_thr) %>%
+                                     dplyr::select(c("rowname")) %>%
+                                     dplyr::pull()
+
+                                   quickpred_df <- tidyr::expand_grid(minpuc = seq(from=0.0, to=0.9, by=0.1),
+                                                                      mincor = seq(from=0.0, to=0.9, by=0.1)) %>%
+                                     dplyr::rowwise() %>%
+                                     dplyr::mutate(mean = self$average_number_of_predictors(data_df, minpuc, mincor)) %>%
+                                     dplyr::ungroup()
+
+                                   quickpred_para <- quickpred_df %>%
+                                     tidyr::drop_na() %>%
+                                     dplyr::slice(which.min(abs(quickpred_df$mean - trunc(self$nPred/ncol(data_df) * ncol(data_df)))))
+
+                                   minpuc <- quickpred_para$minpuc
+                                   mincor <- quickpred_para$mincor
+
+                                   private$.pred_mat <- data_df %>%
+                                     mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = self$exclude_vec)
+                                 }, #function
+
                                  ###########################
                                  # handle imputation sites #
                                  ###########################
@@ -584,18 +723,30 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                      print("Warning: Error in pgu.imputation imputationAgent is not valid. Will be set to none.")
                                      self$setimputationAgent <- "none"
                                    }#if
-                                   cleanedData <- switch((self$imputationAgent),
-                                                         "none" = data_df,
-                                                         "median" = self$imputeByMedian(data_df, progress),
-                                                         "mean" = self$imputeByMean(data_df, progress),
-                                                         "expValue" = self$imputeByExpectationValue(data_df, progress),
-                                                         "monteCarlo" = self$imputeByMC(data_df, progress),
-                                                         "knn" = self$imputeByKnn(data_df, progress),
-                                                         "pmm" = self$imputeByMice(data_df,"pmm", progress),
-                                                         "cart" = self$imputeByMice(data_df, "cart", progress),
-                                                         "randomForest" = self$imputeByMice(data_df, "rf", progress),
-                                                         "M5P" = self$imputeByM5P(data_df, progress)
-                                   )
+                                   private$.success <- FALSE
+                                   cleanedData <- data_df
+                                   tryCatch({
+                                     cleanedData <- switch((self$imputationAgent),
+                                                           "none" = data_df,
+                                                           "median" = self$imputeByMedian(data_df, progress),
+                                                           "mean" = self$imputeByMean(data_df, progress),
+                                                           "mu" = self$imputeByExpectationValue(data_df, progress),
+                                                           "mc" = self$imputeByMC(data_df, progress),
+                                                           "knn" = self$imputeByKnn(data_df, progress),
+                                                           "pmm" = self$imputeByMice(data_df, progress),
+                                                           "cart" = self$imputeByMice(data_df, progress),
+                                                           "rf" = self$imputeByMice(data_df, progress),
+                                                           "M5P" = self$imputeByM5P(data_df, progress)
+                                     )
+                                     private$.success <- TRUE
+                                   },
+                                   error = function(e) {
+                                     private$.success <- FALSE
+                                     errorMesage <- sprintf("\nError in pgu.imputation during hndleImputationSites routine:\n%s", e)
+                                     cat(errorMesage)
+                                   }#error
+                                   )#tryCatch
+                                   colnames(cleanedData) <- colnames(data_df)
                                    return(cleanedData)
                                  }, #function
 
@@ -728,15 +879,77 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' x$imputeByMC(data, progress)
                                  imputeByMC = function(data_df = "tbl_df", progress = "Progress"){
                                    imputed_df <- data_df
-                                   for (feature in self$imputationStatistics[["feature"]]){
-                                     if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                       progress$inc(1.0/ncol(data_df))
-                                     }#if
-                                     stats0 <- data_df %>%
-                                       dplyr::select(feature) %>%
-                                       unlist() %>%
-                                       psych::describe()
+                                   # Calculate Errors
+                                   stats0_mat <- data_df %>%
+                                     psych::describe(na.rm=TRUE) %>%
+                                     as.matrix()
 
+                                   stats_mat_list = list()
+                                   diff_mat_list = list()
+                                   for (i in seq(from=1, to=self$iterations, by=1)){
+                                     if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
+                                       progress$inc(1.0/self$iterations)
+                                     }#if
+
+                                     imputed_df <- data_df
+                                     set.seed(self$seed + i)
+                                     for(feature in colnames(data_df)){
+                                       mu <- data_df %>%
+                                         dplyr::select(feature) %>%
+                                         tidyr::drop_na() %>%
+                                         dplyr::pull(feature) %>%
+                                         as.double() %>%
+                                         mean()
+
+                                       sigma <- data_df %>%
+                                         dplyr::select(feature) %>%
+                                         tidyr::drop_na() %>%
+                                         dplyr::pull(feature) %>%
+                                         as.double() %>%
+                                         sd()
+
+                                       indices <- self$imputationSiteIdxByFeature(feature)
+                                       mcVal <- stats::rnorm(n = length(indices),
+                                                             mean = mu,
+                                                             sd = sigma)
+                                       imputed_df <- imputed_df %>%
+                                         dplyr::mutate(!!feature := replace(!!as.name(feature),
+                                                                            indices,
+                                                                            mcVal))
+                                     }#for
+                                     stats_mat_list[[i]] <- imputed_df %>%
+                                       psych::describe(na.rm=TRUE) %>%
+                                       as.matrix()
+
+                                     diff_mat_list[[i]] <- stats0_mat - stats_mat_list[[i]]
+                                   }# for
+
+                                   # Calculate Ranks
+                                   cumulative_diff_df <- tibble::tibble(statistics = colnames(diff_mat_list[[1]]))
+                                   for(i in seq(1, self$iterations)){
+                                     diff_sum <- rep(0.0, times=13)
+                                     for(j in seq(1, ncol(data_df))){
+                                       diff_sum <- diff_sum + (diff_mat_list[[i]][j,])^2
+                                     }
+                                     feature_name <- sprintf("iter_%i", i)
+                                     cumulative_diff_df <- cumulative_diff_df %>%
+                                       dplyr::mutate(!!feature_name := sqrt(diff_sum))
+                                   }
+
+                                   ranks_mat <- cumulative_diff_df %>%
+                                     dplyr::select(-c("statistics")) %>%
+                                     apply(MARGIN = 1, FUN = function(x)rank(x, ties.method = "min"))
+
+                                   # determine optimal seed
+                                   seed_additive <- ranks_mat %>%
+                                     rowSums() %>%
+                                     which.min() %>%
+                                     as.integer()
+
+                                   # calculate optimized imputation
+                                   imputed_df <- data_df
+                                   set.seed(self$seed + seed_additive)
+                                   for(feature in colnames(data_df)){
                                      mu <- data_df %>%
                                        dplyr::select(feature) %>%
                                        tidyr::drop_na() %>%
@@ -751,41 +964,14 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                        as.double() %>%
                                        sd()
 
-                                     stats <- matrix(NA, ncol= self$iterations, nrow = 13)
-                                     for (j in 1:self$iterations) {
-                                       set.seed(self$seed + j - 1)
-                                       indices <- self$imputationSiteIdxByFeature(feature)
-                                       mcVal <- stats::rnorm(n = length(indices),
-                                                             mean = mu,
-                                                             sd = sigma)
-                                       complete_Data <- data_df %>%
-                                         dplyr::mutate(!!feature := replace(!!as.name(feature),
-                                                                            indices,
-                                                                            mcVal))
-                                       stats[,j] <-complete_Data %>%
-                                         dplyr::select(feature) %>%
-                                         unlist() %>%
-                                         psych::describe() %>%
-                                         t()%>%
-                                         unlist()
-                                     }#for
-                                     diffMat <- stats %>%
-                                       sweep(MARGIN = 1, STATS = unlist(stats0), FUN = "-") %>%
-                                       abs()
-                                     ranks <- apply(X = diffMat, MARGIN = 1, FUN = function(x)rank(x, ties.method = "max"))
-                                     set.seed(self$seed+which.min(rowSums(ranks[,3:13]))-1)
                                      indices <- self$imputationSiteIdxByFeature(feature)
                                      mcVal <- stats::rnorm(n = length(indices),
                                                            mean = mu,
                                                            sd = sigma)
-                                     complete_Data <- data_df %>%
+                                     imputed_df <- imputed_df %>%
                                        dplyr::mutate(!!feature := replace(!!as.name(feature),
                                                                           indices,
                                                                           mcVal))
-
-                                     imputed_df <- imputed_df %>%
-                                       dplyr::mutate(!!feature := complete_Data %>%
-                                                       dplyr::pull(feature))
                                    }#for
                                    return(imputed_df)
                                  }, #function
@@ -809,19 +995,18 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                      progress$inc(1)
                                    }#if
-                                   if (ncol(data_df) < 4){
-                                     return(data_df)
+                                   if (ncol(data_df) < self$nPred){
+                                     e <- simpleError("nPred needs to be smaller that the number of features.")
+                                     stop(e)
                                    }#if
-                                   else{
-                                     data_df %>%
-                                       as.data.frame() %>%
-                                       DMwR::knnImputation(k=3,
-                                                           scale = TRUE,
-                                                           meth = "weighAvg",
-                                                           distData = NULL) %>%
-                                       tibble::as_tibble() %>%
-                                       return()
-                                   }#else
+                                   data_df %>%
+                                     as.data.frame() %>%
+                                     DMwR::knnImputation(k=self$nPred,
+                                                         scale = TRUE,
+                                                         meth = "weighAvg",
+                                                         distData = NULL) %>%
+                                     tibble::as_tibble() %>%
+                                     return()
                                  }, #function
 
                                  #' @description
@@ -833,9 +1018,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param data_df
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @param method
-                                 #' One of the methods supported by the mice package.
-                                 #' (character)
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
                                  #' (shiny::Progress)
@@ -844,52 +1026,77 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' (tibble:tibble)
                                  #' @examples
                                  #' x$imputeByMice(data, progress)
-                                 imputeByMice = function(data_df, method = "character", progress = "Progress") {
-                                   if(ncol(data_df) < 2){
-                                     return(data_df)
+                                 imputeByMice = function(data_df, progress = "Progress") {
+                                   if (ncol(data_df) < self$nPred){
+                                     e <- simpleError("nPred needs to be smaller that the number of features.")
+                                     stop(e)
                                    }#if
-                                   else{
-                                     data_col_names <- colnames(data_df)
-                                     colnames(data_df) <- paste0("F", seq(1:ncol(data_df))) %>%
-                                       as.character()
-                                     imputed_df <- data_df
-                                     for (col_name in colnames(data_df)) {
-                                       stats0 <- data_df %>%
-                                         dplyr::select(col_name) %>%
-                                         unlist() %>%
-                                         psych::describe()
-                                       stats <- matrix(NA, ncol= self$iterations, nrow = 13)
-                                       for (j in 1:self$iterations) {
-                                         if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                           progress$inc(1.0/(self$iterations*ncol(data_df)))
-                                         }#if
-                                         imputed_Data <- data_df %>%
-                                           mice::mice(method = method, seed = self$seed+j-1, printFlag = FALSE)
-                                         complete_Data <- mice::complete(imputed_Data,1)
-                                         stats[,j] <-complete_Data %>%
-                                           dplyr::select(col_name) %>%
-                                           unlist() %>%
-                                           psych::describe() %>%
-                                           t()%>%
-                                           unlist()
-                                       }#for
-                                       diffMat <- stats %>%
-                                         sweep(MARGIN = 1, STATS = unlist(stats0), FUN = "-") %>%
-                                         abs()
-                                       ranks <- apply(X = diffMat, MARGIN = 1, FUN = function(x)rank(x, ties.method = "max"))
-                                       imputed_Data <- data_df %>%
-                                         mice::mice(method = method,
-                                                    seed = self$seed+which.min(rowSums(ranks[,3:13]))-1,
-                                                    printFlag = FALSE)
-                                       complete_Data <- mice::complete(imputed_Data,1)
-                                       imputed_df <- imputed_df %>%
-                                         dplyr::mutate(!!col_name := complete_Data %>%
-                                                         dplyr::select(col_name) %>%
-                                                         unlist())
-                                     }#for
-                                     colnames(imputed_df) <- data_col_names
-                                     return(imputed_df)
-                                   }#else
+                                   if(ncol(data_df) < 2){
+                                     e <- simpleError("The number of features needs to be larger than 2.")
+                                     stop(e)
+                                   }#if
+
+                                   # determine predictor matrix
+                                   self$detectPredictors(data_df)
+
+                                   # Calculate Errors for iterations
+                                   stats0_mat <- data_df %>%
+                                     psych::describe(na.rm=TRUE) %>%
+                                     as.matrix()
+
+                                   stats_mat_list = list()
+                                   diff_mat_list = list()
+                                   for (i in seq(1, self$iterations)){
+                                     if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
+                                       progress$inc(1.0/(self$iterations))
+                                     }#if
+                                     mice_model <- data_df %>%
+                                       mice::mice(method = self$imputationAgent,
+                                                  pred = self$pred_mat,
+                                                  seed = self$seed + i,
+                                                  printFlag = TRUE)
+
+                                     stats_mat_list[[i]] <- mice_model %>%
+                                       mice::complete() %>%
+                                       psych::describe(na.rm=TRUE) %>%
+                                       as.matrix()
+
+                                     diff_mat_list[[i]] <- stats0_mat - stats_mat_list[[i]]
+                                   }
+
+                                   # Calculate Ranks
+                                   cumulative_diff_df <- tibble::tibble(statistics = colnames(diff_mat_list[[1]]))
+                                   for(i in seq(1, self$iterations)){
+                                     diff_sum <- rep(0.0, times=13)
+                                     for(j in seq(1, ncol(data_df))){
+                                       diff_sum <- diff_sum + (diff_mat_list[[i]][j,])^2
+                                     }
+                                     feature_name <- sprintf("iter_%i", i)
+                                     cumulative_diff_df <- cumulative_diff_df %>%
+                                       dplyr::mutate(!!feature_name := sqrt(diff_sum))
+                                   }
+
+                                   ranks_mat <- cumulative_diff_df %>%
+                                     dplyr::select(-c("statistics")) %>%
+                                     apply(MARGIN = 1, FUN = function(x)rank(x, ties.method = "min"))
+
+                                   # determine optimal seed
+                                   seed_additive <- ranks_mat %>%
+                                     rowSums() %>%
+                                     which.min() %>%
+                                     as.integer()
+
+                                   # impute with optimal seed and return imputed data
+                                   mice_model <- data_df %>%
+                                     mice::mice(method = self$imputationAgent,
+                                                pred = self$pred_mat,
+                                                seed = self$seed + seed_additive,
+                                                printFlag = FALSE)
+
+                                   mice_model %>%
+                                     mice::complete() %>%
+                                     tibble::as_tibble() %>%
+                                     return()
                                  }, #function
 
                                  #' @description
@@ -907,45 +1114,104 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' (tibble:tibble)
                                  #' @examples
                                  #' x$imputeByM5P(data, progress)
-                                 imputeByM5P = function(data_df = "tl_df", progress = "Progress"){
-                                   if(ncol(data_df) < 2){
-                                     return(data_df)
+                                 imputeByM5P = function(data_df = "tbl_df", progress = "Progress"){
+                                   if (ncol(data_df) < self$nPred){
+                                     e <- simpleError("nPred needs to be smaller that the number of features.")
+                                     stop(e)
                                    }#if
-                                   else{
-                                     data_col_names <- colnames(data_df)
-                                     colnames(data_df) <- paste0("F", seq(1:ncol(data_df))) %>%
-                                       as.character()
-                                     imputed_df <- data_df
-                                     for (i in 1:length(colnames(data_df))) {
-                                       if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                         progress$inc(1.0/ncol(data_df))
-                                       }#if
+                                   if(ncol(data_df) < 2){
+                                     e <- simpleError("The number of features needs to be larger than 2.")
+                                     stop(e)
+                                   }#if
+                                   imputed_df <- data_df
 
-                                       na_idx <- self$imputationSiteIdxByFeature(featureName = data_col_names[i])
+                                   # determine predictor matrix
+                                   self$detectPredictors(data_df)
 
-                                       if((length(na_idx)<1) | length(na_idx) == nrow(data_df)){
-                                         next
-                                       }#if
+                                   for(feature in colnames(data_df)){
+                                     if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
+                                       progress$inc(1.0/ncol(data_df))
+                                     }
+
+                                     # get imputation candidates
+                                     na_idx <- data_df %>%
+                                       dplyr::pull(feature) %>%
+                                       as.numeric() %>%
+                                       is.na() %>%
+                                       which()
+
+                                     if((length(na_idx)<1) | length(na_idx) == nrow(data_df)){
+                                       next
+                                     }#if
+
+                                     # select valid predictors
+                                     predictor_idx <- self$pred_mat[feature,] %>%
+                                       as.logical()
+
+                                     predictor_names <- colnames(self$pred_mat)[predictor_idx]
+
+                                     #split in train and prediction data
+                                     train_df <- data_df %>%
+                                       dplyr::select(dplyr::all_of(c(feature, predictor_names))) %>%
+                                       dplyr::slice(-na_idx)
+
+                                     na_df <- data_df %>%
+                                       dplyr::select(dplyr::all_of(c(feature, predictor_names))) %>%
+                                       dplyr::slice(na_idx)
+
+                                     # if predictor selection fails, take all features as predictors
+                                     if(ncol(na_df) <2){
                                        train_df <- data_df %>%
                                          dplyr::slice(-na_idx)
 
                                        na_df <- data_df %>%
                                          dplyr::slice(na_idx)
+                                     }
 
-                                       m5 <- colnames(data_df)[i] %>%
-                                         paste("~.") %>%
-                                         as.formula() %>%
-                                         RWeka::M5P(data = train_df)
+                                     m5p_model <- sprintf("%s ~ .", feature) %>%
+                                       stats::as.formula() %>%
+                                       RWeka::M5P(data=train_df)
 
-                                       na_values <- predict(m5, newdata = na_df)
-
-                                       for (j in 1:length(na_idx)){
-                                         imputed_df[[na_idx[j], colnames(data_df)[i]]] <- na_values[j]
-                                       }#for
+                                     imputed_values <- predict(m5p_model, newdata = na_df)
+                                     for (i in 1:length(na_idx)){
+                                       imputed_df[[na_idx[i], feature]] <- imputed_values[i]
                                      }#for
-                                     colnames(imputed_df) <- data_col_names
-                                     return(imputed_df)
-                                   }#else
+                                   }#for
+                                   return(imputed_df)
+
+                                   # data_col_names <- colnames(data_df)
+                                   # colnames(data_df) <- paste0("F", seq(1:ncol(data_df))) %>%
+                                   #   as.character()
+                                   # imputed_df <- data_df
+                                   # for (i in 1:length(colnames(data_df))) {
+                                   #   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
+                                   #     progress$inc(1.0/ncol(data_df))
+                                   #   }#if
+                                   #
+                                   #   na_idx <- self$imputationSiteIdxByFeature(featureName = data_col_names[i])
+                                   #
+                                   #   if((length(na_idx)<1) | length(na_idx) == nrow(data_df)){
+                                   #     next
+                                   #   }#if
+                                   #   train_df <- data_df %>%
+                                   #     dplyr::slice(-na_idx)
+                                   #
+                                   #   na_df <- data_df %>%
+                                   #     dplyr::slice(na_idx)
+                                   #
+                                   #   m5 <- colnames(data_df)[i] %>%
+                                   #     paste("~.") %>%
+                                   #     as.formula() %>%
+                                   #     RWeka::M5P(data = train_df)
+                                   #
+                                   #   na_values <- predict(m5, newdata = na_df)
+                                   #
+                                   #   for (j in 1:length(na_idx)){
+                                   #     imputed_df[[na_idx[j], colnames(data_df)[i]]] <- na_values[j]
+                                   #   }#for
+                                   # }#for
+                                   # colnames(imputed_df) <- data_col_names
+                                   # return(imputed_df)
                                  }, #functions
 
 
@@ -1172,7 +1438,36 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
 
                                    p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
                                    return(p)
-                                 }#function
+                                 },#function
 
+                                 #' @description
+                                 #' Displays an influx/outflux plot
+                                 #' @return
+                                 #' A composite plot.
+                                 #' (ggplot2::ggplot)
+                                 #' @examples
+                                 #' x$fluxPlot() %>%
+                                 #'  show()
+                                 fluxPlot = function(){
+                                   p <- self$flux_df %>%
+                                     ggplot2::ggplot(mapping = aes(x=influx, y=outflux, label=rowname)) +
+                                     ggplot2::geom_point()+
+                                     ggplot2::geom_text(mapping = aes(label=ifelse(outflux<self$outflux_thr,as.character(rowname),'')),hjust=0,vjust=0) +
+                                     ggplot2::geom_hline(mapping = aes(yintercept = self$outflux_thr, linetype = "threshold")) +
+                                     ggplot2::scale_linetype_manual(values = c("threshold" = "dashed")) +
+                                     ggplot2::xlim(0,1) +
+                                     ggplot2::ylim(0,1) +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = element_rect(fill = "transparent"),
+                                       legend.key = element_rect(fill = "transparent")
+                                     )
+                                     # ggthemes::geom_rangeframe(size = 1, x=ggplot2::xlim(0,1), y=c(0, 1)) +
+                                     # ggthemes::theme_tufte()
+                                     # ggplot2::theme(legend.position=c(.9,.75))
+                                   return(p)
+                                 }#function
                                )#public
 )#class

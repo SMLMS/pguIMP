@@ -43,6 +43,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  .dataPoints = "numeric",
                                  .logLikelihood = "numeric",
                                  .degOfFreedom = "numeric",
+                                 .n = "integer",
                                  .bic = "numeric",
                                  .aic = "numeric",
                                  .aicc = "numeric",
@@ -119,6 +120,12 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' (numeric)
                                  degOfFreedom = function(){
                                    return(private$.degOfFreedom)
+                                 },
+                                 #' @field n
+                                 #' Returns the instance variable n.
+                                 #' (integer)
+                                 n = function(){
+                                   return(private$.n)
                                  },
                                  #' @field bic
                                  #' Returns the instance variable bic.
@@ -281,6 +288,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                    private$.expSigma <- 0
                                    private$.logLikelihood <- 0
                                    private$.degOfFreedom <- 0
+                                   private$.n <- 0
                                    private$.bic <- 0
                                    private$.aic <-0
                                    private$.aicc <- 0
@@ -303,6 +311,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                    private$.expSigma <- NA
                                    private$.logLikelihood <- NA
                                    private$.degOfFreedom <- NA
+                                   private$.n <- NA
                                    private$.bic <- NA
                                    private$.aic <-NA
                                    private$.aicc <- NA
@@ -329,27 +338,49 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  optimize = function(){
                                    estMu <- mean(self$rawData[["x"]], na.rm=TRUE)
                                    estSigma <- sd(self$rawData[["x"]], na.rm=TRUE)
-                                   fit<-tryCatch({
-                                     bbmle::mle2(x ~ dLogLikelihood(mu=mu, sigma=sigma), start = list(mu=estMu, sigma=estSigma), data=self$rawData)
+                                   fit <- NULL
+                                   tryCatch({
+                                     fit <- stats::optim(par = c(mu = estMu, sigma = estSigma), fn = pguIMP::dLogLikelihood, x =  purrr::discard(self$rawData[["x"]], is.na))
+                                     private$.fitSuccess <- TRUE
                                    },
                                    error = function(e) {
                                      self$resetFail()
-                                     errorMesage <- sprintf("\nError in pgu.normDist during maximum likelihood optimization:\n%s", e)
+                                     errorMesage <- sprintf("\nError in pgu.normDist during maximum likelihood estimation:\n%s", e)
                                      cat(errorMesage)
+                                     private$.fitSuccess <- FALSE
                                      return(NA)
                                    })#tryCatch
-                                   if(isS4(fit)){
-                                     private$.rawData["residuals"] <- bbmle::residuals(fit)
-                                     private$.expMu <- fit@coef[1]
-                                     private$.expSigma <- fit@coef[2]
-                                     ll <- bbmle::logLik(fit)
-                                     private$.logLikelihood <- ll[1]
-                                     private$.degOfFreedom <- attr(ll, "df")
-                                     private$.bic <- stats::BIC(fit)
-                                     private$.aic <- bbmle::AIC(fit)
-                                     private$.aicc <- bbmle::AICc(fit)
-                                     private$.fitSuccess <- TRUE
+                                   if(self$fitSuccess == TRUE){
+                                     private$.expMu <- fit$par[1]
+                                     private$.expSigma <- fit$par[2]
+                                     private$.logLikelihood <- -1 * dLogLikelihood(x=purrr::discard(self$rawData[["x"]], is.na), pars = c(mu =fit$par[1], sigma = fit$par[2]))
+                                     private$.degOfFreedom <- 2
+                                     private$.n <- length(purrr::discard(self$rawData[["x"]], is.na))
+                                     private$.bic <- self$degOfFreedom*log(self$n) - 2*self$logLikelihood
+                                     private$.aic <- 2*self$degOfFreedom - 2 *self$logLikelihood
+                                     private$.aicc <- self$aic +((2*self$degOfFreedom^2) +(2*self$degOfFreedom))/(self$n-self$degOfFreedom-2)
                                    }#if
+                                   # fit<-tryCatch({
+                                   #   bbmle::mle2(x ~ dLogLikelihood(mu=mu, sigma=sigma), start = list(mu=estMu, sigma=estSigma), data=self$rawData)
+                                   # },
+                                   # error = function(e) {
+                                   #   self$resetFail()
+                                   #   errorMesage <- sprintf("\nError in pgu.normDist during maximum likelihood optimization:\n%s", e)
+                                   #   cat(errorMesage)
+                                   #   return(NA)
+                                   # })#tryCatch
+                                   # if(isS4(fit)){
+                                   #   private$.rawData["residuals"] <- bbmle::residuals(fit)
+                                   #   private$.expMu <- fit@coef[1]
+                                   #   private$.expSigma <- fit@coef[2]
+                                   #   ll <- bbmle::logLik(fit)
+                                   #   private$.logLikelihood <- ll[1]
+                                   #   private$.degOfFreedom <- attr(ll, "df")
+                                   #   private$.bic <- stats::BIC(fit)
+                                   #   private$.aic <- bbmle::AIC(fit)
+                                   #   private$.aicc <- bbmle::AICc(fit)
+                                   #   private$.fitSuccess <- TRUE
+                                   # }#if
                                  }, #function
 
                                  #' @description

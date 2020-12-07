@@ -15,6 +15,7 @@
 #' @import gridExtra
 #' @import DT
 #' @import VIM
+#' @import mice
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

@@ -214,11 +214,11 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' Sets the instance variable cutoff.
                               #' (numeric)
                               setCutoff = function(value = "numeric"){
-                                if(value < 0.001){
-                                  private$.cutoff <- 0.001
+                                if(value < 0.01){
+                                  private$.cutoff <- 0.01
                                 }
-                                else if(value > 0.999){
-                                  private$.cutoff <- 0.999
+                                else if(value > 0.99){
+                                  private$.cutoff <- 0.99
                                 }
                                 else{
                                   private$.cutoff <- value
@@ -284,7 +284,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' @examples
                               #' y <- tibble:tibble()
                               #' x <- pguIMP:pgu.outliers$new(data_df = y)
-                              initialize = function(data_df = "tbl_df", alpha = 0.05, epsilon = 0.1, minSamples = 4, gamma = 0.05, nu=0.1, k=4, cutoff=0.95, seed = 42){
+                              initialize = function(data_df = "tbl_df", alpha = 0.05, epsilon = 0.1, minSamples = 4, gamma = 0.05, nu=0.1, k=4, cutoff=0.99, seed = 42){
                                 self$setAlpha <- alpha
                                 self$setEpsilon <- epsilon
                                 self$setMinSamples <- minSamples
@@ -382,6 +382,28 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 data_df %>%
                                   dplyr::select(tidyselect::all_of(private$.outliersParameter[["features"]])) %>%
                                   return()
+                              }, #function
+
+                              #' @description
+                              #' Checks if the feature consists of a sufficient number of instances.
+                              #' @param data_df
+                              #' Dataframe to be analyzed
+                              #' (tibble::tibble)
+                              #' @param feature
+                              #' The attribute to be analyzed.
+                              #' (character)
+                              #' @examples
+                              #' x$checkFeatureValidity(data_df, "ifected")
+                              checkFeatureValidity = function(data_df = "tbl_df", feature = "character"){
+                                result <- FALSE
+                                n <- data_df %>%
+                                  dplyr::select(feature) %>%
+                                  tidyr::drop_na() %>%
+                                  nrow()
+                                if(n > 4){
+                                  result <- TRUE
+                                }
+                                return(result)
                               }, #function
 
                               #' @description
@@ -522,11 +544,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                     progress$inc(1)
                                   }#if
-                                  private$.featureData <- data_df[[feature]]
-                                  foundOutlier <- TRUE
-                                  while (foundOutlier) {
-                                    foundOutlier <- self$grubbs_numeric(data_df, feature)
-                                  }#while
+                                  if (self$checkFeatureValidity(data_df, feature)){
+                                    private$.featureData <- data_df[[feature]]
+                                    foundOutlier <- TRUE
+                                    while (foundOutlier) {
+                                      foundOutlier <- self$grubbs_numeric(data_df, feature)
+                                    }#while
+                                  } #if
                                 }#for
                               },#function
 
@@ -595,11 +619,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                     progress$inc(1)
                                   }#if
-                                  outliers_df <- self$dbscan_numeric(data_df, feature)
-                                  if(nrow(outliers_df)>0){
-                                    private$.outliers <- self$outliers %>%
-                                      dplyr::add_row(outliers_df)
-                                  }
+                                  if (self$checkFeatureValidity(data_df, feature)){
+                                    outliers_df <- self$dbscan_numeric(data_df, feature)
+                                    if(nrow(outliers_df)>0){
+                                      private$.outliers <- self$outliers %>%
+                                        dplyr::add_row(outliers_df)
+                                    } #if
+                                  } #if
 
 
                                 } #for
@@ -677,11 +703,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                     progress$inc(1)
                                   }#if
-                                  outliers_df <- self$svm_numeric(data_df, feature)
-                                  if(nrow(outliers_df)>0){
-                                    private$.outliers <- self$outliers %>%
-                                      dplyr::add_row(outliers_df)
-                                  }
+                                  if (self$checkFeatureValidity(data_df, feature)){
+                                    outliers_df <- self$svm_numeric(data_df, feature)
+                                    if(nrow(outliers_df)>0){
+                                      private$.outliers <- self$outliers %>%
+                                        dplyr::add_row(outliers_df)
+                                    } #if
+                                  } #if
                                 }#for
                               },
 
@@ -713,19 +741,26 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   as.numeric() %>%
                                   mean()
 
-                                svm_model <- feature_df %>%
-                                  e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
-
-
                                 outliers_df <- tibble::tibble(measurement = numeric(0),
                                                               feature = character(0),
                                                               values = numeric(0),
                                                               type = character(0),
                                                               color = character(0))
 
-                                result <- predict(svm_model, data_df[feature]) %>%
-                                  as.logical()
-                                feature_idx <- which(!result)
+                                feature_idx <- integer(0)
+                                tryCatch({
+                                  svm_model <- feature_df %>%
+                                    e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
+
+                                  result <- predict(svm_model, data_df[feature]) %>%
+                                    as.logical()
+                                  feature_idx <- which(!result)
+                                },
+                                error = function(e) {
+                                  sprintf("Warning in pguOutlier's function svm_numeric while analyzing %s:\n %s" , feature, e) %>%
+                                    cat()
+                                }
+                                )
 
                                 if(length(feature_idx)>0){
                                   values <- feature_df[[feature]][feature_idx]
@@ -761,11 +796,13 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                     progress$inc(1)
                                   }#if
-                                  outliers_df <- self$knn_numeric(data_df, feature)
-                                  if(nrow(outliers_df)>0){
-                                    private$.outliers <- self$outliers %>%
-                                      dplyr::add_row(outliers_df)
-                                  }
+                                  if (self$checkFeatureValidity(data_df, feature)){
+                                    outliers_df <- self$knn_numeric(data_df, feature)
+                                    if(nrow(outliers_df)>0){
+                                      private$.outliers <- self$outliers %>%
+                                        dplyr::add_row(outliers_df)
+                                    } #if
+                                  }#if
                                 }#for
                               },
 
@@ -797,20 +834,22 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   as.numeric() %>%
                                   mean()
 
-                                # svm_model <- feature_df %>%
-                                #   e1071::svm(type='one-classification', kernel = "radial", gamma=self$gamma, nu=self$nu)
-
-                                knn_model <- feature_df %>%
-                                  OutlierDetection::nnk(k=self$k, cutoff = self$cutoff)
-
-
+                                feature_idx <- integer(0)
                                 outliers_df <- tibble::tibble(measurement = numeric(0),
                                                               feature = character(0),
                                                               values = numeric(0),
                                                               type = character(0),
                                                               color = character(0))
-
-                                feature_idx <- knn_model$`Location of Outlier`
+                                tryCatch({
+                                  knn_model <- feature_df %>%
+                                    OutlierDetection::nnk(k=self$k, cutoff = self$cutoff)
+                                  feature_idx <- knn_model$`Location of Outlier`
+                                },
+                                error = function(e) {
+                                  sprintf("Warning in pguOutlier's function knn_numeric while analyzing %s:\n %s" , feature, e) %>%
+                                    cat()
+                                }
+                                )
 
                                 if(length(feature_idx)>0){
                                   values <- feature_df[[feature]][feature_idx]
@@ -969,7 +1008,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               plotOutliersDistribution = function(){
                                 p <- self$outliersStatistics %>%
                                   tidyr::gather('low', 'high', key = "type", value="typeCount") %>%
-                                  dplyr::mutate(fraction = 100 * typeCount/absCount) %>%
+                                  dplyr::mutate(fraction = typeCount/absCount) %>%
                                   ggplot2::ggplot(mapping = ggplot2::aes_string(x = "features", y = "fraction", fill = "type"), na.rm=TRUE)+
                                   ggplot2::geom_col()+
                                   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
@@ -994,7 +1033,9 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 feature <- dplyr::sym(feature)
                                 p <- data_df %>%
                                   ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
-                                  ggplot2::geom_bar(stat = "bin")
+                                  ggplot2::geom_bar(stat = "bin") +
+                                  ggthemes::geom_rangeframe(size = 1) +
+                                  ggthemes::theme_tufte(base_size = 14)
                                 return(p)
                               },#function
 
@@ -1014,14 +1055,22 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' x$featureBoxPlotWithSubset() %>%
                               #'  show()
                               featureBoxPlotWithSubset = function(data_df = "tbl_df", feature = "character"){
+                                outlier_idx <- self$outliers %>%
+                                  dplyr::filter(feature == !!feature) %>%
+                                  dplyr::select(measurement) %>%
+                                  dplyr::pull()
+                                data_type <- rep("regular", nrow(data_df))
+                                data_type[outlier_idx] <- "outlier"
                                 outFeature <- self$outliersFeatureList(data_df)
                                 p <- data_df %>%
                                   dplyr::select(feature) %>%
-                                  dplyr::mutate(outFeature = outFeature) %>%
-                                  tidyr::gather_(key="feature", value="measurement", feature) %>%
-                                  ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-                                  ggplot2::geom_boxplot(na.rm=TRUE)+
-                                  ggplot2::geom_jitter(ggplot2::aes(colour=outFeature), na.rm=TRUE)
+                                  dplyr::mutate(type = data_type ) %>%
+                                  tidyr::gather(key = "feature", value = "value", -type) %>%
+                                  ggplot2::ggplot(mapping=ggplot2::aes_string(x = "feature", y="value"), na.rm=TRUE)+
+                                  ggplot2::geom_boxplot(outlier.shape = NA, na.rm=TRUE) +
+                                  ggplot2::geom_jitter(ggplot2::aes(colour=type), na.rm=TRUE) +
+                                  ggthemes::geom_rangeframe(size = 1) +
+                                  ggthemes::theme_tufte(base_size = 14)
                                 return(p)
                               }, #function
 

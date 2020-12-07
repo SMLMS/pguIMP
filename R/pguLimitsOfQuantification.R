@@ -226,7 +226,8 @@ pgu.limitsOfQuantification <- R6::R6Class(
           tibble::rownames_to_column() %>%
           tibble::as_tibble() %>%
           purrr::set_names(c("features", dplyr::pull(self$loq, c(1)))) %>%
-          dplyr::mutate(quantitative = as.logical(quantitative),
+          dplyr::mutate(quality = as.integer(quality),
+                        # quantitative = as.character(quantitative),
                         measurements = c(rep(nrow(obj), length(featureNames))),
                         missings = as.integer(dplyr::summarise_all(obj, list(~sum(is.na(.))))),
                         belowLloq = as.integer(c(rep(0, length(featureNames)))),
@@ -334,15 +335,19 @@ pgu.limitsOfQuantification <- R6::R6Class(
                }
         )#switc
       }#if
-      else if (value < lloq){
-        isOutlier <- TRUE
-        outlierType <- "LLOQ"
-        outlierColor <- "blue"
+      else if (!is.na(lloq)){
+        if(value < lloq){
+          isOutlier <- TRUE
+          outlierType <- "LLOQ"
+          outlierColor <- "blue"
+        } #if
       }#else if
-      else if (value > uloq){
-        isOutlier <- TRUE
-        outlierType <- "ULOQ"
-        outlierColor <- "firebrick"
+      else if (!is.na(uloq)){
+        if(value > uloq){
+          isOutlier <- TRUE
+          outlierType <- "ULOQ"
+          outlierColor <- "firebrick"
+        }
       }#else if
       if(isOutlier){
         private$.outliers <- tibble::add_row(self$outliers,

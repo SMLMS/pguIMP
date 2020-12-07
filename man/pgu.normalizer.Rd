@@ -158,6 +158,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setNormAgent}}{Sets the instance variable normAgent.
 (character)}
 
+\item{\code{features}}{Returns instance variable features.
+(character)}
+
 \item{\code{normParameter}}{Returns the instance variable normParameter.}
 }
 \if{html}{\out{</div>}}
@@ -344,7 +347,7 @@ A min-max normalized version of the dataframe
 \subsection{Method \code{scale_minMax_numeric()}}{
 Scales a numeric object using min-max normalization
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.normalizer$scale_minMax_numeric(values = "numeric", feature = character)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.normalizer$scale_minMax_numeric(values = "numeric", feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -48,6 +48,12 @@ x$resetOutliers(data, progress)
 matrix <- x$filterFeatures(data)
 
 ## ------------------------------------------------
+## Method `pgu.outliers$checkFeatureValidity`
+## ------------------------------------------------
+
+x$checkFeatureValidity(data_df, "ifected")
+
+## ------------------------------------------------
 ## Method `pgu.outliers$detectOutliersParameter`
 ## ------------------------------------------------
 
@@ -252,6 +258,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-print}{\code{pgu.outliers$print()}}
 \item \href{#method-resetOutliers}{\code{pgu.outliers$resetOutliers()}}
 \item \href{#method-filterFeatures}{\code{pgu.outliers$filterFeatures()}}
+\item \href{#method-checkFeatureValidity}{\code{pgu.outliers$checkFeatureValidity()}}
 \item \href{#method-detectOutliersParameter}{\code{pgu.outliers$detectOutliersParameter()}}
 \item \href{#method-outliersFeatureList}{\code{pgu.outliers$outliersFeatureList()}}
 \item \href{#method-featureOutlier}{\code{pgu.outliers$featureOutlier()}}
@@ -288,7 +295,7 @@ Creates and returns a new \code{pgu.outliers} object.
   gamma = 0.05,
   nu = 0.1,
   k = 4,
-  cutoff = 0.95,
+  cutoff = 0.99,
   seed = 42
 )}\if{html}{\out{</div>}}
 }
@@ -424,6 +431,35 @@ A filterd dataframe.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{matrix <- x$filterFeatures(data)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-checkFeatureValidity"></a>}}
+\if{latex}{\out{\hypertarget{method-checkFeatureValidity}{}}}
+\subsection{Method \code{checkFeatureValidity()}}{
+Checks if the feature consists of a sufficient number of instances.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$checkFeatureValidity(data_df = "tbl_df", feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Dataframe to be analyzed
+(tibble::tibble)}
+
+\item{\code{feature}}{The attribute to be analyzed.
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$checkFeatureValidity(data_df, "ifected")
 }
 \if{html}{\out{</div>}}
 

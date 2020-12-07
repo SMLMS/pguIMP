@@ -48,13 +48,24 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' Sets the instance variable rawData
                           #' (tibble::tibble)
                           setRawData = function(data = "tbl_df"){
-                            private$.rawData <- data
+                            if (!tibble::is_tibble(data)){
+                              data <- tibble::tibble("Sample Name" := c(character(0)))
+                            }
+                            if(!"Sample Name" %in% colnames(data)){
+                              sampleName <- seq.int(from =1, to = nrow(data), by =1)
+                              data <- data %>%
+                                dplyr::mutate("Sample Name" := sampleName) %>%
+                                dplyr::select("Sample Name", dplyr::everything())
+                            }
+                            private$.rawData <- data %>%
+                              dplyr::mutate("Sample Name" := as.character(data[["Sample Name"]]))
                             private$.featureNames <- colnames(data)
                             private$.numericFeatureNames <- data %>%
                               dplyr::select_if(is.numeric) %>%
                               colnames()
                             private$.nonNumericFeatureNames <- data %>%
-                              dplyr::select_if(purrr::negate(is.numeric)) %>%
+                              # dplyr::select_if(purrr::negate(is.numeric)) %>%
+                              dplyr::select(-self$numericFeatureNames) %>%
                               colnames()
                             private$.abscissa <- self$featureNames[1]
                             private$.ordinate <- self$featureNames[1]
@@ -152,10 +163,10 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' y <- tibble::tibble()
                           #' x <- pguIMP:pgu.data$new(data = y)
                           initialize = function(data = "tbl_df") {
-                            if(class(data) != "tbl_df"){
-                              data <- tibble::tibble(names <- "none",
-                                                     values <- c(NA))
-                            }#if
+                            # if(class(data) != "tbl_df"){
+                            #   data <- tibble::tibble(names <- "none",
+                            #                          values <- c(NA))
+                            # }#if
                             self$setRawData <- data
                           }, #function
 
