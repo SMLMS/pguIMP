@@ -39,9 +39,10 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  .imputationSiteDistribution = "matrix",
                                  .imputationAgentAlphabet = "character",
                                  .imputationAgent = "factor",
+                                 .nNeighbors = "integer",
                                  .flux_df = "tbl_df",
                                  .outflux_thr = "numeric",
-                                 .nPred = "integer",
+                                 .pred_frac = "numeric",
                                  .pred_mat = "matrix",
                                  .exclude_vec = "character",
                                  .seed = "numeric",
@@ -89,6 +90,18 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  setImputationAgent = function(agent = "character") {
                                    private$.imputationAgent <- factor(agent, levels = self$imputationAgentAlphabet)
                                  },
+                                 #' @field nNeighbors
+                                 #' Returns the instance variable nNeighbors.
+                                 #' (integer)
+                                 nNeighbors = function(){
+                                   return(private$.nNeighbors)
+                                 },
+                                 #' @field setNNeighbors
+                                 #' Sets the instance variable nNeighbors.
+                                 #' (integer)
+                                 setNNeighbors = function(value = "integer"){
+                                   private$.nNeighbors <- abs(as.integer(value))
+                                 },
                                  #' @field flux_df
                                  #' Returns the instance variable flux_df
                                  #' (tibble::tible)
@@ -107,17 +120,17 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  setOutflux_thr = function(value = numeric){
                                    private$.outflux_thr <- as.numeric(value)
                                  },
-                                 #' @field nPred
-                                 #' Returns the instance variable nPred.
-                                 #' (integer)
-                                 nPred = function(){
-                                   return(private$.nPred)
+                                 #' @field pred_frac
+                                 #' Returns the instance variable pred_frac.
+                                 #' (numeric)
+                                 pred_frac = function(){
+                                   return(private$.pred_frac)
                                  },
-                                 #' @field setNPred
-                                 #' Sets the instance variable nPred.
-                                 #' (integer)
-                                 setNPred = function(value = "integer"){
-                                   private$.nPred <- as.integer(value)
+                                 #' @field setPred_frac
+                                 #' Sets the instance variable pred_frac.
+                                 #' (numeric)
+                                 setPred_frac = function(value = "numeric"){
+                                   private$.pred_frac <- abs(as.numeric(value))
                                  },
                                  #' @field pred_mat
                                  #' Returns the instance variable pred_mat.
@@ -203,9 +216,12 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' Default is "none".
                                  #' Options are: ""none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", "cart", "randomForest", "M5P".
                                  #' (string)
-                                 #' @param nPred
-                                 #' Initially sets the instance variable nPred.
+                                 #' @param nNeighbors
+                                 #' Initially sets the instance variable nNeighbors.
                                  #' (integer)
+                                 #' @param pred_frac
+                                 #' Initially sets the instance variable pred_frac.
+                                 #' (numeric)
                                  #' @param outflux_thr
                                  #' Initially sets the instance fariable outflux_thr
                                  #' @return
@@ -213,12 +229,13 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' (pguIMP::pgu.imputation)
                                  #' @examples
                                  #' x <- pguIMP:pgu.imputation$new()
-                                 initialize = function(seed = 42, iterations = 4, imputationAgent = "none", nPred = 10, outflux_thr = 0.5){
+                                 initialize = function(seed = 42, iterations = 4, imputationAgent = "none", nNeighbors = 3, pred_frac = 1.0, outflux_thr = 0.5){
                                    private$.imputationAgentAlphabet <- c("none", "median", "mean", "mu", "mc", "knn", "pmm", "cart", "rf", "M5P")
                                    self$setSeed <- seed
                                    self$setIterations <- iterations
                                    self$setImputationAgent <- imputationAgent
-                                   self$setNPred <- nPred
+                                   self$setNNeighbors <- nNeighbors
+                                   self$setPred_frac <- pred_frac
                                    self$setOutflux_thr <- outflux_thr
                                    private$.success <- FALSE
                                    private$.pred_mat <- matrix()
@@ -650,7 +667,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  average_number_of_predictors = function(data_df = "tbl_df", minpuc = 0, mincor = 0.1){
                                    pred_dist <- data_df %>%
                                      dplyr::select(-dplyr::all_of(self$exclude_vec)) %>%
-                                     mice::quickpred(minpuc = minpuc, mincor = mincor) %>%
+                                     mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = self$exclude_vec) %>%
                                      rowSums() %>%
                                      table()
 
@@ -690,7 +707,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
 
                                    quickpred_para <- quickpred_df %>%
                                      tidyr::drop_na() %>%
-                                     dplyr::slice(which.min(abs(quickpred_df$mean - trunc(self$nPred/ncol(data_df) * ncol(data_df)))))
+                                     dplyr::slice(which.min(abs(quickpred_df$mean - trunc(self$pred_frac * ncol(data_df)) )))
 
                                    minpuc <- quickpred_para$minpuc
                                    mincor <- quickpred_para$mincor
@@ -993,15 +1010,20 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' x$imputeByKnn(data, progress)
                                  imputeByKnn = function(data_df = "tbl_df", progress = "Progress"){
                                    if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                     progress$inc(1)
+                                     progress$inc(0.5)
                                    }#if
-                                   if (ncol(data_df) < self$nPred){
-                                     e <- simpleError("nPred needs to be smaller that the number of features.")
+                                   if(ncol(data_df) < 2){
+                                     e <- simpleError("The number of features needs to be larger than 2.")
                                      stop(e)
+                                   }#if
+                                   if (ncol(data_df) < self$nNeighbors + 1){
+                                     self$setNNeighbors <- ncol(data_df) - 1
+                                     sprintf("\nWarning in pgu.imputation$imputeByKnn: nNeighbors set to: %i\n", self$nNeighbors) %>%
+                                       cat()
                                    }#if
                                    data_df %>%
                                      as.data.frame() %>%
-                                     DMwR::knnImputation(k=self$nPred,
+                                     DMwR::knnImputation(k=self$nNeighbors,
                                                          scale = TRUE,
                                                          meth = "weighAvg",
                                                          distData = NULL) %>%
@@ -1027,7 +1049,8 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @examples
                                  #' x$imputeByMice(data, progress)
                                  imputeByMice = function(data_df, progress = "Progress") {
-                                   if (ncol(data_df) < self$nPred){
+                                   nPred <- trunc(ncol(data_df) * self$pred_frac)
+                                   if (ncol(data_df) < nPred){
                                      e <- simpleError("nPred needs to be smaller that the number of features.")
                                      stop(e)
                                    }#if
@@ -1115,7 +1138,8 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @examples
                                  #' x$imputeByM5P(data, progress)
                                  imputeByM5P = function(data_df = "tbl_df", progress = "Progress"){
-                                   if (ncol(data_df) < self$nPred){
+                                   nPred <- trunc(ncol(data_df) * self$pred_frac)
+                                   if (ncol(data_df) < nPred){
                                      e <- simpleError("nPred needs to be smaller that the number of features.")
                                      stop(e)
                                    }#if
@@ -1345,7 +1369,8 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                              # labels=self$imputationStatistics[["feature"]],
                                              cex.axis=.7,
                                              gap=3,
-                                             ylab=c("Histogram of imputation sites","Pattern"))
+                                             main = "Histogram of imputation sites",
+                                             ylab=c("fraction","fraction"))
                                    return(p)
                                  }, #function
 
@@ -1367,7 +1392,16 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    feature <- dplyr::sym(feature)
                                    p <- data_df %>%
                                      ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
-                                     ggplot2::geom_bar(stat = "bin")
+                                     ggplot2::geom_bar(stat = "bin") +
+                                     ggplot2::ylab("counts") +
+                                     ggplot2::xlab("value") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -1386,14 +1420,30 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' x$featureBoxPlotWithSubset() %>%
                                  #'  show()
                                  featureBoxPlotWithSubset = function(data_df = "tbl_df", feature = "character"){
-                                   nanFeature <- self$nanFeatureList(data_df)
+                                   imputation_idx <- self$imputationSites %>%
+                                     dplyr::filter(feature == !!feature) %>%
+                                     dplyr::select(idx) %>%
+                                     dplyr::pull()
+                                   data_type <- rep("regular", nrow(data_df))
+                                   data_type[imputation_idx] <- "imputed"
+                                   # nanFeature <- self$nanFeatureList(data_df)
                                    p <- data_df %>%
                                      dplyr::select(feature) %>%
-                                     dplyr::mutate(nanFeature = nanFeature) %>%
+                                     dplyr::mutate(type = data_type ) %>%
+                                     # dplyr::mutate(nanFeature = nanFeature) %>%
                                      tidyr::gather_(key="feature", value="measurement", feature) %>%
                                      ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-                                     ggplot2::geom_boxplot(na.rm=TRUE)+
-                                     ggplot2::geom_jitter(ggplot2::aes(colour=nanFeature), na.rm=TRUE)
+                                     ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                     ggplot2::geom_jitter(ggplot2::aes(colour=type), na.rm=TRUE) +
+                                     ggplot2::ylab("value") +
+                                     ggplot2::xlab("feature") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -1436,7 +1486,8 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
 
                                    # p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
 
-                                   p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+                                   p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)),
+                                                                top = textGrob(label = sprintf("Distribution of %s", feature)))
                                    return(p)
                                  },#function
 
@@ -1450,19 +1501,22 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #'  show()
                                  fluxPlot = function(){
                                    p <- self$flux_df %>%
-                                     ggplot2::ggplot(mapping = aes(x=influx, y=outflux, label=rowname)) +
+                                     ggplot2::ggplot(mapping = ggplot2::aes_string(x="influx", y="outflux", label="rowname")) +
                                      ggplot2::geom_point()+
-                                     ggplot2::geom_text(mapping = aes(label=ifelse(outflux<self$outflux_thr,as.character(rowname),'')),hjust=0,vjust=0) +
-                                     ggplot2::geom_hline(mapping = aes(yintercept = self$outflux_thr, linetype = "threshold")) +
+                                     ggplot2::geom_text(mapping = ggplot2::aes(label=ifelse(outflux<self$outflux_thr,as.character(rowname),'')),hjust=0,vjust=0) +
+                                     ggplot2::geom_hline(mapping = ggplot2::aes(yintercept = self$outflux_thr, linetype = "threshold")) +
                                      ggplot2::scale_linetype_manual(values = c("threshold" = "dashed")) +
                                      ggplot2::xlim(0,1) +
                                      ggplot2::ylim(0,1) +
+                                     ggplot2::ggtitle("Flux plot") +
+                                     ggplot2::xlab("influx") +
+                                     ggplot2::ylab("outflux") +
                                      ggplot2::theme_linedraw() +
                                      ggplot2::theme(
-                                       panel.background = element_rect(fill = "transparent"), # bg of the panel
-                                       plot.background = element_rect(fill = "transparent", color = NA), # bg of the plot
-                                       legend.background = element_rect(fill = "transparent"),
-                                       legend.key = element_rect(fill = "transparent")
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
                                      )
                                      # ggthemes::geom_rangeframe(size = 1, x=ggplot2::xlim(0,1), y=c(0, 1)) +
                                      # ggthemes::theme_tufte()

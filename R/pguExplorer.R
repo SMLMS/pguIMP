@@ -191,7 +191,15 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           scatterPlot = function(){
                             p <- self$rawData %>%
                               ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$abscissa), y = as.name(self$ordinate)), na.rm = TRUE) +
-                              ggplot2::geom_point()
+                              ggplot2::geom_point() +
+                              ggplot2::ggtitle("Scatter Plot") +
+                              ggplot2::theme_linedraw() +
+                              ggplot2::theme(
+                                panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                legend.background = ggplot2::element_rect(fill = "transparent"),
+                                legend.key = ggplot2::element_rect(fill = "transparent")
+                              )
                             return(p)
                           }, #function
 
@@ -208,7 +216,16 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                             if(self$abscissaIsNumeric()){
                               p <- self$rawData %>%
                                 ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$abscissa)), na.rm=TRUE) +
-                                ggplot2::geom_bar(stat = "bin")
+                                ggplot2::geom_bar(stat = "bin") +
+                                ggplot2::ylab("counts") +
+                                ggplot2::xlab("value") +
+                                ggplot2::theme_linedraw() +
+                                ggplot2::theme(
+                                  panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                  plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                  legend.background = ggplot2::element_rect(fill = "transparent"),
+                                  legend.key = ggplot2::element_rect(fill = "transparent")
+                                )
                             }#if
                             return(p)
                           }, #function
@@ -228,8 +245,17 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                                 dplyr::select(self$abscissa) %>%
                                 tidyr::gather_(key="feature", value="measurement", as.name(self$abscissa)) %>%
                                 ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-                                ggplot2::geom_boxplot(na.rm=TRUE)+
-                                ggplot2::geom_jitter()
+                                ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                ggplot2::geom_jitter() +
+                                ggplot2::ylab("value") +
+                                ggplot2::xlab("feature") +
+                                ggplot2::theme_linedraw() +
+                                ggplot2::theme(
+                                  panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                  plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                  legend.background = ggplot2::element_rect(fill = "transparent"),
+                                  legend.key = ggplot2::element_rect(fill = "transparent")
+                                )
                             }#if
                             return(p)
                           }, #function
@@ -250,7 +276,8 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                               p2 <- self$abscissaBarPlot() +
                                 ggplot2::scale_x_continuous(position = "top", limits=limits) +
                                 ggplot2::coord_flip()
-                              p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
+                              p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)),
+                                                           top = textGrob(label = sprintf("Distribution of %s", self$abscissa)))
                             }# if
                             return(p)
                           }, #function
@@ -268,7 +295,16 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                             if(self$ordinateIsNumeric()){
                               p <- self$rawData %>%
                                 ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$ordinate)), na.rm=TRUE) +
-                                ggplot2::geom_bar(stat = "bin")
+                                ggplot2::geom_bar(stat = "bin") +
+                                ggplot2::ylab("counts") +
+                                ggplot2::xlab("value") +
+                                ggplot2::theme_linedraw() +
+                                ggplot2::theme(
+                                  panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                  plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                  legend.background = ggplot2::element_rect(fill = "transparent"),
+                                  legend.key = ggplot2::element_rect(fill = "transparent")
+                                )
                             }# if
                             return(p)
                           }, #function
@@ -288,8 +324,17 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                                 dplyr::select(self$ordinate) %>%
                                 tidyr::gather_(key="feature", value="measurement", as.name(self$ordinate)) %>%
                                 ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-                                ggplot2::geom_boxplot(na.rm=TRUE)+
-                                ggplot2::geom_jitter()
+                                ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                ggplot2::geom_jitter() +
+                                ggplot2::ylab("value") +
+                                ggplot2::xlab("feature") +
+                                ggplot2::theme_linedraw() +
+                                ggplot2::theme(
+                                  panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                  plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                  legend.background = ggplot2::element_rect(fill = "transparent"),
+                                  legend.key = ggplot2::element_rect(fill = "transparent")
+                                )
                             }#if
                             return(p)
                           }, #function
@@ -310,7 +355,8 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                               p2 <- self$ordinateBarPlot() +
                                 ggplot2::scale_x_continuous(position = "top", limits=limits) +
                                 ggplot2::coord_flip()
-                              p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
+                              p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)),
+                                                           top = textGrob(label = sprintf("Distribution of %s", self$ordinate)))
                             }# if
                             return(p)
                           }, #function

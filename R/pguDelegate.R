@@ -675,10 +675,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreGraphic <- shiny::renderPlot(
                                   self$explorer$scatterPlot(),
-                                  height = 400)
+                                  height = 400,
+                                  bg="transparent")
                               }#if
                               else{
-                                output$plt.exploreGraphic <- shiny::renderPlot(NULL)
+                                output$plt.exploreGraphic <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -697,11 +698,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreAbscissaGraphic <- shiny::renderPlot(
                                   self$explorer$abscissaPlot(),
-                                  height = 400
+                                  height = 400,
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.exploreAbscissaGraphic <- shiny::renderPlot(NULL)
+                                output$plt.exploreAbscissaGraphic <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -720,11 +722,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreOrdinateGraphic <- shiny::renderPlot(
                                   self$explorer$ordinatePlot(),
-                                  height = 400
+                                  height = 400,
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.exploreOrdinateGraphic <- shiny::renderPlot(NULL)
+                                output$plt.exploreOrdinateGraphic <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -1028,11 +1031,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectStatistics <- shiny::renderPlot(
                                   self$loq$plotLoqDistribution(),
-                                  height = 400
+                                  height = 400,
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.loqDetectStatistics <- shiny::renderPlot(NULL)
+                                output$plt.loqDetectStatistics <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -1050,11 +1054,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectFeature <- shiny::renderPlot(
                                   self$loq$featurePlot(obj = self$filteredData$rawData, feature = input$si.loqDetectFeature),
-                                  height = 425
+                                  height = 425,
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.loqDetectFeature <- shiny::renderPlot(NULL)
+                                output$plt.loqDetectFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -1361,11 +1366,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqMutated")){
                                 output$plt.loqMutateStatistics <- shiny::renderPlot(
                                   self$loq$plotLoqDistribution(),
-                                  height = 400
+                                  height = 400,
+                                  bg="transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.loqMutateStatistics <- shiny::renderPlot(NULL)
+                                output$plt.loqMutateStatistics <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -1383,11 +1389,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqMutated")){
                                 output$plt.loqMutateFeature <- shiny::renderPlot(
                                   self$loq$featurePlot(obj = self$loqMutatedData$rawData, feature = input$si.loqMutateFeature),
-                                  height = 425
+                                  height = 425,
+                                  bg="transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.loqMutateFeature <- shiny::renderPlot(NULL)
+                                output$plt.loqMutateFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -1842,11 +1849,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateTrafoMutateFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$plt.trafoMutateFeature <- shiny::renderPlot(
-                                  self$model$plotModel(feature = input$si.trafoMutateFeature)
+                                  self$model$plotModel(feature = input$si.trafoMutateFeature),
+                                  bg="transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.trafoMutateFeature <- shiny::renderPlot(NULL)
+                                output$plt.trafoMutateFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -2211,11 +2219,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "normalized")){
                                 output$plt.trafoNormFeature <- shiny::renderPlot(
                                   self$normalizer$featurePlot(data_df = self$normalizedData$rawData, feature = input$si.trafoNormFeature),
-                                  height = 425
+                                  height = 425,
+                                  bg="transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL)
+                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -2419,11 +2428,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMissingsGraphic = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$plt.imputeMissingsSummary <- shiny::renderPlot(
-                                  self$missings$imputationSiteHeatMap()
+                                  self$missings$imputationSiteHeatMap(),
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL)
+                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -2860,11 +2870,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeOutliersGraphic = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersImputeSummary <- shiny::renderPlot(
-                                  self$outliers$plotOutliersDistribution()
+                                  self$outliers$plotOutliersDistribution(),
+                                  bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL)
+                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -2883,11 +2894,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$plt.outliersImputeFeature <- shiny::renderPlot(
                                     self$outliers$featurePlot(data_df = self$normalizedData$numericData(),
                                                               feature = input$si.imputeOutliersFeature),
+                                    height = 475,
                                     bg="transparent"
                                 )
                               }#if
                               else{
-                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL)
+                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -3139,6 +3151,60 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             #' @description
+                            #' Updates the ni.imputeMutateNumberOfNeighbors shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMutateNNeighbors(input, output, session)
+                            updateImputeMutateNNeighbors = function(input,  output, session){
+                              if(self$status$query(processName = "outliersDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeMutateNumberOfNeighbors",
+                                                          value = self$imputer$nNeighbors)
+                              }#if
+                            },
+
+                            #' @description
+                            #' Updates the ni.imputeMutatePredFrac shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMutatePredFrac(input, output, session)
+                            updateImputeMutatePredFrac = function(input,  output, session){
+                              if(self$status$query(processName = "outliersDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeMutatePredFrac",
+                                                          value = self$imputer$pred_frac)
+                              }#if
+                            },
+
+                            #' @description
+                            #' Updates the ni.imputeMutateOutfluxThr shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMutateOutfluxThr(input, output, session)
+                            updateImputeMutateOutfluxThr = function(input,  output, session){
+                              if(self$status$query(processName = "outliersDetected")){
+                                shiny::updateNumericInput(session,
+                                                          "ni.imputeMutateOutfluxThr",
+                                                          value = self$imputer$outflux_thr)
+                              }#if
+                            },
+
+                            #' @description
                             #' Updates the ni.imputeMutateSeed shiny widget.
                             #' @param input
                             #' Pointer to shiny input
@@ -3186,9 +3252,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' x$updateImputeMutateGui(input, output, session)
                             updateImputeMutateGui = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
-                                self$updateImputeMutateMethod(input, output, session)
-                                self$updateImputeMutateSeed(input, output, session)
-                                self$updateImputeMutateIterations(input, output, session)
+                                self$resetImputeMutateGui(input, output, session)
                                 self$updateImputeMutateFeature(input, output, session)
                               }#if
                             }, #function
@@ -3206,6 +3270,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             resetImputeMutateGui = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 self$updateImputeMutateMethod(input, output, session)
+                                self$updateImputeMutateNNeighbors(input,  output, session)
+                                self$updateImputeMutatePredFrac(input, output, session)
+                                self$updateImputeMutateOutfluxThr(input, output, session)
                                 self$updateImputeMutateSeed(input, output, session)
                                 self$updateImputeMutateIterations(input, output, session)
                               }#if
@@ -3225,7 +3292,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             imputeMutateMutate = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
-                                private$.imputer$setNPred <- input$ni.imputeMutateNPred
+                                private$.imputer$setNNeighbors <-input$ni.imputeMutateNumberOfNeighbors
+                                private$.imputer$setPred_frac <- input$ni.imputeMutatePredFrac
                                 private$.imputer$setOutflux_thr <- input$ni.imputeMutateOutfluxThr
                                 private$.imputer$setSeed <- input$ni.imputeMutateSeed
                                 private$.imputer$setIterations <- input$ni.imputeMutateIterations
@@ -3418,11 +3486,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
                                   self$imputer$featurePlot(data = self$imputedData$numericData(),
-                                                           feature = input$si.imputeMutateFeature)
+                                                           feature = input$si.imputeMutateFeature),
+                                  height = 475,
+                                  bg = "transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
+                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL, bg = "transparent")
                               }#else
                             }, #function
 
@@ -4003,11 +4073,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 progress <- shiny::Progress$new(session, min = 0, max  = 1.0)
                                 progress$set(message = "Validate imputation", value = 0)
                                 on.exit(progress$close())
-                                private$.validator$validate(org = self$rawData$numericData(),
+                                private$.validator$validate(org = self$filteredData$numericData(),
                                                             imp = self$cleanedData$numericData() %>%
                                                               dplyr::select_if(function(x){!all(is.na(x))}),
                                                             progress = progress)
-                                print(self$validator)
                                 private$.status$update(processName = "validated", value = TRUE)
                               }#if
                               else{
@@ -4055,13 +4124,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateAnalysisValidationGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.analysisValidationFeature <- shiny::renderPlot(
-                                  self$validator$featurePlot(org_df = self$rawData$numericData(),
+                                  self$validator$featurePlot(org_df = self$filteredData$numericData(),
                                                              imp_df = self$cleanedData$numericData(),
-                                                             feature = input$si.analysisValidationFeature)
+                                                             lloq = self$loq$featureLloq(feature = input$si.analysisValidationFeature),
+                                                             uloq = self$loq$featureUloq(feature = input$si.analysisValidationFeature),
+                                                             impIdx_df = self$imputer$imputationSites,
+                                                             feature = input$si.analysisValidationFeature),
+                                  bg="transparent"
                                 )#output
                               }#if
                               else{
-                                output$plt.plt.analysisValidationFeature <- shiny::renderPlot(NULL)
+                                output$plt.plt.analysisValidationFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
 
@@ -5226,9 +5299,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.metadataInfo <- DT::renderDataTable(NULL)
                               }#if
                               if(!private$.status$query(processName = "dataFiltered")){
-                                output$plt.exploreGraphic <- shiny::renderPlot(NULL)
-                                output$plt.exploreAbscissaGraphic <- shiny::renderPlot(NULL)
-                                output$plt.exploreOrdinateGraphic <- shiny::renderPlot(NULL)
+                                output$plt.exploreGraphic <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.exploreAbscissaGraphic <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.exploreOrdinateGraphic <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.exploreAbscissaStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.exploreOrdinateStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.filterStatistics <- DT::renderDataTable(NULL)
@@ -5238,24 +5311,24 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.loqDetectStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.loqDetectOutlier <- DT::renderDataTable(NULL)
                                 output$tbl.loqDetectData <- DT::renderDataTable(NULL)
-                                output$plt.loqDetectStatistics <- shiny::renderPlot(NULL)
-                                output$plt.loqDetectFeature <- shiny::renderPlot(NULL)
+                                output$plt.loqDetectStatistics <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.loqDetectFeature <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.loqDetectFeature <- DT::renderDataTable(NULL)
                               }#if
                               if(!private$.status$query(processName = "loqMutated")){
                                 output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.loqMutateOutlier <- DT::renderDataTable(NULL)
                                 output$tbl.loqMutateData <- DT::renderDataTable(NULL)
-                                output$plt.loqMutateStatistics <- shiny::renderPlot(NULL)
+                                output$plt.loqMutateStatistics <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.loqMutateFeature <- DT::renderDataTable(NULL)
-                                output$plt.loqMutateFeature <- shiny::renderPlot(NULL)
+                                output$plt.loqMutateFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#if
                               if(!self$status$query(processName = "modelOptimized")){
                                 output$tbl.trafoDetectTypes <- DT::renderDataTable(NULL)
                                 output$tbl.trafoDetectParameters <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "modelDefined")){
-                                output$plt.trafoMutateFeature <- shiny::renderPlot(NULL)
+                                output$plt.trafoMutateFeature <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.trafoMutateFeatureParameter <- DT::renderDataTable(NULL)
                                 output$tbl.trafoMutateFeatureQuality <- DT::renderDataTable(NULL)
                                 output$tbl.trafoMutateGlobalParameter <- DT::renderDataTable(NULL)
@@ -5265,30 +5338,31 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.trafoMutateGlobalData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "normalized")){
-                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL)
+                                output$plt.trafoNormFeature <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.trafoNormFeatureStatistics<- DT::renderDataTable(NULL)
                                 output$tbl.trafoNormParameter<- DT::renderDataTable(NULL)
                                 output$tbl.trafoNormStatistics<- DT::renderDataTable(NULL)
                                 output$tbl.trafoNormData<- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "naDetected")){
-                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL)
+                                output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.imputeMissingsStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsDistribution <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsDetail <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "outliersDetected")){
-                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL)
-                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL)
+                                output$plt.outliersImputeSummary <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.outliersImputeFeature <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.outliersImputeFeature <- DT::renderDataTable(NULL)
                                 output$tbl.outliersImputeStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.outliersImputeDetail <- DT::renderDataTable(NULL)
                                 output$tbl.outliersImputeData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "imputed")){
-                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL)
-                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL)
+                                output$plt.imputeMutateSummary <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(NULL, bg="transparent")
+                                output$plt.imputeMutateFlux <- shiny::renderPlot(NULL, bg = "transparent")
                                 output$tbl.imputeMutateFeatureDetail<- DT::renderDataTable(NULL)
                                 output$tbl.imputeMutateStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMutateDistribution <- DT::renderDataTable(NULL)
@@ -5296,7 +5370,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.imputeMutateData <- DT::renderDataTable(NULL)
                               }#if
                               if(!self$status$query(processName = "validated")){
-                                output$plt.analysisValidationFeature <- shiny::renderPlot(NULL)
+                                output$plt.analysisValidationFeature <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.analysisValidationTest <- DT::renderDataTable(NULL)
                                 output$tbl.centralMomentsOrg <- DT::renderDataTable(NULL)
                                 output$tbl.centralMomentsImp <- DT::renderDataTable(NULL)
@@ -5310,7 +5384,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               #   output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
                               # }#if
                               # if(!self$status$query(processName = "regression")){
-                              #   output$plt.regressionFeature <- shiny::renderPlot(NULL)
+                              #   output$plt.regressionFeature <- shiny::renderPlot(NULL, bg="transparent")
                               #   output$tbl.regressionFeature <- DT::renderDataTable(NULL)
                               #   output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
                               #   output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)

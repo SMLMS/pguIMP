@@ -247,7 +247,7 @@ server <- function(input, output, session) {
 
   shiny::observeEvent(input$ab.imputeMutateMutate, {
     delegate$imputeMutateMutate(input, output, session)
-    delegate$updateImputeMutateSeed(input, output, session)
+    delegate$resetImputeMutateGui(input, output, session)
     delegate$updateImputeFluxGraphic(input, output, session)
     delegate$updateImputeMutateGraphic(input, output, session)
     delegate$updateImputeMutateStatisticsTbl(input, output, session)

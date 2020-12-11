@@ -512,7 +512,16 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                   feature <- dplyr::sym(feature)
                                   p <- data_df %>%
                                     ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
-                                    ggplot2::geom_bar(stat = "bin")
+                                    ggplot2::geom_bar(stat = "bin") +
+                                    ggplot2::ylab("counts") +
+                                    ggplot2::xlab("value") +
+                                    ggplot2::theme_linedraw() +
+                                    ggplot2::theme(
+                                      panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                      plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                      legend.background = ggplot2::element_rect(fill = "transparent"),
+                                      legend.key = ggplot2::element_rect(fill = "transparent")
+                                    )
                                   return(p)
                                 }, #function
 
@@ -535,8 +544,17 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                     dplyr::select(feature) %>%
                                     tidyr::gather_(key="feature", value="measurement", feature) %>%
                                     ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-                                    ggplot2::geom_boxplot(na.rm=TRUE)+
-                                    ggplot2::geom_jitter(color = "darkblue", na.rm=TRUE)
+                                    ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                    ggplot2::geom_jitter(color = "darkblue", na.rm=TRUE) +
+                                    ggplot2::ylab("value") +
+                                    ggplot2::xlab("feature") +
+                                    ggplot2::theme_linedraw() +
+                                    ggplot2::theme(
+                                      panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                      plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                      legend.background = ggplot2::element_rect(fill = "transparent"),
+                                      legend.key = ggplot2::element_rect(fill = "transparent")
+                                    )
                                   return(p)
                                 }, #function
 
@@ -579,7 +597,8 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
 
                                   # p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
 
-                                  p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+                                  p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)),
+                                                               top = textGrob(label = sprintf("Distribution of %s", feature)))
                                   return(p)
                                 }#function
                               )#public

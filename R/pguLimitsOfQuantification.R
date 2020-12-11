@@ -685,7 +685,15 @@ pgu.limitsOfQuantification <- R6::R6Class(
         dplyr::mutate(fraction = 100 * typeCount/measurements) %>%
         ggplot2::ggplot(mapping = ggplot2::aes_string(x = "features", y = "fraction", fill = "type"), na.rm=TRUE)+
         ggplot2::geom_col()+
-        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+        ggplot2::ggtitle("LOQ Distribution") +
+        ggplot2::theme_linedraw() +
+        ggplot2::theme(
+          panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+          plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+          legend.background = ggplot2::element_rect(fill = "transparent"),
+          legend.key = ggplot2::element_rect(fill = "transparent"),
+          axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+        )
       return(p)
     }, #function
 
@@ -714,7 +722,16 @@ pgu.limitsOfQuantification <- R6::R6Class(
           ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(feature)), na.rm=TRUE) +
           ggplot2::geom_bar(stat = "bin") +
           ggplot2::geom_vline(xintercept=lloq, linetype="dashed") +
-          ggplot2::geom_vline(xintercept=uloq, linetype="dashed")
+          ggplot2::geom_vline(xintercept=uloq, linetype="dashed") +
+          ggplot2::xlab("value") +
+          ggplot2::ylab("counts") +
+          ggplot2::theme_linedraw() +
+          ggplot2::theme(
+            panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+            plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+            legend.background = ggplot2::element_rect(fill = "transparent"),
+            legend.key = ggplot2::element_rect(fill = "transparent")
+          )
       }#if
       return(p)
     }, #function
@@ -745,10 +762,19 @@ pgu.limitsOfQuantification <- R6::R6Class(
           dplyr::mutate(LOQ = dplyr::if_else(condition = !!dplyr::sym(feature) < lloq, true = "< LLOQ", dplyr::if_else(condition = !!dplyr::sym(feature) > uloq, true = "> ULOQ", false = "quantitative", missing = "quantitative"), missing = "quantitative")) %>%
           tidyr::gather_(key="feature", value="measurement", feature) %>%
           ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
-          ggplot2::geom_boxplot(na.rm=TRUE)+
+          ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
           ggplot2::geom_jitter(ggplot2::aes(colour=LOQ), na.rm=TRUE) +
           ggplot2::geom_hline(yintercept=lloq, linetype="dashed") +
-          ggplot2::geom_hline(yintercept=uloq, linetype="dashed")
+          ggplot2::geom_hline(yintercept=uloq, linetype="dashed") +
+          ggplot2::xlab("feature") +
+          ggplot2::ylab("value") +
+          ggplot2::theme_linedraw() +
+          ggplot2::theme(
+            panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+            plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+            legend.background = ggplot2::element_rect(fill = "transparent"),
+            legend.key = ggplot2::element_rect(fill = "transparent")
+          )
       }#if
       return(p)
     }, #function
@@ -790,7 +816,8 @@ pgu.limitsOfQuantification <- R6::R6Class(
         ggplot2::scale_x_continuous(position = "top", limits=limits) +
         ggplot2::coord_flip()
 
-      p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
+      p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)),
+                                   top = textGrob(label = sprintf("Distribution of %s", feature)))
       return(p)
     } #function
   )#public

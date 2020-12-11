@@ -71,22 +71,34 @@ x$validate(org, imp, progress)
 p <- x$featurePdf(data_df)
 
 ## ------------------------------------------------
+## Method `pgu.validator$featurePde`
+## ------------------------------------------------
+
+p <- x$featurePdf(data_df)
+
+## ------------------------------------------------
 ## Method `pgu.validator$featureCdf`
 ## ------------------------------------------------
 
 p <- x$featureCdf(data_df)
 
 ## ------------------------------------------------
-## Method `pgu.validator$featureQQ`
+## Method `pgu.validator$featureVs`
 ## ------------------------------------------------
 
 p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
 
 ## ------------------------------------------------
+## Method `pgu.validator$featureBoxPlot`
+## ------------------------------------------------
+
+p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
+
+## ------------------------------------------------
 ## Method `pgu.validator$featurePlot`
 ## ------------------------------------------------
 
-p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
+p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -129,8 +141,10 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-centralMomentsFeature}{\code{pgu.validator$centralMomentsFeature()}}
 \item \href{#method-validate}{\code{pgu.validator$validate()}}
 \item \href{#method-featurePdf}{\code{pgu.validator$featurePdf()}}
+\item \href{#method-featurePde}{\code{pgu.validator$featurePde()}}
 \item \href{#method-featureCdf}{\code{pgu.validator$featureCdf()}}
-\item \href{#method-featureQQ}{\code{pgu.validator$featureQQ()}}
+\item \href{#method-featureVs}{\code{pgu.validator$featureVs()}}
+\item \href{#method-featureBoxPlot}{\code{pgu.validator$featureBoxPlot()}}
 \item \href{#method-featurePlot}{\code{pgu.validator$featurePlot()}}
 \item \href{#method-clone}{\code{pgu.validator$clone()}}
 }
@@ -402,6 +416,37 @@ A ggplot2 object
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featurePde"></a>}}
+\if{latex}{\out{\hypertarget{method-featurePde}{}}}
+\subsection{Method \code{featurePde()}}{
+Receives a dataframe and plots the pareto density of the features 'org_pdf' and 'imp_pdf'.
+Returns the plot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePde(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{dataframe to be plotted
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featurePdf(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureCdf"></a>}}
 \if{latex}{\out{\hypertarget{method-featureCdf}{}}}
 \subsection{Method \code{featureCdf()}}{
@@ -433,13 +478,13 @@ A ggplot2 object
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-featureQQ"></a>}}
-\if{latex}{\out{\hypertarget{method-featureQQ}{}}}
-\subsection{Method \code{featureQQ()}}{
+\if{html}{\out{<a id="method-featureVs"></a>}}
+\if{latex}{\out{\hypertarget{method-featureVs}{}}}
+\subsection{Method \code{featureVs()}}{
 Receives two numeric vectors 'org' and 'imp'. Plots the qq-plot of both vectors.
 Returns the plot
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featureQQ(org = "numeric", imp = "numeric")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featureVs(org = "numeric", imp = "numeric")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -467,6 +512,50 @@ A ggplot2 object
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-featureBoxPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-featureBoxPlot}{}}}
+\subsection{Method \code{featureBoxPlot()}}{
+Receives a dataframe and information about the lloq and uloq and retuns a boxplot
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featureBoxPlot(
+  data_df = "tbl_df",
+  lloq = "numeric",
+  uloq = "numeric",
+  feature = "character"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Dataframe to be analyzed
+(tibble::tibble)}
+
+\item{\code{lloq}}{lower limit of quantification
+(numeric)}
+
+\item{\code{uloq}}{upper limit of quantification
+(numeric)}
+
+\item{\code{feature}}{Feature name
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A ggplot2 object
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePlot"></a>}}
 \if{latex}{\out{\hypertarget{method-featurePlot}{}}}
 \subsection{Method \code{featurePlot()}}{
@@ -477,6 +566,9 @@ Returns the plot
 \if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePlot(
   org_df = "tbl_df",
   imp_df = "tbl_df",
+  lloq = "numeric",
+  uloq = "numeric",
+  impIdx_df = "tbl_df",
   feature = "character"
 )}\if{html}{\out{</div>}}
 }
@@ -490,6 +582,15 @@ Returns the plot
 \item{\code{imp_df}}{Dataframe comprising the imputed data.
 (tibble::tibble)}
 
+\item{\code{lloq}}{lower limit of quantification
+(numeric)}
+
+\item{\code{uloq}}{upper limit of quantification
+(numeric)}
+
+\item{\code{impIdx_df}}{dataframe comprising information about imputation sites
+(tibble::tibble)}
+
 \item{\code{feature}}{Feature name.
 (character)}
 }
@@ -501,7 +602,7 @@ A ggplot2 object
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
+\preformatted{p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
 }
 \if{html}{\out{</div>}}
 

@@ -475,6 +475,12 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setImputationAgent}}{Sets the instance variable imputationAgent.
 (character)}
 
+\item{\code{nNeighbors}}{Returns the instance variable nNeighbors.
+(integer)}
+
+\item{\code{setNNeighbors}}{Sets the instance variable nNeighbors.
+(integer)}
+
 \item{\code{flux_df}}{Returns the instance variable flux_df
 (tibble::tible)}
 
@@ -484,11 +490,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setOutflux_thr}}{Sets the instance variable outflux_thr.
 (numeric)}
 
-\item{\code{nPred}}{Returns the instance variable nPred.
-(integer)}
+\item{\code{pred_frac}}{Returns the instance variable pred_frac.
+(numeric)}
 
-\item{\code{setNPred}}{Sets the instance variable nPred.
-(integer)}
+\item{\code{setPred_frac}}{Sets the instance variable pred_frac.
+(numeric)}
 
 \item{\code{pred_mat}}{Returns the instance variable pred_mat.
 (matrix)}
@@ -557,7 +563,8 @@ Creates and returns a new \code{pgu.imputation} object.
   seed = 42,
   iterations = 4,
   imputationAgent = "none",
-  nPred = 10,
+  nNeighbors = 3,
+  pred_frac = 1,
   outflux_thr = 0.5
 )}\if{html}{\out{</div>}}
 }
@@ -578,8 +585,11 @@ Default is "none".
 Options are: ""none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", "cart", "randomForest", "M5P".
 (string)}
 
-\item{\code{nPred}}{Initially sets the instance variable nPred.
+\item{\code{nNeighbors}}{Initially sets the instance variable nNeighbors.
 (integer)}
+
+\item{\code{pred_frac}}{Initially sets the instance variable pred_frac.
+(numeric)}
 
 \item{\code{outflux_thr}}{Initially sets the instance fariable outflux_thr}
 }

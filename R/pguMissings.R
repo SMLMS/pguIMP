@@ -344,7 +344,8 @@ pgu.missings <- R6::R6Class("pgu.missings",
                                           labels=self$imputationParameter[["features"]],
                                           cex.axis=.7,
                                           gap=3,
-                                          ylab=c("Histogram of imputation sites","Pattern"))
+                                          main = "Missings histogram",
+                                          ylab=c("fraction","fraction"))
                                 return(p)
                               } #function
                             )#public

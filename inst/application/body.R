@@ -23,6 +23,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
+          shiny::h1("Upload"),
           shiny::fileInput(
             "fi.import",
             label = h5(" Select Excel file "),
@@ -31,11 +32,10 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::hr(),
           shiny::actionButton("ab.import",
-                              label = h5("import"),
+                              label = h5("Import"),
                               width = "100%")
         ),
         shiny::column(
-
           width = dataColumnWidth,
           shinydashboard::tabBox(
             width = 12,
@@ -66,22 +66,16 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Filter"),
-          shiny::br(),
-          shiny::br(),
           shiny::actionButton(
               inputId = "ab.filterSet",
               label = "Filter",
               width = "100%"
           ),
-          shiny::br(),
-          shiny::br(),
           shiny::actionButton(
             inputId = "ab.filterInvSet",
             label = "Filter inverse",
             width = "100%"
           ),
-          shiny::br(),
-          shiny::br(),
           shiny::actionButton(
             inputId = "ab.filterReset",
             label = "Reset",
@@ -90,6 +84,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::h3("Select Filter"),
           DT::dataTableOutput("tbl.filter", width = "100%"),
           shiny::fluidRow(
             shiny::column(
@@ -117,8 +112,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Explore"),
-          shiny::br(),
-          shiny::br(),
           selectInput(
             "si.exploreAbs",
             label = h5("Abscissa"),
@@ -168,8 +161,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Detect LOQ Outlier"),
-          shiny::br(),
-          shiny::br(),
           shiny::selectInput(
             "si.loqDetectFeature",
             width = '100%',
@@ -184,15 +175,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             choices = list(),
             selected = 1
           ),
-          shiny::br(),
-          shiny::br(),
+          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.detectLoq",
             label = "analyze LOQ",
             width = "100%"
           ),
-          shiny::br(),
-          shiny::br(),
           shiny::actionButton(
             inputId = "ab.resetDetectLoq",
             label = "reset",
@@ -240,8 +228,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Mutate LOQ Outlier"),
-          shiny::br(),
-          shiny::br(),
           shiny::selectInput(
             "si.loqMutateFeature",
             width = '100%',
@@ -263,15 +249,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             choices = list(),
             selected = 1
           ),
-          shiny::br(),
-          shiny::br(),
+          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.mutateLoq",
             label = "mutate LOQ",
             width = "100%"
           ),
-          shiny::br(),
-          shiny::br(),
           shiny::actionButton(
             inputId = "ab.resetMutateLoq",
             label = "reset",
@@ -398,9 +381,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Transformation"),
-          shiny::br(),
-          shiny::br(),
+          shiny::h1("Transform"),
           selectInput(
             "si.trafoMutateFeature",
             label = h5("Feature"),
@@ -431,7 +412,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             label = "set globally",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.trafoMutateReset",
             label = "reset",
@@ -489,9 +469,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Normalization"),
-          shiny::br(),
-          shiny::br(),
+          shiny::h1("Normalize"),
           selectInput(
             "si.trafoNormFeature",
             label = h5("Feature"),
@@ -506,14 +484,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = 1,
             width = "100%"
           ),
-          shiny::br(),
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.trafoNormMutate",
             label = "mutate",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.trafoNormReset",
             label = "reset",
@@ -558,7 +534,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Detect Missings"),
-          shiny::br(),
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeMissingsDetect",
@@ -600,8 +575,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Detect Anomalies"),
-          shiny::br(),
-          shiny::hr(),
           selectInput(
             "si.imputeOutliersFeature",
             label = h5("Feature"),
@@ -616,7 +589,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = 1,
             width = "100%"
           ),
-          shiny::hr(),
           shiny::hr(),
           shiny::h3("Grubbs parameters"),
           shiny::numericInput(
@@ -692,14 +664,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             value = 42,
             width = "100%"
           ),
-          shiny::br(),
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeOutliersDetect",
             label = "Detect Anomalies",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeOutliersReset",
             label = "Reset",
@@ -746,8 +716,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Mutate Imputation Sites"),
-          shiny::br(),
-          shiny::br(),
           shiny::selectInput(
             "si.imputeMutateFeature",
             label = h5("Feature"),
@@ -763,13 +731,22 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = 1
           ),
           shiny::numericInput(
-            "ni.imputeMutateNPred",
-            label = h5("number of predictors"),
+            "ni.imputeMutateNumberOfNeighbors",
+            label = h5("number of neighbors"),
             width = "100%",
-            min = 1,
-            max = 20,
+            min = 2,
+            max = 10,
             step =1,
-            value = 10
+            value = 3
+          ),
+          shiny::numericInput(
+            "ni.imputeMutatePredFrac",
+            label = h5("fraction of predictors"),
+            width = "100%",
+            min = 0,
+            max = 1,
+            step =0.1,
+            value = 1.0
           ),
           shiny::numericInput(
             "ni.imputeMutateOutfluxThr",
@@ -798,6 +775,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             step = 1,
             value = 4
           ),
+          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeMutateMutate",
             label = "mutate imputation sites",
@@ -858,6 +836,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
+          shiny::h1("Validate Imputation Procedure"),
           shiny::selectInput(
             "si.analysisValidationFeature",
             label = h5("Feature"),
@@ -865,8 +844,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             choices = list(),
             selected = 1
           ),
-          shiny::br(),
-          shiny::br(),
+          shiny::hr(),
           shiny::actionButton(
             inputId = "ab.validation",
             label = "calculate",

@@ -182,7 +182,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                                             alternative = "two.sided",
                                                             simulate.p.value=TRUE,
                                                             B=2000)
-                                 print(test_obj)
                                  tibble::tibble(feature = c(feature),
                                                 d.Kolmogorow = c(test_obj$statistic),
                                                 p.Kolmogorow = c(test_obj$p.value)) %>%
@@ -210,7 +209,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                  test_obj <- stats::wilcox.test(x = org,
                                                                 y = imp,
                                                                 alternative = "two.sided")
-                                 print(test_obj)
                                  tibble::tibble(feature = c(feature),
                                                 w.Wilcoxon = c(test_obj$statistic),
                                                 p.Wilcoxon = c(test_obj$p.value)) %>%
@@ -320,9 +318,34 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    dplyr::rename(imputed = imp_pdf) %>%
                                    tidyr::gather(key = "type", value = "pdf", -x, na.rm = TRUE) %>%
                                    ggplot2::ggplot() +
-                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=pdf, color=type, linetype = type), size = 1.5) +
+                                   ggplot2::geom_line(mapping = ggplot2::aes_string(x="x", y="pdf", color="type", linetype = "type"), size = 1.5) +
                                    ggplot2::ggtitle(title_str) +
                                    ggplot2::xlab("value")
+                                 return(p)
+                               }, #featurePdf
+
+                               #' @description
+                               #' Receives a dataframe and plots the pareto density of the features 'org_pdf' and 'imp_pdf'.
+                               #' Returns the plot
+                               #' @param data_df
+                               #' dataframe to be plotted
+                               #' (tibble::tibble)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featurePdf(data_df)
+                               featurePde = function(data_df = "tbl_df"){
+                                 p <- data_df %>%
+                                   ggplot2::ggplot() +
+                                   ggplot2::geom_line(mapping = ggplot2::aes_string(x="value", y = "pde", color = "data", linetype = "data"), size = 1.5) +
+                                   ggplot2::theme_linedraw() +
+                                   ggplot2::theme(
+                                     panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                     plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                     legend.background = ggplot2::element_rect(fill = "transparent"),
+                                     legend.key = ggplot2::element_rect(fill = "transparent")
+                                   )
                                  return(p)
                                }, #featurePdf
 
@@ -345,9 +368,16 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    dplyr::rename(imputed = imp_cdf) %>%
                                    tidyr::gather(key = "type", value = "cdf", -x, na.rm = TRUE) %>%
                                    ggplot2::ggplot() +
-                                   ggplot2::geom_line(mapping = ggplot2::aes(x=x, y=cdf, color=type,  linetype = type), size = 1.5) +
+                                   ggplot2::geom_line(mapping = ggplot2::aes_string(x="x", y="cdf", color="type",  linetype = "type"), size = 1.5) +
                                    ggplot2::ggtitle(title_str) +
-                                   ggplot2::xlab("value")
+                                   ggplot2::xlab("value") +
+                                   ggplot2::theme_linedraw() +
+                                   ggplot2::theme(
+                                     panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                     plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                     legend.background = ggplot2::element_rect(fill = "transparent"),
+                                     legend.key = ggplot2::element_rect(fill = "transparent")
+                                   )
                                  return(p)
                                }, #featureCdf
 
@@ -365,22 +395,64 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' (ggplot2::ggplot)
                                #' @examples
                                #' p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
-                               featureQQ = function(org = "numeric", imp = "numeric"){
-                                 title_str <- sprintf("qq-plot")
-
+                               featureVs = function(org = "numeric", imp = "numeric"){
                                  min_val <- min(min(org), min(imp))
                                  max_val <- max(max(org), max(imp))
 
                                  p <- tibble::as_tibble(qqplot(org, imp, plot.it=FALSE)) %>%
                                    ggplot2::ggplot() +
-                                   ggplot2::geom_point(mapping = ggplot2::aes(x=x, y=y)) +
+                                   ggplot2::geom_point(mapping = ggplot2::aes_string(x="x", y="y")) +
                                    ggplot2::geom_abline(intercept = 0, slope = 1) +
-                                   ggplot2::ggtitle(title_str) +
+                                   ggplot2::ggtitle("Imputation scatter plot") +
                                    ggplot2::xlab("orgiginal") +
-                                   ggplot2::ylab("imputed")
+                                   ggplot2::ylab("imputed") +
+                                   ggplot2::theme_linedraw() +
+                                   ggplot2::theme(
+                                     panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                     plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                     legend.background = ggplot2::element_rect(fill = "transparent"),
+                                     legend.key = ggplot2::element_rect(fill = "transparent")
+                                   )
 
                                  return(p)
                                }, #featureQQ
+
+                               #' @description
+                               #' Receives a dataframe and information about the lloq and uloq and retuns a boxplot
+                               #' @param data_df
+                               #' Dataframe to be analyzed
+                               #' (tibble::tibble)
+                               #' @param lloq
+                               #' lower limit of quantification
+                               #' (numeric)
+                               #' @param uloq
+                               #' upper limit of quantification
+                               #' (numeric)
+                               #' @param feature
+                               #' Feature name
+                               #' (character)
+                               #' @return
+                               #' A ggplot2 object
+                               #' (ggplot2::ggplot)
+                               #' @examples
+                               #' p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
+                               featureBoxPlot = function(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character"){
+                                 p <- data_df %>%
+                                   tidyr::gather(key = !!feature, value="value", -type) %>%
+                                   ggplot2::ggplot(mapping=ggplot2::aes_string(x=feature,y="value"), na.rm=TRUE)+
+                                   ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                   ggplot2::geom_jitter(ggplot2::aes(color = type), na.rm=TRUE) +
+                                   ggplot2::geom_hline(yintercept=lloq, linetype="dashed") +
+                                   ggplot2::geom_hline(yintercept=uloq, linetype="dashed") +
+                                   ggplot2::theme_linedraw() +
+                                   ggplot2::theme(
+                                     panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                     plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                     legend.background = ggplot2::element_rect(fill = "transparent"),
+                                     legend.key = ggplot2::element_rect(fill = "transparent")
+                                   )
+                                 return(p)
+                               }, #featureBoxPlot
 
                                #' @description
                                #' Receives two numeric dataframes 'org_df' and 'imp_df', and a feature name.
@@ -392,6 +464,15 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @param imp_df
                                #' Dataframe comprising the imputed data.
                                #' (tibble::tibble)
+                               #' @param lloq
+                               #' lower limit of quantification
+                               #' (numeric)
+                               #' @param uloq
+                               #' upper limit of quantification
+                               #' (numeric)
+                               #' @param impIdx_df
+                               #' dataframe comprising information about imputation sites
+                               #' (tibble::tibble)
                                #' @param feature
                                #' Feature name.
                                #' (character)
@@ -399,35 +480,35 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
                                #' @examples
-                               #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, feature = "infected")
-                               featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", feature = "character"){
+                               #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
+                               featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", lloq = "numeric", uloq = "numeric", impIdx_df = "tbl_df", feature = "character"){
                                  title_str <- sprintf("Imputation quality analysis of %s", feature)
 
                                  org <- org_df %>%
                                    dplyr::select(feature) %>%
-                                   tidyr::drop_na() %>%
+                                   # tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
                                  imp <- imp_df %>%
                                    dplyr::select(feature) %>%
-                                   tidyr::drop_na() %>%
+                                   # tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
 
                                  org_hist <- org %>%
+                                   purrr::discard(is.na) %>%
                                    hist(plot = FALSE)
                                  org_min <- org_hist$breaks[1]
                                  org_max <- org_hist$breaks[length(org_hist$breaks)]
 
                                  imp_hist <- imp %>%
+                                   purrr::discard(is.na) %>%
                                    hist(plot = FALSE)
                                  imp_min <- imp_hist$breaks[1]
                                  imp_max <- imp_hist$breaks[length(org_hist$breaks)]
 
                                  data_min <- min(c(org_min, imp_min))
                                  data_max <- max(c(org_max, imp_max))
-
-                                 print(data_max)
 
                                  org_pdf_obj <- density(org, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
                                  imp_pdf_obj <- density(imp, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
@@ -439,13 +520,46 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    dplyr::mutate(org_cdf = cumsum(org_pdf)*abs(x[2] - x[1])) %>%
                                    dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
 
-                                 p1 <- self$featurePdf(dist_df) +
+                                 pde_org <- org_df %>%
+                                   dplyr::select(feature) %>%
+                                   tidyr::drop_na() %>%
+                                   dplyr::pull(feature) %>%
+                                   DataVisualizations::ParetoDensityEstimation()
+
+                                 pde_imp <- imp_df %>%
+                                   dplyr::select(feature) %>%
+                                   tidyr::drop_na() %>%
+                                   dplyr::pull(feature) %>%
+                                   DataVisualizations::ParetoDensityEstimation()
+
+                                 pde_df <- tibble::tibble(value = c(pde_org$kernels, pde_imp$kernels),
+                                                          pde = c(pde_org$paretoDensity, pde_imp$paretoDensity),
+                                                          data = c(rep("original", times = length(pde_org$kernels)), rep("imputed", times = length(pde_imp$kernels))))
+
+
+                                 box_df <- tibble::tibble(original = org,
+                                                          imputed = imp)
+
+                                 impIdx <- impIdx_df %>%
+                                   dplyr::filter(feature == !!feature) %>%
+                                   dplyr::pull(idx) %>%
+                                   as.integer()
+
+                                 type_vec  <- rep("original", nrow(box_df))
+                                 type_vec[impIdx] <- "imputed"
+
+                                 box_df <- box_df %>%
+                                   dplyr::mutate(type = type_vec)
+
+                                 p1 <- self$featurePde(pde_df) +
                                    ggplot2::theme(legend.position = "none")
-                                 p2 <- self$featureCdf(dist_df) +
+                                 p2 <- self$featureBoxPlot(data_df = box_df, lloq = lloq, uloq = uloq, feature = feature) +
+                                   ggplot2::theme(legend.position = "none")
+                                 p3 <- self$featureCdf(dist_df) +
                                    ggplot2::theme(legend.position = "top")
-                                 p3 <- self$featureQQ(org, imp)
-                                 p <- gridExtra::grid.arrange(p1,p2,p3,
-                                                              layout_matrix = rbind(c(1,1,2),c(1,1,3)),
+                                 p4 <- self$featureVs(org, imp)
+                                 p <- gridExtra::grid.arrange(p1,p2,p3, p4,
+                                                              layout_matrix = rbind(c(1,1,2,3),c(1,1,2,4)),
                                                               top = grid::textGrob(title_str, gp = grid::gpar(fontsize=20)))
                                  return(p)
                                } #featurePlot

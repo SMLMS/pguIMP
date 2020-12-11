@@ -6,6 +6,27 @@ fileName <- "/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_20
 data_df <- readxl::read_xlsx(path = fileName,
                              sheet = 1)
 
+data_temp_df <- data_df %>%
+  dplyr::select(c("Cer_d18.1_16.0", "Cer_d18.1_20.0")) %>%
+  dplyr::mutate(type = seq(from=1, to=nrow(data_temp_df), by=1) >25)
+
+
+colnames(data_temp_df) <- c("original", "imputed", "type")
+
+min_val <- min(c(data_temp_df$original, data_temp_df$imputed))
+max_val <- max(c(data_temp_df$original, data_temp_df$imputed))
+
+lloq <- min_val + 25*(min_val/100.0)
+uloq <- max_val + 20*(max_val/100.0)
+
+data_temp_df %>%
+  tidyr::gather(key="feature", value="measurement", -type) %>%
+  ggplot2::ggplot(mapping=ggplot2::aes_string(x="feature",y="measurement"), na.rm=TRUE)+
+  ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+  ggplot2::geom_jitter(ggplot2::aes(color = type), na.rm=TRUE) +
+  ggplot2::geom_hline(yintercept=lloq, linetype="dashed") +
+  ggplot2::geom_hline(yintercept=uloq, linetype="dashed")
+
 data_transformed_df <- data_df %>%
   dplyr::select(-c("Sample Name")) %>%
   dplyr::mutate_all(log)
@@ -46,7 +67,7 @@ data_filtered_df <- data_transformed_df %>%
 
 mean_number_of_predictors = function(data_df, minpuc, mincor){
   pred <- data_df %>%
-    mice::quickpred(minpuc = minpuc, mincor = mincor)
+    mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = outlist)
 
   pred_dist <- table(rowSums(pred))
 
@@ -65,15 +86,17 @@ quickpred_df <- quickpred_df %>%
 
 quickpred_para <- quickpred_df %>%
   tidyr::drop_na() %>%
-  dplyr::slice(which.min(abs(quickpred_df$mean - 15)))
+  dplyr::slice(which.min(abs(quickpred_df$mean - 10)))
 
-
+quickpred_df
 minpuc <- quickpred_para$minpuc
 mincor <- quickpred_para$mincor
 
-
 pred <- data_transformed_df %>%
   mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = outlist)
+
+pred %>%
+  rowSums()
 
 # mice_model <- data_transformed_df %>%
 #   mice::mice(method = "cart", pred = pred, seed = seed, printFlag = FALSE)
@@ -123,7 +146,7 @@ pred <- data_transformed_df %>%
 #   which.min()
 
 seed <- 42
-iterations <- 10
+iterations <- 4
 
 # Calculate Errors
 stats0_mat <- data_transformed_df %>%
@@ -133,8 +156,12 @@ stats0_mat <- data_transformed_df %>%
 stats_mat_list = list()
 diff_mat_list = list()
 for (i in seq(1, iterations)){
+  print(i)
   mice_model <- data_transformed_df %>%
-    mice::mice(method = "cart", pred = pred, seed = seed+i, printFlag = FALSE)
+    mice::mice(method = "rf",
+               pred = pred,
+               seed = seed+i,
+               printFlag = FALSE)
 
   stats_mat_list[[i]] <- mice_model %>%
     mice::complete() %>%
@@ -256,3 +283,20 @@ for(feature in colnames(data_transformed_df)){
 
 pred %>%
   rowSums()
+
+library("DataVisualizations")
+pde1 <- data_transformed_df %>%
+  dplyr::pull("TG_42.0") %>%
+  DataVisualizations::ParetoDensityEstimation()
+
+pde2 <- data_transformed_df %>%
+  dplyr::pull("TG_42.1") %>%
+  DataVisualizations::ParetoDensityEstimation()
+
+pde_df <- tibble::tibble(value = c(pde1$kernels, pde2$kernels),
+                         pde = c(pde1$paretoDensity, pde2$paretoDensity),
+                         data = c(rep("original", times = length(pde1$kernels)), rep("imputed", times = length(pde2$kernels))))
+
+pde_df %>%
+  ggplot2::ggplot() +
+  ggplot2::geom_line(mapping = ggplot2::aes(x=value, y = pde, color = data))

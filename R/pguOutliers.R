@@ -1011,7 +1011,17 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   dplyr::mutate(fraction = typeCount/absCount) %>%
                                   ggplot2::ggplot(mapping = ggplot2::aes_string(x = "features", y = "fraction", fill = "type"), na.rm=TRUE)+
                                   ggplot2::geom_col()+
-                                  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+                                  ggplot2::ggtitle("Outliers Distribution") +
+                                  ggplot2::ylab("fraction") +
+                                  ggplot2::xlab("feature") +
+                                  ggplot2::theme_linedraw() +
+                                  ggplot2::theme(
+                                    panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                    plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                    legend.background = ggplot2::element_rect(fill = "transparent"),
+                                    legend.key = ggplot2::element_rect(fill = "transparent"),
+                                    axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+                                  )
                                 return(p)
                               },#function
 
@@ -1034,8 +1044,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 p <- data_df %>%
                                   ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
                                   ggplot2::geom_bar(stat = "bin") +
-                                  ggthemes::geom_rangeframe(size = 1) +
-                                  ggthemes::theme_tufte(base_size = 14)
+                                  ggplot2::xlab("value") +
+                                  ggplot2::ylab("counts") +
+                                  ggplot2::theme_linedraw() +
+                                  ggplot2::theme(
+                                    panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                    plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                    legend.background = ggplot2::element_rect(fill = "transparent"),
+                                    legend.key = ggplot2::element_rect(fill = "transparent")
+                                  )
                                 return(p)
                               },#function
 
@@ -1061,7 +1078,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   dplyr::pull()
                                 data_type <- rep("regular", nrow(data_df))
                                 data_type[outlier_idx] <- "outlier"
-                                outFeature <- self$outliersFeatureList(data_df)
+                                # outFeature <- self$outliersFeatureList(data_df)
                                 p <- data_df %>%
                                   dplyr::select(feature) %>%
                                   dplyr::mutate(type = data_type ) %>%
@@ -1069,8 +1086,15 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   ggplot2::ggplot(mapping=ggplot2::aes_string(x = "feature", y="value"), na.rm=TRUE)+
                                   ggplot2::geom_boxplot(outlier.shape = NA, na.rm=TRUE) +
                                   ggplot2::geom_jitter(ggplot2::aes(colour=type), na.rm=TRUE) +
-                                  ggthemes::geom_rangeframe(size = 1) +
-                                  ggthemes::theme_tufte(base_size = 14)
+                                  ggplot2::xlab("feature") +
+                                  ggplot2::ylab("value") +
+                                  ggplot2::theme_linedraw() +
+                                  ggplot2::theme(
+                                    panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                    plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                    legend.background = ggplot2::element_rect(fill = "transparent"),
+                                    legend.key = ggplot2::element_rect(fill = "transparent")
+                                  )
                                 return(p)
                               }, #function
 
@@ -1111,7 +1135,8 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                   ggplot2::scale_x_continuous(position = "top", limits=limits) +
                                   ggplot2::coord_flip()
 
-                                p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+                                p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)),
+                                                             top = textGrob(label = sprintf("Distribution of %s", feature)))
                                 return(p)
                               }#function
                             )#public

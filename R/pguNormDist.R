@@ -553,7 +553,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  plotHistogram = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping = ggplot2::aes_string(x="x", y="y_data"))+
                                      ggplot2::geom_col()+
-                                     ggplot2::geom_line(ggplot2::aes_string(x="x", y="y_fit"), color="blue")
+                                     ggplot2::geom_line(ggplot2::aes_string(x="x", y="y_fit"), color="blue") +
+                                     ggplot2::ggtitle(sprintf("Distribution of %s", self$featureName)) +
+                                     ggplot2::ylab("counts") +
+                                     ggplot2::xlab("value") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -569,7 +579,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  plotResiduals = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="x", y="res"))+
                                      ggplot2::geom_point()+
-                                     ggplot2::geom_smooth()
+                                     ggplot2::geom_smooth() +
+                                     ggplot2::ggtitle("Residuals") +
+                                     ggplot2::ylab("residuals") +
+                                     ggplot2::xlab("value") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -584,7 +604,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="res"))+
-                                     ggplot2::geom_histogram()
+                                     ggplot2::geom_histogram() +
+                                     ggplot2::ggtitle("Residual distribution") +
+                                     ggplot2::ylab("counts") +
+                                     ggplot2::xlab("residual value") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -599,7 +629,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotRawResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="residuals"))+
-                                     ggplot2::geom_histogram()
+                                     ggplot2::geom_histogram() +
+                                     ggplot2::ggtitle("Residual distribution") +
+                                     ggplot2::ylab("counts") +
+                                     ggplot2::xlab("residual value") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -614,7 +654,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotRawDataDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="x"))+
-                                     ggplot2::geom_histogram()
+                                     ggplot2::geom_histogram() +
+                                     ggplot2::ggtitle("Feature distribution") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::ylab("counts") +
+                                     ggplot2::xlab("value") +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 
@@ -630,7 +680,17 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  normalQQPlot = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(sample="x"))+
                                      ggplot2::stat_qq()+
-                                     ggplot2::stat_qq_line(color="blue")
+                                     ggplot2::stat_qq_line(color="blue") +
+                                     ggplot2::ggtitle("qq-plot") +
+                                     ggplot2::ylab("data") +
+                                     ggplot2::xlab("model") +
+                                     ggplot2::theme_linedraw() +
+                                     ggplot2::theme(
+                                       panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                       plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                       legend.background = ggplot2::element_rect(fill = "transparent"),
+                                       legend.key = ggplot2::element_rect(fill = "transparent")
+                                     )
                                    return(p)
                                  }, #function
 

@@ -580,6 +580,24 @@ x$updateImputeMutateFeature(input, output, session)
 x$updateImputeMutateMethod(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateNNeighbors`
+## ------------------------------------------------
+
+x$updateImputeMutateNNeighbors(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutatePredFrac`
+## ------------------------------------------------
+
+x$updateImputeMutatePredFrac(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMutateOutfluxThr`
+## ------------------------------------------------
+
+x$updateImputeMutateOutfluxThr(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMutateSeed`
 ## ------------------------------------------------
 
@@ -1496,6 +1514,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeOutliersDataTbl}{\code{pgu.delegate$updateImputeOutliersDataTbl()}}
 \item \href{#method-updateImputeMutateFeature}{\code{pgu.delegate$updateImputeMutateFeature()}}
 \item \href{#method-updateImputeMutateMethod}{\code{pgu.delegate$updateImputeMutateMethod()}}
+\item \href{#method-updateImputeMutateNNeighbors}{\code{pgu.delegate$updateImputeMutateNNeighbors()}}
+\item \href{#method-updateImputeMutatePredFrac}{\code{pgu.delegate$updateImputeMutatePredFrac()}}
+\item \href{#method-updateImputeMutateOutfluxThr}{\code{pgu.delegate$updateImputeMutateOutfluxThr()}}
 \item \href{#method-updateImputeMutateSeed}{\code{pgu.delegate$updateImputeMutateSeed()}}
 \item \href{#method-updateImputeMutateIterations}{\code{pgu.delegate$updateImputeMutateIterations()}}
 \item \href{#method-updateImputeMutateGui}{\code{pgu.delegate$updateImputeMutateGui()}}
@@ -4276,6 +4297,93 @@ Updates the si.imputeMutateMethod shiny widget.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeMutateMethod(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateNNeighbors"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateNNeighbors}{}}}
+\subsection{Method \code{updateImputeMutateNNeighbors()}}{
+Updates the ni.imputeMutateNumberOfNeighbors shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateNNeighbors(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateNNeighbors(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutatePredFrac"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutatePredFrac}{}}}
+\subsection{Method \code{updateImputeMutatePredFrac()}}{
+Updates the ni.imputeMutatePredFrac shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutatePredFrac(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutatePredFrac(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMutateOutfluxThr"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMutateOutfluxThr}{}}}
+\subsection{Method \code{updateImputeMutateOutfluxThr()}}{
+Updates the ni.imputeMutateOutfluxThr shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMutateOutfluxThr(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMutateOutfluxThr(input, output, session)
 }
 \if{html}{\out{</div>}}
 
