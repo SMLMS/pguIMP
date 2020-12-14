@@ -1152,6 +1152,24 @@ x$updateCentralMomentsImpTbl(input, output, session)
 x$updateCentralMomentsDeltaTbl(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateCorrelationValidationScatterGraphic`
+## ------------------------------------------------
+
+x$updateCorrelationValidationScatterGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCorrelationValidationBoxPlotGraphic`
+## ------------------------------------------------
+
+x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCorrelationValidationTbl`
+## ------------------------------------------------
+
+x$updatePearsonROrgTbl(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$correlate`
 ## ------------------------------------------------
 
@@ -1403,6 +1421,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{validator}}{Returns the instance variable validator
 (pguIMP::pgu.validator)}
 
+\item{\code{corrValidator}}{Returns the instance variable corrValidator
+(pguIMP::pgu.corrValidator)}
+
 \item{\code{correlator}}{Returns the instance variable correlator
 (pguIMP::pgu.correlator)}
 
@@ -1537,6 +1558,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateCentralMomentsOrgTbl}{\code{pgu.delegate$updateCentralMomentsOrgTbl()}}
 \item \href{#method-updateCentralMomentsImpTbl}{\code{pgu.delegate$updateCentralMomentsImpTbl()}}
 \item \href{#method-updateCentralMomentsDeltaTbl}{\code{pgu.delegate$updateCentralMomentsDeltaTbl()}}
+\item \href{#method-updateCorrelationValidationScatterGraphic}{\code{pgu.delegate$updateCorrelationValidationScatterGraphic()}}
+\item \href{#method-updateCorrelationValidationBoxPlotGraphic}{\code{pgu.delegate$updateCorrelationValidationBoxPlotGraphic()}}
+\item \href{#method-updateCorrelationValidationTbl}{\code{pgu.delegate$updateCorrelationValidationTbl()}}
 \item \href{#method-correlate}{\code{pgu.delegate$correlate()}}
 \item \href{#method-updateCorrelationMatrixRTbl}{\code{pgu.delegate$updateCorrelationMatrixRTbl()}}
 \item \href{#method-updateCorrelationMatrixPPearsonTbl}{\code{pgu.delegate$updateCorrelationMatrixPPearsonTbl()}}
@@ -5400,6 +5424,93 @@ Updtates the tbl.centralMomentsDelta table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateCentralMomentsDeltaTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCorrelationValidationScatterGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCorrelationValidationScatterGraphic}{}}}
+\subsection{Method \code{updateCorrelationValidationScatterGraphic()}}{
+Updtates the plt.correlationValidationScatter graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationScatterGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCorrelationValidationScatterGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCorrelationValidationBoxPlotGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCorrelationValidationBoxPlotGraphic}{}}}
+\subsection{Method \code{updateCorrelationValidationBoxPlotGraphic()}}{
+Updtates the plt.correlationValidationBoxPlot graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationBoxPlotGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCorrelationValidationTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCorrelationValidationTbl}{}}}
+\subsection{Method \code{updateCorrelationValidationTbl()}}{
+Updtates the tbl.correlationValidation table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updatePearsonROrgTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

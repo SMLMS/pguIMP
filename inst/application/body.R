@@ -877,6 +877,23 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::h3("Deviation"),
           DT::dataTableOutput("tbl.centralMomentsDelta"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Correlation Validation Analysis"),
+          shiny::plotOutput("plt.correlationValidationScatter"),
+          shiny::br(),
+          shiny::fluidRow(
+            shiny::column(
+              width = 3,
+              shiny::h3("Box Plot"),
+              shiny::plotOutput("plt.correlationValidationBoxPlot"),
+            ),
+            shiny::column(
+              width = 9,
+              shiny::h3("Correlation Validation Data"),
+              DT::dataTableOutput("tbl.correlationValidation")
+            )
+          )
         )
       )
     )

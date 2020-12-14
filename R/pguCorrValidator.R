@@ -1,5 +1,24 @@
-library("tidyverse")
-library("Hmisc")
+#' @title pgu.corrValidator
+#'
+#' @description
+#' A class that performs pairwise correlation on the pguIMP data set.
+#'
+#' @details
+#'
+#'
+#' @format [R6::R6Class] object.
+#' @section Construction:
+#' x <- pguIMP::pgu.correlator$new(data)
+#'
+#' @import R6
+#' @import tidyverse
+#' @import Hmisc
+#'
+#' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
+#'
+#' @export
+#'
+
 
 pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                  ####################
@@ -143,14 +162,15 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        p_org = self$orgP_mat[ut],
                                        cor_imp  = self$impR_mat[ut],
                                        p_imp = self$impP_mat[ut]
-                                     )
+                                     ) %>%
+                                       dplyr::mutate(cor_delta = cor_imp - cor_org)
                                    }, #function
                                    #' @description
                                    #' Runs the corraltion analysis.
                                    #' @param org_df
                                    #' Adataframe comprising the original data.
                                    #' (tibble::tibble)
-                                   #' @param org_df
+                                   #' @param imp_df
                                    #' Adataframe comprising the imputed data.
                                    #' (tibble::tibble)
                                    #' @examples
@@ -191,17 +211,16 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @description
                                    #' Plots the correlation analysis results.
                                    #' @examples
-                                   #' pgu.corrValidator$plotCorrelationResults()
-                                   plotCorrelationResults = function(){
-                                     self$corr_df %>%
+                                   #' pgu.corrValidator$correlationScatterPlot()
+                                   correlationScatterPlot = function(){
+                                     p <- self$corr_df %>%
                                        dplyr::mutate(pair = paste(row, column, sep = "/\n")) %>%
                                        dplyr::select(c("pair", "cor_org", "cor_imp")) %>%
                                        ggplot2::ggplot() +
                                        ggplot2::geom_point(mapping = ggplot2::aes_string(x="cor_org", y="cor_imp", color = "pair")) +
-                                       ggplot2::geom_text(ggplot2::aes_string(x="cor_org", y="cor_imp", label="pair", color = "pair"),hjust=0, vjust=0) +
                                        ggplot2::geom_abline(mapping = NULL, data = NULL, slope = 1, intercept = 0, show.legend = NA, linetype = "dashed") +
-                                       ggplot2::xlim(-1,1) +
-                                       ggplot2::ylim(-1,1) +
+                                       # ggplot2::xlim(-1,1) +
+                                       # ggplot2::ylim(-1,1) +
                                        ggplot2::ggtitle("Correlation Plot") +
                                        ggplot2::xlab("r (original data)") +
                                        ggplot2::ylab("r (imputed data)") +
@@ -209,44 +228,35 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        ggplot2::theme(
                                          panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
                                          plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
-                                         legend.position = "none"
+                                         legend.background = ggplot2::element_rect(fill = "transparent"),
+                                         legend.key = ggplot2::element_rect(fill = "transparent")
                                        )
-                                   }#plot
+                                     return(p)
+                                   },#plot
+                                   #' @description
+                                   #' Plots the correlation analysis results.
+                                   #' @examples
+                                   #' pgu.corrValidator$correlationBoxPlot()
+                                   correlationBoxPlot = function(){
+                                     p <- self$corr_df %>%
+                                       dplyr::select(c("cor_delta")) %>%
+                                       tidyr::gather_(key="name", value="measurement", "cor_delta") %>%
+                                       ggplot2::ggplot(mapping=ggplot2::aes_string(x="name",y="measurement"), na.rm=TRUE)+
+                                       ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
+                                       ggplot2::geom_jitter(color = "darkblue", na.rm=TRUE) +
+                                       ggplot2::geom_hline(yintercept = 0.0, linetype = "dashed") +
+                                       ggplot2::ggtitle("r(imp) - r(org)") +
+                                       ggplot2::ylab("delta(r)") +
+                                       ggplot2::xlab(ggplot2::element_blank()) +
+                                       ggplot2::theme_linedraw() +
+                                       ggplot2::theme(
+                                         panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                         plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                         legend.background = ggplot2::element_rect(fill = "transparent"),
+                                         legend.key = ggplot2::element_rect(fill = "transparent")
+                                       )
+                                     return(p)
+                                   }
                                  )#public
 
 )# class
-
-# fileName <- "/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx"
-#
-# data_df <- readxl::read_xlsx(path = fileName,
-#                              sheet = 1)
-#
-# data_temp_df <- data_df %>%
-#   dplyr::select(c("Cer_d18.1_16.0", "Cer_d18.1_20.0"))
-
-
-obj <- pgu.corrValidator$new()
-obj$impP_mat
-
-obj$plotCorrelation()
-
-obj$reset()
-obj$
-obj$featureNames
-
-data_temp_df %>%
-  as.matrix() %>%
-  Hmisc::rcorr(type = "pearson")
-
-colnames(data_temp_df) <- c("original", "imputed")
-
-
-data_temp_df %>%
-  as.matrix() %>%
-  Hmisc::rcorr(type = "pearson") %>%
-  flattenCorrMatrix()
-
-data_temp_df %>%
-  as.matrix() %>%
-  cor() %>%
-  upper.tri()

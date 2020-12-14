@@ -43,6 +43,7 @@ Imports:
 Collate:
     'dLogLikelihood.R'
     'normalDistribution.R'
+    'pguCorrValidator.R'
     'pguCorrelator.R'
     'pguFile.R'
     'pguData.R'

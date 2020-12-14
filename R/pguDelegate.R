@@ -31,6 +31,7 @@
 #' @include pguOutliers.R
 #' @include pguImputation.R
 #' @include pguValidator.R
+#' @include pguCorrValidator.R
 #' @include pguCorrelator.R
 #' @include pguRegressor.R
 #' @include pguExporter.R
@@ -71,6 +72,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             # .revisedData = "pgu.data",
                             .cleanedData = "pgu.data",
                             .validator = "pgu.validatior",
+                            .corrValidator = "pgu.corrValidator",
                             .correlator = "pgu.correlator",
                             .regressor = "pgu.regressor",
                             .exporter = "pgu.exporter",
@@ -224,6 +226,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             validator = function(){
                               return(private$.validator)
                             },
+                            #' @field corrValidator
+                            #' Returns the instance variable corrValidator
+                            #' (pguIMP::pgu.corrValidator)
+                            corrValidator = function(){
+                              return(private$.corrValidator)
+                            },
                             #' @field correlator
                             #' Returns the instance variable correlator
                             #' (pguIMP::pgu.correlator)
@@ -290,6 +298,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.imputedData <- pgu.data$new()
                               private$.cleanedData <- pgu.data$new()
                               private$.validator <- pgu.validator$new()
+                              private$.corrValidator <- pgu.corrValidator$new()
                               private$.correlator <- pgu.correlator$new()
                               private$.regressor <- pgu.regressor$new()
                               private$.exporter <- pgu.exporter$new()
@@ -341,6 +350,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$imputedData)
                               print(self$cleanedData)
                               print(self$validator)
+                              print(self$corrValidator)
                               print(self$correlator)
                               print(self$regressor)
                               print(self$exporter)
@@ -4078,6 +4088,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                                               dplyr::select_if(function(x){!all(is.na(x))}),
                                                             progress = progress)
                                 private$.status$update(processName = "validated", value = TRUE)
+                                private$.corrValidator$validate(org_df = self$normalizedData$numericData(),
+                                                                imp_df = self$imputedData$numericData())
                               }#if
                               else{
                                 shiny::showNotification(paste("No imputation performed. Please perform imputation first."),type = "error", duration = 10)
@@ -4289,6 +4301,95 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.centralMomentsDelta <- DT::renderDataTable(NULL)
                               } #else
                             }, #function
+
+                            ####################################
+                            # correlation validation functions #
+                            ####################################
+
+                            #' @description
+                            #' Updtates the plt.correlationValidationScatter graphic.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateCorrelationValidationScatterGraphic(input, output, session)
+                            updateCorrelationValidationScatterGraphic = function(input, output, session){
+                              if(self$status$query(processName = "validated")){
+                                output$plt.correlationValidationScatter <- shiny::renderPlot(
+                                  self$corrValidator$correlationScatterPlot(),
+                                  bg="transparent"
+                                )#output
+                              }#if
+                              else{
+                                output$plt.correlationValidationScatter <- shiny::renderPlot(NULL, bg="transparent")
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updtates the plt.correlationValidationBoxPlot graphic.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
+                            updateCorrelationValidationBoxPlotGraphic = function(input, output, session){
+                              if(self$status$query(processName = "validated")){
+                                output$plt.correlationValidationBoxPlot <- shiny::renderPlot(
+                                  self$corrValidator$correlationBoxPlot(),
+                                  height = 475,
+                                  bg="transparent"
+                                )#output
+                              }#if
+                              else{
+                                output$plt.correlationValidationBoxPlot <- shiny::renderPlot(NULL, bg="transparent")
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updtates the tbl.correlationValidation table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updatePearsonROrgTbl(input, output, session)
+                            updateCorrelationValidationTbl = function(input, output, session){
+                              if(self$status$query(processName = "validated")){
+                                output$tbl.correlationValidation <- DT::renderDataTable(
+                                  self$corrValidator$corr_df %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("correlationValidation"),
+                                          text = "Download"
+                                        )), #buttons
+                                        autoWidth = TRUE,
+                                        columnDefs = list(list(width = '50px', targets = "_all"))
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              } #if
+                              else{
+                                output$tbl.correlationValidation <- DT::renderDataTable(NULL)
+                              } #else
+                            }, #function
+
+
 
                             #########################
                             # correlation functions #
