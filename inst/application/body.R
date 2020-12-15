@@ -889,9 +889,14 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
               shiny::plotOutput("plt.correlationValidationBoxPlot"),
             ),
             shiny::column(
-              width = 9,
+              width = 3,
+              shiny::h3("Correlation Deviation Distribution"),
+              DT::dataTableOutput("tbl.correlationValidationDeviation")
+            ),
+            shiny::column(
+              width = 6,
               shiny::h3("Correlation Validation Data"),
-              DT::dataTableOutput("tbl.correlationValidation")
+              DT::dataTableOutput("tbl.correlationValidationData")
             )
           )
         )

@@ -1,252 +1,44 @@
 library("tidyverse")
-library("Hmisc")
+library("datasets")
 
-pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
-                                 ####################
-                                 # instance variables
-                                 ####################
-                                 private = list(
-                                   .featureNames = "character",
-                                   .orgR_mat = "matrix",
-                                   .impR_mat = "matrix",
-                                   .orgP_mat = "matrix",
-                                   .impP_mat = "matrix",
-                                   .corr_df = "tbl_df"
-                                 ), #private
-                                 ##################
-                                 # accessor methods
-                                 ##################
-                                 active = list(
-                                   #' @field featureNames
-                                   #' Returns the instance variable featureNames.
-                                   #' (character)
-                                   featureNames = function(){
-                                     return(private$.featureNames)
-                                   },
-                                   #' @field orgR_mat
-                                   #' Returns the instance variable orgR_mat.
-                                   #' (matrix)
-                                   orgR_mat = function(){
-                                     return(private$.orgR_mat)
-                                   },
-                                   #' @field impR_mat
-                                   #' Returns the instance variable impR_mat.
-                                   #' (matrix)
-                                   impR_mat = function(){
-                                     return(private$.impR_mat)
-                                   },
-                                   #' @field orgP_mat
-                                   #' Returns the instance variable orgP_mat.
-                                   #' (matrix)
-                                   orgP_mat = function(){
-                                     return(private$.orgP_mat)
-                                   },
-                                   #' @field impP_mat
-                                   #' Returns the instance variable impP_mat.
-                                   #' (matrix)
-                                   impP_mat = function(){
-                                     return(private$.impP_mat)
-                                   },
-                                   #' @field corr_df
-                                   #' Returns the instance variable corr_df.
-                                   #' (tibble::tibble)
-                                   corr_df = function(){
-                                     return(private$.corr_df)
-                                   }
-                                 ), #active
-                                 ###################
-                                 # memory management
-                                 ###################
-                                 public = list(
-                                   #' @description
-                                   #' Creates and returns a new `pgu.corrValidator` object.
-                                   #' @param org_df
-                                   #' The original data to be abalyzed.
-                                   #' (tibble::tibble)
-                                   #' @param imp_df
-                                   #' The imputed version of the org_df data.
-                                   #' @return
-                                   #' A new `pgu.corrValidator` object.
-                                   #' (pguIMP::pgu.corrValidator)
-                                   #' @examples
-                                   #' x <- tibble::tibble()
-                                   #' y <- impute(x)
-                                   #' obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
-                                   initialize = function(org_df = "tbl_df", imp_df = "tbl_df"){
-                                     self$validate(org_df, imp_df)
-                                   },
-                                   #' @description
-                                   #' Clears the heap and
-                                   #' indicates if instance of `pgu.corrValidator` is removed from heap.
-                                   finalize = function(){
-                                     print("Instance of pgu.corrValidator removed from heap")
-                                   },
-                                   #' @description
-                                   #' Prints instance variables of a `pgu.corrValidator` object.
-                                   #' @return
-                                   #' string
-                                   #' @examples
-                                   #' pgu.corrValidator$print()
-                                   #' print(pgu.corrValidator)
-                                   print = function(){
-                                     rString <- sprintf("\npgu.correlator\n")
-                                     cat(rString)
-                                     self$corr_df %>%
-                                       print()
-                                     cat("\n\n")
-                                     invisible(self)
-                                   }, #print
-                                   #####################
-                                   # analyze functions #
-                                   #####################
-                                   #' @description
-                                   #' Resets the object `pgu.corrValidator` based on the instance variable featureNames..
-                                   #' @examples
-                                   #' pgu.corrValidator$reset()
-                                   reset = function(){
-                                     private$.orgR_mat <- self$resetMatrix(value = 0)
-                                     private$.impR_mat <- self$resetMatrix(value = 0)
-                                     private$.orgP_mat <- self$resetMatrix(value = 1)
-                                     private$.impP_mat <- self$resetMatrix(value = 1)
-                                     self$flattenMatrix()
-                                   },
-                                   #' @description
-                                   #' Creates a square matrix which dimension corresponds to the length
-                                   #' of the instance variable featureNames. The matrix entries are set to a distinct `value`.
-                                   #' @param value
-                                   #' The value the matrix entries are set to.
-                                   #' (numeric)
-                                   #' @return
-                                   #' A square matrix.
-                                   #' (matrix)
-                                   #' @examples
-                                   #' matrix <- pgu.corrValidator$resetMatrix(value)
-                                   resetMatrix = function(value = "numeric"){
-                                     n = length(self$featureNames)
-                                     df <- matrix(data = value,
-                                                  nrow = n,
-                                                  ncol = n,
-                                                  dimnames = list(self$featureNames, self$featureNames))
-                                     return(df)
-                                   },#function
-                                   #' @description
-                                   #' Flattens the results transforms them into a dataframe
-                                   #' and stores it into the instance variable corr_df.
-                                   #' @examples
-                                   #' pgu.corrValidatior$flattenMatrix()
-                                   flattenMatrix = function() {
-                                     ut <- upper.tri(self$orgR_mat)
-                                     private$.corr_df <- tibble::tibble(
-                                       row = rownames(self$orgR_mat)[row(self$orgR_mat)[ut]],
-                                       column = rownames(self$orgR_mat)[col(self$orgR_mat)[ut]],
-                                       cor_org  = self$orgR_mat[ut],
-                                       p_org = self$orgP_mat[ut],
-                                       cor_imp  = self$impR_mat[ut],
-                                       p_imp = self$impP_mat[ut]
-                                     )
-                                   }, #function
-                                   #' @description
-                                   #' Runs the corraltion analysis.
-                                   #' @param org_df
-                                   #' Adataframe comprising the original data.
-                                   #' (tibble::tibble)
-                                   #' @param org_df
-                                   #' Adataframe comprising the imputed data.
-                                   #' (tibble::tibble)
-                                   #' @examples
-                                   #' pgu.corrValidator$validate(org_df, imp_df)
-                                   validate = function(org_df = "tbl_df", imp_df = "tbl_df"){
-                                     if(!tibble::is_tibble(org_df)){
-                                       org_df <- tibble::tibble(names = c("none"),
-                                                                values = as.numeric(c(NA)))
-                                     }
-
-                                     private$.featureNames <- org_df %>%
-                                       dplyr::select_if(is.numeric) %>%
-                                       colnames()
-
-                                     if(nrow(org_df) > 4){
-                                       res_org <- org_df %>%
-                                         dplyr::select(dplyr::all_of(self$featureNames)) %>%
-                                         as.matrix() %>%
-                                         Hmisc::rcorr(type = "pearson")
-
-                                       private$.orgR_mat <- res_org$r
-                                       private$.orgP_mat <- res_org$P
-
-                                       res_imp <- imp_df %>%
-                                         dplyr::select(dplyr::all_of(self$featureNames)) %>%
-                                         as.matrix() %>%
-                                         Hmisc::rcorr(type = "pearson")
-
-                                       private$.impR_mat <- res_imp$r
-                                       private$.impP_mat <- res_imp$P
-
-                                       self$flattenMatrix()
-                                     }
-                                     else{
-                                       self$reset()
-                                     }
-                                   }, #validate
-                                   #' @description
-                                   #' Plots the correlation analysis results.
-                                   #' @examples
-                                   #' pgu.corrValidator$plotCorrelationResults()
-                                   plotCorrelationResults = function(){
-                                     self$corr_df %>%
-                                       dplyr::mutate(pair = paste(row, column, sep = "/\n")) %>%
-                                       dplyr::select(c("pair", "cor_org", "cor_imp")) %>%
-                                       ggplot2::ggplot() +
-                                       ggplot2::geom_point(mapping = ggplot2::aes_string(x="cor_org", y="cor_imp", color = "pair")) +
-                                       ggplot2::geom_text(ggplot2::aes_string(x="cor_org", y="cor_imp", label="pair", color = "pair"),hjust=0, vjust=0) +
-                                       ggplot2::geom_abline(mapping = NULL, data = NULL, slope = 1, intercept = 0, show.legend = NA, linetype = "dashed") +
-                                       ggplot2::xlim(-1,1) +
-                                       ggplot2::ylim(-1,1) +
-                                       ggplot2::ggtitle("Correlation Plot") +
-                                       ggplot2::xlab("r (original data)") +
-                                       ggplot2::ylab("r (imputed data)") +
-                                       ggplot2::theme_linedraw() +
-                                       ggplot2::theme(
-                                         panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
-                                         plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
-                                         legend.position = "none"
-                                       )
-                                   }#plot
-                                 )#public
-
-)# class
-
-# fileName <- "/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx"
-#
-# data_df <- readxl::read_xlsx(path = fileName,
-#                              sheet = 1)
-#
-# data_temp_df <- data_df %>%
-#   dplyr::select(c("Cer_d18.1_16.0", "Cer_d18.1_20.0"))
+data_df <- datasets::iris %>%
+  tibble::as_tibble()
 
 
-obj <- pgu.corrValidator$new()
-obj$impP_mat
+test_result <- data_df %>%
+  dplyr::pull(Sepal.Length) %>%
+  t.test(mu = 0, alternative = "two.sided")
 
-obj$plotCorrelation()
+summary_df <- data_df %>%
+  dplyr::select(Sepal.Length) %>%
+  dplyr::summarise(tibble(min = min(Sepal.Length),
+                          q25 = quantile(Sepal.Length, probs = c(0.25)),
+                          mu = mean(Sepal.Length),
+                          median = median(Sepal.Length),
+                          sigma = sd(Sepal.Length),
+                          q75 = quantile(Sepal.Length, probs = c(0.75)),
+                          max = max(Sepal.Length))) %>%
+  dplyr::mutate(t.statistic = test_result$statistic) %>%
+  dplyr::mutate(p.Value = test_result$p.value) %>%
+  t() %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column() %>%
+  tibble::as_tibble()
 
-obj$reset()
-obj$
-obj$featureNames
+colnames(summary_df) <- c("statistics", "values")
 
-data_temp_df %>%
-  as.matrix() %>%
-  Hmisc::rcorr(type = "pearson")
+summary_df
 
-colnames(data_temp_df) <- c("original", "imputed")
+result <- data_df %>%
+  dplyr::pull(Sepal.Length) %>%
+  t.test(mu = 0, alternative = "two.sided")
+
+result$p.value
+result$statistic
 
 
-data_temp_df %>%
-  as.matrix() %>%
-  Hmisc::rcorr(type = "pearson") %>%
-  flattenCorrMatrix()
+data_vec <- data_df %>%
+  dplyr::pull(Sepal.Length)
 
-data_temp_df %>%
-  as.matrix() %>%
-  cor() %>%
-  upper.tri()
+mu <- 0
+(mean(data_vec) - mu) / (sd(data_vec)/sqrt(length(data_vec)))

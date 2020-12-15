@@ -18,6 +18,9 @@
 #' @import gridExtra
 #' @import stats
 #' @import e1071
+#' @import parallelDist
+#' @import DataVisualizations
+#' 
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

@@ -4352,7 +4352,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             #' @description
-                            #' Updtates the tbl.correlationValidation table.
+                            #' Updtates the tbl.correlationValidationDeviation table.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -4360,10 +4360,48 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updatePearsonROrgTbl(input, output, session)
-                            updateCorrelationValidationTbl = function(input, output, session){
+                            #' x$updateCorrelationValidationDeviationTbl(input, output, session)
+                            updateCorrelationValidationDeviationTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
-                                output$tbl.correlationValidation <- DT::renderDataTable(
+                                output$tbl.correlationValidationDeviation <- DT::renderDataTable(
+                                  self$corrValidator$summary() %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("correlationValidationDeviation"),
+                                          text = "Download"
+                                        )), #buttons
+                                        autoWidth = TRUE,
+                                        columnDefs = list(list(width = '50px', targets = "_all"))
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              } #if
+                              else{
+                                output$tbl.correlationValidationData <- DT::renderDataTable(NULL)
+                              } #else
+                            }, #function
+
+                            #' @description
+                            #' Updtates the tbl.correlationValidationData table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateCorrelationValidationDataTbl(input, output, session)
+                            updateCorrelationValidationDataTbl = function(input, output, session){
+                              if(self$status$query(processName = "validated")){
+                                output$tbl.correlationValidationData <- DT::renderDataTable(
                                   self$corrValidator$corr_df %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
@@ -4375,7 +4413,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("correlationValidation"),
+                                          filename = self$fileName$bluntFileName("correlationValidationData"),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4385,7 +4423,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 )#output
                               } #if
                               else{
-                                output$tbl.correlationValidation <- DT::renderDataTable(NULL)
+                                output$tbl.correlationValidationData <- DT::renderDataTable(NULL)
                               } #else
                             }, #function
 
@@ -5350,6 +5388,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   k = c(self$outliers$k),
                                   anomalies_seed = c(self$outliers$seed),
                                   imputation_method = c(self$imputer$imputationAgent),
+                                  number_of_neighbors = c(self$imputer$nNeighbors),
+                                  fraction_of_predictors = c(self$imputer$pred_frac),
+                                  outflux_threshold = c(self$imputer$outflux_thr),
                                   imputation_seed = c(self$imputer$seed),
                                   iterations = c(self$imputer$iterations)
                                 )
@@ -5364,10 +5405,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                      model_quality = self$model$modelQualityData(),
                                      model_statistics = self$model$testResultData(),
                                      normalization_parameter = self$normalizer$normParameter,
-                                     missing_statistics = self$missings$imputationParameter,
+                                     missings_statistics = self$missings$imputationParameter,
+                                     missings_distribution = self$missings$imputationSiteDistribution(self$filteredData$numericData()),
                                      outliers_statistics = self$outliers$outliersStatistics,
                                      imputation_statistics = self$imputer$imputationStatistics,
-                                     validation = self$validator$testStatistics_df,
+                                     imputation_distribution = self$imputer$imputationSiteDistribution,
+                                     validation_test = self$validator$testStatistics_df,
+                                     validation_corrSum = self$corrValidator$summary(),
+                                     validation_correlation = self$corrValidator$corr_df,
                                      analysis_parameter = analysis_parameter
                                 ) %>%
                                   self$reporter$write_report()

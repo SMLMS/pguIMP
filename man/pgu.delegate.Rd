@@ -1164,10 +1164,16 @@ x$updateCorrelationValidationScatterGraphic(input, output, session)
 x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateCorrelationValidationTbl`
+## Method `pgu.delegate$updateCorrelationValidationDeviationTbl`
 ## ------------------------------------------------
 
-x$updatePearsonROrgTbl(input, output, session)
+x$updateCorrelationValidationDeviationTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateCorrelationValidationDataTbl`
+## ------------------------------------------------
+
+x$updateCorrelationValidationDataTbl(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$correlate`
@@ -1560,7 +1566,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateCentralMomentsDeltaTbl}{\code{pgu.delegate$updateCentralMomentsDeltaTbl()}}
 \item \href{#method-updateCorrelationValidationScatterGraphic}{\code{pgu.delegate$updateCorrelationValidationScatterGraphic()}}
 \item \href{#method-updateCorrelationValidationBoxPlotGraphic}{\code{pgu.delegate$updateCorrelationValidationBoxPlotGraphic()}}
-\item \href{#method-updateCorrelationValidationTbl}{\code{pgu.delegate$updateCorrelationValidationTbl()}}
+\item \href{#method-updateCorrelationValidationDeviationTbl}{\code{pgu.delegate$updateCorrelationValidationDeviationTbl()}}
+\item \href{#method-updateCorrelationValidationDataTbl}{\code{pgu.delegate$updateCorrelationValidationDataTbl()}}
 \item \href{#method-correlate}{\code{pgu.delegate$correlate()}}
 \item \href{#method-updateCorrelationMatrixRTbl}{\code{pgu.delegate$updateCorrelationMatrixRTbl()}}
 \item \href{#method-updateCorrelationMatrixPPearsonTbl}{\code{pgu.delegate$updateCorrelationMatrixPPearsonTbl()}}
@@ -5489,12 +5496,12 @@ Updtates the plt.correlationValidationBoxPlot graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateCorrelationValidationTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateCorrelationValidationTbl}{}}}
-\subsection{Method \code{updateCorrelationValidationTbl()}}{
-Updtates the tbl.correlationValidation table.
+\if{html}{\out{<a id="method-updateCorrelationValidationDeviationTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCorrelationValidationDeviationTbl}{}}}
+\subsection{Method \code{updateCorrelationValidationDeviationTbl()}}{
+Updtates the tbl.correlationValidationDeviation table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationDeviationTbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -5510,7 +5517,36 @@ Updtates the tbl.correlationValidation table.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updatePearsonROrgTbl(input, output, session)
+\preformatted{x$updateCorrelationValidationDeviationTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateCorrelationValidationDataTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateCorrelationValidationDataTbl}{}}}
+\subsection{Method \code{updateCorrelationValidationDataTbl()}}{
+Updtates the tbl.correlationValidationData table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateCorrelationValidationDataTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateCorrelationValidationDataTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

@@ -59,6 +59,12 @@ pgu.corrValidatior$flattenMatrix()
 pgu.corrValidator$validate(org_df, imp_df)
 
 ## ------------------------------------------------
+## Method `pgu.corrValidator$summary`
+## ------------------------------------------------
+
+df <- pgu.corrValidator$summary()
+
+## ------------------------------------------------
 ## Method `pgu.corrValidator$correlationScatterPlot`
 ## ------------------------------------------------
 
@@ -106,6 +112,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-resetMatrix}{\code{pgu.corrValidator$resetMatrix()}}
 \item \href{#method-flattenMatrix}{\code{pgu.corrValidator$flattenMatrix()}}
 \item \href{#method-validate}{\code{pgu.corrValidator$validate()}}
+\item \href{#method-summary}{\code{pgu.corrValidator$summary()}}
 \item \href{#method-correlationScatterPlot}{\code{pgu.corrValidator$correlationScatterPlot()}}
 \item \href{#method-correlationBoxPlot}{\code{pgu.corrValidator$correlationBoxPlot()}}
 \item \href{#method-clone}{\code{pgu.corrValidator$clone()}}
@@ -269,6 +276,28 @@ Runs the corraltion analysis.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{pgu.corrValidator$validate(org_df, imp_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-summary"></a>}}
+\if{latex}{\out{\hypertarget{method-summary}{}}}
+\subsection{Method \code{summary()}}{
+Summary of the correlation deviation distribution.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$summary()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A dataframe comprising the summary of the correlation deviation distribution.
+(tibble::tibble)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df <- pgu.corrValidator$summary()
 }
 \if{html}{\out{</div>}}
 

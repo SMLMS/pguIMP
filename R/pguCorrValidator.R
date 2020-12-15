@@ -208,6 +208,40 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        self$reset()
                                      }
                                    }, #validate
+
+                                   #' @description
+                                   #' Summary of the correlation deviation distribution.
+                                   #' @return
+                                   #' A dataframe comprising the summary of the correlation deviation distribution.
+                                   #' (tibble::tibble)
+                                   #' @examples
+                                   #' df <- pgu.corrValidator$summary()
+                                   summary = function(){
+                                     test_result <- self$corr_df %>%
+                                       dplyr::pull(cor_delta) %>%
+                                       t.test(mu = 0, alternative = "two.sided")
+
+                                     summary_df <- self$corr_df %>%
+                                       dplyr::select(cor_delta) %>%
+                                       dplyr::summarise(tibble(min = min(cor_delta),
+                                                               q25 = quantile(cor_delta, probs = c(0.25)),
+                                                               mu = mean(cor_delta),
+                                                               median = median(cor_delta),
+                                                               sigma = sd(cor_delta),
+                                                               q75 = quantile(cor_delta, probs = c(0.75)),
+                                                               max = max(cor_delta))) %>%
+                                       dplyr::mutate(t.statistic = test_result$statistic) %>%
+                                       dplyr::mutate(p.Value = test_result$p.value) %>%
+                                       t() %>%
+                                       as.data.frame() %>%
+                                       tibble::rownames_to_column() %>%
+                                       tibble::as_tibble()
+
+                                     colnames(summary_df) <- c("statistics", "values")
+
+                                     return(summary_df)
+                                   }, #function
+
                                    #' @description
                                    #' Plots the correlation analysis results.
                                    #' @examples
@@ -233,6 +267,7 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        )
                                      return(p)
                                    },#plot
+
                                    #' @description
                                    #' Plots the correlation analysis results.
                                    #' @examples

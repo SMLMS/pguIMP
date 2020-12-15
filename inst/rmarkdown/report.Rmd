@@ -22,10 +22,14 @@ params:
  model_quality: !r tibble::tibble
  model_statistics: !r tibble::tibble
  normalization_parameter: !r tibble::tibble
- missing_statistics: !r tibble::tibble
+ missings_statistics: !r tibble::tibble
+ missings_distribution: !r tibble::tibble
  outliers_statistics: !r tibble::tibble
  imputation_statistics: !r tibble::tibble
- validation: !r tibble::tibble
+ imputation_distribution: !r::tibble::tibble
+ validation_test: !r tibble::tibble
+ validation_corrSum: !r tibble::tibble
+ validation_correlation: !r tibble::tibble
  analysis_parameter: !r tibble::tibble
 ---
 
@@ -158,7 +162,7 @@ params$model_statistics %>%
 
 \newpage
 ## Rescaling
-The selected rescaling method was `r params$analysis_parameter$normalization_type`. The choices for rescaling are min-max scaling, mean scaling and a z transformation. The mathematical implementation of min-max scaling is described in equation \ref{eq:min-max-scaling}.
+The selected rescaling method was `r params$analysis_parameter$normalization_type`. The choices for rescaling are min-max scaling, mean scaling, sigmoidal scaling, and a z transformation. The mathematical implementation of min-max scaling is described in equation \ref{eq:min-max-scaling}.
 Min-max scaling
 \begin{align}
 x' &= \frac{x - \text{min}\left( x\right)}{\text{max}\left( x\right) - \text{min}\left( x\right)}
@@ -184,6 +188,16 @@ with:
 \item $\text{min}(x) :=$ minimum of $x$.
 \end{itemize}
 
+The mathematical implementation of sigmoidal scaling is described in equation \ref{eq:sigmoidal-scaling}.
+\begin{align}
+x' &= \frac{1}{1 + e^{-x}}
+\label{eq:sigmoidal-scaling}
+\end{align}
+with:
+\begin{itemize}
+\item $x :=$ observed values.
+\end{itemize}
+
 The mathematical implementation of the z-transformation is described in equation \ref{eq:z-transformation}.
 \begin{align}
 x' &= \frac{x - \overline{x}}{\sigma}
@@ -195,3 +209,88 @@ with:
 \item $\overline{x} :=$ average of $x$.
 \item $\sigma :=$ standard deviation of $x$.
 \end{itemize}
+
+
+\newpage
+# Imputation
+The imputation of anomalies first requires their identification. Two types of anomalies are distinguished: Missing values and outliers. After their identification, outliers are replaced by missing values. Subsequently, the entire set of missing values is imputed.
+
+\newpage
+## Missings
+The appearance of missing data per feature is listed in table \ref{tab:missing-stats}.
+```{r missing-stats, message = FALSE, echo=FALSE, eval=TRUE}
+params$missings_statistics %>%
+  knitr::kable(format="latex", caption = "Statistics of missing values per feature.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+Recurring patterns formed by the occurrence of missing values in the instances examined are listed in table \ref{tab:missing-dist}.
+```{r missing-dist, message = FALSE, echo=FALSE, eval=TRUE}
+params$missings_distribution %>%
+  knitr::kable(format="latex", caption = "Occurrence of missing values per instance.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+## Outliers
+The user-defined method for outliers detection was `r params$analysis_parameter$anomalies_method`. Grubbs test parameters were set to $\alpha =$ `r params$analysis_parameter$alpha`. DBSCAN parameters were set to $\epsilon =$ `r params$analysis_parameter$epsilon` and *minSamples* $=$ `r params$analysis_parameter$minSamples`. SVM parameters were set to $\gamma =$ `r params$analysis_parameter$gamma` and $\nu =$ `r params$analysis_parameter$nu`. SVM parameters were set to *cutoff* $=$ `r params$analysis_parameter$cutoff` and *k* $=$ `r params$analysis_parameter$k`. The seed was set to `r params$analysis_parameter$anomalies_seed`.
+
+\newpage
+The appearance of outliers per feature is listed in table \ref{tab:outliers-stats}.
+```{r outliers-stats, message = FALSE, echo=FALSE, eval=TRUE}
+params$outliers_statistics %>%
+  knitr::kable(format="latex", caption = "Statistics of outliers per feature.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+## Mutate
+The user-defined method for imputation site mutation was `r params$analysis_parameter$imputation_method`. The following analysis parameters were set by the user:
+\begin{itemize}
+\item $\text{number of neighbors} = $ `r params$analysis_parameter$number_of_neighbors`.
+\item $\text{fraction of predictors} = $ `r params$analysis_parameter$fraction_of_predictors`.
+\item $\text{outflux threshold} = $ `r params$analysis_parameter$outflux_threshold`.
+\item $\text{imputation seed} = $ `r params$analysis_parameter$imputation_seed`.
+\item $\text{Iterations} = $ `r params$analysis_parameter$iterations`.
+\end{itemize}
+
+\newpage
+The appearance of imputation sites per feature is listed in table \ref{tab:imputation-stats}.
+```{r imputation-stats, message = FALSE, echo=FALSE, eval=TRUE}
+params$imputation_statistics %>%
+  knitr::kable(format="latex", caption = "Statistics of missing values per feature.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+Recurring patterns formed by the occurrence of missing values in the instances examined are listed in table \ref{tab:imputation-dist}.
+```{r imputation-dist, message = FALSE, echo=FALSE, eval=TRUE}
+params$imputation_distribution %>%
+  knitr::kable(format="latex", caption = "Occurrence of missing values per instance.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+# Validation
+The resulting data set was compared with the original data set. The distribution of the two data sets was compared using statistical hypothesis testing. The test results are summarized in Table \ref{tab:validation-test}.
+```{r validation-test, message = FALSE, echo=FALSE, eval=TRUE}
+params$validation_test %>%
+  knitr::kable(format="latex", caption = "Validation via hypothesis tests.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+In a second test procedure, the correlation of all transformed and scaled features with each other was calculated for both data sets. The deviations of the correlation coefficients scattered around a mean value of $\mu$ with a standard deviation of $\sigma$. The test results are summarized in Table \ref{tab:validation-correlation}.
+```{r validation-correlation, message = FALSE, echo=FALSE, eval=TRUE}
+params$validation_correlation %>%
+  knitr::kable(format="latex", caption = "Validation via correlation analysis.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
+
+\newpage
+The distribution of the deviation of the two distributions correlation coefficients $\Delta(\text{corr})$ was analyzed and tested against the Null-Hypothesis of $\mu = 0$. using a two-sided one-sample t-test. The Analysis results are listed in table \ref{tab:validation-corrSum}.
+```{r validation-corrSum, message = FALSE, echo=FALSE, eval=TRUE}
+params$validation_corrSum %>%
+  knitr::kable(format="latex", caption = "Summary of the $\\Delta$(corr) distribution.")%>%
+  kableExtra::kable_styling(latex_options = "HOLD_position")
+```
