@@ -71,12 +71,6 @@ x$validate(org, imp, progress)
 p <- x$featurePdf(data_df)
 
 ## ------------------------------------------------
-## Method `pgu.validator$featurePde`
-## ------------------------------------------------
-
-p <- x$featurePdf(data_df)
-
-## ------------------------------------------------
 ## Method `pgu.validator$featureCdf`
 ## ------------------------------------------------
 
@@ -141,7 +135,6 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-centralMomentsFeature}{\code{pgu.validator$centralMomentsFeature()}}
 \item \href{#method-validate}{\code{pgu.validator$validate()}}
 \item \href{#method-featurePdf}{\code{pgu.validator$featurePdf()}}
-\item \href{#method-featurePde}{\code{pgu.validator$featurePde()}}
 \item \href{#method-featureCdf}{\code{pgu.validator$featureCdf()}}
 \item \href{#method-featureVs}{\code{pgu.validator$featureVs()}}
 \item \href{#method-featureBoxPlot}{\code{pgu.validator$featureBoxPlot()}}
@@ -388,41 +381,10 @@ Displays the progress if shiny is loaded.
 \if{html}{\out{<a id="method-featurePdf"></a>}}
 \if{latex}{\out{\hypertarget{method-featurePdf}{}}}
 \subsection{Method \code{featurePdf()}}{
-Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
-Returns the plot
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePdf(data_df = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_df}}{dataframe to be plotted
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A ggplot2 object
-(ggplot2::ggplot)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featurePdf(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-featurePde"></a>}}
-\if{latex}{\out{\hypertarget{method-featurePde}{}}}
-\subsection{Method \code{featurePde()}}{
 Receives a dataframe and plots the pareto density of the features 'org_pdf' and 'imp_pdf'.
 Returns the plot
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePde(data_df = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.validator$featurePdf(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

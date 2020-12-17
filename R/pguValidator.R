@@ -20,7 +20,7 @@
 #' @import e1071
 #' @import parallelDist
 #' @import DataVisualizations
-#' 
+#'
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -298,34 +298,36 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                                                                  d3.skewness = abs(self$centralMoments_org[["m3.skewness"]] - self$centralMoments_imp[["m3.skewness"]]),
                                                                                  d4.kurtosis = abs(self$centralMoments_org[["m4.kurtosis"]] - self$centralMoments_imp[["m4.kurtosis"]]))
                                }, #validate
-
+#
                                # ####################
                                # # output functions #
                                # ####################
-                               #' @description
-                               #' Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
-                               #' Returns the plot
-                               #' @param data_df
-                               #' dataframe to be plotted
-                               #' (tibble::tibble)
-                               #' @return
-                               #' A ggplot2 object
-                               #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featurePdf(data_df)
-                               featurePdf = function(data_df = "tbl_df"){
-                                 title_str <- sprintf("probability density")
-                                 p <- data_df %>%
-                                   dplyr::select(c("x", "org_pdf", "imp_pdf")) %>%
-                                   dplyr::rename(original = org_pdf) %>%
-                                   dplyr::rename(imputed = imp_pdf) %>%
-                                   tidyr::gather(key = "type", value = "pdf", -x, na.rm = TRUE) %>%
-                                   ggplot2::ggplot() +
-                                   ggplot2::geom_line(mapping = ggplot2::aes_string(x="x", y="pdf", color="type", linetype = "type"), size = 1.5) +
-                                   ggplot2::ggtitle(title_str) +
-                                   ggplot2::xlab("value")
-                                 return(p)
-                               }, #featurePdf
+
+                               # @description
+                               # Receives a dataframe and plost the feature 'x' against the features 'org_pdf' and 'imp_pdf'.
+                               # Returns the plot
+                               # @param data_df
+                               # dataframe to be plotted
+                               # (tibble::tibble)
+                               # @return
+                               # A ggplot2 object
+                               # (ggplot2::ggplot)
+                               # @examples
+                               # p <- x$featurePdf(data_df)
+
+                               # featurePdf = function(data_df = "tbl_df"){
+                               #   title_str <- sprintf("probability density")
+                               #   p <- data_df %>%
+                               #     dplyr::select(c("x", "org_pdf", "imp_pdf")) %>%
+                               #     dplyr::rename(original = org_pdf) %>%
+                               #     dplyr::rename(imputed = imp_pdf) %>%
+                               #     tidyr::gather(key = "type", value = "pdf", -x, na.rm = TRUE) %>%
+                               #     ggplot2::ggplot() +
+                               #     ggplot2::geom_line(mapping = ggplot2::aes_string(x="x", y="pdf", color="type", linetype = "type"), size = 1.5) +
+                               #     ggplot2::ggtitle(title_str) +
+                               #     ggplot2::xlab("value")
+                               #   return(p)
+                               # }, #featurePdf
 
                                #' @description
                                #' Receives a dataframe and plots the pareto density of the features 'org_pdf' and 'imp_pdf'.
@@ -338,10 +340,11 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' (ggplot2::ggplot)
                                #' @examples
                                #' p <- x$featurePdf(data_df)
-                               featurePde = function(data_df = "tbl_df"){
+                               featurePdf = function(data_df = "tbl_df"){
                                  p <- data_df %>%
                                    ggplot2::ggplot() +
                                    ggplot2::geom_line(mapping = ggplot2::aes_string(x="value", y = "pde", color = "data", linetype = "data"), size = 1.5) +
+                                   ggplot2::ylab("pdf") +
                                    ggplot2::theme_linedraw() +
                                    ggplot2::theme(
                                      panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
@@ -554,7 +557,7 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                  box_df <- box_df %>%
                                    dplyr::mutate(type = type_vec)
 
-                                 p1 <- self$featurePde(pde_df) +
+                                 p1 <- self$featurePdf(pde_df) +
                                    ggplot2::theme(legend.position = "none")
                                  p2 <- self$featureBoxPlot(data_df = box_df, lloq = lloq, uloq = uloq, feature = feature) +
                                    ggplot2::theme(legend.position = "none")

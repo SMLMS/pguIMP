@@ -543,7 +543,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
-          shiny::h3("Missings Heatmap"),
+          shiny::h3("Missings Statistics"),
           shiny::plotOutput("plt.imputeMissingsSummary"),
           shiny::br(),
           shiny::br(),
@@ -555,6 +555,16 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           DT::dataTableOutput("tbl.imputeMissingsDistribution"),
           shiny::br(),
           shiny::br(),
+          shiny::hr(),
+          shiny::h3("Missings Vs. Exsitings"),
+          shiny::plotOutput("plt.imputeMissingsPairs"),
+          shiny::br(),
+          shiny::br(),
+          shiny::h3("Missings Statistics Mean (SD)"),
+          DT::dataTableOutput("tbl.imputeMissingsCharacteristics"),
+          shiny::br(),
+          shiny::br(),
+          shiny::hr(),
           shiny::h3("Missings Details"),
           DT::dataTableOutput("tbl.imputeMissingsDetail"),
           shiny::br(),
@@ -884,21 +894,19 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::fluidRow(
             shiny::column(
-              width = 3,
+              width = 6,
               shiny::h3("Box Plot"),
               shiny::plotOutput("plt.correlationValidationBoxPlot"),
             ),
             shiny::column(
-              width = 3,
+              width = 6,
               shiny::h3("Correlation Deviation Distribution"),
               DT::dataTableOutput("tbl.correlationValidationDeviation")
             ),
-            shiny::column(
-              width = 6,
-              shiny::h3("Correlation Validation Data"),
-              DT::dataTableOutput("tbl.correlationValidationData")
-            )
-          )
+          ),
+          shiny::br(),
+          shiny::h3("Correlation Validation Data"),
+          DT::dataTableOutput("tbl.correlationValidationData")
         )
       )
     )

@@ -418,10 +418,10 @@ x$updateTrafoNormParameterTbl(input, output, session)
 x$updateImputeNormDataTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$imputeMissingsDetect`
+## Method `pgu.delegate$imputeMissingsAnalyze`
 ## ------------------------------------------------
 
-x$imputeMissingsDetect(input, output, session)
+x$imputeMissingsAnalyze(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMissingsGraphic`
@@ -440,6 +440,18 @@ x$updateImputeMissingsStatisticsTbl(input, output, session)
 ## ------------------------------------------------
 
 x$updateImputeMissingsDistributionTbl(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMissingCharacteristicsGraphic`
+## ------------------------------------------------
+
+x$updateImputeMissingCharacteristicsGraphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$updateImputeMissingsCharacteristicsTbl`
+## ------------------------------------------------
+
+x$updateImputeMissingsCharacteristicsTbl(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMissingsDetailTbl`
@@ -1412,6 +1424,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{missings}}{Returns the instance variable missings
 (pguIMP::pgu.missings)}
 
+\item{\code{missingsCharacterizer}}{Returns the instance variable missingsCharacterizer
+(pguIMP::pgu.missingsCharacterizer)}
+
 \item{\code{outliers}}{Returns the instance variable outlierd
 (pguIMP::pgu.outliers)}
 
@@ -1514,10 +1529,12 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateTrafoNormStatisticsTbl}{\code{pgu.delegate$updateTrafoNormStatisticsTbl()}}
 \item \href{#method-updateTrafoNormParameterTbl}{\code{pgu.delegate$updateTrafoNormParameterTbl()}}
 \item \href{#method-updateTrafoNormDataTbl}{\code{pgu.delegate$updateTrafoNormDataTbl()}}
-\item \href{#method-imputeMissingsDetect}{\code{pgu.delegate$imputeMissingsDetect()}}
+\item \href{#method-imputeMissingsAnalyze}{\code{pgu.delegate$imputeMissingsAnalyze()}}
 \item \href{#method-updateImputeMissingsGraphic}{\code{pgu.delegate$updateImputeMissingsGraphic()}}
 \item \href{#method-updateImputeMissingsStatisticsTbl}{\code{pgu.delegate$updateImputeMissingsStatisticsTbl()}}
 \item \href{#method-updateImputeMissingsDistributionTbl}{\code{pgu.delegate$updateImputeMissingsDistributionTbl()}}
+\item \href{#method-updateImputeMissingCharacteristicsGraphic}{\code{pgu.delegate$updateImputeMissingCharacteristicsGraphic()}}
+\item \href{#method-updateImputeMissingsCharacteristicsTbl}{\code{pgu.delegate$updateImputeMissingsCharacteristicsTbl()}}
 \item \href{#method-updateImputeMissingsDetailTbl}{\code{pgu.delegate$updateImputeMissingsDetailTbl()}}
 \item \href{#method-updateImputeMissingsDataTbl}{\code{pgu.delegate$updateImputeMissingsDataTbl()}}
 \item \href{#method-updateImputeOutliersMethod}{\code{pgu.delegate$updateImputeOutliersMethod()}}
@@ -3549,13 +3566,14 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-imputeMissingsDetect"></a>}}
-\if{latex}{\out{\hypertarget{method-imputeMissingsDetect}{}}}
-\subsection{Method \code{imputeMissingsDetect()}}{
-Calls the missing detection routine of the instance variable imputer on the instance variable transformedData.
+\if{html}{\out{<a id="method-imputeMissingsAnalyze"></a>}}
+\if{latex}{\out{\hypertarget{method-imputeMissingsAnalyze}{}}}
+\subsection{Method \code{imputeMissingsAnalyze()}}{
+Calls the missing detection routine of the instance variable imputer
+on the instance variable normalizedData.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeMissingsDetect(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$imputeMissingsAnalyze(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3571,7 +3589,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeMissingsDetect(input, output, session)
+\preformatted{x$imputeMissingsAnalyze(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -3659,6 +3677,64 @@ Updates the tbl.imputeMissingsDistribution table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeMissingsDistributionTbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMissingCharacteristicsGraphic"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingCharacteristicsGraphic}{}}}
+\subsection{Method \code{updateImputeMissingCharacteristicsGraphic()}}{
+Updates the plt.imputeMissingsPairs graphic.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingCharacteristicsGraphic(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMissingCharacteristicsGraphic(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateImputeMissingsCharacteristicsTbl"></a>}}
+\if{latex}{\out{\hypertarget{method-updateImputeMissingsCharacteristicsTbl}{}}}
+\subsection{Method \code{updateImputeMissingsCharacteristicsTbl()}}{
+Updates the tbl.imputeMissingsCharacteristics table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsCharacteristicsTbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateImputeMissingsCharacteristicsTbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 

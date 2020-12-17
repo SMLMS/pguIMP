@@ -80,7 +80,7 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @description
                                    #' Creates and returns a new `pgu.corrValidator` object.
                                    #' @param org_df
-                                   #' The original data to be abalyzed.
+                                   #' The original data to be analyzed.
                                    #' (tibble::tibble)
                                    #' @param imp_df
                                    #' The imputed version of the org_df data.
@@ -262,11 +262,35 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        ggplot2::theme(
                                          panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
                                          plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
+                                         legend.position = "none"
+                                       )
+                                     return(p)
+                                   },#plot
+
+                                   #' @description
+                                   #' Creates and returns a histogram from the cor_delat values.
+                                   #' @return
+                                   #' Bar plot
+                                   #' (ggplot2::ggplot)
+                                   #' @examples
+                                   #' x$correlationBarPlot() %>%
+                                   #'  show()
+                                   correlationBarPlot = function(){
+                                     p <- self$corr_df %>%
+                                       dplyr::select(c("cor_delta")) %>%
+                                       ggplot2::ggplot(mapping = ggplot2::aes_string(x = "cor_delta"), na.rm=TRUE) +
+                                       ggplot2::geom_bar(stat = "bin") +
+                                       ggplot2::ylab("counts") +
+                                       ggplot2::xlab("value") +
+                                       ggplot2::theme_linedraw() +
+                                       ggplot2::theme(
+                                         panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
+                                         plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
                                          legend.background = ggplot2::element_rect(fill = "transparent"),
                                          legend.key = ggplot2::element_rect(fill = "transparent")
                                        )
                                      return(p)
-                                   },#plot
+                                   }, #function
 
                                    #' @description
                                    #' Plots the correlation analysis results.
@@ -280,9 +304,8 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                        ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
                                        ggplot2::geom_jitter(color = "darkblue", na.rm=TRUE) +
                                        ggplot2::geom_hline(yintercept = 0.0, linetype = "dashed") +
-                                       ggplot2::ggtitle("r(imp) - r(org)") +
-                                       ggplot2::ylab("delta(r)") +
-                                       ggplot2::xlab(ggplot2::element_blank()) +
+                                       ggplot2::ylab("r(imp) - r(org)") +
+                                       ggplot2::xlab("delta(r)") +
                                        ggplot2::theme_linedraw() +
                                        ggplot2::theme(
                                          panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
@@ -291,7 +314,26 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                          legend.key = ggplot2::element_rect(fill = "transparent")
                                        )
                                      return(p)
-                                   }
+                                   }, #function
+
+                                   #' @description
+                                   #' Creates and returns a compund graphical analysis of the cor_delta values.
+                                   #' @return
+                                   #' Compound plot
+                                   #' (gridExtra::grid.arrange)
+                                   #' @examples
+                                   #' x$correlationCompoundPlot() %>%
+                                   #'  show()
+                                   correlationCompoundPlot = function(){
+                                       p1 <- self$correlationBoxPlot()
+                                       limits <- ggplot2::layer_scales(p1)$y$range$range
+                                       p2 <- self$correlationBarPlot() +
+                                         ggplot2::scale_x_continuous(position = "top", limits=limits) +
+                                         ggplot2::coord_flip()
+                                       p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)),
+                                                                    top = textGrob(label = "Distribution of r(imp) - r(org)"))
+                                     return(p)
+                                   } #function
                                  )#public
 
 )# class

@@ -28,6 +28,7 @@
 #' @include pguNormDist.R
 #' @include pguNormalizer.R
 #' @include pguMissings.R
+#' @include pguMissingsCharacterizer.R
 #' @include pguOutliers.R
 #' @include pguImputation.R
 #' @include pguValidator.R
@@ -66,6 +67,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .normalizer = "pgu.normalizer",
                             .normalizedData = "pgu.data",
                             .missings = "pgu.missings",
+                            .missingsCharacterizer = "pgu.missingsCharacterizer",
                             .outliers = "pgu.outliers",
                             .imputer = "pgu.imputation",
                             .imputedData = "pgu.data",
@@ -196,6 +198,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             missings = function(){
                               return(private$.missings)
                             },
+                            #' @field missingsCharacterizer
+                            #' Returns the instance variable missingsCharacterizer
+                            #' (pguIMP::pgu.missingsCharacterizer)
+                            missingsCharacterizer = function(){
+                              return(private$.missingsCharacterizer)
+                            },
                             #' @field outliers
                             #' Returns the instance variable outlierd
                             #' (pguIMP::pgu.outliers)
@@ -293,6 +301,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.normalizer <- pgu.normalizer$new()
                               private$.normalizedData <- pgu.data$new()
                               private$.missings <- pgu.missings$new()
+                              private$.missingsCharacterizer <- pgu.missingsCharacterizer$new()
                               private$.outliers <- pgu.outliers$new()
                               private$.imputer <- pgu.imputation$new()
                               private$.imputedData <- pgu.data$new()
@@ -303,7 +312,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.regressor <- pgu.regressor$new()
                               private$.exporter <- pgu.exporter$new()
                               private$.reporter <- pgu.reporter$new()
-
                             }, #function
 
                             #' @description
@@ -345,6 +353,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$normalizer)
                               print(self$normalizedData)
                               print(self$missings)
+                              print(self$missingsCharacterizer)
                               print(self$outliers)
                               print(self$imputer)
                               print(self$imputedData)
@@ -2276,7 +2285,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
+                                        autowidth = FALSE,
                                         scrollY = '350px',
                                         paging = FALSE,
                                         autoWidth = TRUE
@@ -2344,7 +2354,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
+                                        autowidth = FALSE,
                                         scrollY = '350px',
                                         paging = FALSE,
                                         autoWidth = TRUE,
@@ -2404,7 +2415,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             # impute missings functions #
                             #############################
                             #' @description
-                            #' Calls the missing detection routine of the instance variable imputer on the instance variable transformedData.
+                            #' Calls the missing detection routine of the instance variable imputer
+                            #' on the instance variable normalizedData.
                             #' Updates the instance class status.
                             #' @param input
                             #' Pointer to shiny input
@@ -2413,11 +2425,16 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$imputeMissingsDetect(input, output, session)
-                            imputeMissingsDetect = function(input, output, session){
+                            #' x$imputeMissingsAnalyze(input, output, session)
+                            imputeMissingsAnalyze = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$normalizedData$numericFeatureNames))
+                                progress$set(message = "Characterizing missings", value = 1)
+                                on.exit(progress$close())
                                 self$normalizedData$numericData() %>%
                                   private$.missings$resetImputationParameter()
+                                self$normalizedData$numericData() %>%
+                                  private$.missingsCharacterizer$analyze(progress)
                                 private$.status$update(processName = "naDetected", value = TRUE)
                               }#if
                               else{
@@ -2516,6 +2533,64 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               }#if
                               else{
                                 output$tbl.imputeMissingsDistribution <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the plt.imputeMissingsPairs graphic.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMissingCharacteristicsGraphic(input, output, session)
+                            updateImputeMissingCharacteristicsGraphic = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                output$plt.imputeMissingsPairs <- shiny::renderPlot(
+                                  self$normalizedData$numericData() %>%
+                                    self$missingsCharacterizer$plot_pair_dist(),
+                                  bg="transparent"
+                                )
+                              }#if
+                              else{
+                                output$plt.imputeMissingsPairs<- shiny::renderPlot(NULL, bg="transparent")
+                              }#else
+                            }, #fnunction
+
+                            #' @description
+                            #' Updates the tbl.imputeMissingsCharacteristics table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMissingsCharacteristicsTbl(input, output, session)
+                            updateImputeMissingsCharacteristicsTbl = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                output$tbl.imputeMissingsCharacteristics <- DT::renderDataTable(
+                                  self$missingsCharacterizer$missingsCharacteristics_df %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$bluntFileName("missingsMissings"),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }#if
+                              else{
+                                output$tbl.imputeMissingsCharacteristics <- DT::renderDataTable(NULL)
                               }#else
                             }, #function
 
@@ -4168,7 +4243,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
+                                        autowidth = FALSE,
                                         scrollY = '350px',
                                         paging = FALSE,
                                         dom = "Blfrtip",
@@ -4282,7 +4358,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
+                                        autowidth = FALSE,
                                         scrollY = '350px',
                                         paging = FALSE,
                                         dom = "Blfrtip",
@@ -4305,6 +4382,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             ####################################
                             # correlation validation functions #
                             ####################################
+
+
 
                             #' @description
                             #' Updtates the plt.correlationValidationScatter graphic.
@@ -4341,7 +4420,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateCorrelationValidationBoxPlotGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.correlationValidationBoxPlot <- shiny::renderPlot(
-                                  self$corrValidator$correlationBoxPlot(),
+                                  self$corrValidator$correlationCompoundPlot(),
                                   height = 475,
                                   bg="transparent"
                                 )#output
@@ -4369,8 +4448,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
                                         scrollY = '350px',
+                                        autowidth = FALSE,
                                         paging = FALSE,
                                         dom = "Blfrtip",
                                         buttons = list(list(
@@ -4407,7 +4487,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
-                                        scrollX = TRUE,
+                                        # scrollX = TRUE,
                                         scrollY = '350px',
                                         paging = FALSE,
                                         dom = "Blfrtip",
@@ -5291,6 +5371,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   k = c(self$outliers$k),
                                   anomalies_seed = c(self$outliers$seed),
                                   imputation_method = c(self$imputer$imputationAgent),
+                                  number_of_neighbors = c(self$imputer$nNeighbors),
+                                  fraction_of_predictors = c(self$imputer$pred_frac),
+                                  outflux_threshold = c(self$imputer$outflux_thr),
                                   imputation_seed = c(self$imputer$seed),
                                   iterations = c(self$imputer$iterations)
                                 )
@@ -5315,8 +5398,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                      model_statistics = self$model$testResultData(),
                                      normalization_parameter = self$normalizer$normParameter,
                                      normalized = self$normalizedData$rawData,
-                                     missing_statistics = self$missings$imputationParameter,
+                                     missings_statistics = self$missings$imputationParameter,
+                                     missings_characteristics = self$missingsCharacterizer$missingsCharacteristics_df,
                                      outliers_statistics = self$outliers$outliersStatistics,
+                                     predictors = self$imputer$pred_mat %>%
+                                       as.data.frame() %>%
+                                       tibble::rownames_to_column() %>%
+                                       tibble::as_tibble(),
                                      imputation_statistics = self$imputer$imputationStatistics,
                                      imputed = self$imputedData$rawData,
                                      validation = self$validator$testStatistics_df
@@ -5494,6 +5582,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$plt.imputeMissingsSummary <- shiny::renderPlot(NULL, bg="transparent")
                                 output$tbl.imputeMissingsStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsDistribution <- DT::renderDataTable(NULL)
+                                output$plt.imputeMissingsPairs <- shiny::renderPlot(NULL, bg ="transparent")
+                                output$tbl.imputeMissingsCharacteristics <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsDetail <- DT::renderDataTable(NULL)
                                 output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
                               }#if
@@ -5520,6 +5610,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.analysisValidationTest <- DT::renderDataTable(NULL)
                                 output$tbl.centralMomentsOrg <- DT::renderDataTable(NULL)
                                 output$tbl.centralMomentsImp <- DT::renderDataTable(NULL)
+                                output$tbl.centralMomentsDelta <- DT::renderDataTable(NULL)
+                                output$plt.correlationValidationScatter <- shiny::renderPlot(NULL, bg = "transparent")
+                                output$plt.correlationValidationBoxPlot <- shiny::renderPlot(NULL, bg="transparent")
+                                output$tbl.correlationValidationDeviation <- DT::renderDataTable(NULL)
+                                output$tbl.correlationValidationData <- DT::renderDataTable(NULL)
                               } #if
                               # if(!self$status$query(processName = "correlated")){
                               #   output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)

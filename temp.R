@@ -1,44 +1,24 @@
+library("devtools")
+library("roxygen2")
+devtools::document()
+library("pguIMP")
+pguIMP::IMPgui()
+
+
 library("tidyverse")
-library("datasets")
 
-data_df <- datasets::iris %>%
-  tibble::as_tibble()
-
-
-test_result <- data_df %>%
-  dplyr::pull(Sepal.Length) %>%
-  t.test(mu = 0, alternative = "two.sided")
-
-summary_df <- data_df %>%
-  dplyr::select(Sepal.Length) %>%
-  dplyr::summarise(tibble(min = min(Sepal.Length),
-                          q25 = quantile(Sepal.Length, probs = c(0.25)),
-                          mu = mean(Sepal.Length),
-                          median = median(Sepal.Length),
-                          sigma = sd(Sepal.Length),
-                          q75 = quantile(Sepal.Length, probs = c(0.75)),
-                          max = max(Sepal.Length))) %>%
-  dplyr::mutate(t.statistic = test_result$statistic) %>%
-  dplyr::mutate(p.Value = test_result$p.value) %>%
-  t() %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column() %>%
-  tibble::as_tibble()
-
-colnames(summary_df) <- c("statistics", "values")
-
-summary_df
-
-result <- data_df %>%
-  dplyr::pull(Sepal.Length) %>%
-  t.test(mu = 0, alternative = "two.sided")
-
-result$p.value
-result$statistic
+data_df <- readxl::read_xlsx("/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx",
+                  sheet = 1)
 
 
-data_vec <- data_df %>%
-  dplyr::pull(Sepal.Length)
+norm_sigmoid = function(x){
+  y <- 1.0 / (1.0 + exp(-1.0 * x))
+  return(y)
+}
 
-mu <- 0
-(mean(data_vec) - mu) / (sd(data_vec)/sqrt(length(data_vec)))
+data_df %>%
+  dplyr::select("TG_42.1") %>%
+  tidyr::drop_na() %>%
+  dplyr::mutate(TG_42.1 = norm_sigmoid(TG_42.1)) %>%
+  ggplot2::ggplot() +
+  ggplot2::geom_density(mapping = ggplot2::aes(x= TG_42.1))

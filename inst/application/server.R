@@ -207,10 +207,12 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$ab.imputeMissingsDetect, {
-    delegate$imputeMissingsDetect(input, output, session)
+    delegate$imputeMissingsAnalyze(input, output, session)
     delegate$updateImputeMissingsGraphic(input, output, session)
     delegate$updateImputeMissingsStatisticsTbl(input, output, session)
     delegate$updateImputeMissingsDistributionTbl(input, output, session)
+    delegate$updateImputeMissingCharacteristicsGraphic(input, output, session)
+    delegate$updateImputeMissingsCharacteristicsTbl(input, output, session)
     delegate$updateImputeMissingsDetailTbl(input, output, session)
     delegate$updateImputeMissingsDataTbl(input, output, session)
     delegate$updateImputeOutliersGui(input, output, session)

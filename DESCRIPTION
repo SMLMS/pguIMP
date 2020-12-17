@@ -57,6 +57,7 @@ Collate:
     'pguValidator.R'
     'pguImputation.R'
     'pguOutliers.R'
+    'pguMissingsCharacterizer.R'
     'pguMissings.R'
     'pguNormalizer.R'
     'sLogLikelihood.R'

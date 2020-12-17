@@ -71,10 +71,24 @@ df <- pgu.corrValidator$summary()
 pgu.corrValidator$correlationScatterPlot()
 
 ## ------------------------------------------------
+## Method `pgu.corrValidator$correlationBarPlot`
+## ------------------------------------------------
+
+x$correlationBarPlot() \%>\%
+ show()
+
+## ------------------------------------------------
 ## Method `pgu.corrValidator$correlationBoxPlot`
 ## ------------------------------------------------
 
 pgu.corrValidator$correlationBoxPlot()
+
+## ------------------------------------------------
+## Method `pgu.corrValidator$correlationCompoundPlot`
+## ------------------------------------------------
+
+x$correlationCompoundPlot() \%>\%
+ show()
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -114,7 +128,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-validate}{\code{pgu.corrValidator$validate()}}
 \item \href{#method-summary}{\code{pgu.corrValidator$summary()}}
 \item \href{#method-correlationScatterPlot}{\code{pgu.corrValidator$correlationScatterPlot()}}
+\item \href{#method-correlationBarPlot}{\code{pgu.corrValidator$correlationBarPlot()}}
 \item \href{#method-correlationBoxPlot}{\code{pgu.corrValidator$correlationBoxPlot()}}
+\item \href{#method-correlationCompoundPlot}{\code{pgu.corrValidator$correlationCompoundPlot()}}
 \item \href{#method-clone}{\code{pgu.corrValidator$clone()}}
 }
 }
@@ -130,7 +146,7 @@ Creates and returns a new \code{pgu.corrValidator} object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{org_df}}{The original data to be abalyzed.
+\item{\code{org_df}}{The original data to be analyzed.
 (tibble::tibble)}
 
 \item{\code{imp_df}}{The imputed version of the org_df data.}
@@ -323,6 +339,29 @@ Plots the correlation analysis results.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-correlationBarPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-correlationBarPlot}{}}}
+\subsection{Method \code{correlationBarPlot()}}{
+Creates and returns a histogram from the cor_delat values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$correlationBarPlot()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Bar plot
+(ggplot2::ggplot)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$correlationBarPlot() \%>\%
+ show()
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-correlationBoxPlot"></a>}}
 \if{latex}{\out{\hypertarget{method-correlationBoxPlot}{}}}
 \subsection{Method \code{correlationBoxPlot()}}{
@@ -334,6 +373,29 @@ Plots the correlation analysis results.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{pgu.corrValidator$correlationBoxPlot()
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-correlationCompoundPlot"></a>}}
+\if{latex}{\out{\hypertarget{method-correlationCompoundPlot}{}}}
+\subsection{Method \code{correlationCompoundPlot()}}{
+Creates and returns a compund graphical analysis of the cor_delta values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$correlationCompoundPlot()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Compound plot
+(gridExtra::grid.arrange)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$correlationCompoundPlot() \%>\%
+ show()
 }
 \if{html}{\out{</div>}}
 
