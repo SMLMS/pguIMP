@@ -33,8 +33,6 @@
 #' @include pguImputation.R
 #' @include pguValidator.R
 #' @include pguCorrValidator.R
-#' @include pguCorrelator.R
-#' @include pguRegressor.R
 #' @include pguExporter.R
 #' @include pguReporter.R
 #'
@@ -71,12 +69,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .outliers = "pgu.outliers",
                             .imputer = "pgu.imputation",
                             .imputedData = "pgu.data",
-                            # .revisedData = "pgu.data",
                             .cleanedData = "pgu.data",
                             .validator = "pgu.validatior",
                             .corrValidator = "pgu.corrValidator",
-                            .correlator = "pgu.correlator",
-                            .regressor = "pgu.regressor",
                             .exporter = "pgu.exporter",
                             .reporter = "pgu.reporter"
                           ),
@@ -240,18 +235,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             corrValidator = function(){
                               return(private$.corrValidator)
                             },
-                            #' @field correlator
-                            #' Returns the instance variable correlator
-                            #' (pguIMP::pgu.correlator)
-                            correlator = function(){
-                              return(private$.correlator)
-                            },
-                            #' @field regressor
-                            #' Returns the instance variable regressor
-                            #' (pguIMP::pgu.regressor)
-                            regressor = function(){
-                              return(private$.regressor)
-                            },
                             #' @field exporter
                             #' Returns the instance variable exporter
                             #' (pguIMP::pgu.exporter)
@@ -308,8 +291,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.cleanedData <- pgu.data$new()
                               private$.validator <- pgu.validator$new()
                               private$.corrValidator <- pgu.corrValidator$new()
-                              private$.correlator <- pgu.correlator$new()
-                              private$.regressor <- pgu.regressor$new()
                               private$.exporter <- pgu.exporter$new()
                               private$.reporter <- pgu.reporter$new()
                             }, #function
@@ -360,8 +341,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$cleanedData)
                               print(self$validator)
                               print(self$corrValidator)
-                              print(self$correlator)
-                              print(self$regressor)
                               print(self$exporter)
                               print(self$reporter)
                               invisible(self)
@@ -4508,561 +4487,561 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
 
-
-                            #########################
-                            # correlation functions #
-                            #########################
-                            #' @description
-                            #' Calls the correlate routine of the instance variable correlator on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$correlate(input, output, session)
-                            correlate = function(input, output, session){
-                              if(self$status$query(processName = "validated")){
-                                progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
-                                progress$set(message = "Calculate Correlation", value = 1)
-                                on.exit(progress$close())
-                                # self$cleanedData$numericData() %>%
-                                self$cleanedData$numericData() %>%
-                                  dplyr::select_if(function(x){!all(is.na(x))}) %>%
-                                  private$.correlator$resetCorrelator(progress = progress)
-                                private$.status$update(processName = "correlated", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixR table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRTbl(input, output, session)
-                            updateCorrelationMatrixRTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(
-                                  self$correlator$printRTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_R"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPPearson table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPPearsonTbl(input, output, session)
-                            updateCorrelationMatrixPPearsonTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
-                                  self$correlator$printPPearsonTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Pearson"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixTau table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixTauTbl(input, output, session)
-                            updateCorrelationMatrixTauTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(
-                                  self$correlator$printTauTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Tau"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPKendall table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPKendallTbl(input, output, session)
-                            updateCorrelationMatrixPKendallTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
-                                  self$correlator$printPKendallTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Kendall"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixRho table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRhoTbl(input, output, session)
-                            updateCorrelationMatrixRhoTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(
-                                  self$correlator$printRhoTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Rho"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPSpearman table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPSpearmanTbl(input, output, session)
-                            updateCorrelationMatrixPSpearmanTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
-                                  self$correlator$printPSpearmanTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Spearman"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            ########################
-                            # regression functions #
-                            ########################
-                            #' @description
-                            #' Calls the regression routine of the instance variable regressor on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$regression(input, output, session)
-                            regression = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
-                                progress$set(message = "Calculate Regression", value = 1)
-                                on.exit(progress$close())
-                                # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.status$update(processName = "regression", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionAbs shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionAbscissa(input, output, session)
-                            updateRegressionAbscissa = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionAbs",
-                                                         choices = self$regressor$featureNames,
-                                                         selected = self$regressor$featureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionOrd shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionOrdinate(input, output, session)
-                            updateRegressionOrdinate = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionOrd",
-                                                         choices = ordinateFeatureNames,
-                                                         selected = ordinateFeatureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the gui.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGui(input, output, session)
-                            updateRegressionGui = function(input, output, session){
-                              self$updateRegressionAbscissa(input, output, session)
-                              self$updateRegressionOrdinate(input, output, session)
-                            }, #function
-
-                            #' @description
-                            #' Updates the plt.regressionFeature graphic.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGraphic(input, output, session)
-                            updateRegressionGraphic = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$plt.regressionFeature <- shiny::renderPlot(
-                                  self$regressor$plotModel(data = self$cleanedData$numericData(),
-                                                           abscissa = input$si.regressionAbs,
-                                                           ordinate = input$si.regressionOrd)
-                                )#output
-                              }#if
-                              else{
-                                output$plt.regressionFeature <- shiny::renderPlot(NULL)
-                              } #else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionFeature table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionModelTbl(input, output, session)
-                            updateRegressionModelTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionFeature <- DT::renderDataTable(
-                                  self$regressor$printModel(abscissa = input$si.regressionAbs, ordinate = input$si.regressionOrd) %>%
-                                    # format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Model"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionFeature <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionInterceptTbl(input, output, session)
-                            updateRegressionInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionIntercept <- DT::renderDataTable(
-                                  self$regressor$printInterceptTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #functions
-
-                            #' @description
-                            #' Updates the tbl.regressionPIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPInterceptTbl(input, output, session)
-                            updateRegressionPInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(
-                                  self$regressor$printPInterceptTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionSlopeTbl(input, output, session)
-                            updateRegressionSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionSlope <- DT::renderDataTable(
-                                  self$regressor$printSlopeTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionSlope <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionPSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPSlopeTbl(input, output, session)
-                            updateRegressionPSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPSlope <- DT::renderDataTable(
-                                  self$regressor$printPSlopeTbl() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
-                              } #else
-                            }, #function
+#'
+#'                             #########################
+#'                             # correlation functions #
+#'                             #########################
+#'                             #' @description
+#'                             #' Calls the correlate routine of the instance variable correlator on the instance variable revisedData.
+#'                             #' Updates the instance class status.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$correlate(input, output, session)
+#'                             correlate = function(input, output, session){
+#'                               if(self$status$query(processName = "validated")){
+#'                                 progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
+#'                                 progress$set(message = "Calculate Correlation", value = 1)
+#'                                 on.exit(progress$close())
+#'                                 # self$cleanedData$numericData() %>%
+#'                                 self$cleanedData$numericData() %>%
+#'                                   dplyr::select_if(function(x){!all(is.na(x))}) %>%
+#'                                   private$.correlator$resetCorrelator(progress = progress)
+#'                                 private$.status$update(processName = "correlated", value = TRUE)
+#'                               }#if
+#'                               else{
+#'                                 shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixR table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixRTbl(input, output, session)
+#'                             updateCorrelationMatrixRTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixR <- DT::renderDataTable(
+#'                                   self$correlator$printRTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_R"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixPPearson table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixPPearsonTbl(input, output, session)
+#'                             updateCorrelationMatrixPPearsonTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
+#'                                   self$correlator$printPPearsonTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_P_Pearson"),
+#'                                           text = "Download"
+#'                                         )),#buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::Datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixTau table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixTauTbl(input, output, session)
+#'                             updateCorrelationMatrixTauTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixTau <- DT::renderDataTable(
+#'                                   self$correlator$printTauTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_Tau"),
+#'                                           text = "Download"
+#'                                         )),#buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixPKendall table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixPKendallTbl(input, output, session)
+#'                             updateCorrelationMatrixPKendallTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
+#'                                   self$correlator$printPKendallTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_P_Kendall"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixRho table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixRhoTbl(input, output, session)
+#'                             updateCorrelationMatrixRhoTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixRho <- DT::renderDataTable(
+#'                                   self$correlator$printRhoTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_Rho"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::Datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.correlationMatrixPSpearman table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateCorrelationMatrixPSpearmanTbl(input, output, session)
+#'                             updateCorrelationMatrixPSpearmanTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
+#'                                   self$correlator$printPSpearmanTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("CorrelationMatrix_P_Spearman"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             ########################
+#'                             # regression functions #
+#'                             ########################
+#'                             #' @description
+#'                             #' Calls the regression routine of the instance variable regressor on the instance variable revisedData.
+#'                             #' Updates the instance class status.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$regression(input, output, session)
+#'                             regression = function(input, output, session){
+#'                               if(self$status$query(processName = "correlated")){
+#'                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
+#'                                 progress$set(message = "Calculate Regression", value = 1)
+#'                                 on.exit(progress$close())
+#'                                 # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
+#'                                 private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
+#'                                 private$.status$update(processName = "regression", value = TRUE)
+#'                               }#if
+#'                               else{
+#'                                 shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the si.regressionAbs shiny widget.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionAbscissa(input, output, session)
+#'                             updateRegressionAbscissa = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 shiny::updateSelectInput(session,
+#'                                                          "si.regressionAbs",
+#'                                                          choices = self$regressor$featureNames,
+#'                                                          selected = self$regressor$featureNames[1]
+#'                                 )#input
+#'                               }#if
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the si.regressionOrd shiny widget.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionOrdinate(input, output, session)
+#'                             updateRegressionOrdinate = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
+#'                                 shiny::updateSelectInput(session,
+#'                                                          "si.regressionOrd",
+#'                                                          choices = ordinateFeatureNames,
+#'                                                          selected = ordinateFeatureNames[1]
+#'                                 )#input
+#'                               }#if
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the gui.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionGui(input, output, session)
+#'                             updateRegressionGui = function(input, output, session){
+#'                               self$updateRegressionAbscissa(input, output, session)
+#'                               self$updateRegressionOrdinate(input, output, session)
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the plt.regressionFeature graphic.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionGraphic(input, output, session)
+#'                             updateRegressionGraphic = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$plt.regressionFeature <- shiny::renderPlot(
+#'                                   self$regressor$plotModel(data = self$cleanedData$numericData(),
+#'                                                            abscissa = input$si.regressionAbs,
+#'                                                            ordinate = input$si.regressionOrd)
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$plt.regressionFeature <- shiny::renderPlot(NULL)
+#'                               } #else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.regressionFeature table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionModelTbl(input, output, session)
+#'                             updateRegressionModelTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$tbl.regressionFeature <- DT::renderDataTable(
+#'                                   self$regressor$printModel(abscissa = input$si.regressionAbs, ordinate = input$si.regressionOrd) %>%
+#'                                     # format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("RegressionMatrix_Model"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.regressionFeature <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.regressionIntercept table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionInterceptTbl(input, output, session)
+#'                             updateRegressionInterceptTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$tbl.regressionIntercept <- DT::renderDataTable(
+#'                                   self$regressor$printInterceptTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("RegressionMatrix_Intercept"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #functions
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.regressionPIntercept table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionPInterceptTbl(input, output, session)
+#'                             updateRegressionPInterceptTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$tbl.regressionPIntercept <- DT::renderDataTable(
+#'                                   self$regressor$printPInterceptTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("RegressionMatrix_P_Intercept"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.regressionSlope table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionSlopeTbl(input, output, session)
+#'                             updateRegressionSlopeTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$tbl.regressionSlope <- DT::renderDataTable(
+#'                                   self$regressor$printSlopeTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("RegressionMatrix_Slope"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.regressionSlope <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.regressionPSlope table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateRegressionPSlopeTbl(input, output, session)
+#'                             updateRegressionPSlopeTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "regression")){
+#'                                 output$tbl.regressionPSlope <- DT::renderDataTable(
+#'                                   self$regressor$printPSlopeTbl() %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$bluntFileName("RegressionMatrix_P_Slope"),
+#'                                           text = "Download"
+#'                                         )), #buttons
+#'                                         autoWidth = TRUE,
+#'                                         columnDefs = list(list(width = '50px', targets = "_all"))
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
+#'                               } #else
+#'                             }, #function
 
                             ##############################
                             # numerical output functions #
@@ -5398,13 +5377,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                      model_statistics = self$model$testResultData(),
                                      normalization_parameter = self$normalizer$normParameter,
                                      normalized = self$normalizedData$rawData,
+                                     missings = self$missings$imputationSites,
                                      missings_statistics = self$missings$imputationParameter,
                                      missings_characteristics = self$missingsCharacterizer$missingsCharacteristics_df,
+                                     outliers = self$outliers$outliers %>%
+                                       dplyr::select(-c("color")),
                                      outliers_statistics = self$outliers$outliersStatistics,
                                      predictors = self$imputer$pred_mat %>%
                                        as.data.frame() %>%
                                        tibble::rownames_to_column() %>%
                                        tibble::as_tibble(),
+                                     imputation_sites = self$imputer$one_hot_df,
                                      imputation_statistics = self$imputer$imputationStatistics,
                                      imputed = self$imputedData$rawData,
                                      validation = self$validator$testStatistics_df

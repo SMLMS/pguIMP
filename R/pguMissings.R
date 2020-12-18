@@ -29,6 +29,7 @@ pgu.missings <- R6::R6Class("pgu.missings",
                             private = list(
                               .imputationParameter = "tbl_df",
                               .imputationSites = "tbl_df",
+                              .one_hot_df = "tbl_df",
                               .amv = "ANY"
                             ),
                             ##################
@@ -46,6 +47,12 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' (tibble::tibble)
                               imputationSites = function(){
                                 return(private$.imputationSites)
+                              },
+                              #' @field one_hot_df
+                              #' Returns the positions of missings in one_hot encoding
+                              #' (tibble::tibble)
+                              one_hot_df = function(){
+                                return(private$.one_hot_df)
                               },
                               #' @field amv
                               #' Returns the instance variable amv.
@@ -127,6 +134,7 @@ pgu.missings <- R6::R6Class("pgu.missings",
                                 private$.amv <- VIM::aggr(numericData, plot=FALSE)
                                 self$gatherImputationStatistics(data_df)
                                 self$detectImputationSites(data_df)
+                                self$one_hot(data_df)
                               }, #function
 
                               ####################
@@ -252,6 +260,25 @@ pgu.missings <- R6::R6Class("pgu.missings",
                                   apply(MARGIN=2, FUN=self$gatherFractionOfMissings)
                               }, #function
 
+                              #' @description
+                              #' Gathers statistical information about missing values
+                              #' in one hot format.
+                              #' The result is stored in the instance variable one_hot_df.
+                              #' @param data_df
+                              #' The data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' x$one_hot(data_df)
+                              one_hot = function(data_df = "tbl_df"){
+                                if(!tibble::is_tibble(data_df)){
+                                  print("Warning: data_df needs to by of type tibble.")
+                                  private$.one_hot_df <- tibble::tibble()
+                                }
+                                private$.one_hot_df <- data_df %>%
+                                  dplyr::select_if(is.numeric) %>%
+                                  dplyr::transmute_all(list(miss = ~ as.integer(is.na(.))))
+                              }, #function
+
                               ###########################
                               # detect imputation sites #
                               ###########################
@@ -345,7 +372,8 @@ pgu.missings <- R6::R6Class("pgu.missings",
                                           cex.axis=.7,
                                           gap=3,
                                           main = "Missings histogram",
-                                          ylab=c("fraction","fraction"))
+                                          ylab=c("fraction","fraction")) %>%
+                                  capture.output(file = tempfile())
                                 return(p)
                               } #function
                             )#public

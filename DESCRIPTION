@@ -53,7 +53,6 @@ Collate:
     'pguStatus.R'
     'pguReporter.R'
     'pguExporter.R'
-    'pguRegressor.R'
     'pguValidator.R'
     'pguImputation.R'
     'pguOutliers.R'
@@ -69,3 +68,4 @@ Collate:
     'pguDelegate.R'
     'transposeTibble.R'
     'pguIMP.R'
+    'pguRegressor.R'

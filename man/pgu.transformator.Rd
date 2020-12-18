@@ -24,7 +24,7 @@ x <- pguIMP::pgu.transformator$new(data)
 ## ------------------------------------------------
 
 y <- tibble:tibble()
-x <- pguIMP:pgu.transformator$new(data = y)
+x <- pguIMP:pgu.transformator$new(data_df = y)
 
 ## ------------------------------------------------
 ## Method `pgu.transformator$print`
@@ -354,13 +354,13 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Method \code{new()}}{
 Creates and returns a new \code{pgu.transformator} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$new(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$new(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -372,7 +372,7 @@ A new \code{pgu.transformator} object.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.transformator$new(data = y)
+x <- pguIMP:pgu.transformator$new(data_df = y)
 }
 \if{html}{\out{</div>}}
 

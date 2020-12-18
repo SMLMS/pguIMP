@@ -82,6 +82,12 @@ idx <- x$gatherFractionOfMissings(value)
 x$gatherInformationStatistics(data_df)
 
 ## ------------------------------------------------
+## Method `pgu.missings$one_hot`
+## ------------------------------------------------
+
+x$one_hot(data_df)
+
+## ------------------------------------------------
 ## Method `pgu.missings$detectImputationSites`
 ## ------------------------------------------------
 
@@ -122,6 +128,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{imputationSites}}{Returns the instance variable imputationSites.
 (tibble::tibble)}
 
+\item{\code{one_hot_df}}{Returns the positions of missings in one_hot encoding
+(tibble::tibble)}
+
 \item{\code{amv}}{Returns the instance variable amv.
 (numeric)}
 }
@@ -141,6 +150,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-gatherExistings}{\code{pgu.missings$gatherExistings()}}
 \item \href{#method-gatherFractionOfMissings}{\code{pgu.missings$gatherFractionOfMissings()}}
 \item \href{#method-gatherImputationStatistics}{\code{pgu.missings$gatherImputationStatistics()}}
+\item \href{#method-one_hot}{\code{pgu.missings$one_hot()}}
 \item \href{#method-detectImputationSites}{\code{pgu.missings$detectImputationSites()}}
 \item \href{#method-imputationSiteDistribution}{\code{pgu.missings$imputationSiteDistribution()}}
 \item \href{#method-mergeImputationSiteData}{\code{pgu.missings$mergeImputationSiteData()}}
@@ -441,6 +451,34 @@ The information is stored within the classes instance variable \code{imputationP
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$gatherInformationStatistics(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-one_hot"></a>}}
+\if{latex}{\out{\hypertarget{method-one_hot}{}}}
+\subsection{Method \code{one_hot()}}{
+Gathers statistical information about missing values
+in one hot format.
+The result is stored in the instance variable one_hot_df.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.missings$one_hot(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The data frame to be analyzed.
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$one_hot(data_df)
 }
 \if{html}{\out{</div>}}
 

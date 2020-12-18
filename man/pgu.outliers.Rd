@@ -72,6 +72,12 @@ idx <- x$outliersFeatureList(data)
 f <- x$featureOutlier(feature = "infected")
 
 ## ------------------------------------------------
+## Method `pgu.outliers$one_hot`
+## ------------------------------------------------
+
+x$one_hot(data_df)
+
+## ------------------------------------------------
 ## Method `pgu.outliers$detectOutliers`
 ## ------------------------------------------------
 
@@ -185,6 +191,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{outliers}}{Returns the instance variable outliers.
 (tibble::tibble)}
 
+\item{\code{one_hot_df}}{Returns the positions of missings in one_hot encoding
+(tibble::tibble)}
+
 \item{\code{outliersStatistics}}{Returns the instance variable outliersStatistics.
 (tibble::tibble)}
 
@@ -262,6 +271,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-detectOutliersParameter}{\code{pgu.outliers$detectOutliersParameter()}}
 \item \href{#method-outliersFeatureList}{\code{pgu.outliers$outliersFeatureList()}}
 \item \href{#method-featureOutlier}{\code{pgu.outliers$featureOutlier()}}
+\item \href{#method-one_hot}{\code{pgu.outliers$one_hot()}}
 \item \href{#method-detectOutliers}{\code{pgu.outliers$detectOutliers()}}
 \item \href{#method-detectByGrubbs}{\code{pgu.outliers$detectByGrubbs()}}
 \item \href{#method-grubbs_numeric}{\code{pgu.outliers$grubbs_numeric()}}
@@ -550,6 +560,34 @@ The attribute's outliers
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{f <- x$featureOutlier(feature = "infected")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-one_hot"></a>}}
+\if{latex}{\out{\hypertarget{method-one_hot}{}}}
+\subsection{Method \code{one_hot()}}{
+Gathers statistical information about missing values
+in one hot format.
+The result is stored in the instance variable one_hot_df.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.outliers$one_hot(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The data frame to be analyzed.
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$one_hot(data_df)
 }
 \if{html}{\out{</div>}}
 

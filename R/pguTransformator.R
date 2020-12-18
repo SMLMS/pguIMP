@@ -49,7 +49,7 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                public = list(
                                  #' @description
                                  #' Creates and returns a new `pgu.transformator` object.
-                                 #' @param data
+                                 #' @param data_df
                                  #' The data to be analyzed.
                                  #' (tibble::tibble)
                                  #' @return
@@ -57,14 +57,14 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' (pguIMP::pgu.transformator)
                                  #' @examples
                                  #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.transformator$new(data = y)
-                                 initialize = function(data = "tbl_df"){
-                                   if(class(data) != "tbl_df"){
-                                     data <- tibble::tibble(names <- "none",
-                                                            values <- c(NA))
+                                 #' x <- pguIMP:pgu.transformator$new(data_df = y)
+                                 initialize = function(data_df = "tbl_df"){
+                                   if(!tibble::is_tibble(data_df)){
+                                     data_df <- tibble::tibble(names <- "none",
+                                                               values <- c(NA))
                                    }
                                    private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "squareRoot", "cubeRoot", "arcsine", "inverse", "tukeyLOP", "boxCox")
-                                   self$resetTrafoParameter(data)
+                                   self$resetTrafoParameter(data_df)
                                  }, #function
 
                                  #' @description

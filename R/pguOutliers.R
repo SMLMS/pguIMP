@@ -34,6 +34,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                             private = list(
                               .outliersParameter = "tbl_df",
                               .outliers = "tbl_df",
+                              .one_hot_df = "tbl_df",
                               .outliersStatistics = "tbl_df",
                               .outliersAgentAlphabet = "character",
                               .outliersAgent = "factor",
@@ -62,6 +63,12 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                               #' (tibble::tibble)
                               outliers = function(){
                                 return(private$.outliers)
+                              },
+                              #' @field one_hot_df
+                              #' Returns the positions of missings in one_hot encoding
+                              #' (tibble::tibble)
+                              one_hot_df = function(){
+                                return(private$.one_hot_df)
                               },
                               #' @field outliersStatistics
                               #' Returns the instance variable outliersStatistics.
@@ -363,6 +370,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                                     type = character(0),
                                                                     color = character(0)) %>%
                                   dplyr::mutate_if(is.numeric, round, 8)
+                                self$one_hot(data_df)
                               }, #function
 
                               ####################
@@ -494,6 +502,25 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                 } #warning
                                 )#tryCatch
                                 return(t)
+                              }, #function
+
+                              #' @description
+                              #' Gathers statistical information about missing values
+                              #' in one hot format.
+                              #' The result is stored in the instance variable one_hot_df.
+                              #' @param data_df
+                              #' The data frame to be analyzed.
+                              #' (tibble::tibble)
+                              #' @examples
+                              #' x$one_hot(data_df)
+                              one_hot = function(data_df = "tbl_df"){
+                                if(!tibble::is_tibble(data_df)){
+                                  print("Warning: data_df needs to by of type tibble.")
+                                  private$.one_hot_df <- tibble::tibble()
+                                }
+                                private$.one_hot_df <- data_df %>%
+                                  dplyr::select_if(is.numeric) %>%
+                                  dplyr::transmute_all(list(miss = ~ as.integer(is.na(.))))
                               }, #function
 
                               ###################

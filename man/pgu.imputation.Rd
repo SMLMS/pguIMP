@@ -58,6 +58,12 @@ x$gatherImputationSiteDistribution(data_df)
 x$insertImputationSites(data_df)
 
 ## ------------------------------------------------
+## Method `pgu.imputation$one_hot`
+## ------------------------------------------------
+
+x$one_hot(data_df)
+
+## ------------------------------------------------
 ## Method `pgu.imputation$analyzeImputationSites`
 ## ------------------------------------------------
 
@@ -463,6 +469,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{imputationSites}}{Returns the instance variable imputationSites.
 (tibble::tibble)}
 
+\item{\code{one_hot_df}}{Returns the positions of missings in one_hot encoding
+(tibble::tibble)}
+
 \item{\code{imputationSiteDistribution}}{Returns the instance variable imputationSiteDistribution.
 (matrix)}
 
@@ -532,6 +541,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-gatherImputationSiteStatistics}{\code{pgu.imputation$gatherImputationSiteStatistics()}}
 \item \href{#method-gatherImputationSiteDistribution}{\code{pgu.imputation$gatherImputationSiteDistribution()}}
 \item \href{#method-insertImputationSites}{\code{pgu.imputation$insertImputationSites()}}
+\item \href{#method-one_hot}{\code{pgu.imputation$one_hot()}}
 \item \href{#method-analyzeImputationSites}{\code{pgu.imputation$analyzeImputationSites()}}
 \item \href{#method-imputationSiteIdxByFeature}{\code{pgu.imputation$imputationSiteIdxByFeature()}}
 \item \href{#method-nanFeatureList}{\code{pgu.imputation$nanFeatureList()}}
@@ -756,6 +766,34 @@ A mutated version of data_df.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$insertImputationSites(data_df)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-one_hot"></a>}}
+\if{latex}{\out{\hypertarget{method-one_hot}{}}}
+\subsection{Method \code{one_hot()}}{
+Gathers statistical information about missing values
+in one hot format.
+The result is stored in the instance variable one_hot_df.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.imputation$one_hot(data_df = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{The data frame to be analyzed.
+(tibble::tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$one_hot(data_df)
 }
 \if{html}{\out{</div>}}
 
