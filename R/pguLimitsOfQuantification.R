@@ -486,7 +486,6 @@ pgu.limitsOfQuantification <- R6::R6Class(
         for (feature in featureNames){
           switch(
             self$lloqSubstituteAgent,
-            "keep" = {value <- value},
             "NA" = {value <- NA},
             "LLOQ" = {value <- self$featureLloq(feature)},
             "0.5 LLOQ" = {value <- 0.5 * self$featureLloq(feature)}
@@ -496,8 +495,10 @@ pgu.limitsOfQuantification <- R6::R6Class(
             dplyr::filter(type == "LLOQ") %>%
             dplyr::pull(measurement) %>%
             as.integer()
-          cleanObj <- cleanObj %>%
-            dplyr::mutate(!!as.symbol(feature) := replace(x = !!as.symbol(feature), list = idx, values = value))
+          if(self$lloqSubstituteAgent != "keep"){
+            cleanObj <- cleanObj %>%
+              dplyr::mutate(!!as.symbol(feature) := replace(x = !!as.symbol(feature), list = idx, values = value))
+          } #if
         }#for
       }#if
       return(cleanObj)
@@ -521,7 +522,6 @@ pgu.limitsOfQuantification <- R6::R6Class(
         for (feature in featureNames){
           switch(
             self$uloqSubstituteAgent,
-            "keep" = {value <- value},
             "NA" = {value <- NA},
             "ULOQ" = {value <- self$featureUloq(feature)}
           )#switch
@@ -530,8 +530,10 @@ pgu.limitsOfQuantification <- R6::R6Class(
             dplyr::filter(type == "ULOQ") %>%
             dplyr::pull(measurement) %>%
             as.integer()
-          cleanObj <- cleanObj %>%
-            dplyr::mutate(!!as.symbol(feature) := replace(x = !!as.symbol(feature), list = idx, values = value))
+          if (self$uloqSubstituteAgent != "keep"){
+            cleanObj <- cleanObj %>%
+              dplyr::mutate(!!as.symbol(feature) := replace(x = !!as.symbol(feature), list = idx, values = value))
+          }
         }#for
       }#if
       return(cleanObj)

@@ -1,6 +1,7 @@
 library("tidyverse")
 library("datasets")
 library("compositions")
+library("DataVisualizations")
 library("pguIMP")
 
 # create dataframe
@@ -57,20 +58,39 @@ missingsCharacterizer <- pguIMP::pgu.missingsCharacterizer$new()
 missingsCharacterizer$analyze(imperfect_df)
 missingsCharacterizer$plot_pair_dist(imperfect_df)
 mCharacteristics_df <- missingsCharacterizer$missingsCharacteristics_df %>%
-  dplyr::mutate(pValue = stringr::str_replace(pValue, "<0.001", "0.001")) %>%
+  dplyr::mutate(pValue = stringr::str_replace(pValue, "<", "")) %>%
   dplyr::mutate(pValue = as.numeric(pValue))
+
+# Bonferroni correction
+n_tests <- nrow(mCharacteristics_df)
+mCharacteristics_df <- mCharacteristics_df %>%
+  dplyr::mutate(pValue_corrected = pValue * n_tests)
+
 
 # wie hoch ist die Fraktion an Signifikanten pValues?
 thr <- 0.05
 mCharacteristics_df %>%
-  dplyr::select(pValue) %>%
+  dplyr::select(pValue_corrected) %>%
   dplyr::summarise(
     count = n(),
-    mean = mean(pValue),
-    sd = sd(pValue),
-    dependent = sum(pValue<thr)/n(),
-    independent = sum(!pValue<thr)/n()
+    median = median(pValue_corrected),
+    mean = mean(pValue_corrected),
+    sd = sd(pValue_corrected),
+    dependent = sum(pValue_corrected<thr)/n(),
+    independent = sum(!pValue_corrected<thr)/n()
   )
+
+mCharacteristics_df %>%
+  dplyr::pull(pValue_corrected) %>%
+  DataVisualizations::ParetoDensityEstimation(PlotIt = TRUE)
+
+mCharacteristics_df %>%
+  dplyr::select(pValue_corrected) %>%
+  tidyr::gather(key = "feature", value = "value") %>%
+  ggplot2::ggplot() +
+  ggplot2::geom_boxplot(mapping = ggplot2::aes(x=feature, y=value), outlier.shape = NA) +
+  ggplot2::geom_jitter(mapping = ggplot2::aes(x=feature, y=value, color = value))
+
 
 #############
 # plot data #
@@ -79,3 +99,5 @@ scaled_df %>%
   tidyr::gather(key = "feature", value = "value") %>%
   ggplot2::ggplot() +
   ggplot2::geom_boxplot(mapping = ggplot2::aes(x=feature, y=value))
+
+

@@ -175,7 +175,8 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                                  subset_missings_df <- subset_df %>%
                                                    as.data.frame() %>%
                                                    finalfit::missing_compare(dependent = self$featureAgent,
-                                                                             explanatory = explanatory)
+                                                                             explanatory = explanatory,
+                                                                             digits = c(3,3,10))
 
                                                  subset_missing  <- subset_missings_df %>%
                                                    dplyr::pull(!!rlang::sym("Missing"))
@@ -221,8 +222,10 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                                    panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
                                                    plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
                                                    legend.background = ggplot2::element_rect(fill = "transparent"),
-                                                   legend.key = ggplot2::element_rect(fill = "transparent")
+                                                   legend.key = ggplot2::element_rect(fill = "transparent"),
+                                                   axis.text.x = element_text(angle = 45, hjust = 1)
                                                  )
+
 
                                                return(p)
                                              }

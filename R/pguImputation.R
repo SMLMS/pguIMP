@@ -298,9 +298,15 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    input_correct <- TRUE
                                    if(!tibble::is_tibble(missings_df)){
                                      input_correct <- FALSE
+                                     missings_df <- tibble::tibble(row = integer(0),
+                                                                   features = character(0))
+                                     input_correct <- TRUE
                                    }
                                    if(!tibble::is_tibble(outliers_df)){
                                      input_correct <- FALSE
+                                     outliers_df <- tibble::tibble(measurement = integer(0),
+                                                                   feature = character(0))
+                                     input_correct <- TRUE
                                    }
                                    if(input_correct){
                                      missings_df <- missings_df %>%
@@ -787,7 +793,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    },
                                    error = function(e) {
                                      private$.success <- FALSE
-                                     errorMesage <- sprintf("\nError in pgu.imputation during hndleImputationSites routine:\n%s", e)
+                                     errorMesage <- sprintf("\nError in pgu.imputation during handleImputationSites routine:\n%s", e)
                                      cat(errorMesage)
                                    }#error
                                    )#tryCatch
@@ -1054,7 +1060,8 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                      DMwR::knnImputation(k=self$nNeighbors,
                                                          scale = TRUE,
                                                          meth = "weighAvg",
-                                                         distData = NULL) %>%
+                                                         distData = NULL
+                                                         ) %>%
                                      tibble::as_tibble() %>%
                                      return()
                                  }, #function
@@ -1105,7 +1112,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                        mice::mice(method = self$imputationAgent,
                                                   pred = self$pred_mat,
                                                   seed = self$seed + i,
-                                                  printFlag = TRUE)
+                                                  printFlag = FALSE)
 
                                      stats_mat_list[[i]] <- mice_model %>%
                                        mice::complete() %>%
