@@ -700,7 +700,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
                                  average_number_of_predictors = function(data_df = "tbl_df", minpuc = 0, mincor = 0.1){
                                    pred_dist <- data_df %>%
-                                     dplyr::select(-dplyr::all_of(self$exclude_vec)) %>%
+                                     # dplyr::select(-dplyr::all_of(self$exclude_vec)) %>%
                                      mice::quickpred(minpuc = minpuc, mincor = mincor, exclude = self$exclude_vec) %>%
                                      rowSums() %>%
                                      table()
@@ -775,6 +775,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                      self$setimputationAgent <- "none"
                                    }#if
                                    private$.success <- FALSE
+                                   data_df <- self$insertImputationSites(data_df)
                                    cleanedData <- data_df
                                    tryCatch({
                                      cleanedData <- switch((self$imputationAgent),

@@ -491,12 +491,12 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                  title_str <- sprintf("Imputation quality analysis of %s", feature)
 
                                  org <- org_df %>%
-                                   dplyr::select(feature) %>%
+                                   dplyr::select(dplyr::all_of(feature)) %>%
                                    # tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
                                  imp <- imp_df %>%
-                                   dplyr::select(feature) %>%
+                                   dplyr::select(dplyr::all_of(feature)) %>%
                                    # tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    as.numeric()
@@ -527,13 +527,13 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
 
                                  pde_org <- org_df %>%
-                                   dplyr::select(feature) %>%
+                                   dplyr::select(dplyr::all_of(feature)) %>%
                                    tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    DataVisualizations::ParetoDensityEstimation()
 
                                  pde_imp <- imp_df %>%
-                                   dplyr::select(feature) %>%
+                                   dplyr::select(dlyr::all_of(feature)) %>%
                                    tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    DataVisualizations::ParetoDensityEstimation()

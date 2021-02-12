@@ -55,5 +55,77 @@ data_df %>%
 
 
 
+library("tidyverse")
+data_df <- readxl::read_xlsx("/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx",
+                               sheet = 3)
 
+data_df$Groesse
+
+data_df %>%
+  dplyr::select(dplyr::all_of(c("Diagnose", "Geschl.", "Alter", "Groesse", "Gewicht"))) %>%
+  dplyr::rename(sex = "Geschl.") %>%
+  dplyr::mutate(sex = factor(sex)) %>%
+  dplyr::group_by(Diagnose) %>%
+  dplyr::summarise(mean_size = mean(Groesse, na.rm = TRUE),
+                   std_size = sd(Groesse, na.rm = TRUE),
+                   mean_age = mean(Alter, na.rm = TRUE),
+                   std_age = sd(Alter, na.rm = TRUE),
+                   mean_weight = mean(Gewicht, na.rm = TRUE),
+                   std_weight = sd(Gewicht, na.rm = TRUE),
+                   sex = sum(sex =="m"),
+                   n=n()) %>%
+  print()
+
+
+data_df %>%
+  dplyr::select(dplyr::all_of(c("Alter", "Groesse", "Gewicht"))) %>%
+  tidyr::gather(key = "variable", value = "value") %>%
+  dplyr::group_by(variable) %>%
+  dplyr::summarise(mu = mean(value, na.rm = TRUE),
+                   std = sd(value, na.rm = TRUE),
+                   n=n()) %>%
+  print()
+
+data_df %>%
+  dplyr::select("Geschl.") %>%
+  dplyr::rename(sex = "Geschl.") %>%
+  dplyr::group_by(sex) %>%
+  tally() %>%
+  print()
+
+data_df %>%
+  dplyr::select("Diagnose") %>%
+  dplyr::group_by(Diagnose) %>%
+  tally() %>%
+  print()
+
+data_df <- readxl::read_xlsx("/Users/malkusch/PowerFolders/pharmacology/Daten/Gurke/data_paper_2020/66-14_semi-targeted_Zeitpunkt1.xlsx",
+                             sheet = 1)
+
+data_df %>%
+  is.na() %>%
+  sum()
+
+nrow(data_df)
+ncol(data_df)
+
+
+
+data_df <- readxl::read_xlsx("/Users/malkusch/PowerFolders/imputation/data_quantitative/lipids.xlsx",
+                             sheet = 4)
+
+data_df %>%
+  dplyr::select(dplyr::all_of(c("Diagnose", "Geschlecht", "Alter", "Groesse", "Gewicht"))) %>%
+  dplyr::rename(sex = "Geschlecht") %>%
+  dplyr::mutate(sex = factor(sex)) %>%
+  dplyr::group_by(Diagnose) %>%
+  dplyr::summarise(mean_size = mean(Groesse, na.rm = TRUE),
+                   std_size = sd(Groesse, na.rm = TRUE),
+                   mean_age = mean(Alter, na.rm = TRUE),
+                   std_age = sd(Alter, na.rm = TRUE),
+                   mean_weight = mean(Gewicht, na.rm = TRUE),
+                   std_weight = sd(Gewicht, na.rm = TRUE),
+                   sex = sum(sex =="m"),
+                   n=n()) %>%
+  print()
 
