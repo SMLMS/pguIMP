@@ -1,0 +1,11 @@
+citHeader("To cite pguIMP in publications use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "pguIMP: Reproducible cleaning of biomedical laboratory data.",
+  author   = "Sebastian Malkusch",
+  year     = 2021,
+  textVersion = paste(
+
+  )
+)

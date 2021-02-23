@@ -511,7 +511,7 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    purrr::discard(is.na) %>%
                                    hist(plot = FALSE)
                                  imp_min <- imp_hist$breaks[1]
-                                 imp_max <- imp_hist$breaks[length(org_hist$breaks)]
+                                 imp_max <- imp_hist$breaks[length(imp_hist$breaks)]
 
                                  data_min <- min(c(org_min, imp_min))
                                  data_max <- max(c(org_max, imp_max))
@@ -533,7 +533,7 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    DataVisualizations::ParetoDensityEstimation()
 
                                  pde_imp <- imp_df %>%
-                                   dplyr::select(dlyr::all_of(feature)) %>%
+                                   dplyr::select(dplyr::all_of(feature)) %>%
                                    tidyr::drop_na() %>%
                                    dplyr::pull(feature) %>%
                                    DataVisualizations::ParetoDensityEstimation()
