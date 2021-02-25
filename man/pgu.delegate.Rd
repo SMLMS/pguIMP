@@ -280,6 +280,12 @@ x$updateTrafoMutateFeature(input, output, session)
 x$updateTrafoMutateType(input, output, session)
 
 ## ------------------------------------------------
+## Method `pgu.delegate$updateTrafoMutateLambda`
+## ------------------------------------------------
+
+x$updateTrafoMutateLambdae(input, output, session)
+
+## ------------------------------------------------
 ## Method `pgu.delegate$updateTrafoMutateMirror`
 ## ------------------------------------------------
 
@@ -296,6 +302,12 @@ x$updateTrafoMutateGui(input, output, session)
 ## ------------------------------------------------
 
 x$resetTrafoMutateGui(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$trafoMutateFit`
+## ------------------------------------------------
+
+x$trafoMutateFit(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$trafoMutateGlobal`
@@ -1953,9 +1965,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateTrafoDetectGui}{\code{pgu.delegate$updateTrafoDetectGui()}}
 \item \href{#method-updateTrafoMutateFeature}{\code{pgu.delegate$updateTrafoMutateFeature()}}
 \item \href{#method-updateTrafoMutateType}{\code{pgu.delegate$updateTrafoMutateType()}}
+\item \href{#method-updateTrafoMutateLambda}{\code{pgu.delegate$updateTrafoMutateLambda()}}
 \item \href{#method-updateTrafoMutateMirror}{\code{pgu.delegate$updateTrafoMutateMirror()}}
 \item \href{#method-updateTrafoMutateGui}{\code{pgu.delegate$updateTrafoMutateGui()}}
 \item \href{#method-resetTrafoMutateGui}{\code{pgu.delegate$resetTrafoMutateGui()}}
+\item \href{#method-trafoMutateFit}{\code{pgu.delegate$trafoMutateFit()}}
 \item \href{#method-trafoMutateGlobal}{\code{pgu.delegate$trafoMutateGlobal()}}
 \item \href{#method-trafoMutateFeature}{\code{pgu.delegate$trafoMutateFeature()}}
 \item \href{#method-updateTrafoMutateFeatureGraphic}{\code{pgu.delegate$updateTrafoMutateFeatureGraphic()}}
@@ -3322,6 +3336,35 @@ Updates the si.trafoMutateType shiny widget.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateTrafoMutateLambda"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoMutateLambda}{}}}
+\subsection{Method \code{updateTrafoMutateLambda()}}{
+Updates the ni.trafoMutateLambda shiny widget.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoMutateLambda(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$updateTrafoMutateLambdae(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateMirror"></a>}}
 \if{latex}{\out{\hypertarget{method-updateTrafoMutateMirror}{}}}
 \subsection{Method \code{updateTrafoMutateMirror()}}{
@@ -3402,6 +3445,36 @@ Updates the gui.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$resetTrafoMutateGui(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-trafoMutateFit"></a>}}
+\if{latex}{\out{\hypertarget{method-trafoMutateFit}{}}}
+\subsection{Method \code{trafoMutateFit()}}{
+Estimates the optimal transformation parameters.
+Updates the GUI
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$trafoMutateFit(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$trafoMutateFit(input, output, session)
 }
 \if{html}{\out{</div>}}
 

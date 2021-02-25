@@ -389,11 +389,20 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = 1,
             width = "100%"
           ),
-          selectInput(
+          shiny::selectInput(
             "si.trafoMutateType",
             label = h5("Transformation Type"),
             choices = list(),
             selected = 1,
+            width = "100%"
+          ),
+          shiny::numericInput(
+            "ni.trafoMutateLambdaLOP",
+            label = h5("lambda LOP"),
+            value = 1,
+            min = -2,
+            max = 2,
+            step = 0.01,
             width = "100%"
           ),
           shiny::checkboxInput(
@@ -401,15 +410,20 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             label = h5("Mirror"),
             value = FALSE
           ),
-          shiny::hr(),
-          shiny::actionButton(
-            inputId = "ab.trafoMutateFeature",
-            label = "set",
-            width = "100%"
-          ),
           shiny::actionButton(
             inputId = "ab.trafoMutateSetGlobal",
             label = "set globally",
+            width = "100%"
+          ),
+          shiny::actionButton(
+            inputId = "ab.trafoMutateFeature",
+            label = "set feature",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::actionButton(
+            inputId = "ab.trafoMutateFit",
+            label = "optimize",
             width = "100%"
           ),
           shiny::actionButton(
@@ -585,14 +599,14 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = menueColumnWidth,
           shiny::h1("Detect Anomalies"),
-          selectInput(
+          shiny::selectInput(
             "si.imputeOutliersFeature",
             label = h5("Feature"),
             choices = list(),
             selected = 1,
             width = "100%"
           ),
-          selectInput(
+          shiny::selectInput(
             "si.imputeOutliersMethod",
             label = h5("Detection Method"),
             choices = list(),

@@ -70,10 +70,28 @@ y <- x$mirrorLogic(feature = "infected")
 x$setMirrorLogic(feature = "infected", logic = FALSE)
 
 ## ------------------------------------------------
-## Method `pgu.transformator$lambda`
+## Method `pgu.transformator$lambdaLOP`
 ## ------------------------------------------------
 
-y <- x$lambda(feature = "infected")
+y <- x$lambdaLOP(feature = "infected")
+
+## ------------------------------------------------
+## Method `pgu.transformator$setLambdaLOP`
+## ------------------------------------------------
+
+x$setLambdaLOP(feature = "infected", lambda = 2)
+
+## ------------------------------------------------
+## Method `pgu.transformator$lambdaBC`
+## ------------------------------------------------
+
+y <- x$lambdaBC(feature = "infected")
+
+## ------------------------------------------------
+## Method `pgu.transformator$lambdaAS`
+## ------------------------------------------------
+
+y <- x$lambdaAS(feature = "infected")
 
 ## ------------------------------------------------
 ## Method `pgu.transformator$featureIdx`
@@ -134,6 +152,12 @@ y <- x$backTranslateData(data)
 ## ------------------------------------------------
 
 y <- x$lambdaEstimator(value = c(4, 5, 6), feature = "infected")
+
+## ------------------------------------------------
+## Method `pgu.transformator$estimateLambda_temp`
+## ------------------------------------------------
+
+y <- x$estimateLambda(data)
 
 ## ------------------------------------------------
 ## Method `pgu.transformator$estimateLambda`
@@ -268,10 +292,10 @@ y <- x$inverseTransformTukeyLadderOfPowers(value, lambda = 0)
 y <- x$inverseTransformBoxCox(value, lambda = 0)
 
 ## ------------------------------------------------
-## Method `pgu.transformator$estimateTrafoParameter`
+## Method `pgu.transformator$fit`
 ## ------------------------------------------------
 
-x$estimateTrafoParameter(data)
+x$fit(data)
 
 ## ------------------------------------------------
 ## Method `pgu.transformator$mutateData`
@@ -309,7 +333,10 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-addConstant}{\code{pgu.transformator$addConstant()}}
 \item \href{#method-mirrorLogic}{\code{pgu.transformator$mirrorLogic()}}
 \item \href{#method-setMirrorLogic}{\code{pgu.transformator$setMirrorLogic()}}
-\item \href{#method-lambda}{\code{pgu.transformator$lambda()}}
+\item \href{#method-lambdaLOP}{\code{pgu.transformator$lambdaLOP()}}
+\item \href{#method-setLambdaLOP}{\code{pgu.transformator$setLambdaLOP()}}
+\item \href{#method-lambdaBC}{\code{pgu.transformator$lambdaBC()}}
+\item \href{#method-lambdaAS}{\code{pgu.transformator$lambdaAS()}}
 \item \href{#method-featureIdx}{\code{pgu.transformator$featureIdx()}}
 \item \href{#method-addConstGenerator}{\code{pgu.transformator$addConstGenerator()}}
 \item \href{#method-mirrorNumeric}{\code{pgu.transformator$mirrorNumeric()}}
@@ -320,6 +347,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-backTranslateNumeric}{\code{pgu.transformator$backTranslateNumeric()}}
 \item \href{#method-backTranslateData}{\code{pgu.transformator$backTranslateData()}}
 \item \href{#method-lambdaEstimator}{\code{pgu.transformator$lambdaEstimator()}}
+\item \href{#method-estimateLambda_temp}{\code{pgu.transformator$estimateLambda_temp()}}
 \item \href{#method-estimateLambda}{\code{pgu.transformator$estimateLambda()}}
 \item \href{#method-normalizeArcSine}{\code{pgu.transformator$normalizeArcSine()}}
 \item \href{#method-optimizeTukeyLadderOfPowers}{\code{pgu.transformator$optimizeTukeyLadderOfPowers()}}
@@ -342,7 +370,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-inverseTransformInverse}{\code{pgu.transformator$inverseTransformInverse()}}
 \item \href{#method-inverseTransformTukeyLadderOfPowers}{\code{pgu.transformator$inverseTransformTukeyLadderOfPowers()}}
 \item \href{#method-inverseTransformBoxCox}{\code{pgu.transformator$inverseTransformBoxCox()}}
-\item \href{#method-estimateTrafoParameter}{\code{pgu.transformator$estimateTrafoParameter()}}
+\item \href{#method-fit}{\code{pgu.transformator$fit()}}
 \item \href{#method-mutateData}{\code{pgu.transformator$mutateData()}}
 \item \href{#method-reverseMutateData}{\code{pgu.transformator$reverseMutateData()}}
 \item \href{#method-clone}{\code{pgu.transformator$clone()}}
@@ -486,7 +514,7 @@ for user defined attribute.
 (character)}
 
 \item{\code{type}}{Trafo type parameter. Valid choices are:
-"none", "log2", "logNorm", "log10", "squareRoot", "cubeRoot", "arcsine", "inverse", "tukeyLOP", "boxCox".
+"none", "exponential", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox".
 (character)}
 }
 \if{html}{\out{</div>}}
@@ -593,16 +621,16 @@ for user defined attribute.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-lambda"></a>}}
-\if{latex}{\out{\hypertarget{method-lambda}{}}}
-\subsection{Method \code{lambda()}}{
-Returns entry of \code{lambda}
+\if{html}{\out{<a id="method-lambdaLOP"></a>}}
+\if{latex}{\out{\hypertarget{method-lambdaLOP}{}}}
+\subsection{Method \code{lambdaLOP()}}{
+Returns entry of \code{lambda_lop}
 for user defined attribute.
 Lambda is a specific optimization parameter
-that is derived from the Box-Cox or Tukey-LOP
+that is derived from the Tukey-LOP
 transfromation procedure.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$lambda(feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$lambdaLOP(feature = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -619,7 +647,105 @@ Value of entry.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$lambda(feature = "infected")
+\preformatted{y <- x$lambdaLOP(feature = "infected")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setLambdaLOP"></a>}}
+\if{latex}{\out{\hypertarget{method-setLambdaLOP}{}}}
+\subsection{Method \code{setLambdaLOP()}}{
+Sets entry of \code{lambda_lop}
+for user defined attribute.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$setLambdaLOP(feature = "character", lambda = "numeric")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{feature}}{Attribute's name.
+(character)}
+
+\item{\code{lambda}}{Sets the feature specific exponential value.
+(numeric)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$setLambdaLOP(feature = "infected", lambda = 2)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-lambdaBC"></a>}}
+\if{latex}{\out{\hypertarget{method-lambdaBC}{}}}
+\subsection{Method \code{lambdaBC()}}{
+Returns entry of \code{lambda_bc}
+for user defined attribute.
+Lambda is a specific optimization parameter
+that is derived from the Box-Cox
+transfromation procedure.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$lambdaBC(feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{feature}}{Attribute's name.
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Value of entry.
+(numeric)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{y <- x$lambdaBC(feature = "infected")
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-lambdaAS"></a>}}
+\if{latex}{\out{\hypertarget{method-lambdaAS}{}}}
+\subsection{Method \code{lambdaAS()}}{
+Returns entry of \code{lambda_as}
+for user defined attribute.
+Lambda is a specific optimization parameter
+that is derived from the arcsine
+transfromation procedure.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$lambdaAS(feature = "character")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{feature}}{Attribute's name.
+(character)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Value of entry.
+(numeric)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{y <- x$lambdaAS(feature = "infected")
 }
 \if{html}{\out{</div>}}
 
@@ -943,11 +1069,40 @@ The specific lambda factor.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-estimateLambda_temp"></a>}}
+\if{latex}{\out{\hypertarget{method-estimateLambda_temp}{}}}
+\subsection{Method \code{estimateLambda_temp()}}{
+Estimates the lambda factor for each attribute of the assigned data frame,
+by calling the class' lambdaEstimator function.
+The respective lambda values of the individual attributes of the data frame
+are stored in the lambda attribute of the instance variable trafoParameter.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$estimateLambda_temp(data = "tbl_df")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{A data frame.
+(tibble:tibble)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{y <- x$estimateLambda(data)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-estimateLambda"></a>}}
 \if{latex}{\out{\hypertarget{method-estimateLambda}{}}}
 \subsection{Method \code{estimateLambda()}}{
-Estimates the lambda factor for each attribute of the assigned data frame,
-by calling the class' lambdaEstimator function.
+Estimates the arcsine transformation lambda factor
+for each attribute of the assigned data frame.
 The respective lambda values of the individual attributes of the data frame
 are stored in the lambda attribute of the instance variable trafoParameter.
 \subsection{Usage}{
@@ -1649,15 +1804,15 @@ The transformed values.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-estimateTrafoParameter"></a>}}
-\if{latex}{\out{\hypertarget{method-estimateTrafoParameter}{}}}
-\subsection{Method \code{estimateTrafoParameter()}}{
+\if{html}{\out{<a id="method-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-fit}{}}}
+\subsection{Method \code{fit()}}{
 Estimate all transformation parameters(lambda, addConst,...)
 for each attribute of a given data frame.
 The function calls the class' functions calculateAddConst and estimateLambda.
 The results are stored in the respective attributes of the instance variable trafoParameter.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$estimateTrafoParameter(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.transformator$fit(data = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -1670,7 +1825,7 @@ The results are stored in the respective attributes of the instance variable tra
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$estimateTrafoParameter(data)
+\preformatted{x$fit(data)
 }
 \if{html}{\out{</div>}}
 

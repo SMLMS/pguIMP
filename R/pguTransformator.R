@@ -63,7 +63,7 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                      data_df <- tibble::tibble(names <- "none",
                                                                values <- c(NA))
                                    }
-                                   private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "squareRoot", "cubeRoot", "arcsine", "inverse", "tukeyLOP", "boxCox")
+                                   private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox")
                                    self$resetTrafoParameter(data_df)
                                  }, #function
 
@@ -114,7 +114,9 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                                                              trafoType = as.factor(trafoType),
                                                                              addConst = as.numeric(addConst),
                                                                              mirrorLogic = as.logical(mirrorLogic),
-                                                                             lambda = as.numeric(lambda))
+                                                                             lambda_as = as.numeric(lambda),
+                                                                             lambda_lop = as.numeric(lambda),
+                                                                             lambda_bc = as.numeric(lambda))
                                  }, #function
 
                                  ############################
@@ -148,7 +150,7 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' (character)
                                  #' @param type
                                  #' Trafo type parameter. Valid choices are:
-                                 #' "none", "log2", "logNorm", "log10", "squareRoot", "cubeRoot", "arcsine", "inverse", "tukeyLOP", "boxCox".
+                                 #' "none", "exponential", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox".
                                  #' (character)
                                  #' @examples
                                  #' x$setTrafoType(feature = "infected", type = "logNorm")
@@ -180,7 +182,7 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                    c <- 0.0
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
-                                     c <- self$trafoParameter[idx, "addConst"]
+                                     c <- self$trafoParameter[[idx, "addConst"]]
                                    }#if
                                    return(c)
                                  }, #function
@@ -224,10 +226,10 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  }, #function
 
                                  #' @description
-                                 #' Returns entry of `lambda`
+                                 #' Returns entry of `lambda_lop`
                                  #' for user defined attribute.
                                  #' Lambda is a specific optimization parameter
-                                 #' that is derived from the Box-Cox or Tukey-LOP
+                                 #' that is derived from the Tukey-LOP
                                  #' transfromation procedure.
                                  #' @param feature
                                  #' Attribute's name.
@@ -236,12 +238,76 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' Value of entry.
                                  #' (numeric)
                                  #' @examples
-                                 #' y <- x$lambda(feature = "infected")
-                                 lambda = function(feature = "character"){
+                                 #' y <- x$lambdaLOP(feature = "infected")
+                                 lambdaLOP = function(feature = "character"){
+                                   lambda <- 0.0
+                                   idx <- self$featureIdx(feature)
+                                   if(!is.na(idx)){
+                                     lambda <- self$trafoParameter[[idx, "lambda_lop"]]
+                                   }#if
+                                   return(lambda)
+                                 }, #function
+
+                                 #' @description
+                                 #' Sets entry of `lambda_lop`
+                                 #' for user defined attribute.
+                                 #' @param feature
+                                 #' Attribute's name.
+                                 #' (character)
+                                 #' @param lambda
+                                 #' Sets the feature specific exponential value.
+                                 #' (numeric)
+                                 #' @examples
+                                 #' x$setLambdaLOP(feature = "infected", lambda = 2)
+                                 setLambdaLOP = function(feature = "character", lambda = "numeric"){
+                                   idx <- self$featureIdx(feature)
+                                   if(!is.na(idx)){
+                                     private$.trafoParameter[idx, "lambda_lop"] <- lambda
+                                   }#if
+                                 }, #function
+
+                                 #' @description
+                                 #' Returns entry of `lambda_bc`
+                                 #' for user defined attribute.
+                                 #' Lambda is a specific optimization parameter
+                                 #' that is derived from the Box-Cox
+                                 #' transfromation procedure.
+                                 #' @param feature
+                                 #' Attribute's name.
+                                 #' (character)
+                                 #' @return
+                                 #' Value of entry.
+                                 #' (numeric)
+                                 #' @examples
+                                 #' y <- x$lambdaBC(feature = "infected")
+                                 lambdaBC = function(feature = "character"){
                                    l <- 0.0
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
-                                     l <- self$trafoParameter[idx, "lambda"]
+                                     l <- self$trafoParameter[idx, "lambda_bc"]
+                                   }#if
+                                   return(l)
+                                 }, #function
+
+                                 #' @description
+                                 #' Returns entry of `lambda_as`
+                                 #' for user defined attribute.
+                                 #' Lambda is a specific optimization parameter
+                                 #' that is derived from the arcsine
+                                 #' transfromation procedure.
+                                 #' @param feature
+                                 #' Attribute's name.
+                                 #' (character)
+                                 #' @return
+                                 #' Value of entry.
+                                 #' (numeric)
+                                 #' @examples
+                                 #' y <- x$lambdaAS(feature = "infected")
+                                 lambdaAS = function(feature = "character"){
+                                   l <- 0.0
+                                   idx <- self$featureIdx(feature)
+                                   if(!is.na(idx)){
+                                     l <- self$trafoParameter[idx, "lambda_as"]
                                    }#if
                                    return(l)
                                  }, #function
@@ -462,10 +528,7 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                             log2 = {lambda <- 1.0},
                                             logNorm = {lambda <- 1-0},
                                             log10 = {lambda <- 1.0},
-                                            squareRoot = {lambda <- 1.0},
-                                            cubeRoot = {lambda <- 1.0},
                                             arcsine = {lambda <- self$normalizeArcSine(value)},
-                                            inverse = {lambda <- 1.0},
                                             tukeyLOP = {lambda <- self$optimizeTukeyLadderOfPowers(value)},
                                             boxCox = {lambda <- self$optimizeBoxCox(value)},
                                             {rString <- sprintf("\nWarning in pgu.transformator: trafoType %s is not known\n",as.character(method))
@@ -485,12 +548,38 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' (tibble:tibble)
                                  #' @examples
                                  #' y <- x$estimateLambda(data)
-                                 estimateLambda = function(data = "tbl_df"){
+                                 estimateLambda_temp = function(data = "tbl_df"){
                                    tempData <- data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%
                                      self$mirrorData() %>%
                                      self$translateData()
                                    private$.trafoParameter["lambda"] <- lapply(self$trafoParameter[["features"]], function(x){self$lambdaEstimator(value = tempData[[x]], feature = x)}) %>%
+                                     t() %>%
+                                     as.numeric()
+                                 }, #function
+
+                                 #' @description
+                                 #' Estimates the arcsine transformation lambda factor
+                                 #' for each attribute of the assigned data frame.
+                                 #' The respective lambda values of the individual attributes of the data frame
+                                 #' are stored in the lambda attribute of the instance variable trafoParameter.
+                                 #' @param data
+                                 #' A data frame.
+                                 #' (tibble:tibble)
+                                 #' @examples
+                                 #' y <- x$estimateLambda(data)
+                                 estimateLambda = function(data = "tbl_df"){
+                                   tempData <- data %>%
+                                     dplyr::select(self$trafoParameter[["features"]]) %>%
+                                     self$mirrorData() %>%
+                                     self$translateData()
+                                   private$.trafoParameter["lambda_as"] <- lapply(self$trafoParameter[["features"]], function(x){self$normalizeArcSine(value = tempData[[x]])}) %>%
+                                     t() %>%
+                                     as.numeric()
+                                   private$.trafoParameter["lambda_lop"] <- lapply(self$trafoParameter[["features"]], function(x){self$optimizeTukeyLadderOfPowers(value = tempData[[x]])}) %>%
+                                     t() %>%
+                                     as.numeric()
+                                   private$.trafoParameter["lambda_bc"] <- lapply(self$trafoParameter[["features"]], function(x){self$optimizeBoxCox(value = tempData[[x]])}) %>%
                                      t() %>%
                                      as.numeric()
                                  }, #function
@@ -525,9 +614,9 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                      lambda <-
                                        value %>%
                                        purrr::discard(is.na) %>%
-                                         rcompanion::transformTukey(start = -10,
-                                                                    end = 10,
-                                                                    int = 0.025,
+                                         rcompanion::transformTukey(start = -2,
+                                                                    end = 2,
+                                                                    int = 0.01,
                                                                     plotit = FALSE,
                                                                     verbose = FALSE,
                                                                     quiet = TRUE,
@@ -610,12 +699,9 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                             log2 = {tf <- self$transformLogModulus(value, base=2)},
                                             logNorm = {tf <- self$transformLogModulus(value, base=exp(1))},
                                             log10 = {tf <- self$transformLogModulus(value, base=10)},
-                                            squareRoot = {tf <- self$transformSquareRoot(value)},
-                                            cubeRoot = {tf <- self$transformCubeRoot(value)},
-                                            arcsine = {tf <- self$transformArcsine(value, lambda=self$trafoParameter[[idx,"lambda"]])},
-                                            inverse = {tf <- self$transformInverse(value)},
-                                            tukeyLOP = {tf <- self$transformTukeyLadderOfPowers(value, lambda=self$trafoParameter[[idx,"lambda"]])},
-                                            boxCox = {tf <- self$transformBoxCox(value, lambda=self$trafoParameter[[idx,"lambda"]])},
+                                            arcsine = {tf <- self$transformArcsine(value, lambda=self$trafoParameter[[idx,"lambda_as"]])},
+                                            tukeyLOP = {tf <- self$transformTukeyLadderOfPowers(value, lambda=self$trafoParameter[[idx,"lambda_lop"]])},
+                                            boxCox = {tf <- self$transformBoxCox(value, lambda=self$trafoParameter[[idx,"lambda_bc"]])},
                                             {private$.trafoParameter[idx, "trafoType"] <- "none"
                                             tf <- value
                                             rString <- sprintf("\nWarning in pgu.transformator: trafoType %s is not known\n",as.character(method))
@@ -738,13 +824,13 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' y <- x$transformTukeyLadderOfPowers(value, lambda = 0)
                                  transformTukeyLadderOfPowers = function(value = "numeric", lambda="numeric"){
                                    if(lambda > 0){
-                                     return((value)^lambda)
+                                     return(value^lambda)
                                    }#if
-                                   else if(lambda == 0){
-                                     return(self$transformLogModulus(value, base=exp(1)))
+                                   else if(lambda < 0){
+                                     return(-1.0*((value)^lambda))
                                    }#else if
                                    else {
-                                     return(-1.0*((value)^lambda))
+                                     return(self$transformLogModulus(value, base=exp(1)))
                                    }#else
                                  }, #function
 
@@ -799,10 +885,10 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                             log10 = {tf <- self$inverseTransformLogModulus(value, base=10)},
                                             squareRoot = {tf <- self$inverseTransformSquareRoot(value)},
                                             cubeRoot = {tf <- self$inverseTransformCubeRoot(value)},
-                                            arcsine = {tf <- self$inverseTransformArcsine(value, lambda=self$trafoParameter[[idx,"lambda"]])},
+                                            arcsine = {tf <- self$inverseTransformArcsine(value, lambda=self$trafoParameter[[idx,"lambda_as"]])},
                                             inverse = {tf <- self$inverseTransformInverse(value)},
-                                            tukeyLOP = {tf <- self$inverseTransformTukeyLadderOfPowers(value, lambda=self$trafoParameter[[idx,"lambda"]])},
-                                            boxCox = {tf <- self$inverseTransformBoxCox(value, lambda=self$trafoParameter[[idx,"lambda"]])},
+                                            tukeyLOP = {tf <- self$inverseTransformTukeyLadderOfPowers(value, lambda=self$trafoParameter[[idx,"lambda_lop"]])},
+                                            boxCox = {tf <- self$inverseTransformBoxCox(value, lambda=self$trafoParameter[[idx,"lambda_bc"]])},
                                             {private$.trafoParameter[idx, "trafoType"] <- "none"
                                             tf <- value
                                             rString <- sprintf("\nWarning in pgu.transformator: trafoType %s is not known\n",as.character(method))
@@ -968,8 +1054,8 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' A data frame.
                                  #' (tibble:tibble)
                                  #' @examples
-                                 #' x$estimateTrafoParameter(data)
-                                 estimateTrafoParameter = function(data = "tbl_df"){
+                                 #' x$fit(data)
+                                 fit = function(data = "tbl_df"){
                                    data %>%
                                      self$calculateAddConst()
                                    data %>%

@@ -144,6 +144,21 @@ server <- function(input, output, session) {
   #   delegate$updateTrafoDetectGui(input, output, session)
   # })
 
+  shiny::observeEvent(input$ab.trafoMutateFit,{
+    delegate$trafoMutateFit(input, output, session)
+    delegate$updateTrafoMutateFeatureGraphic(input, output, session)
+    delegate$updateTrafoMutateFeatureParameterTbl(input, output, session)
+    delegate$updateTrafoMutateFeatureQualityTbl(input, output, session)
+    delegate$updateTrafoMutateGlobalParameterTbl(input, output, session)
+    delegate$updateTrafoMutateGlobalModelTbl(input, output, session)
+    delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
+    delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
+    delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
+    delegate$updateTrafoNormGui(input, output, session)
+    delegate$hideOutdatedResults(input, output, session)
+    analysisFinished(FALSE)
+  })
+
   shiny::observeEvent(input$ab.trafoMutateSetGlobal, {
     delegate$trafoMutateGlobal(input, output, session)
     delegate$updateTrafoMutateFeatureGraphic(input, output, session)

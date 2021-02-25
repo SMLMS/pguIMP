@@ -1613,7 +1613,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             ##############################################
-                            # trafo mutate functions (model by gaussion) #
+                            # trafo mutate functions (model by gaussian) #
                             ##############################################
                             #' @description
                             #' Updates the si.trafoMutateFeature shiny widget.
@@ -1650,8 +1650,25 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                                          inputId = "si.trafoMutateType",
                                                          choices = self$transformator$trafoAlphabet,
                                                          selected = self$transformator$trafoType(feature = input$si.trafoMutateFeature)
-                                                         # selected = self$transformator$trafoType(feature = self$loqMutatedData$numericFeatureNames[1])
                                 )
+                              }#if
+                            }, #function
+
+                            #' @description
+                            #' Updates the ni.trafoMutateLambda shiny widget.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateTrafoMutateLambdae(input, output, session)
+                            updateTrafoMutateLambda = function(input, output, session){
+                              if(self$status$query(processName = "loqMutated")){
+                                shiny::updateNumericInput(session,
+                                                         inputId = "ni.trafoMutateLambdaLOP",
+                                                         value = self$transformator$lambdaLOP(feature = input$si.trafoMutateFeature))
                               }#if
                             }, #function
 
@@ -1670,7 +1687,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 shiny::updateCheckboxInput(session,
                                                            inputId = "cb.trafoMutateMirror",
                                                            value = self$transformator$mirrorLogic(feature = input$si.trafoMutateFeature)
-                                                           # value = self$transformator$mirrorLogic(feature = self$loqMutatedData$numericFeatureNames[1])
                                 )
                               }#if
                             }, #function
@@ -1687,8 +1703,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' x$updateTrafoMutateGui(input, output, session)
                             updateTrafoMutateGui = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
+                                self$loqMutatedData$numericData() %>%
+                                  self$transformator$resetTrafoParameter()
                                 self$updateTrafoMutateFeature(input, output, session)
                                 self$updateTrafoMutateType(input, output, session)
+                                self$updateTrafoMutateLambda(input, output, session)
                                 self$updateTrafoMutateMirror(input, output, session)
                               }#if
                             }, #function
@@ -1706,8 +1725,45 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             resetTrafoMutateGui = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 self$updateTrafoMutateType(input, output, session)
+                                self$updateTrafoMutateLambda(input, output, session)
                                 self$updateTrafoMutateMirror(input, output, session)
                               }#if
+                            }, #function
+
+                            #' @description
+                            #' Estimates the optimal transformation parameters.
+                            #' Updates the GUI
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$trafoMutateFit(input, output, session)
+                            trafoMutateFit = function(input, output, session){
+                              if(self$status$query(processName = "modelDefined")){
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
+                                progress$set(message = "Optimizing model parameter", value = 1)
+                                on.exit(progress$close())
+                                self$loqMutatedData$numericData() %>%
+                                  private$.transformator$fit()
+                                self$resetTrafoMutateGui(input, output, session)
+                                self$loqMutatedData$numericData() %>%
+                                  private$.transformator$mutateData() %>%
+                                  private$.model$resetModel(progress)
+                                name  <- as.name("Sample Name")
+                                private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
+                                  self$transformator$mutateData() %>%
+                                  tibble::add_column(!! name := self$loqMutatedData$rawData %>%
+                                                       dplyr::select(!!name) %>%
+                                                       unlist() %>%
+                                                       as.character()) %>%
+                                  dplyr::select(c(!!name, self$loqMutatedData$numericFeatureNames))
+                              }#if
+                              else{
+                                shiny::showNotification(paste("No global model defined. Please defina a global transformation model first."),type = "error", duration = 10)
+                              }#else
                             }, #function
 
                             #' @description
@@ -1726,17 +1782,19 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
                                 progress$set(message = "Optimizing model parameter", value = 1)
                                 on.exit(progress$close())
-                                self$loqMutatedData$numericData() %>%
-                                  private$.transformator$resetTrafoParameter()
+                                # self$loqMutatedData$numericData() %>%
+                                #   private$.transformator$resetTrafoParameter()
                                 for (feature in self$loqMutatedData$numericFeatureNames){
                                   private$.transformator$setTrafoType(feature = feature,
                                                                       type = input$si.trafoMutateType)
+                                  private$.transformator$setLambdaLOP(feature = feature,
+                                                                      lambda = input$ni.trafoMutateLambdaLOP)
                                   private$.transformator$setMirrorLogic(feature = feature,
                                                                         logic = input$cb.trafoMutateMirror)
                                 }#for
 
-                                self$loqMutatedData$numericData() %>%
-                                  private$.transformator$estimateTrafoParameter()
+                                # self$loqMutatedData$numericData() %>%
+                                #   private$.transformator$estimateTrafoParameter()
                                 self$loqMutatedData$numericData() %>%
                                   private$.transformator$mutateData() %>%
                                   private$.model$resetModel(progress)
@@ -1771,11 +1829,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "modelDefined")){
                                 private$.transformator$setTrafoType(feature = input$si.trafoMutateFeature,
                                                                     type = input$si.trafoMutateType)
+                                private$.transformator$setLambdaLOP(feature = input$si.trafoMutateFeature,
+                                                                    lambda = input$ni.trafoMutateLambdaLOP)
                                 private$.transformator$setMirrorLogic(feature = input$si.trafoMutateFeature,
                                                                       logic = input$cb.trafoMutateMirror)
 
-                                self$loqMutatedData$numericData() %>%
-                                  private$.transformator$estimateTrafoParameter()
+                                # self$loqMutatedData$numericData() %>%
+                                #   private$.transformator$estimateTrafoParameter()
 
                                 self$loqMutatedData$numericData() %>%
                                   self$transformator$mutateData() %>%
@@ -1806,8 +1866,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   private$.transformator$setMirrorLogic(feature = input$si.trafoMutateFeature,
                                                                         logic = input$cb.trafoMutateMirror)
 
-                                  self$loqMutatedData$numericData() %>%
-                                    private$.transformator$estimateTrafoParameter()
+                                  # self$loqMutatedData$numericData() %>%
+                                  #   private$.transformator$estimateTrafoParameter()
 
                                   private$.featureModel$resetNormDist(data = self$loqMutatedData$numericData %>%
                                                                         self$transformator$mutateData() %>%
