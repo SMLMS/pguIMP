@@ -17,7 +17,7 @@
 #'
 #' @include pguStatus.R
 #' @include pguFile.R
-#' @include pguImporter.R
+#' @include importDataSet.R
 #' @include pguData.R
 #' @include pguLimitsOfQuantification.R
 #' @include pguFilter.R
@@ -48,15 +48,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                           private = list(
                             .status = "pgu.status",
                             .fileName = "pgu.file",
-                            .importer = "pgu.importer",
+                            .loqFileName = "pgu.file",
                             .rawData = "pgu.data",
-                            .loq = "pgu.limitsOfQuantification",
-                            .metadata = "pgu.data",
                             .filterSet = "pgu.filter",
                             .filteredData = "pgu.data",
-                            .filteredMetadata = "pgu.data",
-                            .explorer= "pgu.explorer",
+
+                            .loq = "pgu.limitsOfQuantification",
                             .loqMutatedData = "pgu.data",
+                            .explorer= "pgu.explorer",
                             .optimizer = "pgu.optimizer",
                             .transformator = "pgu.transformator",
                             .model = "pgu.model",
@@ -73,7 +72,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             .validator = "pgu.validatior",
                             .corrValidator = "pgu.corrValidator",
                             .exporter = "pgu.exporter",
-                            .reporter = "pgu.reporter"
+                            .reporter = "pgu.reporter",
+
+                            #' @description
+                            #' Clears the heap and
+                            #' indicates that instance of `pgu.delegate` is removed from heap.
+                            finalize = function() {
+                              print("Instance of pgu.delegate removed from heap")
+                            } #function
                           ),
                           ##################
                           # accessor methods
@@ -91,29 +97,17 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             fileName = function(){
                               return(private$.fileName)
                             },
-                            #' @field importer
-                            #' Returns the instance variable status
-                            #' (pguIMP::pgu.status)
-                            importer = function(){
-                              return(private$.importer)
+                            #' @field loqFileName
+                            #' Returns the instance variable loqFileName
+                            #' (pguIMP::pgu.file)
+                            loqFileName = function(){
+                              return(private$.loqFileName)
                             },
                             #' @field rawData
                             #' Returns the instance variable rawData
                             #' (pguIMP::pgu.data)
                             rawData = function(){
                               return(private$.rawData)
-                            },
-                            #' @field loq
-                            #' Returns the instance variable loq
-                            #' (pguIMP::pgu.limitsOfQuantification)
-                            loq = function(){
-                              return(private$.loq)
-                            },
-                            #' @field metadata
-                            #' Returns the instance variable metadata
-                            #' (pguIMP::pgu.data)
-                            metadata = function(){
-                              return(private$.metadata)
                             },
                             #' @field filterSet
                             #' Returns the instance variable filterSet
@@ -127,23 +121,23 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             filteredData = function(){
                               return(private$.filteredData)
                             },
-                            #' @field filteredMetadata
-                            #' Returns the instance variable filteredMetadata
-                            #' (pguIMP::pgu.data)
-                            filteredMetadata = function(){
-                              return(private$.filteredMetadata)
-                            },
-                            #' @field explorer
-                            #' Returns the instance variable explorer
-                            #' (pguIMP::pgu.explorer)
-                            explorer = function(){
-                              return(private$.explorer)
+                            #' @field loq
+                            #' Returns the instance variable loq
+                            #' (pguIMP::pgu.limitsOfQuantification)
+                            loq = function(){
+                              return(private$.loq)
                             },
                             #' @field loqMutatedData
                             #' Returns the instance variable loqMutatedData
                             #' (pguIMP::pgu.data)
                             loqMutatedData = function(){
                               return(private$.loqMutatedData)
+                            },
+                            #' @field explorer
+                            #' Returns the instance variable explorer
+                            #' (pguIMP::pgu.explorer)
+                            explorer = function(){
+                              return(private$.explorer)
                             },
                             #' @field optimizer
                             #' Returns the instance variable optimizer
@@ -267,13 +261,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print("Instance of pgu.delegate allocated")
                               private$.status <- pgu.status$new()
                               private$.fileName <- pgu.file$new()
-                              private$.importer <- pgu.importer$new()
+                              private$.loqFileName <- pgu.file$new()
                               private$.rawData <- pgu.data$new()
                               private$.loq <- pgu.limitsOfQuantification$new()
-                              private$.metadata <- pgu.data$new()
+                              #private$.metadata <- pgu.data$new()
                               private$.filterSet <- pgu.filter$new()
                               private$.filteredData <- pgu.data$new()
-                              private$.filteredMetadata <- pgu.data$new()
+                              #private$.filteredMetadata <- pgu.data$new()
                               private$.explorer <- pgu.explorer$new()
                               private$.loqMutatedData <- pgu.data$new()
                               private$.optimizer <- pgu.optimizer$new()
@@ -295,12 +289,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               private$.reporter <- pgu.reporter$new()
                             }, #function
 
-                            #' @description
-                            #' Clears the heap and
-                            #' indicates that instance of `pgu.delegate` is removed from heap.
-                            finalize = function() {
-                              print("Instance of pgu.delegate removed from heap")
-                            }, #function
+
 
                             ##########################
                             # print instance variables
@@ -312,11 +301,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$print()
                             #' print(x)
-                            print = function() {
+                            print = function()
+                            {
                               sprintf("\npgu.delegate\n\n") %>%
                                 cat()
                               print(self$status)
                               print(self$fileName)
+                              print(self$loqFileName)
                               print(self$importer)
                               print(self$rawData)
                               print(self$loq)
@@ -344,10 +335,38 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               print(self$exporter)
                               print(self$reporter)
                               invisible(self)
-                            }, #fucntion
+                            }, #end pguIMP::pgu.delegate$print()
                             ####################
                             # import functions #
                             ####################
+                            #' @description
+                            #' Updates the import gui
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_import_gui = function(input, output, session)
+                            {
+                              shiny::updateNumericInput(session = session,
+                                                        inputId = "ni.importSheetIndex",
+                                                        value = private$.fileName$sheetIndex)
+                              shiny::updateSelectInput(session = session,
+                                                       inputId = "si.importSeparator",
+                                                       selected = private$.fileName$separator)
+                              shiny::updateNumericInput(session = session,
+                                                        inputId = "ni.importSkip",
+                                                        value =  private$.fileName$skipRows)
+                              shiny::updateSelectInput(session = session,
+                                                       inputId = "si.importHeader",
+                                                       selected = private$.fileName$header)
+                              shiny::updateSelectInput(session = session,
+                                                       inputId = "si.importNaChar",
+                                                       selected = private$.fileName$naChar)
+                            }, #end pguIMP::pgu.delegate$updateImportGui()
+
+
                             #' @description
                             #' Manages the data upload to the R server.
                             #' Updates the instance class status.
@@ -358,23 +377,32 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$queryExcel(input, output, session)
-                            queryExcel = function(input, output, session){
+                            #' x$query_data(input, output, session)
+                            query_data = function(input, output, session)
+                            {
                               if (length(input$fi.import$datapath) > 0){
-                                private$.fileName$setUploadFileName <- input$fi.import$datapath
-                                private$.fileName$setFileName <- input$fi.import$name
-                                private$.fileName$splitFileName()
+                                private$.fileName$reset(uploadFileName = input$fi.import$datapath,
+                                                        fileName = input$fi.import$name,
+                                                        sheetIndex = input$ni.importSheetIndex,
+                                                        separator = input$si.importSeparator,
+                                                        skipRows = input$ni.importSkip,
+                                                        columnName = input$si.importColnames,
+                                                        naChar = input$si.importNaChar)
+                                private$.fileName$fit()
                                 private$.status$update(processName = "dataUploaded", value = TRUE)
                               } #if
                               else{
                                 private$.status$update(processName = "dataUploaded", value = FALSE)
-                                shiny::showNotification(paste("Please select a valid file."),type = "error", duration = 10)
+                                shiny::showNotification(paste("File name field must not left empty."),type = "error", duration = 10)
                               } #else
-                              if((private$.fileName$suffix != "xls") && (private$.fileName$suffix != "xlsx")){
+                              if((private$.fileName$suffix != "csv") &&
+                                 (private$.fileName$suffix != "txt") &&
+                                 (private$.fileName$suffix != "xls") &&
+                                 (private$.fileName$suffix != "xlsx")){
                                 private$.status$update(processName = "dataUploaded", value = FALSE)
-                                shiny::showNotification(paste("Please select a valid file of type '.xls' or '.xlsx'."),type = "error", duration = 10)
+                                shiny::showNotification(paste("Invalid file type. Please select a valid file of type '.arff', '.csv', '.txt', '.xls' or '.xlsx'."),type = "error", duration = 10)
                               } #if
-                            }, #function
+                            }, #end pguIMP::pgi.delegate$queryData()
 
                             #' @description
                             #' Imports uploaded data from the R server into the instance variable rawData.
@@ -386,11 +414,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$importData(input, output, session)
-                            importData = function(input, output, session){
+                            #' x$import_data(input, output, session)
+                            import_data = function(input, output, session)
+                            {
                               if (private$.status$query(processName = "dataUploaded")){
                                 tryCatch({
-                                  private$.rawData$setRawData <- private$.importer$importData(self$fileName)
+                                  # private$.rawData$setRawData <- private$.importer$importData(self$fileName)
+                                  private$.rawData$setRawData <- pguIMP::importDataSet(obj = self$fileName)
+                                  private$.rawData$fit()
                                   private$.status$update(processName = "dataImported", value = TRUE)
                                 },
                                 error = function(e) {
@@ -403,11 +434,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 private$.status$update(processName = "dataUploaded", value = FALSE)
                                 shiny::showNotification(paste("No file uploaded to import. Please upload a valid file first."),type = "error", duration = 10)
                               }#else
-                            }, #function
+                            }, #end pguIMP::pgu.delegate$importData()
 
                             #' @description
-                            #' Imports uploaded data from the R server into the instance variable loqData.
-                            #' Updates the instance class status.
+                            #' Updates the tbl.importDataTypes table.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -415,28 +445,36 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$importLoq(input, output, session)
-                            importLoq = function(input, output, session){
-                              if (private$.status$query(processName = "dataImported")){
-                                tryCatch({
-                                  private$.loq$setLoq <- private$.importer$importLoq(self$fileName)
-                                  private$.status$update(processName = "loqImported", value = TRUE)
-                                },
-                                error = function(e) {
-                                  private$.status$update(processName = "loqImported", value = FALSE)
-                                  shiny::showNotification(paste(e),type = "error", duration = 10)
-                                }#error
-                                )#tryCatch
+                            #' x$update_import_data_Types_tbl(input, output, session)
+                            update_import_data_Types_tbl = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataImported")){
+                                output$tbl.importDataTypes <- DT::renderDataTable({self$rawData$classInformation %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("rawData_type") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                }#output
+                                )#output
                               }#if
                               else{
-                                private$.status$update(processName = "loqImported", value = FALSE)
-                                shiny::showNotification(paste("No file uploaded to import. Please upload a valid file first."),type = "error", duration = 10)
+                                output$tbl.importDataTypes <- DT::renderDataTable(NULL)
                               }#else
-                            }, #function
+                            }, #end pguIMP::pgu.delegate$update_import_data_Types_tbl
 
                             #' @description
-                            #' Imports uploaded data from the R server into the instance variable metadata.
-                            #' Updates the instance class status.
+                            #' Updates the tbl.importDataStatistics table.
                             #' @param input
                             #' Pointer to shiny input
                             #' @param output
@@ -444,28 +482,118 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$importMetadata(input, output, session)
-                            importMetadata = function(input, output, session){
-                              if (private$.status$query(processName = "dataImported")){
-                                tryCatch({
-                                  private$.metadata$setRawData <- private$.importer$importMetadata(self$fileName)
-                                  private$.status$update(processName = "metadataImported", value = TRUE)
-                                },
-                                error = function(e) {
-                                  private$.status$update(processName = "metadataImported", value = FALSE)
-                                  shiny::showNotification(paste(e),type = "error", duration = 10)
-                                }#error
-                                )#tryCatch
+                            #' x$update_import_data_statistics_tbl(input, output, session)
+                            update_import_data_statistics_tbl = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataImported")){
+                                output$tbl.importDataStatistics <- DT::renderDataTable({self$rawData$statistics %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("rawData_statistics") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                }#output
+                                )#output
                               }#if
                               else{
-                                private$.status$update(processName = "metadataImported", value = FALSE)
-                                shiny::showNotification(paste("No file uploaded to import. Please upload a valid file first."),type = "error", duration = 10)
+                                output$tbl.importDataStatistics <- DT::renderDataTable(NULL)
                               }#else
-                            }, #function
+                            }, #end pguIMP::pgu.delegate$update_import_data_statistics_tbl
+
+                            #' @description
+                            #' Updates the tbl.importMissingsStatistics table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$update_import_missings_statistics_tbl(input, output, session)
+                            update_import_missings_statistics_tbl = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataImported")){
+                                output$tbl.importMissingsStatistics <- DT::renderDataTable({self$rawData$missingsStatistics %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("rawData_missings") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                }#output
+                                )#output
+                              }#if
+                              else{
+                                output$tbl.importMissingsStatistics <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #end pguIMP::pgu.delegate$update_import_missings_statistics_tbl
+
 
                             ####################
                             # filter functions #
                             ####################
+                            #' @description
+                            #' Updates the tbl.filter table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$update_filter_select_tbl(input, output, session)
+                            update_filter_select_tbl = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataImported")){
+                                output$tbl.filterSelect <- DT::renderDataTable({self$rawData$rawData %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      rownames = FALSE,
+                                      filter = "top",
+                                      selection = list("multiple", target = "column"),
+                                      options = list(
+                                        stateSave = TRUE,
+                                        scrollX = TRUE,
+                                        scrollY = '45vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        columnDefs = list(list(width = '75px', targets = "_all")),
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("filtered_data") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#optins
+                                    )#DT::datatable
+                                })#output
+                              }#if
+                              else{
+                                output$tbl.filterSelect <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #end pguIMP::pgu.delegate$update_filter_select_tbl
+
+
                             #' @description
                             #' Queries the filter parameters selected by the user in the gui
                             #'  and stores them in the instance variable filterSet.
@@ -476,37 +604,44 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateFilter(input, output, session)
-                            updateFilter = function(input, output, session){
+                            #' x$update_filter(input, output, session)
+                            update_filter = function(input, output, session)
+                            {
                               if(private$.status$query(processName = "dataImported")){
-                                if (length(input$tbl.filter_rows_all) < 1) {
-                                  private$.filterSet$resetRowIdx(data = self$rawData$rawData)
-                                }#if
-                                else {
-                                  private$.filterSet$setRowIdx <- input$tbl.filter_rows_all
-                                }#else
-                                if (length(input$tbl.filter_columns_selected) < 1) {
-                                  private$.filterSet$resetColIdx(data = self$rawData$rawData)
-                                }#if
-                                else{
-                                  colSelection <- input$tbl.filter_columns_selected - ncol(self$metadata$rawData) + 1
-                                  colSelection <- colSelection[colSelection > 0] + 1
-                                  if(length(colSelection) < 1){
-                                    private$.filterSet$resetColIdx(data = self$rawData$rawData)
-                                  }#if
-                                  else{
-                                    colSelection <- colSelection %>%
-                                      append(1) %>%
-                                      unique() %>%
-                                      sort
-                                    private$.filterSet$setColIdx <- colSelection
-                                  }#else
-                                }#else
+                                # if (length(input$tbl.filter_rows_all) < 1) {
+                                #   private$.filterSet$resetRowIdx(data = self$rawData$rawData)
+                                # }#if
+                                # else {
+                                #   private$.filterSet$setRowIdx <- input$tbl.filter_rows_all
+                                # }#else
+                                # if (length(input$tbl.filter_columns_selected) < 1) {
+                                #   private$.filterSet$resetColIdx(data = self$rawData$rawData)
+                                # }#if
+                                # else{
+                                #   colSelection <- input$tbl.filter_columns_selected - ncol(self$metadata$rawData) + 1
+                                #   colSelection <- colSelection[colSelection > 0] + 1
+                                #   if(length(colSelection) < 1){
+                                #     private$.filterSet$resetColIdx(data = self$rawData$rawData)
+                                #   }#if
+                                #   else{
+                                #     colSelection <- colSelection %>%
+                                #       append(1) %>%
+                                #       unique() %>%
+                                #       sort
+                                #     private$.filterSet$setColIdx <- colSelection
+                                #   }#else
+                                # }#else
+                                private$.filterSet$reset(data_df = self$rawData$rawData)
+                                private$.filterSet$setRowIdx <- input$tbl.filterSelect_rows_all
+                                if (!is.null(input$tbl.filterSelect_columns_selected))
+                                {
+                                  private$.filterSet$setColIdx <- input$tbl.filterSelect_columns_selected + 1
+                                }
                               }#if
                               else{
                                 shiny::showNotification(paste("No file imported. Please import a valid file first."),type = "error", duration = 10)
                               }#else
-                            }, #fucntion
+                            }, #end pguIMP::pgu.delegate$update_filter
 
                             #' @description
                             #' Queries the filter parameters selected by the user in the gui
@@ -519,34 +654,42 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateFilterInverse(input, output, session)
-                            updateFilterInverse = function(input, output, session){
+                            #' x$update_filter_inverse(input, output, session)
+                            update_filter_inverse = function(input, output, session){
                               if(private$.status$query(processName = "dataImported")){
-                                if (length(input$tbl.filter_rows_all) < 1) {
-                                  private$.filterSet$resetRowIdx(data = self$rawData$rawData)
-                                }#if
-                                else {
-                                  private$.filterSet$setRowIdx <- input$tbl.filter_rows_all
-                                }#else
-                                if (length(input$tbl.filter_columns_selected) < 1) {
-                                  private$.filterSet$resetColIdx(data = self$rawData$rawData)
-                                }#if
-                                else{
-                                  colSelection <- input$tbl.filter_columns_selected - ncol(self$metadata$rawData) + 1
-                                  colSelection <- colSelection[colSelection > 0] + 1
+                                # if (length(input$tbl.filter_rows_all) < 1) {
+                                #   private$.filterSet$resetRowIdx(data = self$rawData$rawData)
+                                # }#if
+                                # else {
+                                #   private$.filterSet$setRowIdx <- input$tbl.filter_rows_all
+                                # }#else
+                                # if (length(input$tbl.filter_columns_selected) < 1) {
+                                #   private$.filterSet$resetColIdx(data = self$rawData$rawData)
+                                # }#if
+                                # else{
+                                #   colSelection <- input$tbl.filter_columns_selected - ncol(self$metadata$rawData) + 1
+                                #   colSelection <- colSelection[colSelection > 0] + 1
+                                #   idx <- seq(1,ncol(self$rawData$rawData), 1)
+                                #   iverseColSelection <- idx[-c(colSelection)]
+                                #   if(length(iverseColSelection) < 1){
+                                #     private$.filterSet$resetColIdx(data = self$rawData$rawData)
+                                #   }#if
+                                #   else{
+                                #     iverseColSelection <- iverseColSelection %>%
+                                #       append(1) %>%
+                                #       unique() %>%
+                                #       sort()
+                                #     private$.filterSet$setColIdx <- iverseColSelection
+                                #   }#else
+                                # }#else
+                                private$.filterSet$reset(data_df = self$rawData$rawData)
+                                private$.filterSet$setRowIdx <- input$tbl.filterSelect_rows_all
+                                if (!is.null(input$tbl.filterSelect_columns_selected))
+                                {
                                   idx <- seq(1,ncol(self$rawData$rawData), 1)
-                                  iverseColSelection <- idx[-c(colSelection)]
-                                  if(length(iverseColSelection) < 1){
-                                    private$.filterSet$resetColIdx(data = self$rawData$rawData)
-                                  }#if
-                                  else{
-                                    iverseColSelection <- iverseColSelection %>%
-                                      append(1) %>%
-                                      unique() %>%
-                                      sort()
-                                    private$.filterSet$setColIdx <- iverseColSelection
-                                  }#else
-                                }#else
+                                  iverseColSelection <- idx[-c(input$tbl.filterSelect_columns_selected + 1)]
+                                  private$.filterSet$setColIdx <- iverseColSelection
+                                }
                               }#if
                               else{
                                 shiny::showNotification(paste("No file imported. Please import a valid file first."),type = "error", duration = 10)
@@ -564,11 +707,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$resetFilter(input, output, session)
-                            resetFilter = function(input, output, session){
+                            #' x$reset_filter(input, output, session)
+                            reset_filter = function(input, output, session){
                               if(private$.status$query(processName = "dataImported")){
-                                private$.filterSet$resetRowIdx(data = self$rawData$rawData)
-                                private$.filterSet$resetColIdx(data = self$rawData$rawData)
+                                private$.filterSet$reset(data_df = self$rawData$rawData)
                               }#if
                               else{
                                 shiny::showNotification(paste("No file imported. Please import a valid file first."),type = "error", duration = 10)
@@ -586,14 +728,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$filterData(input, output, session)
-                            filterData = function(input, output, session){
+                            #' x$filter_data(input, output, session)
+                            filter_data = function(input, output, session)
+                            {
                               if(private$.status$query(processName = "dataImported")){
                                 private$.filteredData$setRawData <- self$rawData$rawData %>%
-                                  self$filterSet$filter()
-                                private$.filteredMetadata$setRawData <- self$metadata$rawData %>%
-                                  self$filterSet$filterRows()
-                                self$updateExplorationData(input, output, session)
+                                  self$filterSet$predict()
+                                private$.filteredData$fit()
                                 private$.status$update(processName = "dataFiltered", value = TRUE)
                               }#if
                               else{
@@ -601,9 +742,85 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               }#else
                             }, #function
 
+                            #' @description
+                            #' Updates the tbl.filterStatistics table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$update_filter_statistics_tbl(input, output, session)
+                            update_filter_statistics_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "dataFiltered")){
+                                output$tbl.filterStatistics <- DT::renderDataTable({self$filteredData$statistics %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '25vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        columnDefs = list(list(width = '50px', targets = "_all")),
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("filter_statistics") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })#output
+                              }#if
+                              else{
+                                output$tbl.filterStatistics <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Updates the tbl.filterMissings table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$update_filter_missings_tbl(input, output, session)
+                            update_filter_missings_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "dataFiltered")){
+                                output$tbl.filterMissings <- DT::renderDataTable({self$filteredData$missingsStatistics %>%
+                                    format.data.frame(scientific = FALSE, digits = 2) %>%
+                                    DT::datatable(
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '25vh',
+                                        paging = FALSE,
+                                        autoWidth = TRUE,
+                                        columnDefs = list(list(width = '50px', targets = "_all")),
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("filter_missings") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        )) #buttons
+                                      )#options
+                                    )#DT::datatable
+                                })#output
+                              }#if
+                              else{
+                                output$tbl.filterMissings <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
+
                             #####################
                             # explore functions #
                             #####################
+
                             #' @description
                             #' Updates the gui.
                             #' @param input
@@ -613,11 +830,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationData(input, output, session)
-                            updateExplorationData = function(input, output, session){
+                            #' x$update_exploration_gui(input, output, session)
+                            update_exploration_gui = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
-                                private$.explorer$reset(obj =self$filteredMetadata$rawData %>%
-                                                          dplyr::right_join(self$filteredData$rawData, by = "Sample Name"),
+                                private$.explorer$reset(data_df = self$filteredData$rawData,
                                                         abs = "Sample Name",
                                                         ord = "Sample Name"
                                 )
@@ -639,9 +855,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationAbscissa(input, output, session)
-                            updateExplorationAbscissa = function(input, output, session){
-                              private$.explorer$setAbscissa <- input$si.exploreAbs
+                            #' x$update_exploration_abscissa(input, output, session)
+                            update_exploration_abscissa = function(input, output, session){
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                private$.explorer$setAbscissa <- input$si.exploreAbs
+                                private$.explorer$fit()
+                              }
                             }, #function
 
                             #' @description
@@ -653,9 +873,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationOrdinate(input, output, session)
-                            updateExplorationOrdinate = function(input, output, session){
-                              private$.explorer$setOrdinate <- input$si.exploreOrd
+                            #' x$update_exploration_ordinate(input, output, session)
+                            update_exploration_ordinate = function(input, output, session){
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                private$.explorer$setOrdinate <- input$si.exploreOrd
+                                private$.explorer$fit()
+                              }
                             }, #function
 
                             #' @description
@@ -668,8 +892,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationGraphic(input, output, session)
-                            updateExplorationGraphic = function(input, output, session){
+                            #' x$update_exploration_graphic(input, output, session)
+                            update_exploration_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreGraphic <- shiny::renderPlot(
                                   self$explorer$scatterPlot(),
@@ -691,8 +915,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationAbscissaGraphic(input, output, session)
-                            updateExplorationAbscissaGraphic = function(input, output, session){
+                            #' x$update_exploration_abscissa_graphic(input, output, session)
+                            update_exploration_abscissa_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreAbscissaGraphic <- shiny::renderPlot(
                                   self$explorer$abscissaPlot(),
@@ -716,7 +940,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateExplorationOrdinateGraphic(input, output, session)
-                            updateExplorationOrdinateGraphic = function(input, output, session){
+                            update_exploration_ordinate_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreOrdinateGraphic <- shiny::renderPlot(
                                   self$explorer$ordinatePlot(),
@@ -739,11 +963,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateExplorationAbscissaTable(input, output, session)
-                            updateExplorationAbscissaTable = function(input, output, session){
+                            #' x$update_exploration_abscissa_table(input, output, session)
+                            update_exploration_abscissa_table = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.exploreAbscissaStatistics <- DT::renderDataTable({
-                                  self$explorer$abscissaStatistic() %>%
+                                  self$explorer$abscissaStatistics %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -753,7 +977,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("rawData_type"),
+                                          filename = self$fileName$predict(sprintf("abs_%s_statistics", input$si.exploreAbs)) %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -776,10 +1001,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateExplorationOrdinateTable(input, output, session)
-                            updateExplorationOrdinateTable = function(input, output, session){
+                            update_exploration_ordinate_table = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.exploreOrdinateStatistics <- DT::renderDataTable({
-                                  self$explorer$ordinateStatistic() %>%
+                                  self$explorer$ordinateStatistics %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -788,7 +1013,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("rawData_type"),
+                                          filename = self$fileName$predict(sprintf("ord_%s_statistics", input$si.exploreOrd)) %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -801,8 +1027,149 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             ########################
+                            # LOQ Define functions #
+                            ########################
+                            #' @description
+                            #' Initializes the LOQ object after filtering.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            reset_loq_values = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                self$filteredData$numericalAttributeNames %>%
+                                  private$.loq$reset()
+                                self$update_loq_define_gui(input, output, session)
+                                private$.status$update(processName = "loqImported", value = TRUE)
+                              }
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_gui = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                output$tbl.loqDefineValues  <- DT::renderDataTable({
+                                  self$loq$loq %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("LOQ_values") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.loqDefineValues <- DT::renderDataTable(NULL)
+                              }#else
+                            },
+
+                            #' @description
+                            #' Manages the loq data upload to the R server.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            query_loq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered")){
+                                if (length(input$fi.LoqImport$datapath) > 0){
+                                  private$.loqFileName$reset(uploadFileName = input$fi.LoqImport$datapath,
+                                                             fileName = input$fi.LoqImport$name,
+                                                             sheetIndex = input$ni.LoqSheetIndex,
+                                                             separator = input$si.LoqSeparator,
+                                                             skipRows = input$ni.LoqSkip,
+                                                             columnName = input$si.LoqColnames,
+                                                             naChar = input$si.LoqNaChar)
+                                  private$.loqFileName$fit()
+                                } #if
+                                else{
+                                  shiny::showNotification(paste("File name field must not left empty."),type = "error", duration = 10)
+                                } #else
+                                if((private$.fileName$suffix != "csv") &&
+                                   (private$.fileName$suffix != "txt") &&
+                                   (private$.fileName$suffix != "xls") &&
+                                   (private$.fileName$suffix != "xlsx")){
+                                  shiny::showNotification(paste("Invalid file type. Please select a valid file of type '.csv', '.txt', '.xls' or '.xlsx'."),type = "error", duration = 10)
+                                } #if
+                              }
+                            }, #end pguIMP::pgi.delegate$query_loq()
+
+                            #' @description
+                            #' Imports the loq data upload to the R server.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            import_loq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                private$.loq$reset(attribute_names = self$filteredData$numericalAttributeNames,
+                                                   data_df = pguIMP::importDataSet(obj = self$loqFileName))
+                                self$update_loq_define_gui(input, output, session)
+                                private$.status$update(processName = "loqImported", value = TRUE)
+                              }
+                            },
+
+                            ########################
                             # LOQ Detect functions #
                             ########################
+                            #' #' @description
+                            #' #' Imports uploaded data from the R server into the instance variable loqData.
+                            #' #' Updates the instance class status.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$importLoq(input, output, session)
+                            #' importLoq = function(input, output, session){
+                            #'   if (private$.status$query(processName = "dataImported")){
+                            #'     tryCatch({
+                            #'       private$.loq$setLoq <- private$.importer$importLoq(self$fileName)
+                            #'       private$.status$update(processName = "loqImported", value = TRUE)
+                            #'     },
+                            #'     error = function(e) {
+                            #'       private$.status$update(processName = "loqImported", value = FALSE)
+                            #'       shiny::showNotification(paste(e),type = "error", duration = 10)
+                            #'     }#error
+                            #'     )#tryCatch
+                            #'   }#if
+                            #'   else{
+                            #'     private$.status$update(processName = "loqImported", value = FALSE)
+                            #'     shiny::showNotification(paste("No file uploaded to import. Please upload a valid file first."),type = "error", duration = 10)
+                            #'   }#else
+                            #' }, #function
+
+
+
                             #' @description
                             #' Updates the gui.
                             #' @param input
@@ -812,14 +1179,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateLoqDetectGui(input, output, session)
-                            updateLoqDetectGui = function(input, output, session){
-                              if(private$.status$query(processName = "dataFiltered")){
-                                self$updateLoqNaHandling(input, output, session)
+                            #' x$update_loq_detect_gui(input, output, session)
+                            update_loq_detect_gui = function(input, output, session){
+                              if(private$.status$query(processName = "loqImported")){
+                                self$update_loq_na_handling(input, output, session)
                                 shiny::updateSelectInput(session,
                                                          "si.loqDetectFeature",
-                                                         choices = self$filteredData$numericFeatureNames,
-                                                         selected = self$filteredData$numericFeatureNames[1])
+                                                         choices = self$filteredData$numericalAttributeNames,
+                                                         selected = self$filteredData$numericAttributeNames[1])
 
                               }#if
                               else{
@@ -837,12 +1204,15 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$updateLoqNaHandling(input, output, session)
-                            updateLoqNaHandling = function(input, output, session){
-                              shiny::updateSelectInput(session,
-                                                       "si.loqNaHandling",
-                                                       choices = self$loq$naHandlingAlphabet,
-                                                       selected = self$loq$naHandlingAgent)
+                            #' x$update_loq_na_handling(input, output, session)
+                            update_loq_na_handling = function(input, output, session){
+                              if(private$.status$query(processName = "loqImported"))
+                              {
+                                shiny::updateSelectInput(session,
+                                                         "si.loqNaHandling",
+                                                         choices = self$loq$naHandlingAlphabet,
+                                                         selected = self$loq$naHandlingAgent)
+                              }
                             }, #function
 
                             #' @description
@@ -856,11 +1226,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$detectLoq(input, output, session)
-                            detectLoq = function(input, output, session){
-                              if(private$.status$query(processName = "dataFiltered")){
+                            detect_loq = function(input, output, session){
+                              if(private$.status$query(processName = "loqImported")){
                                 private$.loq$setNaHandlingAgent <- input$si.loqNaHandling
-                                private$.loq$findOutliers(obj = self$filteredData$numericData())
-                                private$.loq$collectStatistics(obj = self$filteredData$numericData())
+                                self$filteredData$numerical_data() %>%
+                                  private$.loq$fit()
                                 private$.status$update(processName = "loqDetected", value = TRUE)
                               }#if
                               else{
@@ -878,7 +1248,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqDetectStatisticsTbl(input, output, session)
-                            updateLoqDetectStatisticsTbl = function(input, output, session){
+                            update_loq_detect_statistics_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqDetected")){
                                 output$tbl.loqDetectStatistics <- DT::renderDataTable(
                                   self$loq$loqStatistics %>%
@@ -892,7 +1262,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("loqStatistics"),
+                                          filename = self$fileName$predict("loqStatistics") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -914,106 +1285,131 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqDetectOutlierTbl(input, output, session)
-                            updateLoqDetectOutlierTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "loqDetected")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
-                                dfOutlier <- self$loq$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::slice(idx) %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("loqOutlier"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$filteredData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
+                            update_loq_detect_outlier_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "loqDetected"))
+                              {
+                                output$tbl.loqDetectOutlier <- DT::renderDataTable(
+                                  self$loq$outliers %>%
+                                    format.data.frame(scientific = FALSE, digits = 3) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("loqOutliers") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.loqDetectOutlier <- DT::renderDataTable(NULL)
+                              }
 
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.loqDetectOutlier <- DT::renderDataTable(t)
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(self$status$query(processName = "loqDetected")){
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
+                              #   dfOutlier <- self$loq$outliers
+                              #   idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                              #   t <- dfData %>%
+                              #     dplyr::slice(idx) %>%
+                              #     dplyr::mutate_if(is.numeric, round, 3) %>%
+                              #     DT::datatable(
+                              #       options = list(
+                              #         scrollX = TRUE,
+                              #         scrollY = '350px',
+                              #         paging = FALSE,
+                              #         dom = "Blfrtip",
+                              #         buttons = list(list(
+                              #           extend = 'csv',
+                              #           filename = self$fileName$bluntFileName("loqOutlier"),
+                              #           text = "Download"
+                              #         ))#buttons
+                              #       )#options
+                              #     )#DT::datatable
+                              #   for (featureName in self$filteredData$numericFeatureNames){
+                              #     featureOutlier <- dfOutlier %>%
+                              #       dplyr::filter(feature == featureName) %>%
+                              #       dplyr::mutate_if(is.numeric, round, 3)
+                              #     if (nrow(featureOutlier)>0){
+                              #       t <- DT::formatStyle(t,
+                              #                            featureName,
+                              #                            backgroundColor = styleEqual(dfData %>%
+                              #                                                           dplyr::select(!!featureName) %>%
+                              #                                                           dplyr::slice(featureOutlier[["measurement"]]) %>%
+                              #                                                           unlist() %>%
+                              #                                                           as.numeric() %>%
+                              #                                                           round(digits = 3),
+                              #                                                         featureOutlier[["color"]])
+                              #
+                              #       )#t
+                              #     }#if
+                              #   }#for
+                              # }#if
+                              # output$tbl.loqDetectOutlier <- DT::renderDataTable(t)
                             }, #function
 
-                            #' @description
-                            #' Updates the numerical loq data table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectDataTbl(input, output, session)
-                            updateLoqDetectDataTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "loqDetected")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
-                                dfOutlier <- self$loq$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("loqData"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$filteredData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
-
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.loqDetectData <- DT::renderDataTable(t)
-                            }, #function
+                            #' #' @description
+                            #' #' Updates the numerical loq data table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateLoqDetectDataTbl(input, output, session)
+                            #' update_loq_detect_data_tbl = function(input, output, session){
+                            #'   options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                            #'   t <- NULL
+                            #'   if(self$status$query(processName = "loqDetected")){
+                            #'     dfData <- self$filteredMetadata$rawData %>%
+                            #'       dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
+                            #'     dfOutlier <- self$loq$outliers
+                            #'     idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                            #'     t <- dfData %>%
+                            #'       dplyr::mutate_if(is.numeric, round, 3) %>%
+                            #'       DT::datatable(
+                            #'         options = list(
+                            #'           scrollX = TRUE,
+                            #'           scrollY = '350px',
+                            #'           paging = FALSE,
+                            #'           dom = "Blfrtip",
+                            #'           buttons = list(list(
+                            #'             extend = 'csv',
+                            #'             filename = self$fileName$bluntFileName("loqData"),
+                            #'             text = "Download"
+                            #'           ))#buttons
+                            #'         )#options
+                            #'       )#DT::datatable
+                            #'     for (featureName in self$filteredData$numericFeatureNames){
+                            #'       featureOutlier <- dfOutlier %>%
+                            #'         dplyr::filter(feature == featureName) %>%
+                            #'         dplyr::mutate_if(is.numeric, round, 3)
+                            #'       if (nrow(featureOutlier)>0){
+                            #'         t <- DT::formatStyle(t,
+                            #'                              featureName,
+                            #'                              backgroundColor = styleEqual(dfData %>%
+                            #'                                                             dplyr::select(!!featureName) %>%
+                            #'                                                             dplyr::slice(featureOutlier[["measurement"]]) %>%
+                            #'                                                             unlist() %>%
+                            #'                                                             as.numeric() %>%
+                            #'                                                             round(digits = 3),
+                            #'                                                           featureOutlier[["color"]])
+                            #'
+                            #'         )#t
+                            #'       }#if
+                            #'     }#for
+                            #'   }#if
+                            #'   output$tbl.loqDetectData <- DT::renderDataTable(t)
+                            #' }, #function
 
                             #' @description
                             #' Updates the loq statistics graphic.
@@ -1025,10 +1421,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqDetectStatisticsGraphic(input, output, session)
-                            updateLoqDetectStatisticsGraphic = function(input, output, session){
+                            update_loq_detect_statistics_graphic = function(input, output, session){
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectStatistics <- shiny::renderPlot(
-                                  self$loq$plotLoqDistribution(),
+                                  self$loq$plot_loq_distribution(),
                                   height = 400,
                                   bg="transparent"
                                 )
@@ -1048,10 +1444,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqDetectFeatureGraphic(input, output, session)
-                            updateLoqDetectFeatureGraphic = function(input, output, session){
+                            update_loq_detect_attribute_graphic = function(input, output, session){
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectFeature <- shiny::renderPlot(
-                                  self$loq$featurePlot(obj = self$filteredData$rawData, feature = input$si.loqDetectFeature),
+                                  self$loq$attribute_plot(data_df = self$filteredData$rawData, attribute = input$si.loqDetectFeature),
                                   height = 425,
                                   bg="transparent"
                                 )
@@ -1072,42 +1468,68 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqDetectFeatureTbl(input, output, session)
-                            updateLoqDetectFeatureTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(private$.status$query(processName = "loqDetected")){
-                                feature <- input$si.loqDetectFeature
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$filteredData$rawData %>%
-                                                      dplyr::select(c("Sample Name", !!feature)),
-                                                    by = "Sample Name")
+                            update_loq_detect_attribute_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "loqDetected"))
+                              {
+                                suffix <- sprintf("%s_outliers", input$si.loqDetectFeature)
+                                output$tbl.loqDetectFeature <- DT::renderDataTable(
+                                  self$loq$attribute_outliers(attribute = input$si.loqDetectFeature) %>%
+                                    format.data.frame(scientific = FALSE, digits = 3) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict(suffix) %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.loqDetectFeature <- DT::renderDataTable(NULL)
+                              }
 
-                                dfOutlier <- self$loq$featureOutlier(feature = feature)
-
-                                t <- dfData %>%
-                                  DT::datatable(options = list(scrollX = TRUE,
-                                                               scrollY = '300px',
-                                                               paging = FALSE,
-                                                               dom = "Blfrtip",
-                                                               buttons = list(list(
-                                                                 extend = 'csv',
-                                                                 filename = self$fileName$bluntFileName("rawData_type"),
-                                                                 text = "Download"
-                                                               ))
-                                  ))#DT::datatable
-                                if (nrow(dfOutlier) > 0){
-                                  t <- DT::formatStyle(
-                                    t,
-                                    feature,
-                                    backgroundColor = DT::styleEqual(dfData %>%
-                                                                       dplyr::select(!!feature) %>%
-                                                                       dplyr::slice(dfOutlier[["measurement"]]) %>%
-                                                                       unlist() %>%
-                                                                       round(digits = 3),
-                                                                     dfOutlier[["color"]]))
-                                }#if
-                              }#if
-                              output$tbl.loqDetectFeature <- DT::renderDataTable(t)
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(private$.status$query(processName = "loqDetected")){
+                              #   feature <- input$si.loqDetectFeature
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$filteredData$rawData %>%
+                              #                         dplyr::select(c("Sample Name", !!feature)),
+                              #                       by = "Sample Name")
+                              #
+                              #   dfOutlier <- self$loq$featureOutlier(feature = feature)
+                              #
+                              #   t <- dfData %>%
+                              #     DT::datatable(options = list(scrollX = TRUE,
+                              #                                  scrollY = '300px',
+                              #                                  paging = FALSE,
+                              #                                  dom = "Blfrtip",
+                              #                                  buttons = list(list(
+                              #                                    extend = 'csv',
+                              #                                    filename = self$fileName$bluntFileName("rawData_type"),
+                              #                                    text = "Download"
+                              #                                  ))
+                              #     ))#DT::datatable
+                              #   if (nrow(dfOutlier) > 0){
+                              #     t <- DT::formatStyle(
+                              #       t,
+                              #       feature,
+                              #       backgroundColor = DT::styleEqual(dfData %>%
+                              #                                          dplyr::select(!!feature) %>%
+                              #                                          dplyr::slice(dfOutlier[["measurement"]]) %>%
+                              #                                          unlist() %>%
+                              #                                          round(digits = 3),
+                              #                                        dfOutlier[["color"]]))
+                              #   }#if
+                              # }#if
+                              # output$tbl.loqDetectFeature <- DT::renderDataTable(t)
                             }, #function
 
                             ########################
@@ -1123,14 +1545,16 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqMutateGui(input, output, session)
-                            updateLoqMutateGui = function(input, output, session){
-                              if(private$.status$query(processName = "loqDetected")){
-                                self$updateLloqSubstitute(input, output, session)
-                                self$updateUloqSubstitute(input, output, session)
+                            update_loq_mutate_gui = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "loqDetected"))
+                              {
+                                self$update_lloq_substitute(input, output, session)
+                                self$update_uloq_substitute(input, output, session)
                                 shiny::updateSelectInput(session,
                                                          "si.loqMutateFeature",
-                                                         choices = self$filteredData$numericFeatureNames,
-                                                         selected = self$filteredData$numericFeatureNames[1])
+                                                         choices = self$filteredData$numericalAttributeNames,
+                                                         selected = self$filteredData$numericalAttributeNames[1])
 
                               }#if
                               else{
@@ -1148,7 +1572,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLloqSubstitute(input, output, session)
-                            updateLloqSubstitute = function(input, output, session){
+                            update_lloq_substitute = function(input, output, session)
+                            {
                               shiny::updateSelectInput(session,
                                                        "si.lloqSubstitute",
                                                        choices = self$loq$lloqSubstituteAlphabet,
@@ -1165,7 +1590,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateUloqSubstitute(input, output, session)
-                            updateUloqSubstitute = function(input, output, session){
+                            update_uloq_substitute = function(input, output, session)
+                            {
                               shiny::updateSelectInput(session,
                                                        "si.uloqSubstitute",
                                                        choices = self$loq$uloqSubstituteAlphabet,
@@ -1184,18 +1610,18 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$mutateLoq(input, output, session)
-                            mutateLoq = function(input, output, session){
-                              if(private$.status$query(processName = "loqDetected")){
+                            mutate_loq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "loqDetected"))
+                              {
                                 private$.loq$setLloqSubstituteAgent <- input$si.lloqSubstitute
                                 private$.loq$setUloqSubstituteAgent <- input$si.uloqSubstitute
-                                name  <- as.name("Sample Name")
-                                private$.loqMutatedData$setRawData <- self$filteredData$numericData() %>%
-                                  self$loq$mutateLoqOutliers() %>%
-                                  tibble::add_column(!! name := self$filteredData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$filteredData$numericFeatureNames))
+
+                                private$.loqMutatedData$setRawData <- self$filteredData$numerical_data() %>%
+                                  self$loq$predict() %>%
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.loqMutatedData$fit()
                                 private$.status$update(processName = "loqMutated", value = TRUE)
                               }#if
                               else{
@@ -1203,97 +1629,97 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               }#else
                             }, #function
 
-                            #' @description
-                            #' Updates the numerical loq statistics table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateStatisticsTbl(input, output, session)
-                            updateLoqMutateStatisticsTbl = function(input, output, session){
-                              if(private$.status$query(processName = "loqMutated")){
-                                output$tbl.loqMutateStatistics <- DT::renderDataTable(
-                                  self$loq$loqStatistics %>%
-                                    format.data.frame(scientific = FALSE, digits = 3) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("loqStatistics"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
+                            #' #' @description
+                            #' #' Updates the numerical loq statistics table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateLoqMutateStatisticsTbl(input, output, session)
+                            #' updateLoqMutateStatisticsTbl = function(input, output, session){
+                            #'   if(private$.status$query(processName = "loqMutated")){
+                            #'     output$tbl.loqMutateStatistics <- DT::renderDataTable(
+                            #'       self$loq$loqStatistics %>%
+                            #'         format.data.frame(scientific = FALSE, digits = 3) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '350px',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("loqStatistics"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
 
-                            #' @description
-                            #' Updates the numerical loq outliers table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateOutlierTbl(input, output, session)
-                            updateLoqMutateOutlierTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "loqMutated")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
-                                dfOutlier <- self$loq$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::slice(idx) %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("loqOutlier"),
-                                        text = "Download"
-                                      ))#nuttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$loqMutatedData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
-
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
-                            }, #function
+                            #' #' @description
+                            #' #' Updates the numerical loq outliers table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateLoqMutateOutlierTbl(input, output, session)
+                            #' updateLoqMutateOutlierTbl = function(input, output, session){
+                            #'   options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                            #'   t <- NULL
+                            #'   if(self$status$query(processName = "loqMutated")){
+                            #'     dfData <- self$filteredMetadata$rawData %>%
+                            #'       dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
+                            #'     dfOutlier <- self$loq$outliers
+                            #'     idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                            #'     t <- dfData %>%
+                            #'       dplyr::slice(idx) %>%
+                            #'       dplyr::mutate_if(is.numeric, round, 3) %>%
+                            #'       DT::datatable(
+                            #'         options = list(
+                            #'           scrollX = TRUE,
+                            #'           scrollY = '350px',
+                            #'           paging = FALSE,
+                            #'           dom = "Blfrtip",
+                            #'           buttons = list(list(
+                            #'             extend = 'csv',
+                            #'             filename = self$fileName$bluntFileName("loqOutlier"),
+                            #'             text = "Download"
+                            #'           ))#nuttons
+                            #'         )#options
+                            #'       )#DT::datatable
+                            #'     for (featureName in self$loqMutatedData$numericFeatureNames){
+                            #'       featureOutlier <- dfOutlier %>%
+                            #'         dplyr::filter(feature == featureName) %>%
+                            #'         dplyr::mutate_if(is.numeric, round, 3)
+                            #'       if (nrow(featureOutlier)>0){
+                            #'         t <- DT::formatStyle(t,
+                            #'                              featureName,
+                            #'                              backgroundColor = styleEqual(dfData %>%
+                            #'                                                             dplyr::select(!!featureName) %>%
+                            #'                                                             dplyr::slice(featureOutlier[["measurement"]]) %>%
+                            #'                                                             unlist() %>%
+                            #'                                                             as.numeric() %>%
+                            #'                                                             round(digits = 3),
+                            #'                                                           featureOutlier[["color"]])
+                            #'
+                            #'         )#t
+                            #'       }#if
+                            #'     }#for
+                            #'   }#if
+                            #'   output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
+                            #' }, #function
 
                             #' @description
                             #' Updates the numerical loq mutate outliers table.
@@ -1305,49 +1731,73 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqMutateDataTbl(input, output, session)
-                            updateLoqMutateDataTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "loqMutated")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
-                                dfOutlier <- self$loq$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("loqData"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$loqMutatedData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
-
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.loqMutateData <- DT::renderDataTable(t)
+                            update_loq_mutate_data_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "loqMutated"))
+                              {
+                                output$tbl.loqMutateData <- DT::renderDataTable(
+                                  self$loqMutatedData$rawData %>%
+                                    format.data.frame(scientific = FALSE, digits = 3) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("loq_mutated_data") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.loqMutateData <- DT::renderDataTable(NULL)
+                              }
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(self$status$query(processName = "loqMutated")){
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
+                              #   dfOutlier <- self$loq$outliers
+                              #   idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                              #   t <- dfData %>%
+                              #     dplyr::mutate_if(is.numeric, round, 3) %>%
+                              #     DT::datatable(
+                              #       options = list(
+                              #         scrollX = TRUE,
+                              #         scrollY = '350px',
+                              #         paging = FALSE,
+                              #         dom = "Blfrtip",
+                              #         buttons = list(list(
+                              #           extend = 'csv',
+                              #           filename = self$fileName$bluntFileName("loqData"),
+                              #           text = "Download"
+                              #         ))#buttons
+                              #       )#options
+                              #     )#DT::datatable
+                              #   for (featureName in self$loqMutatedData$numericFeatureNames){
+                              #     featureOutlier <- dfOutlier %>%
+                              #       dplyr::filter(feature == featureName) %>%
+                              #       dplyr::mutate_if(is.numeric, round, 3)
+                              #     if (nrow(featureOutlier)>0){
+                              #       t <- DT::formatStyle(t,
+                              #                            featureName,
+                              #                            backgroundColor = styleEqual(dfData %>%
+                              #                                                           dplyr::select(!!featureName) %>%
+                              #                                                           dplyr::slice(featureOutlier[["measurement"]]) %>%
+                              #                                                           unlist() %>%
+                              #                                                           as.numeric() %>%
+                              #                                                           round(digits = 3),
+                              #                                                         featureOutlier[["color"]])
+                              #
+                              #       )#t
+                              #     }#if
+                              #   }#for
+                              # }#if
+                              # output$tbl.loqMutateData <- DT::renderDataTable(t)
                             }, #function
 
                             #' @description
@@ -1358,12 +1808,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateStatisticsGraphic(input, output, session)
-                            updateLoqMutateStatisticsGraphic = function(input, output, session){
-                              if(self$status$query(processName = "loqMutated")){
+                            update_loq_mutate_statistics_graphic = function(input, output, session)
+                            {
+                              if(self$status$query(processName = "loqMutated"))
+                              {
                                 output$plt.loqMutateStatistics <- shiny::renderPlot(
-                                  self$loq$plotLoqDistribution(),
+                                  self$loq$plot_loq_distribution(),
                                   height = 400,
                                   bg="transparent"
                                 )#output
@@ -1383,10 +1833,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqMutateFeatureGraphic(input, output, session)
-                            updateLoqMutateFeatureGraphic = function(input, output, session){
-                              if(self$status$query(processName = "loqMutated")){
+                            update_loq_mutate_attribute_graphic = function(input, output, session)
+                              {
+                              if(self$status$query(processName = "loqMutated"))
+                                {
                                 output$plt.loqMutateFeature <- shiny::renderPlot(
-                                  self$loq$featurePlot(obj = self$loqMutatedData$rawData, feature = input$si.loqMutateFeature),
+                                  self$loq$attribute_plot(data_df = self$loqMutatedData$rawData, attribute = input$si.loqMutateFeature),
                                   height = 425,
                                   bg="transparent"
                                 )#output
@@ -1406,43 +1858,75 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateLoqMutateFeatureTbl(input, output, session)
-                            updateLoqMutateFeatureTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "loqMutated")){
-                                feature <- input$si.loqMutateFeature
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$loqMutatedData$rawData %>%
-                                                      dplyr::select(c("Sample Name", !!feature)),
-                                                    by = "Sample Name")
+                            update_loq_mutate_attribute_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "loqMutated"))
+                              {
+                                suffix <- sprintf("%s_outliers_mutated", input$si.loqMutateFeature)
+                                data_df <- self$loq$attribute_outliers(attribute = input$si.loqMutateFeature)
+                                idx <- dplyr::pull(data_df, instance)
 
-                                dfOutlier <- self$loq$featureOutlier(feature = feature)
+                                data_df <- data_df %>%
+                                  dplyr::mutate(mutated = dplyr::pull(self$loqMutatedData$rawData, input$si.loqMutateFeature)[idx])
 
-                                t <- dfData %>%
-                                  DT::datatable(options = list(scrollX = TRUE,
-                                                               scrollY = '300px',
-                                                               paging = FALSE,
-                                                               dom = "Blfrtip",
-                                                               buttons = list(list(
-                                                                 extend = 'csv',
-                                                                 filename = self$fileName$bluntFileName("rawData_type"),
-                                                                 text = "Download"
-                                                               ))#buttons
-                                  ))#DT::datatable
-                                if (nrow(dfOutlier) > 0){
-                                  t <- DT::formatStyle(
-                                    t,
-                                    feature,
-                                    backgroundColor = DT::styleEqual(dfData %>%
-                                                                       dplyr::select(!!feature) %>%
-                                                                       dplyr::slice(dfOutlier[["measurement"]]) %>%
-                                                                       unlist() %>%
-                                                                       round(digits = 3),
-                                                                     dfOutlier[["color"]])
-                                    )#t
-                                }#if
-                              }#if
-                              output$tbl.loqMutateFeature <- DT::renderDataTable(t)
+                                output$tbl.loqMutateFeature <- DT::renderDataTable(
+                                  data_df %>%
+                                    format.data.frame(scientific = FALSE, digits = 3) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict(suffix) %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.loqMutateFeature <- DT::renderDataTable(NULL)
+                              }
+
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(self$status$query(processName = "loqMutated")){
+                              #   feature <- input$si.loqMutateFeature
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$loqMutatedData$rawData %>%
+                              #                         dplyr::select(c("Sample Name", !!feature)),
+                              #                       by = "Sample Name")
+                              #
+                              #   dfOutlier <- self$loq$featureOutlier(feature = feature)
+                              #
+                              #   t <- dfData %>%
+                              #     DT::datatable(options = list(scrollX = TRUE,
+                              #                                  scrollY = '300px',
+                              #                                  paging = FALSE,
+                              #                                  dom = "Blfrtip",
+                              #                                  buttons = list(list(
+                              #                                    extend = 'csv',
+                              #                                    filename = self$fileName$bluntFileName("rawData_type"),
+                              #                                    text = "Download"
+                              #                                  ))#buttons
+                              #     ))#DT::datatable
+                              #   if (nrow(dfOutlier) > 0){
+                              #     t <- DT::formatStyle(
+                              #       t,
+                              #       feature,
+                              #       backgroundColor = DT::styleEqual(dfData %>%
+                              #                                          dplyr::select(!!feature) %>%
+                              #                                          dplyr::slice(dfOutlier[["measurement"]]) %>%
+                              #                                          unlist() %>%
+                              #                                          round(digits = 3),
+                              #                                        dfOutlier[["color"]])
+                              #       )#t
+                              #   }#if
+                              # }#if
+                              # output$tbl.loqMutateFeature <- DT::renderDataTable(t)
                             }, #function
 
                             #############################################
@@ -1481,12 +1965,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   trafoAlphabet <- c(trafoAlphabet, "boxCox")
                                 }#if
                                 # data in obj ändern
-                                private$.optimizer$resetOptimizer(data = self$loqMutatedData$numericData())
+                                private$.optimizer$resetOptimizer(data = self$loqMutatedData$numerical_ata())
                                 private$.optimizer$setTrafoAlphabet <- trafoAlphabet
                                 private$.optimizer$setMirror <- input$cb.wizardMirror
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$optimizer$trafoAlphabet)*2)
                                 progress$set(message = "optimizing transformation parameters ...", value = 1)
-                                private$.optimizer$optimize(data = self$loqMutatedData$numericData(), progress = progress)
+                                private$.optimizer$optimize(data = self$loqMutatedData$numerical_data(), progress = progress)
                                 on.exit(progress$close())
                                 private$.status$update(processName = "modelOptimized", value = TRUE)
                               }#if
@@ -1629,8 +2113,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateSelectInput(session,
                                                          inputId = "si.trafoMutateFeature",
-                                                         choices = self$loqMutatedData$numericFeatureNames,
-                                                         selected = self$loqMutatedData$numericFeatureNames[1])
+                                                         choices = self$loqMutatedData$numericalAttributeNames,
+                                                         selected = self$loqMutatedData$numericalAttributeNames[1])
                               }#if
                             }, #function
 
@@ -1699,12 +2183,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGui(input, output, session)
-                            updateTrafoMutateGui = function(input, output, session){
+                            resetTrafoMutateGui = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
-                                self$loqMutatedData$numericData() %>%
-                                  self$transformator$resetTrafoParameter()
+                                self$loqMutatedData$numerical_data() %>%
+                                  private$.transformator$resetTrafoParameter()
                                 self$updateTrafoMutateFeature(input, output, session)
                                 self$updateTrafoMutateType(input, output, session)
                                 self$updateTrafoMutateLambda(input, output, session)
@@ -1720,9 +2202,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$resetTrafoMutateGui(input, output, session)
-                            resetTrafoMutateGui = function(input, output, session){
+                            updateTrafoMutateGui = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 self$updateTrafoMutateType(input, output, session)
                                 self$updateTrafoMutateLambda(input, output, session)
@@ -1742,27 +2222,18 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$trafoMutateFit(input, output, session)
                             trafoMutateFit = function(input, output, session){
-                              if(self$status$query(processName = "modelDefined")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
+                              if(self$status$query(processName = "loqMutated")){
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericalAttributeNames))
                                 progress$set(message = "Optimizing model parameter", value = 1)
+                                self$loqMutatedData$numerical_data() %>%
+                                  private$.transformator$resetTrafoParameter()
                                 on.exit(progress$close())
-                                self$loqMutatedData$numericData() %>%
+                                self$loqMutatedData$numerical_data() %>%
                                   private$.transformator$fit()
-                                self$resetTrafoMutateGui(input, output, session)
-                                self$loqMutatedData$numericData() %>%
-                                  private$.transformator$mutateData() %>%
-                                  private$.model$resetModel(progress)
-                                name  <- as.name("Sample Name")
-                                private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
-                                  self$transformator$mutateData() %>%
-                                  tibble::add_column(!! name := self$loqMutatedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$loqMutatedData$numericFeatureNames))
+                                private$.status$update(processName = "modelOptimized", value = TRUE)
                               }#if
                               else{
-                                shiny::showNotification(paste("No global model defined. Please defina a global transformation model first."),type = "error", duration = 10)
+                                shiny::showNotification(paste("No loq analysis perfomred. Please mutate loq outliers first."),type = "error", duration = 10)
                               }#else
                             }, #function
 
@@ -1778,39 +2249,34 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$trafoMutateGlobal(input, output, session)
                             trafoMutateGlobal = function(input, output, session){
-                              if(self$status$query(processName = "loqMutated")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
-                                progress$set(message = "Optimizing model parameter", value = 1)
+                              if(self$status$query(processName = "modelOptimized")){
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericalAttributeNames))
+                                progress$set(message = "Perfomring transformation", value = 1)
                                 on.exit(progress$close())
                                 # self$loqMutatedData$numericData() %>%
                                 #   private$.transformator$resetTrafoParameter()
-                                for (feature in self$loqMutatedData$numericFeatureNames){
+                                for (feature in self$loqMutatedData$numericalAttributeNames){
                                   private$.transformator$setTrafoType(feature = feature,
                                                                       type = input$si.trafoMutateType)
-                                  private$.transformator$setLambdaLOP(feature = feature,
-                                                                      lambda = input$ni.trafoMutateLambdaLOP)
                                   private$.transformator$setMirrorLogic(feature = feature,
                                                                         logic = input$cb.trafoMutateMirror)
                                 }#for
 
                                 # self$loqMutatedData$numericData() %>%
                                 #   private$.transformator$estimateTrafoParameter()
-                                self$loqMutatedData$numericData() %>%
+                                self$loqMutatedData$numerical_data() %>%
                                   private$.transformator$mutateData() %>%
                                   private$.model$resetModel(progress)
-                                name  <- as.name("Sample Name")
-                                private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
+                                private$.transformedData$setRawData <- self$loqMutatedData$numerical_data() %>%
                                   self$transformator$mutateData() %>%
                                   # self$model$scaleData() %>%
-                                  tibble::add_column(!! name := self$loqMutatedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$loqMutatedData$numericFeatureNames))
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.transformedData$fit()
                                 private$.status$update(processName = "modelDefined", value = TRUE)
                               }#if
                               else{
-                                shiny::showNotification(paste("No loq analysis perfomred. Please mutate loq outliers first."),type = "error", duration = 10)
+                                shiny::showNotification(paste("Model parameters not optimized. Please optimize first."),type = "error", duration = 10)
                               }#else
                             }, #function
 
@@ -1837,7 +2303,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 # self$loqMutatedData$numericData() %>%
                                 #   private$.transformator$estimateTrafoParameter()
 
-                                self$loqMutatedData$numericData() %>%
+                                self$loqMutatedData$numerical_data() %>%
                                   self$transformator$mutateData() %>%
                                   dplyr::select(input$si.trafoMutateFeature) %>%
                                   private$.featureModel$resetNormDist()
@@ -1869,7 +2335,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   # self$loqMutatedData$numericData() %>%
                                   #   private$.transformator$estimateTrafoParameter()
 
-                                  private$.featureModel$resetNormDist(data = self$loqMutatedData$numericData %>%
+                                  private$.featureModel$resetNormDist(data = self$loqMutatedData$numerical_data() %>%
                                                                         self$transformator$mutateData() %>%
                                                                         dplyr::select(input$si.trafoMutateFeature)
                                   )
@@ -1879,15 +2345,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 
                                 private$.model$setNormDist(data = self$featureModel, feature = input$si.trafoMutateFeature)
 
-                                name  <- as.name("Sample Name")
-                                private$.transformedData$setRawData <- self$loqMutatedData$numericData() %>%
+                                private$.transformedData$setRawData <- self$loqMutatedData$numerical_data() %>%
                                   self$transformator$mutateData() %>%
                                   # self$model$scaleData() %>%
-                                  tibble::add_column(!! name := self$loqMutatedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$loqMutatedData$numericFeatureNames))
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.transformedData$fit()
                               }#if
                               else{
                                 shiny::showNotification(paste("No global model defined. Please defina a global transformation model first."),type = "error", duration = 10)
@@ -1941,7 +2404,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("featureTrafoParameter"),
+                                          filename = self$fileName$predict("featureTrafoParameter") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -1978,7 +2442,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("featureTrafoQuality"),
+                                          filename = self$fileName$predict("featureTrafoQuality") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2014,7 +2479,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("globalTrafoParameter"),
+                                          filename = self$fileName$predict("globalTrafoParameter") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2050,7 +2516,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("globalModelParameter"),
+                                          filename = self$fileName$predict("globalModelParameter") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2086,7 +2553,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("globalModelQuality"),
+                                          filename = self$fileName$predict("globalModelQuality") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2122,7 +2590,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("globalModelQuality"),
+                                          filename = self$fileName$predict("globalModelQuality") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2148,8 +2617,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$transformedData$rawData, by = "Sample Name") %>%
+                                  self$transformedData$rawData %>%
                                     dplyr::mutate_if(is.numeric, round, 3) %>%
                                     DT::datatable(
                                       options = list(
@@ -2159,7 +2627,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("transformedData"),
+                                          filename = self$fileName$predict("transformedData") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2188,8 +2657,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "modelDefined")){
                                 shiny::updateSelectInput(session,
                                                          "si.trafoNormFeature",
-                                                         choices = self$transformedData$numericFeatureNames,
-                                                         selected = self$transformedData$numericFeatureNames[1])
+                                                         choices = self$transformedData$numericalAttributeNames,
+                                                         selected = self$transformedData$numericalAttributeNames[1])
                               }#if
                             }, #function
 
@@ -2245,17 +2714,14 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "modelDefined")){
                                 private$.normalizer$setNormAgent <- input$si.trafoNormMethod
 
-                                self$transformedData$numericData() %>%
+                                self$transformedData$numerical_data() %>%
                                   private$.normalizer$detectNormParameter()
 
-                                name  <- as.name("Sample Name")
-                                private$.normalizedData$setRawData <- self$transformedData$numericData() %>%
+                                private$.normalizedData$setRawData <- self$transformedData$numerical_data() %>%
                                   self$normalizer$scale_data() %>%
-                                  tibble::add_column(!! name := self$transformedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$transformedData$numericFeatureNames))
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.normalizedData$fit()
                                 private$.status$update(processName = "normalized", value = TRUE)
                               }#if
                               else{
@@ -2316,11 +2782,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateTrafoNormFeatureStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormFeatureStatistics <- DT::renderDataTable({
-                                  self$normalizedData$dataStatistics() %>%
+                                  self$normalizedData$statistics %>%
                                     dplyr::filter(Value == input$si.trafoNormFeature) %>%
                                     dplyr::select_if(is.numeric) %>%
                                     tidyr::pivot_longer(cols = dplyr::everything()) %>%
                                     dplyr::rename(statistics = "name") %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -2352,7 +2819,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateTrafoNormStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormStatistics <- DT::renderDataTable({
-                                  self$normalizedData$dataStatistics() %>%
+                                  self$normalizedData$statistics %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -2363,7 +2831,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("normalized_statistics"),
+                                          filename = self$fileName$predict("normalized_statistics") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2390,6 +2859,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormParameter <- DT::renderDataTable({
                                   self$normalizer$normParameter %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -2401,7 +2871,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("normalization_parameter"),
+                                          filename = self$fileName$predict("normalization_parameter") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2428,6 +2899,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormData <- DT::renderDataTable({
                                   self$normalizedData$rawData %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
                                       options = list(
@@ -2438,7 +2910,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("normalized_data"),
+                                          filename = self$fileName$predict("normalized_data") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2467,12 +2940,12 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' x$imputeMissingsAnalyze(input, output, session)
                             imputeMissingsAnalyze = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$normalizedData$numericFeatureNames))
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$normalizedData$numericalAttributeNames))
                                 progress$set(message = "Characterizing missings", value = 1)
                                 on.exit(progress$close())
-                                self$normalizedData$numericData() %>%
+                                self$normalizedData$numerical_data() %>%
                                   private$.missings$resetImputationParameter()
-                                self$normalizedData$numericData() %>%
+                                self$normalizedData$numerical_data() %>%
                                   private$.missingsCharacterizer$analyze(progress)
                                 private$.status$update(processName = "naDetected", value = TRUE)
                               }#if
@@ -2527,7 +3000,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("missingsStatistics"),
+                                          filename = self$fileName$predict("missingsStatistics") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2552,7 +3026,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMissingsDistributionTbl = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsDistribution <- DT::renderDataTable(
-                                  self$normalizedData$numericData() %>%
+                                  self$normalizedData$numerical_data() %>%
                                     self$missings$imputationSiteDistribution() %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -2563,7 +3037,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("missingsDistribution"),
+                                          filename = self$fileName$predict("missingsDistribution") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2588,7 +3063,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMissingCharacteristicsGraphic = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$plt.imputeMissingsPairs <- shiny::renderPlot(
-                                  self$normalizedData$numericData() %>%
+                                  self$normalizedData$numerical_data() %>%
                                     self$missingsCharacterizer$plot_pair_dist(),
                                   bg="transparent"
                                 )
@@ -2621,7 +3096,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("missingsMissings"),
+                                          filename = self$fileName$predict("missingsMissings") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2647,7 +3123,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsDetail <- DT::renderDataTable(
                                   self$normalizedData$rawData %>%
-                                    self$missings$mergeImputationSiteData(metadata_df = self$metadata$rawData) %>%
+                                    dplyr::filter_all(dplyr::any_vars(is.na(.))) %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -2658,7 +3134,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteDetectionDetail"),
+                                          filename = self$fileName$predict("imputationSiteDetectionDetail") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -2669,43 +3146,44 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.imputeMissingsDetail <- DT::renderDataTable(NULL)
                               }#else
                             }, #function
-
-                            #' @description
-                            #' Updates the tbl.imputeDetectData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsDataTbl(input, output, session)
-                            updateImputeMissingsDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "naDetected")){
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteDetectionData"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
+#'
+#'                             #' @description
+#'                             #' Updates the tbl.imputeDetectData table.
+#'                             #' @param input
+#'                             #' Pointer to shiny input
+#'                             #' @param output
+#'                             #' Pointer to shiny output
+#'                             #' @param session
+#'                             #' Pointer to shiny session
+#'                             #' @examples
+#'                             #' x$updateImputeMissingsDataTbl(input, output, session)
+#'                             updateImputeMissingsDataTbl = function(input, output, session){
+#'                               if(self$status$query(processName = "naDetected")){
+#'                                 output$tbl.imputeMissingsData <- DT::renderDataTable(
+#'                                   self$filteredMetadata$rawData %>%
+#'                                     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") %>%
+#'                                     format.data.frame(scientific = TRUE, digits = 4) %>%
+#'                                     DT::datatable(
+#'                                       extensions = "Buttons",
+#'                                       options = list(
+#'                                         scrollX = TRUE,
+#'                                         scrollY = '350px',
+#'                                         paging = FALSE,
+#'                                         dom = "Blfrtip",
+#'                                         buttons = list(list(
+#'                                           extend = 'csv',
+#'                                           filename = self$fileName$predict("imputationSiteDetectionData") %>%
+#'                                             tools::file_path_sans_ext(),
+#'                                           text = "Download"
+#'                                         ))#buttons
+#'                                       )#options
+#'                                     )#DT::datatable
+#'                                 )#output
+#'                               }#if
+#'                               else{
+#'                                 output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
+#'                               }#else
+#'                             }, #function
 
                             #############################
                             # impute outliers functions #
@@ -2744,8 +3222,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateSelectInput(session,
                                                          "si.imputeOutliersFeature",
-                                                         choices = self$normalizedData$numericFeatureNames,
-                                                         selected = self$normalizedData$numericFeatureNames[1])
+                                                         choices = self$normalizedData$numericalAttributeNames,
+                                                         selected = self$normalizedData$numericalAttributeNames[1])
                               }#if
                             }, #function
 
@@ -2968,10 +3446,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 
                                 self$resetImputeOutliersGui(input, output, session)
 
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericFeatureNames))
+                                progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericalAttributeNames))
                                 progress$set(message = "Searching for anomalies", value = 1)
                                 on.exit(progress$close())
-                                self$normalizedData$numericData() %>%
+                                self$normalizedData$numerical_data() %>%
                                   private$.outliers$detectOutliers(progress)
 
                                 private$.status$update(processName = "outliersDetected", value = TRUE)
@@ -3016,7 +3494,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeOutliersFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersImputeFeature <- shiny::renderPlot(
-                                    self$outliers$featurePlot(data_df = self$normalizedData$numericData(),
+                                    self$outliers$featurePlot(data_df = self$normalizedData$numerical_data(),
                                                               feature = input$si.imputeOutliersFeature),
                                     height = 475,
                                     bg="transparent"
@@ -3037,51 +3515,79 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny session
                             #' @examples
                             #' x$updateImputeOutliersFeatureTbl(input, output, session)
-                            updateImputeOutliersFeatureTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "outliersDetected")){
-                                feature <- input$si.imputeOutliersFeature
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$normalizedData$rawData %>%
-                                                      dplyr::select(c("Sample Name", !!feature)),
-                                                    by = "Sample Name")
-
-                                dfOutlier <- self$outliers$featureOutlier(feature = feature)
-
-                                t <- dfData %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("OutliersData"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-
-                                featureOutlier <- dfOutlier %>%
-                                  dplyr::mutate_if(is.numeric, round, 3)
-                                if (nrow(featureOutlier)>0){
-                                  t <- DT::formatStyle(t,
-                                                       feature,
-                                                       backgroundColor = styleEqual(dfData %>%
-                                                                                      dplyr::select(!!feature) %>%
-                                                                                      dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                      unlist() %>%
-                                                                                      as.numeric() %>%
-                                                                                      round(digits = 3),
-                                                                                    featureOutlier[["color"]])
-
-                                  )#t
-                                }#if
-                              }#if
-                              output$tbl.outliersImputeFeature <- DT::renderDataTable(t)
+                            updateImputeOutliersFeatureTbl = function(input, output, session)
+                            {
+                              if(self$status$query(processName = "outliersDetected"))
+                              {
+                                suffix <- sprintf("%s_outliers", input$si.imputeOutliersFeature)
+                                output$tbl.outliersImputeFeature <- DT::renderDataTable(
+                                  self$outliers$outliers %>%
+                                    dplyr::filter(feature == !!input$si.imputeOutliersFeature) %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict(suffix) %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.outliersImputeFeature <- DT::renderDataTable(NULL)
+                              }
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(self$status$query(processName = "outliersDetected")){
+                              #   feature <- input$si.imputeOutliersFeature
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$normalizedData$rawData %>%
+                              #                         dplyr::select(c("Sample Name", !!feature)),
+                              #                       by = "Sample Name")
+                              #
+                              #   dfOutlier <- self$outliers$featureOutlier(feature = feature)
+                              #
+                              #   t <- dfData %>%
+                              #     dplyr::mutate_if(is.numeric, round, 3) %>%
+                              #     DT::datatable(
+                              #       options = list(
+                              #         scrollX = TRUE,
+                              #         scrollY = '350px',
+                              #         paging = FALSE,
+                              #         dom = "Blfrtip",
+                              #         buttons = list(list(
+                              #           extend = 'csv',
+                              #           filename = self$fileName$predict("OutliersData") %>%
+                              #             tools::file_path_sans_ext(),
+                              #           text = "Download"
+                              #         ))#buttons
+                              #       )#options
+                              #     )#DT::datatable
+                              #
+                              #   featureOutlier <- dfOutlier %>%
+                              #     dplyr::mutate_if(is.numeric, round, 3)
+                              #   if (nrow(featureOutlier)>0){
+                              #     t <- DT::formatStyle(t,
+                              #                          feature,
+                              #                          backgroundColor = styleEqual(dfData %>%
+                              #                                                         dplyr::select(!!feature) %>%
+                              #                                                         dplyr::slice(featureOutlier[["measurement"]]) %>%
+                              #                                                         unlist() %>%
+                              #                                                         as.numeric() %>%
+                              #                                                         round(digits = 3),
+                              #                                                       featureOutlier[["color"]])
+                              #
+                              #     )#t
+                              #   }#if
+                              # }#if
+                              # output$tbl.outliersImputeFeature <- DT::renderDataTable(t)
                             }, #function
 
                             #' @description
@@ -3108,7 +3614,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("outliersStatistics"),
+                                          filename = self$fileName$predict("outliersStatistics") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -3131,105 +3638,131 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' x$updateImputeOutliersDetailTbl(input, output, session)
                             updateImputeOutliersDetailTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "outliersDetected")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
-                                dfOutlier <- self$outliers$outliers
-                                idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::slice(idx) %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("OutliersDetail"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$normalizedData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
-
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.outliersImputeDetail <- DT::renderDataTable(t)
+                              if(self$status$query(processName = "outliersDetected"))
+                              {
+                                output$tbl.outliersImputeDetail <- DT::renderDataTable(
+                                  self$outliers$outliers %>%
+                                    format.data.frame(scientific = TRUE, digits = 4) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("outliers") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.outliersImputeDetail <- DT::renderDataTable(NULL)
+                              }
+                              # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                              # t <- NULL
+                              # if(self$status$query(processName = "outliersDetected")){
+                              #   dfData <- self$filteredMetadata$rawData %>%
+                              #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
+                              #   dfOutlier <- self$outliers$outliers
+                              #   idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                              #   t <- dfData %>%
+                              #     dplyr::slice(idx) %>%
+                              #     dplyr::mutate_if(is.numeric, round, 3) %>%
+                              #     DT::datatable(
+                              #       options = list(
+                              #         scrollX = TRUE,
+                              #         scrollY = '350px',
+                              #         paging = FALSE,
+                              #         dom = "Blfrtip",
+                              #         buttons = list(list(
+                              #           extend = 'csv',
+                              #           filename = self$fileName$predict("OutliersDetail") %>%
+                              #             tools::file_path_sans_ext(),
+                              #           text = "Download"
+                              #         ))#buttons
+                              #       )#options
+                              #     )#DT::datatable
+                              #   for (featureName in self$normalizedData$numericalAttributeNames){
+                              #     featureOutlier <- dfOutlier %>%
+                              #       dplyr::filter(feature == featureName) %>%
+                              #       dplyr::mutate_if(is.numeric, round, 3)
+                              #     if (nrow(featureOutlier)>0){
+                              #       t <- DT::formatStyle(t,
+                              #                            featureName,
+                              #                            backgroundColor = styleEqual(dfData %>%
+                              #                                                           dplyr::select(!!featureName) %>%
+                              #                                                           dplyr::slice(featureOutlier[["measurement"]]) %>%
+                              #                                                           unlist() %>%
+                              #                                                           as.numeric() %>%
+                              #                                                           round(digits = 3),
+                              #                                                         featureOutlier[["color"]])
+                              #
+                              #       )#t
+                              #     }#if
+                              #   }#for
+                              # }#if
+                              # output$tbl.outliersImputeDetail <- DT::renderDataTable(t)
                             }, #function
 
-                            #' @description
-                            #' Updates the numerical outliers data table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersDataTbl(input, output, session)
-                            updateImputeOutliersDataTbl = function(input, output, session){
-                              options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-                              t <- NULL
-                              if(self$status$query(processName = "outliersDetected")){
-                                dfData <- self$filteredMetadata$rawData %>%
-                                  dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
-                                dfOutlier <- self$outliers$outliers
-                                # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-                                t <- dfData %>%
-                                  dplyr::mutate_if(is.numeric, round, 3) %>%
-                                  DT::datatable(
-                                    options = list(
-                                      scrollX = TRUE,
-                                      scrollY = '350px',
-                                      paging = FALSE,
-                                      dom = "Blfrtip",
-                                      buttons = list(list(
-                                        extend = 'csv',
-                                        filename = self$fileName$bluntFileName("OutliersData"),
-                                        text = "Download"
-                                      ))#buttons
-                                    )#options
-                                  )#DT::datatable
-                                for (featureName in self$normalizedData$numericFeatureNames){
-                                  featureOutlier <- dfOutlier %>%
-                                    dplyr::filter(feature == featureName) %>%
-                                    dplyr::mutate_if(is.numeric, round, 3)
-                                  if (nrow(featureOutlier)>0){
-                                    t <- DT::formatStyle(t,
-                                                         featureName,
-                                                         backgroundColor = styleEqual(dfData %>%
-                                                                                        dplyr::select(!!featureName) %>%
-                                                                                        dplyr::slice(featureOutlier[["measurement"]]) %>%
-                                                                                        unlist() %>%
-                                                                                        as.numeric() %>%
-                                                                                        round(digits = 3),
-                                                                                      featureOutlier[["color"]])
-
-                                    )#t
-                                  }#if
-                                }#for
-                              }#if
-                              output$tbl.outliersImputeData <- DT::renderDataTable(t)
-                            }, #function
+                            #' #' @description
+                            #' #' Updates the numerical outliers data table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateImputeOutliersDataTbl(input, output, session)
+                            #' updateImputeOutliersDataTbl = function(input, output, session){
+                            #'   # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+                            #'   # t <- NULL
+                            #'   # if(self$status$query(processName = "outliersDetected")){
+                            #'   #   dfData <- self$filteredMetadata$rawData %>%
+                            #'   #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
+                            #'   #   dfOutlier <- self$outliers$outliers
+                            #'   #   # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+                            #'   #   t <- dfData %>%
+                            #'   #     dplyr::mutate_if(is.numeric, round, 3) %>%
+                            #'   #     DT::datatable(
+                            #'   #       options = list(
+                            #'   #         scrollX = TRUE,
+                            #'   #         scrollY = '350px',
+                            #'   #         paging = FALSE,
+                            #'   #         dom = "Blfrtip",
+                            #'   #         buttons = list(list(
+                            #'   #           extend = 'csv',
+                            #'   #           filename = self$fileName$predict("OutliersData") %>%
+                            #'   #             tools::file_path_sans_ext(),
+                            #'   #           text = "Download"
+                            #'   #         ))#buttons
+                            #'   #       )#options
+                            #'   #     )#DT::datatable
+                            #'   #   for (featureName in self$normalizedData$numericalAttributeNames){
+                            #'   #     featureOutlier <- dfOutlier %>%
+                            #'   #       dplyr::filter(feature == featureName) %>%
+                            #'   #       dplyr::mutate_if(is.numeric, round, 3)
+                            #'   #     if (nrow(featureOutlier)>0){
+                            #'   #       t <- DT::formatStyle(t,
+                            #'   #                            featureName,
+                            #'   #                            backgroundColor = styleEqual(dfData %>%
+                            #'   #                                                           dplyr::select(!!featureName) %>%
+                            #'   #                                                           dplyr::slice(featureOutlier[["measurement"]]) %>%
+                            #'   #                                                           unlist() %>%
+                            #'   #                                                           as.numeric() %>%
+                            #'   #                                                           round(digits = 3),
+                            #'   #                                                         featureOutlier[["color"]])
+                            #'   #
+                            #'   #       )#t
+                            #'   #     }#if
+                            #'   #   }#for
+                            #'   # }#if
+                            #'   # output$tbl.outliersImputeData <- DT::renderDataTable(t)
+                            #' }, #function
 
                             ###########################
                             # impute mutate functions #
@@ -3248,8 +3781,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateSelectInput(session,
                                                          "si.imputeMutateFeature",
-                                                         choices = self$normalizedData$numericFeatureNames,
-                                                         selected = self$normalizedData$numericFeatureNames[1]
+                                                         choices = self$normalizedData$numericalAttributeNames,
+                                                         selected = self$normalizedData$numericalAttributeNames[1]
                                 )
                               }#if
                             }, #function
@@ -3425,32 +3958,27 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 private$.imputer$gatherImputationSites(missings_df = private$.missings$imputationSites,
                                                                        outliers_df = private$.outliers$outliers)
 
-                                private$.imputer$analyzeImputationSites(data_df = self$normalizedData$numericData())
+                                private$.imputer$analyzeImputationSites(data_df = self$normalizedData$numerical_data())
 
-                                private$.imputer$detectPredictors(data_df = self$normalizedData$numericData())
+                                private$.imputer$detectPredictors(data_df = self$normalizedData$numerical_data())
 
                                 progress <- shiny::Progress$new(session, min = 0, max = 1)
                                 progress$set(message = "Mutate imputation sites", value = 0)
                                 on.exit(progress$close())
 
-                                name  <- as.name("Sample Name")
-                                private$.imputedData$setRawData <- self$normalizedData$numericData() %>%
+                                private$.imputedData$setRawData <- self$normalizedData$numerical_data() %>%
                                   self$imputer$handleImputationSites(progress) %>%
-                                  tibble::add_column(!! name := self$normalizedData$rawData %>%
-                                                       dplyr::select(!!name) %>%
-                                                       unlist() %>%
-                                                       as.character()) %>%
-                                  dplyr::select(c(!!name, self$normalizedData$numericFeatureNames))
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.imputedData$fit()
 
                                 if(self$imputer$success){
-                                  private$.cleanedData$setRawData <- self$imputedData$numericData() %>%
+                                  private$.cleanedData$setRawData <- self$imputedData$numerical_data() %>%
                                     self$normalizer$rescale_data() %>%
                                     self$transformator$reverseMutateData() %>%
-                                    tibble::add_column(!! name := self$imputedData$rawData %>%
-                                                         dplyr::select(!!name) %>%
-                                                         unlist() %>%
-                                                         as.character()) %>%
-                                    dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+                                    tibble::add_column(self$filteredData$categorical_data()) %>%
+                                    dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                  private$.cleanedData$fit()
 
                                   private$.status$update(processName = "imputed", value = TRUE)
                                 }
@@ -3548,7 +4076,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteStatistics"),
+                                          filename = self$fileName$predict("imputationSiteStatistics") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -3583,7 +4112,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationSiteDistribution"),
+                                          filename = self$fileName$predict("imputationSiteDistribution") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -3609,7 +4139,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMutateFeatureDetailGraphic = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
-                                  self$imputer$featurePlot(data = self$imputedData$numericData(),
+                                  self$imputer$featurePlot(data = self$imputedData$numerical_data(),
                                                            feature = input$si.imputeMutateFeature),
                                   height = 475,
                                   bg = "transparent"
@@ -3633,10 +4163,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMutateFeatureDetailTbl = function(input, output, session){
                               if (self$status$query(processName = "imputed")){
                                 output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData %>%
-                                                        dplyr::select(c("Sample Name", input$si.imputeMutateFeature)),
-                                                      by = "Sample Name") %>%
+                                  self$imputedData$rawData %>%
+                                    dplyr::select(dplyr::all_of(c(self$imputedData$categoricalAttributeNames, input$si.imputeMutateFeature))) %>%
                                     dplyr::slice(self$imputer$imputationSiteIdxByFeature(feature = input$si.imputeMutateFeature)) %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
@@ -3648,7 +4176,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationFeatureDetails"),
+                                          filename = self$fileName$predict("imputationFeatureDetails") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -3676,8 +4205,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 idx <- dfImputationSites[["idx"]][!duplicated(dfImputationSites[["idx"]])]
 
                                 output$tbl.imputeMutateDetail <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
+                                  self$imputedData$rawData %>%
                                     dplyr::slice(idx) %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
@@ -3689,7 +4217,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationDetail"),
+                                          filename = self$fileName$predict("imputationDetail") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#buttons
                                       )#options
@@ -3714,8 +4243,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateImputeMutateDataTbl = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$tbl.imputeMutateData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData %>%
-                                    dplyr::right_join(self$imputedData$rawData, by = "Sample Name") %>%
+                                  self$imputedData$rawData %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -3726,7 +4254,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("imputationData"),
+                                          filename = self$fileName$predict("imputationData") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         ))#button
                                       )#options
@@ -4197,13 +4726,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 progress <- shiny::Progress$new(session, min = 0, max  = 1.0)
                                 progress$set(message = "Validate imputation", value = 0)
                                 on.exit(progress$close())
-                                private$.validator$validate(org = self$filteredData$numericData(),
-                                                            imp = self$cleanedData$numericData() %>%
+                                private$.validator$validate(org = self$filteredData$numerical_data(),
+                                                            imp = self$cleanedData$numerical_data() %>%
                                                               dplyr::select_if(function(x){!all(is.na(x))}),
                                                             progress = progress)
                                 private$.status$update(processName = "validated", value = TRUE)
-                                private$.corrValidator$validate(org_df = self$normalizedData$numericData(),
-                                                                imp_df = self$imputedData$numericData())
+                                private$.corrValidator$fit(org_df = self$normalizedData$numerical_data(),
+                                                           imp_df = self$imputedData$numerical_data())
                               }#if
                               else{
                                 shiny::showNotification(paste("No imputation performed. Please perform imputation first."),type = "error", duration = 10)
@@ -4250,10 +4779,10 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateAnalysisValidationGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.analysisValidationFeature <- shiny::renderPlot(
-                                  self$validator$featurePlot(org_df = self$filteredData$numericData(),
-                                                             imp_df = self$cleanedData$numericData(),
-                                                             lloq = self$loq$featureLloq(feature = input$si.analysisValidationFeature),
-                                                             uloq = self$loq$featureUloq(feature = input$si.analysisValidationFeature),
+                                  self$validator$featurePlot(org_df = self$filteredData$numerical_data(),
+                                                             imp_df = self$cleanedData$numerical_data(),
+                                                             lloq = self$loq$attribute_lloq(attribute = input$si.analysisValidationFeature),
+                                                             uloq = self$loq$attribute_uloq(attribute = input$si.analysisValidationFeature),
                                                              impIdx_df = self$imputer$imputationSites,
                                                              feature = input$si.analysisValidationFeature),
                                   bg="transparent"
@@ -4289,7 +4818,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("validationTests"),
+                                          filename = self$fileName$predict("validationTests") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4327,7 +4857,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("rawCentralMoments"),
+                                          filename = self$fileName$predict("rawCentralMoments") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4365,7 +4896,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("impCentralMoments"),
+                                          filename = self$fileName$predict("impCentralMoments") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4404,7 +4936,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("deltaCentralMoments"),
+                                          filename = self$fileName$predict("deltaCentralMoments") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4482,7 +5015,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             updateCorrelationValidationDeviationTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.correlationValidationDeviation <- DT::renderDataTable(
-                                  self$corrValidator$summary() %>%
+                                  self$corrValidator$summary_df %>%
                                     format.data.frame(scientific = TRUE, digits = 4) %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -4494,7 +5027,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("correlationValidationDeviation"),
+                                          filename = self$fileName$predict("correlationValidationDeviation") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -4532,7 +5066,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                         dom = "Blfrtip",
                                         buttons = list(list(
                                           extend = 'csv',
-                                          filename = self$fileName$bluntFileName("correlationValidationData"),
+                                          filename = self$fileName$predict("correlationValidationData") %>%
+                                            tools::file_path_sans_ext(),
                                           text = "Download"
                                         )), #buttons
                                         autoWidth = TRUE,
@@ -5106,258 +5641,112 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             ##############################
                             # numerical output functions #
                             ##############################
-                            #' @description
-                            #' Updates the tbl.rawDataInfo table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRawDataInfo(input, output, session)
-                            updateRawDataInfo = function(input, output, session){
-                              if(private$.status$query(processName = "dataImported")){
-                                output$tbl.rawDataInfo <- DT::renderDataTable({self$rawData$dataInformation() %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '75vh',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("rawData_type"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                  }#output
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.rawDataInfo <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
 
-                            #' @description
-                            #' Updates the tbl.loqInfo table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqInfo(input, output, session)
-                            updateLoqInfo = function(input, output, session){
-                              if(private$.status$query(processName = "dataImported")){
-                                output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '75vh',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("loqData_type"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::Datatable
-                                })#output
-                              }#if
-                              else{
-                                output$tbl.loqInfo <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
 
-                            #' @description
-                            #' Updates the tbl.metadataInfo table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateMetadataInfo(input, output, session)
-                            updateMetadataInfo = function(input, output, session){
-                              if(private$.status$query(processName = "metadataImported")){
-                                output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '75vh',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("metadata_type"),
-                                          text = "Download"
-                                        )) #buttons
-                                      )#options
-                                    )#DT::datatable
-                                })#output
-                              }#if
-                              else{
-                                output$tbl.metadataInfo <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
+                            #' #' @description
+                            #' #' Updates the tbl.loqInfo table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateLoqInfo(input, output, session)
+                            #' updateLoqInfo = function(input, output, session){
+                            #'   if(private$.status$query(processName = "dataImported")){
+                            #'     output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '75vh',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("loqData_type"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )#DT::Datatable
+                            #'     })#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.loqInfo <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.metadataInfo table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateMetadataInfo(input, output, session)
+                            #' updateMetadataInfo = function(input, output, session){
+                            #'   if(private$.status$query(processName = "metadataImported")){
+                            #'     output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '75vh',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("metadata_type"),
+                            #'               text = "Download"
+                            #'             )) #buttons
+                            #'           )#options
+                            #'         )#DT::datatable
+                            #'     })#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.metadataInfo <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
+                            #'
+                            #' #' @description
+                            #' #' Updates the tbl.rawDataStatistics table.
+                            #' #' @param input
+                            #' #' Pointer to shiny input
+                            #' #' @param output
+                            #' #' Pointer to shiny output
+                            #' #' @param session
+                            #' #' Pointer to shiny session
+                            #' #' @examples
+                            #' #' x$updateRawDataStatisticsTbl(input, output, session)
+                            #' updateRawDataStatisticsTbl = function(input, output, session){
+                            #'   if(private$.status$query(processName = "dataImported")){
+                            #'     output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() %>%
+                            #'         format.data.frame(scientific = TRUE, digits = 4) %>%
+                            #'         DT::datatable(
+                            #'           extensions = "Buttons",
+                            #'           options = list(
+                            #'             scrollX = TRUE,
+                            #'             scrollY = '25vh',
+                            #'             paging = FALSE,
+                            #'             dom = "Blfrtip",
+                            #'             buttons = list(list(
+                            #'               extend = 'csv',
+                            #'               filename = self$fileName$bluntFileName("rawData_statistics"),
+                            #'               text = "Download"
+                            #'             ))#buttons
+                            #'           )#options
+                            #'         )}#DT::datatable
+                            #'     )#output
+                            #'   }#if
+                            #'   else{
+                            #'     output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
+                            #'   }#else
+                            #' }, #function
 
-                            #' @description
-                            #' Updates the tbl.rawDataStatistics table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRawDataStatisticsTbl(input, output, session)
-                            updateRawDataStatisticsTbl = function(input, output, session){
-                              if(private$.status$query(processName = "dataImported")){
-                                output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '25vh',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("rawData_statistics"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )}#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
 
-                            #' @description
-                            #' Updates the tbl.filter table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateFilterTbl(input, output, session)
-                            updateFilterTbl = function(input, output, session){
-                              if(private$.status$query(processName = "dataImported")){
-                                df <- self$metadata$rawData %>%
-                                  dplyr::right_join(self$rawData$rawData, by = "Sample Name")
-                                output$tbl.filter <- DT::renderDataTable({df %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      rownames = FALSE,
-                                      selection = list(target = "column"),
-                                      filter = "top",
-                                      options = list(
-                                        stateSave = TRUE,
-                                        scrollX = TRUE,
-                                        scrollY = '45vh',
-                                        paging = FALSE,
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '75px', targets = "_all")),
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("filter_data"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#optins
-                                    )#DT::datatable
-                                })#output
-                              }#if
-                              else{
-                                output$tbl.filter <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.filterStatistics table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateFilterStatisticsTbl(input, output, session)
-                            updateFilterStatisticsTbl = function(input, output, session){
-                              if(private$.status$query(processName = "dataFiltered")){
-                                output$tbl.filterStatistics <- DT::renderDataTable({self$filteredData$dataStatistics() %>%
-                                    format.data.frame(scientific = TRUE, digits = 4) %>%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '25vh',
-                                        paging = FALSE,
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all")),
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("filter_statistics"),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                })#output
-                              }#if
-                              else{
-                                output$tbl.filterStatistics <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.filterMissings table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateFilterMissingsTbl(input, output, session)
-                            updateFilterMissingsTbl = function(input, output, session){
-                              if(private$.status$query(processName = "dataFiltered")){
-                                output$tbl.filterMissings <- DT::renderDataTable({self$filteredData$missings() %>%
-                                    format.data.frame(scientific = FALSE, digits = 2) %>%
-                                    DT::datatable(
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '25vh',
-                                        paging = FALSE,
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all")),
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("filter_missings"),
-                                          text = "Download"
-                                        )) #buttons
-                                      )#options
-                                    )#DT::datatable
-                                })#output
-                              }#if
-                              else{
-                                output$tbl.filterMissings <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
 
                             #########################
                             # data export functions #
@@ -5376,16 +5765,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @examples
                             #' y <- x$exportFileName(input, output, session)
                             exportFileName = function(input, output, session){
-                              private$.fileName$setSuffix <- "xlsx"
-                              private$.fileName$updateTimeString()
-                              # private$.fileName$mergeFileName()
-                              private$.fileName$exportFileName() %>%
+                              private$.fileName$predict() %>%
                                 return()
                             }, #function
 
                             #' @description
                             #' Exports the pguIMP analysis results
-                            #' @param file
+                            #' @param fileName
                             #' export filename
                             #' (character)
                             #' @param input
@@ -5394,6 +5780,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' x$exportData(input, file="result.xlsx")
                             exportData = function(input, file){
                               if(self$status$query(processName = "validated")){
+                                print(file)
                                 private$.exporter$setFileName <- file
                                 gui_parameter <- tibble::tibble(
                                   loq_na_handling = c(self$loq$naHandlingAgent),
@@ -5422,7 +5809,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 
                                 list(raw_data = self$cleanedData$rawData,
                                      loq = self$loq$loq,
-                                     metadata = self$filteredMetadata$rawData,
                                      giu_parameter = gui_parameter,
                                      filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
                                                                        filter_parameter = as.vector(input$tbl.filter_search_columns)),
@@ -5499,8 +5885,8 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                   numberOfInstances = c(nrow(self$rawData$rawData)),
                                   numberOfFeatures = c(ncol(self$rawData$rawData)),
                                   numberOfMetaFeatures = c(ncol(self$metadata$rawData)),
-                                  numberOfNumericFeatures = c(length(self$rawData$numericFeatureNames)),
-                                  numberOfNonNumericFeatures = c(length(self$rawData$nonNumericFeatureNames)),
+                                  numberOfNumericFeatures = c(length(self$rawData$numericalAttributeNames)),
+                                  numberOfNonNumericFeatures = c(length(self$rawData$categoricalAttributeNames)),
                                   totalNumberOfMissings = c(self$rawData$rawData %>%
                                                               dplyr::select(dplyr::everything()) %>%  # replace to your needs
                                                               dplyr::summarise_all(~ sum(is.na(.x))) %>%
@@ -5529,7 +5915,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 list(filter_parameter = tibble::tibble(features = c(self$metadata$featureNames, self$rawData$featureNames[2:length(self$rawData$featureNames)]),
                                                                        filter_parameter = as.vector(input$tbl.filter_search_columns)) %>%
                                        dplyr::filter(filter_parameter != ""),
-                                     selected_features = self$filteredData$numericFeatureNames,
+                                     selected_features = self$filteredData$numericalAttributeNames,
                                      loq_statistics = self$loq$loqStatistics,
                                      trafo_parameter = self$transformator$trafoParameter,
                                      model_parameter = self$model$modelParameterData(),
@@ -5537,7 +5923,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                      model_statistics = self$model$testResultData(),
                                      normalization_parameter = self$normalizer$normParameter,
                                      missings_statistics = self$missings$imputationParameter,
-                                     missings_distribution = self$missings$imputationSiteDistribution(self$filteredData$numericData()),
+                                     missings_distribution = self$missings$imputationSiteDistribution(self$filteredData$numerical_data()),
                                      outliers_statistics = self$outliers$outliersStatistics,
                                      imputation_statistics = self$imputer$imputationStatistics,
                                      imputation_distribution = self$imputer$imputationSiteDistribution,
@@ -5562,18 +5948,13 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param session
                             #' Pointer to shiny session
                             #' @examples
-                            #' x$hideOutdatedResults(input, output, session)
-                            hideOutdatedResults = function(input, output, session){
+                            #' x$hide_outdated_results(input, output, session)
+                            hide_outdated_results = function(input, output, session){
                               if(!private$.status$query(processName = "dataImported")){
-                                output$tbl.rawDataInfo <- DT::renderDataTable(NULL)
-                                output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
-                                output$tbl.filter <- DT::renderDataTable(NULL)
-                              }#if
-                              if(!private$.status$query(processName = "loqImported")){
-                                output$tbl.loqInfo <- DT::renderDataTable(NULL)
-                              }#if
-                              if(!private$.status$query(processName = "metadataImported")){
-                                output$tbl.metadataInfo <- DT::renderDataTable(NULL)
+                                output$tbl.importDataTypes <- DT::renderDataTable(NULL)
+                                output$tbl.importDataStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.importMissingsStatistics <- DT::renderDataTable(NULL)
+                                output$tbl.filterSelect <- DT::renderDataTable(NULL)
                               }#if
                               if(!private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreGraphic <- shiny::renderPlot(NULL, bg="transparent")
@@ -5583,6 +5964,9 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$tbl.exploreOrdinateStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.filterStatistics <- DT::renderDataTable(NULL)
                                 output$tbl.filterMissings <- DT::renderDataTable(NULL)
+                              }#if
+                              if(!private$.status$query(processName = "loqImported")){
+                                output$tbl.loqDefineValues <- DT::renderDataTable(NULL)
                               }#if
                               if(!private$.status$query(processName = "loqDetected")){
                                 output$tbl.loqDetectStatistics <- DT::renderDataTable(NULL)

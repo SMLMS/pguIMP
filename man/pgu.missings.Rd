@@ -100,14 +100,30 @@ y <- x$detectImputationsites(data_df)
 data \%>\%
  x$imputationSiteDistribution() \%>\%
  print()
-
-## ------------------------------------------------
-## Method `pgu.missings$mergeImputationSiteData`
-## ------------------------------------------------
-
-data \%>\%
- x$mergeImputationSiteData() \%>\%
- print()
+#' @description
+#' Merges the numeric attributes of the pguIMP data with its metadata.
+#' @param data_df
+#' The data frame to be analyzed.
+#' (tibble::tibble)
+#' @param metadata_df
+#' The corresponding metadata.
+#' (tibble::tibble)
+#' @return
+#' A data frame
+#' (tibble::tibble)
+#' @examples
+#' data \%>\%
+#'  x$mergeImputationSiteData() \%>\%
+#'  print()
+mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
+  dfMerge <- data_df
+  if(nrow(data_df) == nrow(metadata_df)){
+    dfMerge <- dplyr::bind_cols(metadata_df, data_df)
+  }#if
+  dfMerge \%>\%
+    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
+    return()
+}, #function
 
 ## ------------------------------------------------
 ## Method `pgu.missings$imputationSiteHeatMap`
@@ -153,7 +169,6 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-one_hot}{\code{pgu.missings$one_hot()}}
 \item \href{#method-detectImputationSites}{\code{pgu.missings$detectImputationSites()}}
 \item \href{#method-imputationSiteDistribution}{\code{pgu.missings$imputationSiteDistribution()}}
-\item \href{#method-mergeImputationSiteData}{\code{pgu.missings$mergeImputationSiteData()}}
 \item \href{#method-imputationSiteHeatMap}{\code{pgu.missings$imputationSiteHeatMap()}}
 \item \href{#method-clone}{\code{pgu.missings$clone()}}
 }
@@ -538,44 +553,30 @@ A data frame
 \preformatted{data \%>\%
  x$imputationSiteDistribution() \%>\%
  print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mergeImputationSiteData"></a>}}
-\if{latex}{\out{\hypertarget{method-mergeImputationSiteData}{}}}
-\subsection{Method \code{mergeImputationSiteData()}}{
-Merges the numeric attributes of the pguIMP data with its metadata.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.missings$mergeImputationSiteData(
-  data_df = "tbl_df",
-  metadata_df = "tbl_df"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_df}}{The data frame to be analyzed.
-(tibble::tibble)}
-
-\item{\code{metadata_df}}{The corresponding metadata.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A data frame
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data \%>\%
- x$mergeImputationSiteData() \%>\%
- print()
+#' @description
+#' Merges the numeric attributes of the pguIMP data with its metadata.
+#' @param data_df
+#' The data frame to be analyzed.
+#' (tibble::tibble)
+#' @param metadata_df
+#' The corresponding metadata.
+#' (tibble::tibble)
+#' @return
+#' A data frame
+#' (tibble::tibble)
+#' @examples
+#' data \%>\%
+#'  x$mergeImputationSiteData() \%>\%
+#'  print()
+mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
+  dfMerge <- data_df
+  if(nrow(data_df) == nrow(metadata_df)){
+    dfMerge <- dplyr::bind_cols(metadata_df, data_df)
+  }#if
+  dfMerge \%>\%
+    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
+    return()
+}, #function
 }
 \if{html}{\out{</div>}}
 

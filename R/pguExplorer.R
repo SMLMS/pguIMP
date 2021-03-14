@@ -26,7 +26,87 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                         private = list(
                           .rawData = "tbl_df",
                           .abscissa = "character",
-                          .ordinate = "character"
+                          .ordinate = "character",
+                          .abscissaStatistics = "tbl_df",
+                          .ordinateStatistics = "tbl_df",
+
+                          #' @description
+                          #' Tests if the abscissa attribute is of type numeric.
+                          abscissa_is_numeric = function()
+                            {
+                            self$rawData %>%
+                              dplyr::select(self$abscissa) %>%
+                              purrr::map(is.numeric) %>%
+                              unlist() %>%
+                              return()
+                          }, #pguIMP::pgu.explorer$abscissa_is_numeric
+
+                          #' @description
+                          #' Tests if the ordinate attribute is of type numeric.
+                          ordinate_is_numeric = function()
+                          {
+                            self$rawData %>%
+                              dplyr::select(self$ordinate) %>%
+                              purrr::map(is.numeric) %>%
+                              unlist() %>%
+                              return()
+                          }, #pguIMP::pgu.explorer$ordinate_is_numeric
+
+                          #' @description
+                          #' Summarizes the numeric values of a vector.
+                          summarize_numeric = function(val = "numeric")
+                          {
+                            if(!any(is.na(val))){
+                              res <- c(summary(val),"NA's"=0)
+                            }#if
+                            else{
+                              res <- summary(val)
+                            }#else
+                            return(res)
+                          }, #pguIMP::pgu.explorer$summarize_numeric
+
+                          #' @description
+                          #' Calculates the statistics of the abscissa values.
+                          #' Stores the result in the instance variable abscissaStatistics.
+                          calculate_abscissa_statistics = function()
+                          {
+                            if(private$abscissa_is_numeric())
+                            {
+                              private$.abscissaStatistics <- self$rawData %>%
+                                dplyr::select(self$abscissa) %>%
+                                apply(MARGIN=2, FUN=private$summarize_numeric) %>%
+                                as.data.frame() %>%
+                                tibble::rownames_to_column("Value") %>%
+                                tibble::as_tibble()
+                            }else{
+                              private$.abscissaStatistics <- NULL
+                            }
+                          }, #pguIMP::pgu.explorer$calculate_abscissa_statistics
+
+                          #' @description
+                          #' Calculates the statistics of the ordinate values.
+                          #' Stores the result in the instance variable ordinateStatistics.
+                          calculate_ordinate_statistics = function()
+                          {
+                            if(private$ordinate_is_numeric())
+                            {
+                              private$.ordinateStatistics <- self$rawData %>%
+                                dplyr::select(self$ordinate) %>%
+                                apply(MARGIN=2, FUN=private$summarize_numeric) %>%
+                                as.data.frame() %>%
+                                tibble::rownames_to_column("Value") %>%
+                                tibble::as_tibble()
+                            }else{
+                              private$.ordinateStatistics <- NULL
+                            }
+                          }, #pguIMP::pgu.explorer$calculate_ordinate_statistics
+
+                          #' @description
+                          #' Clears the heap and
+                          #' indicates that instance of `pgu.explorer` is removed from heap.
+                          finalize = function() {
+                            print("Instance of pgu.explorer removed from heap")
+                          } #pguIMP::pgu.explorer$finalize
                         ),
                         ##################
                         # accessor methods
@@ -41,8 +121,11 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @field setRawData
                           #' Sets the instance variable rawData
                           #' (tibble::tibble)
-                          setRawData = function(obj = "tbl_df"){
-                            private$.rawData <- obj
+                          setRawData = function(data_df = "tbl_df"){
+                            if(tibble::is.tibble(data_df))
+                            {
+                              private$.rawData <- data_df
+                            }
                           },
                           #' @field abscissa
                           #' Returns the instance variable abscissa
@@ -67,15 +150,28 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' (character)
                           setOrdinate = function(value = "character"){
                             private$.ordinate <- value
+                          },
+                          #' @field abscissaStatistics
+                          #' Returns the instance variable abscissaStatistics
+                          #' (character)
+                          abscissaStatistics = function(){
+                            return(private$.abscissaStatistics)
+                          },
+                          #' @field ordinateStatistics
+                          #' Returns the instance variable ordinateStatistics
+                          #' (character)
+                          ordinateStatistics = function(){
+                            return(private$.ordinateStatistics)
                           }
                         ),
-                        ###################
-                        # memory management
-                        ###################
+
+                        ####################
+                        # public functions #
+                        ####################
                         public = list(
                           #' @description
                           #' Creates and returns a new `pgu.explorer` object.
-                          #' @param obj
+                          #' @param data_df
                           #' The data to be analyzed.
                           #' (tibble::tibble)
                           #' @return
@@ -84,26 +180,19 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @examples
                           #' y <- tibble:tibble()
                           #' x <- pguIMP:pgu.explorer$new(data = y)
-                          initialize = function(obj = "tbl_df") {
-                            if(class(obj) != "tbl_df"){
-                              # obj <- tibble::tibble(!!("Sample Name") <- c("none"),
-                              #                        values <- c(NA)
-                              #                        )
-                              obj <- tibble::tibble(`Sample Name` <- c("none"),
-                                                    values <- c(NA)
+                          initialize = function(data_df = "tbl_df")
+                          {
+                            if(!tibble::is_tibble(data_df)){
+                              data_df <- tibble::tibble(`Sample Name` <- c("none"),
+                                                        values <- c(NA)
                               )
                             }#if
-                            self$setRawData <- obj
+                            self$setRawData <- data_df
                             self$setAbscissa <- "Sample Name"
                             self$setOrdinate <- "Sample Name"
-                          }, #function
+                          }, #pguIMP::pgu.explorer$initialize
 
-                          #' @description
-                          #' Clears the heap and
-                          #' indicates that instance of `pgu.explorer` is removed from heap.
-                          finalize = function() {
-                            print("Instance of pgu.explorer removed from heap")
-                          }, #function
+
 
                           ##########################
                           # print instance variables
@@ -115,22 +204,27 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @examples
                           #' x$print()
                           #' print(x)
-                          print = function() {
+                          print = function()
+                          {
                             rString <- sprintf("\npgu.explorer\n")
                             cat(rString)
                             aString <- sprintf("\nabscissa: %s\nordindate: %s\n", self$abscissa, self$ordinate)
                             cat(aString)
                             print(self$rawData)
+                            cat("\n\nAbscissa statistics:\n")
+                            print(self$abscissaStatistics)
+                            cat("\n\nOrdinate statistics:\n")
+                            print(self$ordinateStatistics)
                             cat("\n\n")
                             invisible(self)
-                          }, #function
+                          }, #pguIMP::pgu.explorer$print
 
                           ####################
                           # public functions #
                           ####################
                           #' @description
                           #' Resets the instance of the pgu.explorer class
-                          #' @param obj
+                          #' @param data_df
                           #' The data to be analyzed.
                           #' (tibble::tibble)
                           #' @param abs
@@ -141,41 +235,21 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' (character)
                           #' @examples
                           #' x$reset(abj, abs = "time", ord = "infected")
-                          reset = function(obj = "tbl_df", abs = "character", ord = "character"){
-                            self$setRawData <- obj
+                          reset = function(data_df = "tbl_df", abs = "character", ord = "character")
+                          {
+                            self$setRawData <- data_df
                             self$setAbscissa <- abs
                             self$setOrdinate <- ord
-                          }, #function
+                          }, #pguIMP::pgu.explorer$reset
 
                           #' @description
-                          #' Tests if the abscissa attribute is of type numeric.
-                          #' @return
-                          #' Test result
-                          #' (logical)
-                          #' @examples
-                          #' y <- x$abscissaIsNumeric()
-                          abscissaIsNumeric = function(){
-                            self$rawData %>%
-                              dplyr::select(self$abscissa) %>%
-                              purrr::map(is.numeric) %>%
-                              unlist() %>%
-                              return()
-                          }, #function
+                          #' Calculates the abscissa and ordinate statistics
+                          fit = function()
+                          {
+                            private$calculate_abscissa_statistics()
+                            private$calculate_ordinate_statistics()
+                          }, #pguIMP::pgu.explorer$fit
 
-                          #' @description
-                          #' Tests if the ordinate attribute is of type numeric.
-                          #' @return
-                          #' Test result
-                          #' (logical)
-                          #' @examples
-                          #' y <- x$ordinateIsNumeric()
-                          ordinateIsNumeric = function(){
-                            self$rawData %>%
-                              dplyr::select(self$ordinate) %>%
-                              purrr::map(is.numeric) %>%
-                              unlist() %>%
-                              return()
-                          }, #function
 
                           ####################
                           # graphical output #
@@ -213,10 +287,10 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           abscissaBarPlot = function(){
                             p <- NULL
-                            if(self$abscissaIsNumeric()){
+                            if(private$abscissa_is_numeric()){
                               p <- self$rawData %>%
                                 ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$abscissa)), na.rm=TRUE) +
-                                ggplot2::geom_bar(stat = "bin") +
+                                ggplot2::geom_bar(stat = "bin", bins =30, na.rm=TRUE) +
                                 ggplot2::ylab("counts") +
                                 ggplot2::xlab("value") +
                                 ggplot2::theme_linedraw() +
@@ -240,7 +314,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           abscissaBoxPlot = function(){
                             p <- NULL
-                            if(self$abscissaIsNumeric()){
+                            if(private$abscissa_is_numeric()){
                               p <- self$rawData %>%
                                 dplyr::select(self$abscissa) %>%
                                 tidyr::gather_(key="feature", value="measurement", as.name(self$abscissa)) %>%
@@ -270,7 +344,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           abscissaPlot = function(){
                             p <- NULL
-                            if(self$abscissaIsNumeric()){
+                            if(private$abscissa_is_numeric()){
                               p1 <- self$abscissaBoxPlot()
                               limits <- ggplot2::layer_scales(p1)$y$range$range
                               p2 <- self$abscissaBarPlot() +
@@ -292,10 +366,10 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           ordinateBarPlot = function(){
                             p <- NULL
-                            if(self$ordinateIsNumeric()){
+                            if(private$ordinate_is_numeric()){
                               p <- self$rawData %>%
                                 ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$ordinate)), na.rm=TRUE) +
-                                ggplot2::geom_bar(stat = "bin") +
+                                ggplot2::geom_bar(stat = "bin", bins =30, na.rm = TRUE) +
                                 ggplot2::ylab("counts") +
                                 ggplot2::xlab("value") +
                                 ggplot2::theme_linedraw() +
@@ -319,7 +393,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           ordinateBoxPlot = function(){
                             p <- NULL
-                            if(self$ordinateIsNumeric()){
+                            if(private$ordinate_is_numeric()){
                               p <- self$rawData %>%
                                 dplyr::select(self$ordinate) %>%
                                 tidyr::gather_(key="feature", value="measurement", as.name(self$ordinate)) %>%
@@ -349,7 +423,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #'  show()
                           ordinatePlot = function(){
                             p <- NULL
-                            if(self$ordinateIsNumeric()){
+                            if(private$ordinate_is_numeric()){
                               p1 <- self$ordinateBoxPlot()
                               limits <- ggplot2::layer_scales(p1)$y$range$range
                               p2 <- self$ordinateBarPlot() +
@@ -359,72 +433,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                                                            top = textGrob(label = sprintf("Distribution of %s", self$ordinate)))
                             }# if
                             return(p)
-                          }, #function
-
-                          ##################
-                          # numeric output #
-                          ##################
-                          #' @description
-                          #' Summarizes the numeric values of a vector.
-                          #' @param val
-                          #' values to analyze
-                          #' (numeric)
-                          #' @return
-                          #' summary
-                          #' (tibble::tibble)
-                          #' @examples
-                          #' x$summarizeNumeric(val) %>%
-                          #'  print()
-                          summarizeNumeric = function(val = "numeric"){
-                            if(!any(is.na(val))){
-                              res <- c(summary(val),"NA's"=0)
-                            }#if
-                            else{
-                              res <- summary(val)
-                            }#else
-                            return(res)
-                          }, #function
-
-                          #' @description
-                          #' Calculates and returns the statistics of the abscissa values.
-                          #' @return
-                          #' statistics
-                          #' (tibble::tibble)
-                          #' @examples
-                          #' x$abscissaStatistic() %>%
-                          #'  print()
-                          abscissaStatistic = function(){
-                            t <- NULL
-                            if(self$abscissaIsNumeric()){
-                              t <- self$rawData %>%
-                                dplyr::select(self$abscissa) %>%
-                                apply(MARGIN=2, FUN=self$summarizeNumeric) %>%
-                                as.data.frame() %>%
-                                tibble::rownames_to_column("Value") %>%
-                                tibble::as_tibble()
-                            }#if
-                            return(t)
-                          }, #function
-
-                          #' @description
-                          #' Calculates and returns the statistics of the ordinate values.
-                          #' @return
-                          #' statistics
-                          #' (tibble::tibble)
-                          #' @examples
-                          #' x$ordinateStatistic() %>%
-                          #'  print()
-                          ordinateStatistic = function(){
-                            t <- NULL
-                            if(self$abscissaIsNumeric()){
-                              t <- self$rawData %>%
-                                dplyr::select(self$ordinate) %>%
-                                apply(MARGIN=2, FUN=self$summarizeNumeric) %>%
-                                as.data.frame() %>%
-                                tibble::rownames_to_column("Value") %>%
-                                tibble::as_tibble()
-                            }#if
-                            return(t)
-                          }#function
+                          }
                         )#public
 )#class

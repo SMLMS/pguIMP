@@ -40,18 +40,6 @@ print(x)
 x$reset(abj, abs = "time", ord = "infected")
 
 ## ------------------------------------------------
-## Method `pgu.explorer$abscissaIsNumeric`
-## ------------------------------------------------
-
-y <- x$abscissaIsNumeric()
-
-## ------------------------------------------------
-## Method `pgu.explorer$ordinateIsNumeric`
-## ------------------------------------------------
-
-y <- x$ordinateIsNumeric()
-
-## ------------------------------------------------
 ## Method `pgu.explorer$scatterPlot`
 ## ------------------------------------------------
 
@@ -99,27 +87,6 @@ x$ordinateBoxPlot() \%>\%
 
 x$ordinatePlot() \%>\%
  show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$summarizeNumeric`
-## ------------------------------------------------
-
-x$summarizeNumeric(val) \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.explorer$abscissaStatistic`
-## ------------------------------------------------
-
-x$abscissaStatistic() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.explorer$ordinateStatistic`
-## ------------------------------------------------
-
-x$ordinateStatistic() \%>\%
- print()
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -144,6 +111,12 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 
 \item{\code{setOrdinate}}{Sets the instance variable ordinate
 (character)}
+
+\item{\code{abscissaStatistics}}{Returns the instance variable abscissaStatistics
+(character)}
+
+\item{\code{ordinateStatistics}}{Returns the instance variable ordinateStatistics
+(character)}
 }
 \if{html}{\out{</div>}}
 }
@@ -151,11 +124,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.explorer$new()}}
-\item \href{#method-finalize}{\code{pgu.explorer$finalize()}}
 \item \href{#method-print}{\code{pgu.explorer$print()}}
 \item \href{#method-reset}{\code{pgu.explorer$reset()}}
-\item \href{#method-abscissaIsNumeric}{\code{pgu.explorer$abscissaIsNumeric()}}
-\item \href{#method-ordinateIsNumeric}{\code{pgu.explorer$ordinateIsNumeric()}}
+\item \href{#method-fit}{\code{pgu.explorer$fit()}}
 \item \href{#method-scatterPlot}{\code{pgu.explorer$scatterPlot()}}
 \item \href{#method-abscissaBarPlot}{\code{pgu.explorer$abscissaBarPlot()}}
 \item \href{#method-abscissaBoxPlot}{\code{pgu.explorer$abscissaBoxPlot()}}
@@ -163,9 +134,6 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-ordinateBarPlot}{\code{pgu.explorer$ordinateBarPlot()}}
 \item \href{#method-ordinateBoxPlot}{\code{pgu.explorer$ordinateBoxPlot()}}
 \item \href{#method-ordinatePlot}{\code{pgu.explorer$ordinatePlot()}}
-\item \href{#method-summarizeNumeric}{\code{pgu.explorer$summarizeNumeric()}}
-\item \href{#method-abscissaStatistic}{\code{pgu.explorer$abscissaStatistic()}}
-\item \href{#method-ordinateStatistic}{\code{pgu.explorer$ordinateStatistic()}}
 \item \href{#method-clone}{\code{pgu.explorer$clone()}}
 }
 }
@@ -173,15 +141,36 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Tests if the abscissa attribute is of type numeric.
+
+
+Tests if the ordinate attribute is of type numeric.
+
+
+Summarizes the numeric values of a vector.
+
+
+Calculates the statistics of the abscissa values.
+Stores the result in the instance variable abscissaStatistics.
+
+
+Calculates the statistics of the ordinate values.
+Stores the result in the instance variable ordinateStatistics.
+
+
+Clears the heap and
+indicates that instance of \code{pgu.explorer} is removed from heap.
+
+
 Creates and returns a new \code{pgu.explorer} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$new(obj = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$new(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{obj}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -197,17 +186,6 @@ x <- pguIMP:pgu.explorer$new(data = y)
 }
 \if{html}{\out{</div>}}
 
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clears the heap and
-indicates that instance of \code{pgu.explorer} is removed from heap.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$finalize()}\if{html}{\out{</div>}}
 }
 
 }
@@ -239,13 +217,13 @@ print(x)
 \subsection{Method \code{reset()}}{
 Resets the instance of the pgu.explorer class
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$reset(obj = "tbl_df", abs = "character", ord = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$reset(data_df = "tbl_df", abs = "character", ord = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{obj}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 
 \item{\code{abs}}{The abscissa attribute
@@ -266,46 +244,12 @@ Resets the instance of the pgu.explorer class
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-abscissaIsNumeric"></a>}}
-\if{latex}{\out{\hypertarget{method-abscissaIsNumeric}{}}}
-\subsection{Method \code{abscissaIsNumeric()}}{
-Tests if the abscissa attribute is of type numeric.
+\if{html}{\out{<a id="method-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-fit}{}}}
+\subsection{Method \code{fit()}}{
+Calculates the abscissa and ordinate statistics
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$abscissaIsNumeric()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Test result
-(logical)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$abscissaIsNumeric()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ordinateIsNumeric"></a>}}
-\if{latex}{\out{\hypertarget{method-ordinateIsNumeric}{}}}
-\subsection{Method \code{ordinateIsNumeric()}}{
-Tests if the ordinate attribute is of type numeric.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$ordinateIsNumeric()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Test result
-(logical)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$ordinateIsNumeric()
-}
-\if{html}{\out{</div>}}
-
+\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$fit()}\if{html}{\out{</div>}}
 }
 
 }
@@ -464,83 +408,6 @@ Compound plot
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$ordinatePlot() \%>\%
  show()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-summarizeNumeric"></a>}}
-\if{latex}{\out{\hypertarget{method-summarizeNumeric}{}}}
-\subsection{Method \code{summarizeNumeric()}}{
-Summarizes the numeric values of a vector.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$summarizeNumeric(val = "numeric")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{val}}{values to analyze
-(numeric)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-summary
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$summarizeNumeric(val) \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-abscissaStatistic"></a>}}
-\if{latex}{\out{\hypertarget{method-abscissaStatistic}{}}}
-\subsection{Method \code{abscissaStatistic()}}{
-Calculates and returns the statistics of the abscissa values.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$abscissaStatistic()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-statistics
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$abscissaStatistic() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ordinateStatistic"></a>}}
-\if{latex}{\out{\hypertarget{method-ordinateStatistic}{}}}
-\subsection{Method \code{ordinateStatistic()}}{
-Calculates and returns the statistics of the ordinate values.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.explorer$ordinateStatistic()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-statistics
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$ordinateStatistic() \%>\%
- print()
 }
 \if{html}{\out{</div>}}
 

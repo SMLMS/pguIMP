@@ -4,7 +4,7 @@
 #' Filter the pguIMP dataset.
 #'
 #' @details
-#' The filtering is done by colum and row indices.
+#' The filtering is done by column and row indices.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:
@@ -24,7 +24,29 @@ pgu.filter <- R6::R6Class("pgu.filter",
                           ####################
                           private = list(
                             .colIdx = "numeric",
-                            .rowIdx = "numeric"
+                            .rowIdx = "numeric",
+
+                            #' @description
+                            #' Resets the filter parameter colIdx to the full dataframe.
+                            reset_colIdx = function(data_df = "tbl_df")
+                            {
+                              self$setColIdx <- seq(1,ncol(data_df), 1)
+                            }, #end pguIMP::pgi.filter$reset_colIndex()
+
+                            #' @description
+                            #' Resets the filter parameter rowIdx to the full dataframe.
+                            reset_rowIdx = function(data_df = "tbl_df")
+                            {
+                              self$setRowIdx <- seq(1,nrow(data_df), 1)
+                            }, #end pguIMP::pgu.filter$reset_rowIdx
+
+                            #' @description
+                            #' Clears the heap and
+                            #' indicates that instance of pguIMP::pgu.filter is removed from heap.
+                            finalize = function()
+                            {
+                              print("Instance of pgu.filter removed from heap")
+                            } #end pguIMP::pgu.filter$finalize()
                           ),
                           ##################
                           # accessor methods
@@ -33,147 +55,116 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' @field colIdx
                             #' Returns the instance variable colIdx
                             #' (numeric)
-                            colIdx = function(){
+                            colIdx = function()
+                            {
                               return(private$.colIdx)
                             },
                             #' @field setColIdx
                             #' Sets the instance variable colIdx
                             #' (numeric)
-                            setColIdx = function(idx = "numeric"){
-                              private$.colIdx <- idx
+                            setColIdx = function(idx = "numeric")
+                            {
+                              if(is.numeric(idx))
+                              {
+                                private$.colIdx <- idx %>%
+                                  sort()
+                              }#if
                             },
                             #' @field rowIdx
                             #' Returns the instance variable rowIdx
                             #' (numeric)
-                            rowIdx = function(){
+                            rowIdx = function()
+                            {
                               return(private$.rowIdx)
                             },
                             #' @field setRowIdx
                             #' Sets the instance variable rowIdx
                             #' (numeric)
-                            setRowIdx = function(idx = "numeric"){
-                              private$.rowIdx = idx
+                            setRowIdx = function(idx = "numeric")
+                            {
+                              if(is.numeric(idx))
+                              {
+                                private$.rowIdx = idx %>%
+                                  sort()
+                              }#if
                             }
                           ),
-                          ###################
-                          # memory management
-                          ###################
+                          ####################
+                          # public functions #
+                          ####################
                           public = list(
                             #' @description
-                            #' Creates and returns a new `pgu.filter` object.
-                            #' @param data
+                            #' Creates and returns a new pguIMP::pgu.filter object.
+                            #' @param data_df
                             #' The data to be analyzed.
                             #' (tibble::tibble)
                             #' @return
-                            #' A new `pgu.filter` object.
-                            #' (pguIMP::pgu.optimizer)
+                            #' A new pguIMP::pgu.filter object.
+                            #' (pguIMP::pgu.filter)
                             #' @examples
                             #' y <- tibble:tibble()
-                            #' x <- pguIMP:pgu.filter$new(data = y)
-                            initialize = function(data = "tbl_df"){
-                              if(class(data) != "tbl_df"){
-                                data <- tibble::tibble(names <- "none",
-                                                       values <- c(NA))
+                            #' x <- pguIMP:pgu.filter$new(data_df = y)
+                            initialize = function(data_df = "tbl_df")
+                            {
+                              if(!tibble::is.tibble(data_df)){
+                                tibble::tibble(names <- "none",
+                                               values <- c(NA)) %>%
+                                  self$reset()
+                              }else{
+                                data_df %>%
+                                  self$reset()
                               }#if
-                              data %>%
-                                self$resetFilter()
-                            }, #function
+                            }, #end pguIMP::pgu.filter$initialize()
 
                             #' @description
-                            #' Clears the heap and
-                            #' indicates that instance of `pgu.filter` is removed from heap.
-                            finalize = function(){
-                              print("Instance of pgu.filter removed from heap")
-                            }, #function
-
-                            ##########################
-                            # print instance variables
-                            ##########################
-                            #' @description
-                            #' Prints instance variables of a `pgu.filter` object.
+                            #' Prints instance variables of a pguIMP::pgu.filter object.
                             #' @return
                             #' string
                             #' @examples
                             #' x$print()
                             #' print(x)
-                            print = function(){
-                              rString <- sprintf("\npgu.filter\n")
-                              cat(rString)
-                              cat("colIdx:\n")
-                              cat(private$.colIdx)
-                              cat("\nrawIdx:\n")
-                              cat(private$.rowIdx)
+                            print = function()
+                            {
+                              sprintf("\npgu.filter\ncolIdx:\n") %>%
+                                cat()
+                              print(self$colIdx)
+                              sprintf("\nrowIdx:\n") %>%
+                                cat()
+                              print(self$rowIdx)
                               cat("\n\n")
                               invisible(self)
-                            }, #function
+                            }, #end pgiIMP::pgu.filter$print()
 
-                            #' @description
-                            #' Resets the filter parameter colIdx to the full dataframe.
-                            #' @param data
-                            #' The data to be analyzed.
-                            #' (tibble::tibble)
-                            #' @examples
-                            #' x$resetColIdx(data)
-                            resetColIdx = function(data = "tbl_df"){
-                              self$setColIdx <- seq(1,ncol(data), 1)
-                            }, #function
-
-                            #' @description
-                            #' Resets the filter parameter rowIdx to the full dataframe.
-                            #' @param data
-                            #' The data to be analyzed.
-                            #' (tibble::tibble)
-                            #' @examples
-                            #' x$resetRowIdx(data)
-                            resetRowIdx = function(data = "tbl_df"){
-                              self$setRowIdx <- seq(1,nrow(data), 1)
-                            }, #function
 
                             #' @description
                             #' Resets the filter parameter colIdx and rowIdx to the full dataframe.
-                            #' @param data
+                            #' @param data_df
                             #' The data to be analyzed.
                             #' (tibble::tibble)
                             #' @examples
-                            #' x$resetFilter(data)
-                            resetFilter = function(data = "tbl_df"){
-                              self$resetColIdx(data)
-                              self$resetRowIdx(data)
-                            }, #function
+                            #' x$reset(data)
+                            reset = function(data_df = "tbl_df")
+                            {
+                              private$reset_colIdx(data_df)
+                              private$reset_rowIdx(data_df)
+                            }, #end pguIMP::pgi.filter$reset()
 
                             #' @description
                             #' Filters and returns the given data frame.
-                            #' @param data
+                            #' @param data_df
                             #' The data to be analyzed.
                             #' (tibble::tibble)
                             #' @return
                             #' The filtered data frame
                             #' (tibble::tibble)
                             #' @examples
-                            #' y <- x$filter(data)
-                            filter = function(data = "tbl_df"){
-                              data %>%
+                            #' y <- x$filter(data_df)
+                            predict = function(data_df = "tbl_df")
+                            {
+                              data_df %>%
                                 dplyr::select(self$colIdx) %>%
                                 dplyr::slice(self$rowIdx) %>%
                                 return()
-                            }, #function
-
-                            #' @description
-                            #' Filters and returns the given data frame.
-                            #' In contrast to the filter function, this function only
-                            #' filters the rows.
-                            #' @param data
-                            #' The data to be analyzed.
-                            #' (tibble::tibble)
-                            #' @return
-                            #' The filtered data frame
-                            #' (tibble::tibble)
-                            #' @examples
-                            #' y <- x$filterRows(data)
-                            filterRows = function(data = "tbl_df"){
-                              data %>%
-                                dplyr::slice(self$rowIdx) %>%
-                                return()
-                            }#function
+                            } #end phuIMP::pgi.filter$predict()
                           )#public
 )#class

@@ -28,6 +28,9 @@ sidebar <- shinydashboard::dashboardSidebar(
     shinydashboard::menuItem("Crop LOQ",
                              tabName = "tab_loq",
                              icon = shiny::icon("crop-alt"),
+                             shinydashboard::menuSubItem("Define",
+                                                         icon = shiny::icon("upload"),
+                                                         tabName = "tab_define_loq"),
                              shinydashboard::menuSubItem("Detect",
                                                          icon = shiny::icon("microscope"),
                                                          tabName = "tab_detect_loq"),
@@ -87,17 +90,17 @@ sidebar <- shinydashboard::dashboardSidebar(
                                width = "100%",
                                labe = h5('Download')
                              )
-    ),
-    shinydashboard::menuItem("Report",
-                             tabName = "tab_report",
-                             icon = shiny::icon("file-pdf"),
-                             shinyjs::useShinyjs(),
-                             shiny::downloadButton(
-                               'dbReport',
-                               width = "100%",
-                               labe = h5('Download')
-                             )
     )
+    # shinydashboard::menuItem("Report",
+    #                          tabName = "tab_report",
+    #                          icon = shiny::icon("file-pdf"),
+    #                          shinyjs::useShinyjs(),
+    #                          shiny::downloadButton(
+    #                            'dbReport',
+    #                            width = "100%",
+    #                            labe = h5('Download')
+    #                          )
+    # )
 
   )
 )

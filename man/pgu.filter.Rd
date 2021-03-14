@@ -10,7 +10,7 @@
 Filter the pguIMP dataset.
 }
 \details{
-The filtering is done by colum and row indices.
+The filtering is done by column and row indices.
 }
 \section{Construction}{
 
@@ -24,7 +24,7 @@ x <- pguIMP::pgu.filter$new(data)
 ## ------------------------------------------------
 
 y <- tibble:tibble()
-x <- pguIMP:pgu.filter$new(data = y)
+x <- pguIMP:pgu.filter$new(data_df = y)
 
 ## ------------------------------------------------
 ## Method `pgu.filter$print`
@@ -34,34 +34,16 @@ x$print()
 print(x)
 
 ## ------------------------------------------------
-## Method `pgu.filter$resetColIdx`
+## Method `pgu.filter$reset`
 ## ------------------------------------------------
 
-x$resetColIdx(data)
+x$reset(data)
 
 ## ------------------------------------------------
-## Method `pgu.filter$resetRowIdx`
+## Method `pgu.filter$predict`
 ## ------------------------------------------------
 
-x$resetRowIdx(data)
-
-## ------------------------------------------------
-## Method `pgu.filter$resetFilter`
-## ------------------------------------------------
-
-x$resetFilter(data)
-
-## ------------------------------------------------
-## Method `pgu.filter$filter`
-## ------------------------------------------------
-
-y <- x$filter(data)
-
-## ------------------------------------------------
-## Method `pgu.filter$filterRows`
-## ------------------------------------------------
-
-y <- x$filterRows(data)
+y <- x$filter(data_df)
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -87,13 +69,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.filter$new()}}
-\item \href{#method-finalize}{\code{pgu.filter$finalize()}}
 \item \href{#method-print}{\code{pgu.filter$print()}}
-\item \href{#method-resetColIdx}{\code{pgu.filter$resetColIdx()}}
-\item \href{#method-resetRowIdx}{\code{pgu.filter$resetRowIdx()}}
-\item \href{#method-resetFilter}{\code{pgu.filter$resetFilter()}}
-\item \href{#method-filter}{\code{pgu.filter$filter()}}
-\item \href{#method-filterRows}{\code{pgu.filter$filterRows()}}
+\item \href{#method-reset}{\code{pgu.filter$reset()}}
+\item \href{#method-predict}{\code{pgu.filter$predict()}}
 \item \href{#method-clone}{\code{pgu.filter$clone()}}
 }
 }
@@ -101,41 +79,40 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Creates and returns a new \code{pgu.filter} object.
+Resets the filter parameter colIdx to the full dataframe.
+
+
+Resets the filter parameter rowIdx to the full dataframe.
+
+
+Clears the heap and
+indicates that instance of pguIMP::pgu.filter is removed from heap.
+
+
+Creates and returns a new pguIMP::pgu.filter object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$new(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$new(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new \code{pgu.filter} object.
-(pguIMP::pgu.optimizer)
+A new pguIMP::pgu.filter object.
+(pguIMP::pgu.filter)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.filter$new(data = y)
+x <- pguIMP:pgu.filter$new(data_df = y)
 }
 \if{html}{\out{</div>}}
 
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clears the heap and
-indicates that instance of \code{pgu.filter} is removed from heap.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$finalize()}\if{html}{\out{</div>}}
 }
 
 }
@@ -143,7 +120,7 @@ indicates that instance of \code{pgu.filter} is removed from heap.
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Prints instance variables of a \code{pgu.filter} object.
+Prints instance variables of a pguIMP::pgu.filter object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.filter$print()}\if{html}{\out{</div>}}
 }
@@ -162,77 +139,25 @@ print(x)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetColIdx"></a>}}
-\if{latex}{\out{\hypertarget{method-resetColIdx}{}}}
-\subsection{Method \code{resetColIdx()}}{
-Resets the filter parameter colIdx to the full dataframe.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$resetColIdx(data = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetColIdx(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetRowIdx"></a>}}
-\if{latex}{\out{\hypertarget{method-resetRowIdx}{}}}
-\subsection{Method \code{resetRowIdx()}}{
-Resets the filter parameter rowIdx to the full dataframe.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$resetRowIdx(data = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetRowIdx(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetFilter"></a>}}
-\if{latex}{\out{\hypertarget{method-resetFilter}{}}}
-\subsection{Method \code{resetFilter()}}{
+\if{html}{\out{<a id="method-reset"></a>}}
+\if{latex}{\out{\hypertarget{method-reset}{}}}
+\subsection{Method \code{reset()}}{
 Resets the filter parameter colIdx and rowIdx to the full dataframe.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$resetFilter(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$reset(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetFilter(data)
+\preformatted{x$reset(data)
 }
 \if{html}{\out{</div>}}
 
@@ -240,18 +165,18 @@ Resets the filter parameter colIdx and rowIdx to the full dataframe.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filter"></a>}}
-\if{latex}{\out{\hypertarget{method-filter}{}}}
-\subsection{Method \code{filter()}}{
+\if{html}{\out{<a id="method-predict"></a>}}
+\if{latex}{\out{\hypertarget{method-predict}{}}}
+\subsection{Method \code{predict()}}{
 Filters and returns the given data frame.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$filter(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$predict(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
 }
 \if{html}{\out{</div>}}
@@ -262,39 +187,7 @@ The filtered data frame
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$filter(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filterRows"></a>}}
-\if{latex}{\out{\hypertarget{method-filterRows}{}}}
-\subsection{Method \code{filterRows()}}{
-Filters and returns the given data frame.
-In contrast to the filter function, this function only
-filters the rows.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.filter$filterRows(data = "tbl_df")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{The data to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-The filtered data frame
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$filterRows(data)
+\preformatted{y <- x$filter(data_df)
 }
 \if{html}{\out{</div>}}
 

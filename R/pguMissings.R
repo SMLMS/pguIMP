@@ -327,30 +327,30 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               }, #function
 
 
-                              #' @description
-                              #' Merges the numeric attributes of the pguIMP data with its metadata.
-                              #' @param data_df
-                              #' The data frame to be analyzed.
-                              #' (tibble::tibble)
-                              #' @param metadata_df
-                              #' The corresponding metadata.
-                              #' (tibble::tibble)
-                              #' @return
-                              #' A data frame
-                              #' (tibble::tibble)
-                              #' @examples
-                              #' data %>%
-                              #'  x$mergeImputationSiteData() %>%
-                              #'  print()
-                              mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
-                                dfMerge <- data_df
-                                if(nrow(data_df) == nrow(metadata_df)){
-                                  dfMerge <- dplyr::bind_cols(metadata_df, data_df)
-                                }#if
-                                dfMerge %>%
-                                  dplyr::filter_all(dplyr::any_vars(is.na(.))) %>%
-                                  return()
-                              }, #function
+                              #' #' @description
+                              #' #' Merges the numeric attributes of the pguIMP data with its metadata.
+                              #' #' @param data_df
+                              #' #' The data frame to be analyzed.
+                              #' #' (tibble::tibble)
+                              #' #' @param metadata_df
+                              #' #' The corresponding metadata.
+                              #' #' (tibble::tibble)
+                              #' #' @return
+                              #' #' A data frame
+                              #' #' (tibble::tibble)
+                              #' #' @examples
+                              #' #' data %>%
+                              #' #'  x$mergeImputationSiteData() %>%
+                              #' #'  print()
+                              #' mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
+                              #'   dfMerge <- data_df
+                              #'   if(nrow(data_df) == nrow(metadata_df)){
+                              #'     dfMerge <- dplyr::bind_cols(metadata_df, data_df)
+                              #'   }#if
+                              #'   dfMerge %>%
+                              #'     dplyr::filter_all(dplyr::any_vars(is.na(.))) %>%
+                              #'     return()
+                              #' }, #function
 
                               ##################
                               # plot functions #

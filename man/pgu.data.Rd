@@ -21,76 +21,22 @@ x <- pguIMP::pgu.data$new(data)
 \examples{
 
 ## ------------------------------------------------
-## Method `pgu.data$new`
+## Method `pgu.data$attribute_index`
 ## ------------------------------------------------
 
-y <- tibble::tibble()
-x <- pguIMP:pgu.data$new(data = y)
+idx <- x$attribute_index(attribute = "infected")
 
 ## ------------------------------------------------
-## Method `pgu.data$print`
+## Method `pgu.data$numerical_data`
 ## ------------------------------------------------
 
-x$print()
-print(x)
+y <- x$numerical_data()
 
 ## ------------------------------------------------
-## Method `pgu.data$resetActiveFeatureNames`
+## Method `pgu.data$categorical_data`
 ## ------------------------------------------------
 
-x$resetActiveFeatureNames()
-
-## ------------------------------------------------
-## Method `pgu.data$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.data$numericData`
-## ------------------------------------------------
-
-y <- x$numericData()
-
-## ------------------------------------------------
-## Method `pgu.data$nonNumericData`
-## ------------------------------------------------
-
-y <- x$nonNumericData()
-
-## ------------------------------------------------
-## Method `pgu.data$dataInformation`
-## ------------------------------------------------
-
-x$dataInformation() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.data$summarizeNumeric`
-## ------------------------------------------------
-
-x$summarizeNumeric(val = c(1,2,3,4,5))
-
-## ------------------------------------------------
-## Method `pgu.data$dataStatistics`
-## ------------------------------------------------
-
-x$dataStatistics() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.data$reducedDataStatistics`
-## ------------------------------------------------
-
-x$reducedDataStatistics() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.data$missings`
-## ------------------------------------------------
-
-x$misings() \%>\%
- print()
+y <- x$categorical_data()
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -104,32 +50,26 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{setRawData}}{Sets the instance variable rawData
 (tibble::tibble)}
 
-\item{\code{featureNames}}{Returns the instance variable featureNames
+\item{\code{attributeNames}}{Returns the instance variable attributeNames
 (character)}
 
-\item{\code{numericFeatureNames}}{Returns the insatnce variable numericFeatureNames
+\item{\code{numericalAttributeNames}}{Returns the instance variable numericalAttributeNames
 (character)}
 
-\item{\code{nonNumericFeatureNames}}{Returns the instance variable nonNumericFeatureNames
+\item{\code{categoricalAttributeNames}}{Returns the instance variable categoricalAttributeNames
 (character)}
 
-\item{\code{activeFeatureNames}}{Returns the instance variable activeFeatureNames
-(character)}
+\item{\code{classInformation}}{Returns the instance variable classInformation
+(tibble::tibble)}
 
-\item{\code{setActiveFeatureNames}}{Sets the instance variable activeFeatureNames
-(character)}
+\item{\code{statistics}}{Returns the instance variable statistics
+(tibble::tibble)}
 
-\item{\code{abscissa}}{Returns the instance variable abscissa
-(character)}
+\item{\code{reducedStatistics}}{Returns the instance variable reducedStatistics
+(tibble::tibble)}
 
-\item{\code{setAbscissa}}{Sets the instance variable abscissa
-(character)}
-
-\item{\code{ordinate}}{Returns the instance variable ordinate
-(character)}
-
-\item{\code{setOrdinate}}{Sets the instance variable ordinate
-(character)}
+\item{\code{missingsStatistics}}{Returns the instance variable missingsStatistics
+(tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
@@ -137,17 +77,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.data$new()}}
-\item \href{#method-finalize}{\code{pgu.data$finalize()}}
 \item \href{#method-print}{\code{pgu.data$print()}}
-\item \href{#method-resetActiveFeatureNames}{\code{pgu.data$resetActiveFeatureNames()}}
-\item \href{#method-featureIdx}{\code{pgu.data$featureIdx()}}
-\item \href{#method-numericData}{\code{pgu.data$numericData()}}
-\item \href{#method-nonNumericData}{\code{pgu.data$nonNumericData()}}
-\item \href{#method-dataInformation}{\code{pgu.data$dataInformation()}}
-\item \href{#method-summarizeNumeric}{\code{pgu.data$summarizeNumeric()}}
-\item \href{#method-dataStatistics}{\code{pgu.data$dataStatistics()}}
-\item \href{#method-reducedDataStatistics}{\code{pgu.data$reducedDataStatistics()}}
-\item \href{#method-missings}{\code{pgu.data$missings()}}
+\item \href{#method-fit}{\code{pgu.data$fit()}}
+\item \href{#method-attribute_index}{\code{pgu.data$attribute_index()}}
+\item \href{#method-numerical_data}{\code{pgu.data$numerical_data()}}
+\item \href{#method-categorical_data}{\code{pgu.data$categorical_data()}}
 \item \href{#method-clone}{\code{pgu.data$clone()}}
 }
 }
@@ -155,49 +89,57 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Creates and returns a new \code{pgu.data} object.
+Clears the heap and
+indicates that instance of pguIMP::pgu.data is removed from heap.
+
+
+Summarizes information on the instance variable rawData
+and retruns it in form of a compact data frame.
+
+
+Summarizes a vector of numericals and returns summary.
+
+
+Iterativley calls the function summarize_numerical_data on all numerical attributes
+of the instance variable rawData and returns the result in form of a data frame.
+
+
+Calls the function calculate_statistics
+filters the result for the attribute names and arithmetic mean values.
+and returns the result in form of a data frame.
+
+
+Calls the class' function dataStatistics
+filters the result for the attribute names and information about missing values.
+and returns the result in form of a data frame.
+
+
+Creates and returns a new pguIMP::pgu.data object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$new(data = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.data$new(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{The data to be analyzed.
+\item{\code{data_df}}{The data to be analyzed.
 (tibble::tibble)}
+
+\item{\code{val}}{Vector of numericals to be summarized.
+(numeric)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new \code{pgu.data} object.
+A new pguIMP::pgu.data object.
 (pguIMP::pgu.data)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble::tibble()
-x <- pguIMP:pgu.data$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clears the heap and
-indicates that instance of \code{pgu.data} is removed from heap.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$finalize()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Prints instance variables of a \code{pgu.data} object.
+Prints instance variables of a pguIMP::pgu.data object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.data$print()}\if{html}{\out{</div>}}
 }
@@ -205,58 +147,41 @@ Prints instance variables of a \code{pgu.data} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
 }
-\if{html}{\out{</div>}}
-
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-fit}{}}}
+\subsection{Method \code{fit()}}{
+Extracts information about the instance variable rawData.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.data$fit()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetActiveFeatureNames"></a>}}
-\if{latex}{\out{\hypertarget{method-resetActiveFeatureNames}{}}}
-\subsection{Method \code{resetActiveFeatureNames()}}{
-Sets all attribute feature names as active.
+\if{html}{\out{<a id="method-attribute_index"></a>}}
+\if{latex}{\out{\hypertarget{method-attribute_index}{}}}
+\subsection{Method \code{attribute_index()}}{
+Returns the index of an attribute within the instance variable attributeNames.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$resetActiveFeatureNames()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetActiveFeatureNames()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-featureIdx"></a>}}
-\if{latex}{\out{\hypertarget{method-featureIdx}{}}}
-\subsection{Method \code{featureIdx()}}{
-Returns the index of an attributes feature name within the object's instance variable \code{featureNames}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$featureIdx(feature = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.data$attribute_index(attribute = "character")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{feature}}{Attribute's name.
+\item{\code{attribute}}{Attribute's name.
 (character)}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Index of attribute's feature name in dataframe
+Index of attribute's name in rawData
 (numeric)
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "infected")
+\preformatted{idx <- x$attribute_index(attribute = "infected")
 }
 \if{html}{\out{</div>}}
 
@@ -264,12 +189,12 @@ Index of attribute's feature name in dataframe
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-numericData"></a>}}
-\if{latex}{\out{\hypertarget{method-numericData}{}}}
-\subsection{Method \code{numericData()}}{
-Returns a copy of the instance variable rawData comprising solely the numeric attributes.
+\if{html}{\out{<a id="method-numerical_data"></a>}}
+\if{latex}{\out{\hypertarget{method-numerical_data}{}}}
+\subsection{Method \code{numerical_data()}}{
+Returns the numeric attributes of the instance variable rawData.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$numericData()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.data$numerical_data()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -278,7 +203,7 @@ A data frame
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$numericData()
+\preformatted{y <- x$numerical_data()
 }
 \if{html}{\out{</div>}}
 
@@ -286,12 +211,12 @@ A data frame
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-nonNumericData"></a>}}
-\if{latex}{\out{\hypertarget{method-nonNumericData}{}}}
-\subsection{Method \code{nonNumericData()}}{
-Returns a copy of the instance variable rawData comprising solely the attributes of non numeric types.
+\if{html}{\out{<a id="method-categorical_data"></a>}}
+\if{latex}{\out{\hypertarget{method-categorical_data}{}}}
+\subsection{Method \code{categorical_data()}}{
+Returns the categorical attributes of the instance variable rawData.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$nonNumericData()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.data$categorical_data()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -300,134 +225,7 @@ A data frame
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$nonNumericData()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-dataInformation"></a>}}
-\if{latex}{\out{\hypertarget{method-dataInformation}{}}}
-\subsection{Method \code{dataInformation()}}{
-Summarizes information on the instance variable rawData
-and retruns it in form of a compact data frame.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$dataInformation()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Information data frame
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$dataInformation() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-summarizeNumeric"></a>}}
-\if{latex}{\out{\hypertarget{method-summarizeNumeric}{}}}
-\subsection{Method \code{summarizeNumeric()}}{
-Summarizes a vector of numerics and returns summary.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$summarizeNumeric(val = "numeric")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{val}}{Vector of numerics to be summarized.
-(numeric)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-Summary
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$summarizeNumeric(val = c(1,2,3,4,5))
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-dataStatistics"></a>}}
-\if{latex}{\out{\hypertarget{method-dataStatistics}{}}}
-\subsection{Method \code{dataStatistics()}}{
-Iterativly calls the class' function summarizeNumeric on all numeric attributes
-of the instance variable rawData and returns the result in form of a data frame.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$dataStatistics()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Summary
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$dataStatistics() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reducedDataStatistics"></a>}}
-\if{latex}{\out{\hypertarget{method-reducedDataStatistics}{}}}
-\subsection{Method \code{reducedDataStatistics()}}{
-Calls the class' function dataStatistics
-filters the result for the attributes feature names and arithmetric mean values.
-and returns the result in form of a data frame.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$reducedDataStatistics()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Summary
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$reducedDataStatistics() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-missings"></a>}}
-\if{latex}{\out{\hypertarget{method-missings}{}}}
-\subsection{Method \code{missings()}}{
-Calls the class' function dataStatistics
-filters the result for the attributes feature names and information about missing values.
-and returns the result in form of a data frame.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.data$missings()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Summary
-(tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$misings() \%>\%
- print()
+\preformatted{y <- x$categorical_data()
 }
 \if{html}{\out{</div>}}
 

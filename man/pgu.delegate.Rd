@@ -34,211 +34,355 @@ x$print()
 print(x)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$queryExcel`
+## Method `pgu.delegate$query_data`
 ## ------------------------------------------------
 
-x$queryExcel(input, output, session)
+x$query_data(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$importData`
+## Method `pgu.delegate$import_data`
 ## ------------------------------------------------
 
-x$importData(input, output, session)
+x$import_data(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$importLoq`
+## Method `pgu.delegate$update_import_data_Types_tbl`
 ## ------------------------------------------------
 
-x$importLoq(input, output, session)
+x$update_import_data_Types_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$importMetadata`
+## Method `pgu.delegate$update_import_data_statistics_tbl`
 ## ------------------------------------------------
 
-x$importMetadata(input, output, session)
+x$update_import_data_statistics_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateFilter`
+## Method `pgu.delegate$update_import_missings_statistics_tbl`
 ## ------------------------------------------------
 
-x$updateFilter(input, output, session)
+x$update_import_missings_statistics_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateFilterInverse`
+## Method `pgu.delegate$update_filter_select_tbl`
 ## ------------------------------------------------
 
-x$updateFilterInverse(input, output, session)
+x$update_filter_select_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$resetFilter`
+## Method `pgu.delegate$update_filter`
 ## ------------------------------------------------
 
-x$resetFilter(input, output, session)
+x$update_filter(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$filterData`
+## Method `pgu.delegate$update_filter_inverse`
 ## ------------------------------------------------
 
-x$filterData(input, output, session)
+x$update_filter_inverse(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationData`
+## Method `pgu.delegate$reset_filter`
 ## ------------------------------------------------
 
-x$updateExplorationData(input, output, session)
+x$reset_filter(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationAbscissa`
+## Method `pgu.delegate$filter_data`
 ## ------------------------------------------------
 
-x$updateExplorationAbscissa(input, output, session)
+x$filter_data(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationOrdinate`
+## Method `pgu.delegate$update_filter_statistics_tbl`
 ## ------------------------------------------------
 
-x$updateExplorationOrdinate(input, output, session)
+x$update_filter_statistics_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationGraphic`
+## Method `pgu.delegate$update_filter_missings_tbl`
 ## ------------------------------------------------
 
-x$updateExplorationGraphic(input, output, session)
+x$update_filter_missings_tbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationAbscissaGraphic`
+## Method `pgu.delegate$update_exploration_gui`
 ## ------------------------------------------------
 
-x$updateExplorationAbscissaGraphic(input, output, session)
+x$update_exploration_gui(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationOrdinateGraphic`
+## Method `pgu.delegate$update_exploration_abscissa`
+## ------------------------------------------------
+
+x$update_exploration_abscissa(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$update_exploration_ordinate`
+## ------------------------------------------------
+
+x$update_exploration_ordinate(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$update_exploration_graphic`
+## ------------------------------------------------
+
+x$update_exploration_graphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$update_exploration_abscissa_graphic`
+## ------------------------------------------------
+
+x$update_exploration_abscissa_graphic(input, output, session)
+
+## ------------------------------------------------
+## Method `pgu.delegate$update_exploration_ordinate_graphic`
 ## ------------------------------------------------
 
 x$updateExplorationOrdinateGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationAbscissaTable`
+## Method `pgu.delegate$update_exploration_abscissa_table`
 ## ------------------------------------------------
 
-x$updateExplorationAbscissaTable(input, output, session)
+x$update_exploration_abscissa_table(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateExplorationOrdinateTable`
+## Method `pgu.delegate$update_exploration_ordinate_table`
 ## ------------------------------------------------
 
 x$updateExplorationOrdinateTable(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectGui`
+## Method `pgu.delegate$update_loq_detect_gui`
 ## ------------------------------------------------
 
-x$updateLoqDetectGui(input, output, session)
+x$update_loq_detect_gui(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqNaHandling`
+## Method `pgu.delegate$update_loq_na_handling`
 ## ------------------------------------------------
 
-x$updateLoqNaHandling(input, output, session)
+x$update_loq_na_handling(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$detectLoq`
+## Method `pgu.delegate$detect_loq`
 ## ------------------------------------------------
 
 x$detectLoq(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectStatisticsTbl`
+## Method `pgu.delegate$update_loq_detect_statistics_tbl`
 ## ------------------------------------------------
 
 x$updateLoqDetectStatisticsTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectOutlierTbl`
+## Method `pgu.delegate$update_loq_detect_outlier_tbl`
 ## ------------------------------------------------
 
 x$updateLoqDetectOutlierTbl(input, output, session)
+#' @description
+#' Updates the numerical loq data table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqDetectDataTbl(input, output, session)
+update_loq_detect_data_tbl = function(input, output, session){
+  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  t <- NULL
+  if(self$status$query(processName = "loqDetected")){
+    dfData <- self$filteredMetadata$rawData \%>\%
+      dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
+    dfOutlier <- self$loq$outliers
+    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+    t <- dfData \%>\%
+      dplyr::mutate_if(is.numeric, round, 3) \%>\%
+      DT::datatable(
+        options = list(
+          scrollX = TRUE,
+          scrollY = '350px',
+          paging = FALSE,
+          dom = "Blfrtip",
+          buttons = list(list(
+            extend = 'csv',
+            filename = self$fileName$bluntFileName("loqData"),
+            text = "Download"
+          ))#buttons
+        )#options
+      )#DT::datatable
+    for (featureName in self$filteredData$numericFeatureNames){
+      featureOutlier <- dfOutlier \%>\%
+        dplyr::filter(feature == featureName) \%>\%
+        dplyr::mutate_if(is.numeric, round, 3)
+      if (nrow(featureOutlier)>0){
+        t <- DT::formatStyle(t,
+                             featureName,
+                             backgroundColor = styleEqual(dfData \%>\%
+                                                            dplyr::select(!!featureName) \%>\%
+                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+                                                            unlist() \%>\%
+                                                            as.numeric() \%>\%
+                                                            round(digits = 3),
+                                                          featureOutlier[["color"]])
+
+        )#t
+      }#if
+    }#for
+  }#if
+  output$tbl.loqDetectData <- DT::renderDataTable(t)
+}, #function
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectDataTbl`
-## ------------------------------------------------
-
-x$updateLoqDetectDataTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectStatisticsGraphic`
+## Method `pgu.delegate$update_loq_detect_statistics_graphic`
 ## ------------------------------------------------
 
 x$updateLoqDetectStatisticsGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectFeatureGraphic`
+## Method `pgu.delegate$update_loq_detect_attribute_graphic`
 ## ------------------------------------------------
 
 x$updateLoqDetectFeatureGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqDetectFeatureTbl`
+## Method `pgu.delegate$update_loq_detect_attribute_tbl`
 ## ------------------------------------------------
 
 x$updateLoqDetectFeatureTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateGui`
+## Method `pgu.delegate$update_loq_mutate_gui`
 ## ------------------------------------------------
 
 x$updateLoqMutateGui(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLloqSubstitute`
+## Method `pgu.delegate$update_lloq_substitute`
 ## ------------------------------------------------
 
 x$updateLloqSubstitute(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateUloqSubstitute`
+## Method `pgu.delegate$update_uloq_substitute`
 ## ------------------------------------------------
 
 x$updateUloqSubstitute(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$mutateLoq`
+## Method `pgu.delegate$mutate_loq`
 ## ------------------------------------------------
 
 x$mutateLoq(input, output, session)
+#' @description
+#' Updates the numerical loq statistics table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqMutateStatisticsTbl(input, output, session)
+updateLoqMutateStatisticsTbl = function(input, output, session){
+  if(private$.status$query(processName = "loqMutated")){
+    output$tbl.loqMutateStatistics <- DT::renderDataTable(
+      self$loq$loqStatistics \%>\%
+        format.data.frame(scientific = FALSE, digits = 3) \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '350px',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("loqStatistics"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )#DT::datatable
+    )#output
+  }#if
+  else{
+    output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
+  }#else
+}, #function
+#' @description
+#' Updates the numerical loq outliers table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqMutateOutlierTbl(input, output, session)
+updateLoqMutateOutlierTbl = function(input, output, session){
+  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  t <- NULL
+  if(self$status$query(processName = "loqMutated")){
+    dfData <- self$filteredMetadata$rawData \%>\%
+      dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
+    dfOutlier <- self$loq$outliers
+    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+    t <- dfData \%>\%
+      dplyr::slice(idx) \%>\%
+      dplyr::mutate_if(is.numeric, round, 3) \%>\%
+      DT::datatable(
+        options = list(
+          scrollX = TRUE,
+          scrollY = '350px',
+          paging = FALSE,
+          dom = "Blfrtip",
+          buttons = list(list(
+            extend = 'csv',
+            filename = self$fileName$bluntFileName("loqOutlier"),
+            text = "Download"
+          ))#nuttons
+        )#options
+      )#DT::datatable
+    for (featureName in self$loqMutatedData$numericFeatureNames){
+      featureOutlier <- dfOutlier \%>\%
+        dplyr::filter(feature == featureName) \%>\%
+        dplyr::mutate_if(is.numeric, round, 3)
+      if (nrow(featureOutlier)>0){
+        t <- DT::formatStyle(t,
+                             featureName,
+                             backgroundColor = styleEqual(dfData \%>\%
+                                                            dplyr::select(!!featureName) \%>\%
+                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+                                                            unlist() \%>\%
+                                                            as.numeric() \%>\%
+                                                            round(digits = 3),
+                                                          featureOutlier[["color"]])
+
+        )#t
+      }#if
+    }#for
+  }#if
+  output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
+}, #function
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateStatisticsTbl`
-## ------------------------------------------------
-
-x$updateLoqMutateStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateOutlierTbl`
-## ------------------------------------------------
-
-x$updateLoqMutateOutlierTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateDataTbl`
+## Method `pgu.delegate$update_loq_mutate_data_tbl`
 ## ------------------------------------------------
 
 x$updateLoqMutateDataTbl(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateStatisticsGraphic`
-## ------------------------------------------------
-
-x$updateLoqMutateStatisticsGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateFeatureGraphic`
+## Method `pgu.delegate$update_loq_mutate_attribute_graphic`
 ## ------------------------------------------------
 
 x$updateLoqMutateFeatureGraphic(input, output, session)
 
 ## ------------------------------------------------
-## Method `pgu.delegate$updateLoqMutateFeatureTbl`
+## Method `pgu.delegate$update_loq_mutate_attribute_tbl`
 ## ------------------------------------------------
 
 x$updateLoqMutateFeatureTbl(input, output, session)
@@ -290,18 +434,6 @@ x$updateTrafoMutateLambdae(input, output, session)
 ## ------------------------------------------------
 
 x$updateTrafoMutateMirror(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGui`
-## ------------------------------------------------
-
-x$updateTrafoMutateGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$resetTrafoMutateGui`
-## ------------------------------------------------
-
-x$resetTrafoMutateGui(input, output, session)
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$trafoMutateFit`
@@ -471,11 +603,43 @@ x$updateImputeMissingsCharacteristicsTbl(input, output, session)
 
 x$updateImputeMissingsDetailTbl(input, output, session)
 
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsDataTbl`
-## ------------------------------------------------
-
-x$updateImputeMissingsDataTbl(input, output, session)
+                            #' @description
+                            #' Updates the tbl.imputeDetectData table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMissingsDataTbl(input, output, session)
+                            updateImputeMissingsDataTbl = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                output$tbl.imputeMissingsData <- DT::renderDataTable(
+                                  self$filteredMetadata$rawData \%>\%
+                                    dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") \%>\%
+                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("imputationSiteDetectionData") \%>\%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }#if
+                              else{
+                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeOutliersMethod`
@@ -584,12 +748,61 @@ x$updateImputeOutliersStatisticsTbl(input, output, session)
 ## ------------------------------------------------
 
 x$updateImputeOutliersDetailTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersDataTbl`
-## ------------------------------------------------
-
-x$updateImputeOutliersDataTbl(input, output, session)
+#' @description
+#' Updates the numerical outliers data table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateImputeOutliersDataTbl(input, output, session)
+updateImputeOutliersDataTbl = function(input, output, session){
+  # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  # t <- NULL
+  # if(self$status$query(processName = "outliersDetected")){
+  #   dfData <- self$filteredMetadata$rawData \%>\%
+  #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
+  #   dfOutlier <- self$outliers$outliers
+  #   # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+  #   t <- dfData \%>\%
+  #     dplyr::mutate_if(is.numeric, round, 3) \%>\%
+  #     DT::datatable(
+  #       options = list(
+  #         scrollX = TRUE,
+  #         scrollY = '350px',
+  #         paging = FALSE,
+  #         dom = "Blfrtip",
+  #         buttons = list(list(
+  #           extend = 'csv',
+  #           filename = self$fileName$predict("OutliersData") \%>\%
+  #             tools::file_path_sans_ext(),
+  #           text = "Download"
+  #         ))#buttons
+  #       )#options
+  #     )#DT::datatable
+  #   for (featureName in self$normalizedData$numericalAttributeNames){
+  #     featureOutlier <- dfOutlier \%>\%
+  #       dplyr::filter(feature == featureName) \%>\%
+  #       dplyr::mutate_if(is.numeric, round, 3)
+  #     if (nrow(featureOutlier)>0){
+  #       t <- DT::formatStyle(t,
+  #                            featureName,
+  #                            backgroundColor = styleEqual(dfData \%>\%
+  #                                                           dplyr::select(!!featureName) \%>\%
+  #                                                           dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+  #                                                           unlist() \%>\%
+  #                                                           as.numeric() \%>\%
+  #                                                           round(digits = 3),
+  #                                                         featureOutlier[["color"]])
+  #
+  #       )#t
+  #     }#if
+  #   }#for
+  # }#if
+  # output$tbl.outliersImputeData <- DT::renderDataTable(t)
+}, #function
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$updateImputeMutateFeature`
@@ -1753,48 +1966,108 @@ x$updateCorrelationValidationDataTbl(input, output, session)
                                 output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
                               } #else
                             }, #function
+#' @description
+#' Updates the tbl.loqInfo table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqInfo(input, output, session)
+updateLoqInfo = function(input, output, session){
+  if(private$.status$query(processName = "dataImported")){
+    output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '75vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("loqData_type"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )#DT::Datatable
+    })#output
+  }#if
+  else{
+    output$tbl.loqInfo <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 
-## ------------------------------------------------
-## Method `pgu.delegate$updateRawDataInfo`
-## ------------------------------------------------
+#' @description
+#' Updates the tbl.metadataInfo table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateMetadataInfo(input, output, session)
+updateMetadataInfo = function(input, output, session){
+  if(private$.status$query(processName = "metadataImported")){
+    output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '75vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("metadata_type"),
+              text = "Download"
+            )) #buttons
+          )#options
+        )#DT::datatable
+    })#output
+  }#if
+  else{
+    output$tbl.metadataInfo <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 
-x$updateRawDataInfo(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateLoqInfo`
-## ------------------------------------------------
-
-x$updateLoqInfo(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateMetadataInfo`
-## ------------------------------------------------
-
-x$updateMetadataInfo(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateRawDataStatisticsTbl`
-## ------------------------------------------------
-
-x$updateRawDataStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateFilterTbl`
-## ------------------------------------------------
-
-x$updateFilterTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateFilterStatisticsTbl`
-## ------------------------------------------------
-
-x$updateFilterStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateFilterMissingsTbl`
-## ------------------------------------------------
-
-x$updateFilterMissingsTbl(input, output, session)
+#' @description
+#' Updates the tbl.rawDataStatistics table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateRawDataStatisticsTbl(input, output, session)
+updateRawDataStatisticsTbl = function(input, output, session){
+  if(private$.status$query(processName = "dataImported")){
+    output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() \%>\%
+        format.data.frame(scientific = TRUE, digits = 4) \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '25vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("rawData_statistics"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )}#DT::datatable
+    )#output
+  }#if
+  else{
+    output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 
 ## ------------------------------------------------
 ## Method `pgu.delegate$exportFileName`
@@ -1821,10 +2094,10 @@ y <- x$reportFileName(input, output, session)
 x$write_report(input, file="report.pdf")
 
 ## ------------------------------------------------
-## Method `pgu.delegate$hideOutdatedResults`
+## Method `pgu.delegate$hide_outdated_results`
 ## ------------------------------------------------
 
-x$hideOutdatedResults(input, output, session)
+x$hide_outdated_results(input, output, session)
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
@@ -1838,16 +2111,10 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{fileName}}{Returns the instance variable fileName
 (pguIMP::pgu.file)}
 
-\item{\code{importer}}{Returns the instance variable status
-(pguIMP::pgu.status)}
+\item{\code{loqFileName}}{Returns the instance variable loqFileName
+(pguIMP::pgu.file)}
 
 \item{\code{rawData}}{Returns the instance variable rawData
-(pguIMP::pgu.data)}
-
-\item{\code{loq}}{Returns the instance variable loq
-(pguIMP::pgu.limitsOfQuantification)}
-
-\item{\code{metadata}}{Returns the instance variable metadata
 (pguIMP::pgu.data)}
 
 \item{\code{filterSet}}{Returns the instance variable filterSet
@@ -1856,14 +2123,14 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{filteredData}}{Returns the instance variable filteredData
 (pguIMP::pgu.data)}
 
-\item{\code{filteredMetadata}}{Returns the instance variable filteredMetadata
+\item{\code{loq}}{Returns the instance variable loq
+(pguIMP::pgu.limitsOfQuantification)}
+
+\item{\code{loqMutatedData}}{Returns the instance variable loqMutatedData
 (pguIMP::pgu.data)}
 
 \item{\code{explorer}}{Returns the instance variable explorer
 (pguIMP::pgu.explorer)}
-
-\item{\code{loqMutatedData}}{Returns the instance variable loqMutatedData
-(pguIMP::pgu.data)}
 
 \item{\code{optimizer}}{Returns the instance variable optimizer
 (pguIMP::pgu.optimizer)}
@@ -1922,43 +2189,48 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.delegate$new()}}
-\item \href{#method-finalize}{\code{pgu.delegate$finalize()}}
 \item \href{#method-print}{\code{pgu.delegate$print()}}
-\item \href{#method-queryExcel}{\code{pgu.delegate$queryExcel()}}
-\item \href{#method-importData}{\code{pgu.delegate$importData()}}
-\item \href{#method-importLoq}{\code{pgu.delegate$importLoq()}}
-\item \href{#method-importMetadata}{\code{pgu.delegate$importMetadata()}}
-\item \href{#method-updateFilter}{\code{pgu.delegate$updateFilter()}}
-\item \href{#method-updateFilterInverse}{\code{pgu.delegate$updateFilterInverse()}}
-\item \href{#method-resetFilter}{\code{pgu.delegate$resetFilter()}}
-\item \href{#method-filterData}{\code{pgu.delegate$filterData()}}
-\item \href{#method-updateExplorationData}{\code{pgu.delegate$updateExplorationData()}}
-\item \href{#method-updateExplorationAbscissa}{\code{pgu.delegate$updateExplorationAbscissa()}}
-\item \href{#method-updateExplorationOrdinate}{\code{pgu.delegate$updateExplorationOrdinate()}}
-\item \href{#method-updateExplorationGraphic}{\code{pgu.delegate$updateExplorationGraphic()}}
-\item \href{#method-updateExplorationAbscissaGraphic}{\code{pgu.delegate$updateExplorationAbscissaGraphic()}}
-\item \href{#method-updateExplorationOrdinateGraphic}{\code{pgu.delegate$updateExplorationOrdinateGraphic()}}
-\item \href{#method-updateExplorationAbscissaTable}{\code{pgu.delegate$updateExplorationAbscissaTable()}}
-\item \href{#method-updateExplorationOrdinateTable}{\code{pgu.delegate$updateExplorationOrdinateTable()}}
-\item \href{#method-updateLoqDetectGui}{\code{pgu.delegate$updateLoqDetectGui()}}
-\item \href{#method-updateLoqNaHandling}{\code{pgu.delegate$updateLoqNaHandling()}}
-\item \href{#method-detectLoq}{\code{pgu.delegate$detectLoq()}}
-\item \href{#method-updateLoqDetectStatisticsTbl}{\code{pgu.delegate$updateLoqDetectStatisticsTbl()}}
-\item \href{#method-updateLoqDetectOutlierTbl}{\code{pgu.delegate$updateLoqDetectOutlierTbl()}}
-\item \href{#method-updateLoqDetectDataTbl}{\code{pgu.delegate$updateLoqDetectDataTbl()}}
-\item \href{#method-updateLoqDetectStatisticsGraphic}{\code{pgu.delegate$updateLoqDetectStatisticsGraphic()}}
-\item \href{#method-updateLoqDetectFeatureGraphic}{\code{pgu.delegate$updateLoqDetectFeatureGraphic()}}
-\item \href{#method-updateLoqDetectFeatureTbl}{\code{pgu.delegate$updateLoqDetectFeatureTbl()}}
-\item \href{#method-updateLoqMutateGui}{\code{pgu.delegate$updateLoqMutateGui()}}
-\item \href{#method-updateLloqSubstitute}{\code{pgu.delegate$updateLloqSubstitute()}}
-\item \href{#method-updateUloqSubstitute}{\code{pgu.delegate$updateUloqSubstitute()}}
-\item \href{#method-mutateLoq}{\code{pgu.delegate$mutateLoq()}}
-\item \href{#method-updateLoqMutateStatisticsTbl}{\code{pgu.delegate$updateLoqMutateStatisticsTbl()}}
-\item \href{#method-updateLoqMutateOutlierTbl}{\code{pgu.delegate$updateLoqMutateOutlierTbl()}}
-\item \href{#method-updateLoqMutateDataTbl}{\code{pgu.delegate$updateLoqMutateDataTbl()}}
-\item \href{#method-updateLoqMutateStatisticsGraphic}{\code{pgu.delegate$updateLoqMutateStatisticsGraphic()}}
-\item \href{#method-updateLoqMutateFeatureGraphic}{\code{pgu.delegate$updateLoqMutateFeatureGraphic()}}
-\item \href{#method-updateLoqMutateFeatureTbl}{\code{pgu.delegate$updateLoqMutateFeatureTbl()}}
+\item \href{#method-update_import_gui}{\code{pgu.delegate$update_import_gui()}}
+\item \href{#method-query_data}{\code{pgu.delegate$query_data()}}
+\item \href{#method-import_data}{\code{pgu.delegate$import_data()}}
+\item \href{#method-update_import_data_Types_tbl}{\code{pgu.delegate$update_import_data_Types_tbl()}}
+\item \href{#method-update_import_data_statistics_tbl}{\code{pgu.delegate$update_import_data_statistics_tbl()}}
+\item \href{#method-update_import_missings_statistics_tbl}{\code{pgu.delegate$update_import_missings_statistics_tbl()}}
+\item \href{#method-update_filter_select_tbl}{\code{pgu.delegate$update_filter_select_tbl()}}
+\item \href{#method-update_filter}{\code{pgu.delegate$update_filter()}}
+\item \href{#method-update_filter_inverse}{\code{pgu.delegate$update_filter_inverse()}}
+\item \href{#method-reset_filter}{\code{pgu.delegate$reset_filter()}}
+\item \href{#method-filter_data}{\code{pgu.delegate$filter_data()}}
+\item \href{#method-update_filter_statistics_tbl}{\code{pgu.delegate$update_filter_statistics_tbl()}}
+\item \href{#method-update_filter_missings_tbl}{\code{pgu.delegate$update_filter_missings_tbl()}}
+\item \href{#method-update_exploration_gui}{\code{pgu.delegate$update_exploration_gui()}}
+\item \href{#method-update_exploration_abscissa}{\code{pgu.delegate$update_exploration_abscissa()}}
+\item \href{#method-update_exploration_ordinate}{\code{pgu.delegate$update_exploration_ordinate()}}
+\item \href{#method-update_exploration_graphic}{\code{pgu.delegate$update_exploration_graphic()}}
+\item \href{#method-update_exploration_abscissa_graphic}{\code{pgu.delegate$update_exploration_abscissa_graphic()}}
+\item \href{#method-update_exploration_ordinate_graphic}{\code{pgu.delegate$update_exploration_ordinate_graphic()}}
+\item \href{#method-update_exploration_abscissa_table}{\code{pgu.delegate$update_exploration_abscissa_table()}}
+\item \href{#method-update_exploration_ordinate_table}{\code{pgu.delegate$update_exploration_ordinate_table()}}
+\item \href{#method-reset_loq_values}{\code{pgu.delegate$reset_loq_values()}}
+\item \href{#method-update_loq_define_gui}{\code{pgu.delegate$update_loq_define_gui()}}
+\item \href{#method-query_loq}{\code{pgu.delegate$query_loq()}}
+\item \href{#method-import_loq}{\code{pgu.delegate$import_loq()}}
+\item \href{#method-update_loq_detect_gui}{\code{pgu.delegate$update_loq_detect_gui()}}
+\item \href{#method-update_loq_na_handling}{\code{pgu.delegate$update_loq_na_handling()}}
+\item \href{#method-detect_loq}{\code{pgu.delegate$detect_loq()}}
+\item \href{#method-update_loq_detect_statistics_tbl}{\code{pgu.delegate$update_loq_detect_statistics_tbl()}}
+\item \href{#method-update_loq_detect_outlier_tbl}{\code{pgu.delegate$update_loq_detect_outlier_tbl()}}
+\item \href{#method-update_loq_detect_statistics_graphic}{\code{pgu.delegate$update_loq_detect_statistics_graphic()}}
+\item \href{#method-update_loq_detect_attribute_graphic}{\code{pgu.delegate$update_loq_detect_attribute_graphic()}}
+\item \href{#method-update_loq_detect_attribute_tbl}{\code{pgu.delegate$update_loq_detect_attribute_tbl()}}
+\item \href{#method-update_loq_mutate_gui}{\code{pgu.delegate$update_loq_mutate_gui()}}
+\item \href{#method-update_lloq_substitute}{\code{pgu.delegate$update_lloq_substitute()}}
+\item \href{#method-update_uloq_substitute}{\code{pgu.delegate$update_uloq_substitute()}}
+\item \href{#method-mutate_loq}{\code{pgu.delegate$mutate_loq()}}
+\item \href{#method-update_loq_mutate_data_tbl}{\code{pgu.delegate$update_loq_mutate_data_tbl()}}
+\item \href{#method-update_loq_mutate_statistics_graphic}{\code{pgu.delegate$update_loq_mutate_statistics_graphic()}}
+\item \href{#method-update_loq_mutate_attribute_graphic}{\code{pgu.delegate$update_loq_mutate_attribute_graphic()}}
+\item \href{#method-update_loq_mutate_attribute_tbl}{\code{pgu.delegate$update_loq_mutate_attribute_tbl()}}
 \item \href{#method-optimizeTrafoParameter}{\code{pgu.delegate$optimizeTrafoParameter()}}
 \item \href{#method-updateDetectedTrafoTypes}{\code{pgu.delegate$updateDetectedTrafoTypes()}}
 \item \href{#method-updateDetectedTrafoParameter}{\code{pgu.delegate$updateDetectedTrafoParameter()}}
@@ -1967,8 +2239,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateTrafoMutateType}{\code{pgu.delegate$updateTrafoMutateType()}}
 \item \href{#method-updateTrafoMutateLambda}{\code{pgu.delegate$updateTrafoMutateLambda()}}
 \item \href{#method-updateTrafoMutateMirror}{\code{pgu.delegate$updateTrafoMutateMirror()}}
-\item \href{#method-updateTrafoMutateGui}{\code{pgu.delegate$updateTrafoMutateGui()}}
 \item \href{#method-resetTrafoMutateGui}{\code{pgu.delegate$resetTrafoMutateGui()}}
+\item \href{#method-updateTrafoMutateGui}{\code{pgu.delegate$updateTrafoMutateGui()}}
 \item \href{#method-trafoMutateFit}{\code{pgu.delegate$trafoMutateFit()}}
 \item \href{#method-trafoMutateGlobal}{\code{pgu.delegate$trafoMutateGlobal()}}
 \item \href{#method-trafoMutateFeature}{\code{pgu.delegate$trafoMutateFeature()}}
@@ -1997,7 +2269,6 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeMissingCharacteristicsGraphic}{\code{pgu.delegate$updateImputeMissingCharacteristicsGraphic()}}
 \item \href{#method-updateImputeMissingsCharacteristicsTbl}{\code{pgu.delegate$updateImputeMissingsCharacteristicsTbl()}}
 \item \href{#method-updateImputeMissingsDetailTbl}{\code{pgu.delegate$updateImputeMissingsDetailTbl()}}
-\item \href{#method-updateImputeMissingsDataTbl}{\code{pgu.delegate$updateImputeMissingsDataTbl()}}
 \item \href{#method-updateImputeOutliersMethod}{\code{pgu.delegate$updateImputeOutliersMethod()}}
 \item \href{#method-updateImputeOutliersFeature}{\code{pgu.delegate$updateImputeOutliersFeature()}}
 \item \href{#method-updateImputeOutliersAlpha}{\code{pgu.delegate$updateImputeOutliersAlpha()}}
@@ -2016,7 +2287,6 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateImputeOutliersFeatureTbl}{\code{pgu.delegate$updateImputeOutliersFeatureTbl()}}
 \item \href{#method-updateImputeOutliersStatisticsTbl}{\code{pgu.delegate$updateImputeOutliersStatisticsTbl()}}
 \item \href{#method-updateImputeOutliersDetailTbl}{\code{pgu.delegate$updateImputeOutliersDetailTbl()}}
-\item \href{#method-updateImputeOutliersDataTbl}{\code{pgu.delegate$updateImputeOutliersDataTbl()}}
 \item \href{#method-updateImputeMutateFeature}{\code{pgu.delegate$updateImputeMutateFeature()}}
 \item \href{#method-updateImputeMutateMethod}{\code{pgu.delegate$updateImputeMutateMethod()}}
 \item \href{#method-updateImputeMutateNNeighbors}{\code{pgu.delegate$updateImputeMutateNNeighbors()}}
@@ -2046,18 +2316,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-updateCorrelationValidationBoxPlotGraphic}{\code{pgu.delegate$updateCorrelationValidationBoxPlotGraphic()}}
 \item \href{#method-updateCorrelationValidationDeviationTbl}{\code{pgu.delegate$updateCorrelationValidationDeviationTbl()}}
 \item \href{#method-updateCorrelationValidationDataTbl}{\code{pgu.delegate$updateCorrelationValidationDataTbl()}}
-\item \href{#method-updateRawDataInfo}{\code{pgu.delegate$updateRawDataInfo()}}
-\item \href{#method-updateLoqInfo}{\code{pgu.delegate$updateLoqInfo()}}
-\item \href{#method-updateMetadataInfo}{\code{pgu.delegate$updateMetadataInfo()}}
-\item \href{#method-updateRawDataStatisticsTbl}{\code{pgu.delegate$updateRawDataStatisticsTbl()}}
-\item \href{#method-updateFilterTbl}{\code{pgu.delegate$updateFilterTbl()}}
-\item \href{#method-updateFilterStatisticsTbl}{\code{pgu.delegate$updateFilterStatisticsTbl()}}
-\item \href{#method-updateFilterMissingsTbl}{\code{pgu.delegate$updateFilterMissingsTbl()}}
 \item \href{#method-exportFileName}{\code{pgu.delegate$exportFileName()}}
 \item \href{#method-exportData}{\code{pgu.delegate$exportData()}}
 \item \href{#method-reportFileName}{\code{pgu.delegate$reportFileName()}}
 \item \href{#method-writeReport}{\code{pgu.delegate$writeReport()}}
-\item \href{#method-hideOutdatedResults}{\code{pgu.delegate$hideOutdatedResults()}}
+\item \href{#method-hide_outdated_results}{\code{pgu.delegate$hide_outdated_results()}}
 \item \href{#method-clone}{\code{pgu.delegate$clone()}}
 }
 }
@@ -2065,6 +2328,10 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Clears the heap and
+indicates that instance of \code{pgu.delegate} is removed from heap.
+
+
 Creates and returns a new \code{pgu.delegate} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$new(data = "tbl_df")}\if{html}{\out{</div>}}
@@ -2093,17 +2360,6 @@ x <- pguIMP:pgu.delegate$new(data = y)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clears the heap and
-indicates that instance of \code{pgu.delegate} is removed from heap.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$finalize()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
@@ -2126,13 +2382,34 @@ print(x)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-queryExcel"></a>}}
-\if{latex}{\out{\hypertarget{method-queryExcel}{}}}
-\subsection{Method \code{queryExcel()}}{
+\if{html}{\out{<a id="method-update_import_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_import_gui}{}}}
+\subsection{Method \code{update_import_gui()}}{
+Updates the import gui
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_import_gui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-query_data"></a>}}
+\if{latex}{\out{\hypertarget{method-query_data}{}}}
+\subsection{Method \code{query_data()}}{
 Manages the data upload to the R server.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$queryExcel(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$query_data(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2148,7 +2425,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$queryExcel(input, output, session)
+\preformatted{x$query_data(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2156,13 +2433,13 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-importData"></a>}}
-\if{latex}{\out{\hypertarget{method-importData}{}}}
-\subsection{Method \code{importData()}}{
+\if{html}{\out{<a id="method-import_data"></a>}}
+\if{latex}{\out{\hypertarget{method-import_data}{}}}
+\subsection{Method \code{import_data()}}{
 Imports uploaded data from the R server into the instance variable rawData.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$importData(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$import_data(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2178,7 +2455,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$importData(input, output, session)
+\preformatted{x$import_data(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2186,13 +2463,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-importLoq"></a>}}
-\if{latex}{\out{\hypertarget{method-importLoq}{}}}
-\subsection{Method \code{importLoq()}}{
-Imports uploaded data from the R server into the instance variable loqData.
-Updates the instance class status.
+\if{html}{\out{<a id="method-update_import_data_Types_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_import_data_Types_tbl}{}}}
+\subsection{Method \code{update_import_data_Types_tbl()}}{
+Updates the tbl.importDataTypes table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$importLoq(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_import_data_Types_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2208,7 +2484,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$importLoq(input, output, session)
+\preformatted{x$update_import_data_Types_tbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2216,13 +2492,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-importMetadata"></a>}}
-\if{latex}{\out{\hypertarget{method-importMetadata}{}}}
-\subsection{Method \code{importMetadata()}}{
-Imports uploaded data from the R server into the instance variable metadata.
-Updates the instance class status.
+\if{html}{\out{<a id="method-update_import_data_statistics_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_import_data_statistics_tbl}{}}}
+\subsection{Method \code{update_import_data_statistics_tbl()}}{
+Updates the tbl.importDataStatistics table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$importMetadata(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_import_data_statistics_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2238,7 +2513,7 @@ Updates the instance class status.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$importMetadata(input, output, session)
+\preformatted{x$update_import_data_statistics_tbl(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2246,13 +2521,71 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateFilter"></a>}}
-\if{latex}{\out{\hypertarget{method-updateFilter}{}}}
-\subsection{Method \code{updateFilter()}}{
+\if{html}{\out{<a id="method-update_import_missings_statistics_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_import_missings_statistics_tbl}{}}}
+\subsection{Method \code{update_import_missings_statistics_tbl()}}{
+Updates the tbl.importMissingsStatistics table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_import_missings_statistics_tbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$update_import_missings_statistics_tbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_filter_select_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_filter_select_tbl}{}}}
+\subsection{Method \code{update_filter_select_tbl()}}{
+Updates the tbl.filter table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_filter_select_tbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$update_filter_select_tbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_filter"></a>}}
+\if{latex}{\out{\hypertarget{method-update_filter}{}}}
+\subsection{Method \code{update_filter()}}{
 Queries the filter parameters selected by the user in the gui
 and stores them in the instance variable filterSet.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateFilter(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_filter(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2268,7 +2601,7 @@ and stores them in the instance variable filterSet.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateFilter(input, output, session)
+\preformatted{x$update_filter(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2276,14 +2609,14 @@ and stores them in the instance variable filterSet.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateFilterInverse"></a>}}
-\if{latex}{\out{\hypertarget{method-updateFilterInverse}{}}}
-\subsection{Method \code{updateFilterInverse()}}{
+\if{html}{\out{<a id="method-update_filter_inverse"></a>}}
+\if{latex}{\out{\hypertarget{method-update_filter_inverse}{}}}
+\subsection{Method \code{update_filter_inverse()}}{
 Queries the filter parameters selected by the user in the gui
 inverts them
 and stores them in the instance variable filterSet.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateFilterInverse(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_filter_inverse(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2299,7 +2632,7 @@ and stores them in the instance variable filterSet.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateFilterInverse(input, output, session)
+\preformatted{x$update_filter_inverse(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2307,14 +2640,14 @@ and stores them in the instance variable filterSet.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetFilter"></a>}}
-\if{latex}{\out{\hypertarget{method-resetFilter}{}}}
-\subsection{Method \code{resetFilter()}}{
+\if{html}{\out{<a id="method-reset_filter"></a>}}
+\if{latex}{\out{\hypertarget{method-reset_filter}{}}}
+\subsection{Method \code{reset_filter()}}{
 Generates a filter set that selects the whole data frame.
 Stores them in the instance variable filterSet.
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$resetFilter(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$reset_filter(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2330,7 +2663,7 @@ Updates the gui.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetFilter(input, output, session)
+\preformatted{x$reset_filter(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2338,14 +2671,14 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filterData"></a>}}
-\if{latex}{\out{\hypertarget{method-filterData}{}}}
-\subsection{Method \code{filterData()}}{
+\if{html}{\out{<a id="method-filter_data"></a>}}
+\if{latex}{\out{\hypertarget{method-filter_data}{}}}
+\subsection{Method \code{filter_data()}}{
 Filters the data corresponding to the user defined parameters stored in the instance variable filterSet.
 Results are stored in the instance variables filteredData and filteredMetadata.
 Updated the instance variable filterSet.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$filterData(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$filter_data(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2361,7 +2694,7 @@ Updated the instance variable filterSet.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$filterData(input, output, session)
+\preformatted{x$filter_data(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2369,12 +2702,70 @@ Updated the instance variable filterSet.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationData"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationData}{}}}
-\subsection{Method \code{updateExplorationData()}}{
+\if{html}{\out{<a id="method-update_filter_statistics_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_filter_statistics_tbl}{}}}
+\subsection{Method \code{update_filter_statistics_tbl()}}{
+Updates the tbl.filterStatistics table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_filter_statistics_tbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$update_filter_statistics_tbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_filter_missings_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_filter_missings_tbl}{}}}
+\subsection{Method \code{update_filter_missings_tbl()}}{
+Updates the tbl.filterMissings table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_filter_missings_tbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{x$update_filter_missings_tbl(input, output, session)
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_exploration_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_gui}{}}}
+\subsection{Method \code{update_exploration_gui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationData(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_gui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2390,7 +2781,7 @@ Updates the gui.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationData(input, output, session)
+\preformatted{x$update_exploration_gui(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2398,12 +2789,12 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationAbscissa"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationAbscissa}{}}}
-\subsection{Method \code{updateExplorationAbscissa()}}{
+\if{html}{\out{<a id="method-update_exploration_abscissa"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_abscissa}{}}}
+\subsection{Method \code{update_exploration_abscissa()}}{
 Transfers the information oabout the selected abscissa attribute to the explorer class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationAbscissa(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_abscissa(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2419,7 +2810,7 @@ Transfers the information oabout the selected abscissa attribute to the explorer
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationAbscissa(input, output, session)
+\preformatted{x$update_exploration_abscissa(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2427,12 +2818,12 @@ Transfers the information oabout the selected abscissa attribute to the explorer
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationOrdinate"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationOrdinate}{}}}
-\subsection{Method \code{updateExplorationOrdinate()}}{
+\if{html}{\out{<a id="method-update_exploration_ordinate"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_ordinate}{}}}
+\subsection{Method \code{update_exploration_ordinate()}}{
 Transfers the information oabout the selected ordinate attribute to the explorer class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationOrdinate(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_ordinate(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2448,7 +2839,7 @@ Transfers the information oabout the selected ordinate attribute to the explorer
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationOrdinate(input, output, session)
+\preformatted{x$update_exploration_ordinate(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2456,13 +2847,13 @@ Transfers the information oabout the selected ordinate attribute to the explorer
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationGraphic}{}}}
-\subsection{Method \code{updateExplorationGraphic()}}{
+\if{html}{\out{<a id="method-update_exploration_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_graphic}{}}}
+\subsection{Method \code{update_exploration_graphic()}}{
 Updates the exploration abscissa vs. ordinate scatter plot
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2478,7 +2869,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationGraphic(input, output, session)
+\preformatted{x$update_exploration_graphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2486,13 +2877,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationAbscissaGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationAbscissaGraphic}{}}}
-\subsection{Method \code{updateExplorationAbscissaGraphic()}}{
+\if{html}{\out{<a id="method-update_exploration_abscissa_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_abscissa_graphic}{}}}
+\subsection{Method \code{update_exploration_abscissa_graphic()}}{
 Updates the abscissa compound plot
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationAbscissaGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_abscissa_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2508,7 +2899,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationAbscissaGraphic(input, output, session)
+\preformatted{x$update_exploration_abscissa_graphic(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2516,13 +2907,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationOrdinateGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationOrdinateGraphic}{}}}
-\subsection{Method \code{updateExplorationOrdinateGraphic()}}{
+\if{html}{\out{<a id="method-update_exploration_ordinate_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_ordinate_graphic}{}}}
+\subsection{Method \code{update_exploration_ordinate_graphic()}}{
 Updates the ordinate compound plot
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationOrdinateGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_ordinate_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2546,13 +2937,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationAbscissaTable"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationAbscissaTable}{}}}
-\subsection{Method \code{updateExplorationAbscissaTable()}}{
+\if{html}{\out{<a id="method-update_exploration_abscissa_table"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_abscissa_table}{}}}
+\subsection{Method \code{update_exploration_abscissa_table()}}{
 Updates the numerical abscissa analysis table.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationAbscissaTable(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_abscissa_table(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2568,7 +2959,7 @@ corresponding to the respective user defined attributes.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationAbscissaTable(input, output, session)
+\preformatted{x$update_exploration_abscissa_table(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2576,13 +2967,13 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateExplorationOrdinateTable"></a>}}
-\if{latex}{\out{\hypertarget{method-updateExplorationOrdinateTable}{}}}
-\subsection{Method \code{updateExplorationOrdinateTable()}}{
+\if{html}{\out{<a id="method-update_exploration_ordinate_table"></a>}}
+\if{latex}{\out{\hypertarget{method-update_exploration_ordinate_table}{}}}
+\subsection{Method \code{update_exploration_ordinate_table()}}{
 Updates the numerical ordinate analysis table.
 corresponding to the respective user defined attributes.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateExplorationOrdinateTable(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_exploration_ordinate_table(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2606,12 +2997,124 @@ corresponding to the respective user defined attributes.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectGui"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectGui}{}}}
-\subsection{Method \code{updateLoqDetectGui()}}{
+\if{html}{\out{<a id="method-reset_loq_values"></a>}}
+\if{latex}{\out{\hypertarget{method-reset_loq_values}{}}}
+\subsection{Method \code{reset_loq_values()}}{
+Initializes the LOQ object after filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$reset_loq_values(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_gui}{}}}
+\subsection{Method \code{update_loq_define_gui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectGui(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_gui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-query_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-query_loq}{}}}
+\subsection{Method \code{query_loq()}}{
+Manages the loq data upload to the R server.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$query_loq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-import_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-import_loq}{}}}
+\subsection{Method \code{import_loq()}}{
+Imports the loq data upload to the R server.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$import_loq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session
+#' @description
+#' Imports uploaded data from the R server into the instance variable loqData.
+#' Updates the instance class status.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$importLoq(input, output, session)
+importLoq = function(input, output, session){
+if (private$.status$query(processName = "dataImported")){
+tryCatch({
+private$.loq$setLoq <- private$.importer$importLoq(self$fileName)
+private$.status$update(processName = "loqImported", value = TRUE)
+},
+error = function(e) {
+private$.status$update(processName = "loqImported", value = FALSE)
+shiny::showNotification(paste(e),type = "error", duration = 10)
+}#error
+)#tryCatch
+}#if
+else{
+private$.status$update(processName = "loqImported", value = FALSE)
+shiny::showNotification(paste("No file uploaded to import. Please upload a valid file first."),type = "error", duration = 10)
+}#else
+}, #function}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_detect_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_gui}{}}}
+\subsection{Method \code{update_loq_detect_gui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_gui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2627,7 +3130,7 @@ Updates the gui.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectGui(input, output, session)
+\preformatted{x$update_loq_detect_gui(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2635,13 +3138,13 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqNaHandling"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqNaHandling}{}}}
-\subsection{Method \code{updateLoqNaHandling()}}{
+\if{html}{\out{<a id="method-update_loq_na_handling"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_na_handling}{}}}
+\subsection{Method \code{update_loq_na_handling()}}{
 Updates the si.loqHandling shiny widget
 corresponding to the respective user defined parameter.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqNaHandling(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_na_handling(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2657,7 +3160,7 @@ corresponding to the respective user defined parameter.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqNaHandling(input, output, session)
+\preformatted{x$update_loq_na_handling(input, output, session)
 }
 \if{html}{\out{</div>}}
 
@@ -2665,13 +3168,13 @@ corresponding to the respective user defined parameter.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-detectLoq"></a>}}
-\if{latex}{\out{\hypertarget{method-detectLoq}{}}}
-\subsection{Method \code{detectLoq()}}{
+\if{html}{\out{<a id="method-detect_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-detect_loq}{}}}
+\subsection{Method \code{detect_loq()}}{
 Runs the outlier detection routine of the instance variable outliers.
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$detectLoq(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$detect_loq(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2695,12 +3198,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectStatisticsTbl}{}}}
-\subsection{Method \code{updateLoqDetectStatisticsTbl()}}{
+\if{html}{\out{<a id="method-update_loq_detect_statistics_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_statistics_tbl}{}}}
+\subsection{Method \code{update_loq_detect_statistics_tbl()}}{
 Updates the numerical loq statistics analysis table
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_statistics_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2724,12 +3227,12 @@ Updates the numerical loq statistics analysis table
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectOutlierTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectOutlierTbl}{}}}
-\subsection{Method \code{updateLoqDetectOutlierTbl()}}{
+\if{html}{\out{<a id="method-update_loq_detect_outlier_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_outlier_tbl}{}}}
+\subsection{Method \code{update_loq_detect_outlier_tbl()}}{
 Updates the numerical loq table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectOutlierTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_outlier_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2746,6 +3249,60 @@ Updates the numerical loq table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateLoqDetectOutlierTbl(input, output, session)
+#' @description
+#' Updates the numerical loq data table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqDetectDataTbl(input, output, session)
+update_loq_detect_data_tbl = function(input, output, session){
+  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  t <- NULL
+  if(self$status$query(processName = "loqDetected")){
+    dfData <- self$filteredMetadata$rawData \%>\%
+      dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
+    dfOutlier <- self$loq$outliers
+    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+    t <- dfData \%>\%
+      dplyr::mutate_if(is.numeric, round, 3) \%>\%
+      DT::datatable(
+        options = list(
+          scrollX = TRUE,
+          scrollY = '350px',
+          paging = FALSE,
+          dom = "Blfrtip",
+          buttons = list(list(
+            extend = 'csv',
+            filename = self$fileName$bluntFileName("loqData"),
+            text = "Download"
+          ))#buttons
+        )#options
+      )#DT::datatable
+    for (featureName in self$filteredData$numericFeatureNames){
+      featureOutlier <- dfOutlier \%>\%
+        dplyr::filter(feature == featureName) \%>\%
+        dplyr::mutate_if(is.numeric, round, 3)
+      if (nrow(featureOutlier)>0){
+        t <- DT::formatStyle(t,
+                             featureName,
+                             backgroundColor = styleEqual(dfData \%>\%
+                                                            dplyr::select(!!featureName) \%>\%
+                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+                                                            unlist() \%>\%
+                                                            as.numeric() \%>\%
+                                                            round(digits = 3),
+                                                          featureOutlier[["color"]])
+
+        )#t
+      }#if
+    }#for
+  }#if
+  output$tbl.loqDetectData <- DT::renderDataTable(t)
+}, #function
 }
 \if{html}{\out{</div>}}
 
@@ -2753,41 +3310,12 @@ Updates the numerical loq table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectDataTbl}{}}}
-\subsection{Method \code{updateLoqDetectDataTbl()}}{
-Updates the numerical loq data table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectDataTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectDataTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectStatisticsGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectStatisticsGraphic}{}}}
-\subsection{Method \code{updateLoqDetectStatisticsGraphic()}}{
+\if{html}{\out{<a id="method-update_loq_detect_statistics_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_statistics_graphic}{}}}
+\subsection{Method \code{update_loq_detect_statistics_graphic()}}{
 Updates the loq statistics graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectStatisticsGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_statistics_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2811,12 +3339,12 @@ Updates the loq statistics graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectFeatureGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectFeatureGraphic}{}}}
-\subsection{Method \code{updateLoqDetectFeatureGraphic()}}{
+\if{html}{\out{<a id="method-update_loq_detect_attribute_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_attribute_graphic}{}}}
+\subsection{Method \code{update_loq_detect_attribute_graphic()}}{
 Updates the loq feature compound graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectFeatureGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_attribute_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2840,12 +3368,12 @@ Updates the loq feature compound graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqDetectFeatureTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqDetectFeatureTbl}{}}}
-\subsection{Method \code{updateLoqDetectFeatureTbl()}}{
+\if{html}{\out{<a id="method-update_loq_detect_attribute_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_detect_attribute_tbl}{}}}
+\subsection{Method \code{update_loq_detect_attribute_tbl()}}{
 Updates the numerical loq feature table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqDetectFeatureTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_detect_attribute_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2869,12 +3397,12 @@ Updates the numerical loq feature table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateGui"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateGui}{}}}
-\subsection{Method \code{updateLoqMutateGui()}}{
+\if{html}{\out{<a id="method-update_loq_mutate_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_mutate_gui}{}}}
+\subsection{Method \code{update_loq_mutate_gui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateGui(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_mutate_gui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2898,12 +3426,12 @@ Updates the gui.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLloqSubstitute"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLloqSubstitute}{}}}
-\subsection{Method \code{updateLloqSubstitute()}}{
+\if{html}{\out{<a id="method-update_lloq_substitute"></a>}}
+\if{latex}{\out{\hypertarget{method-update_lloq_substitute}{}}}
+\subsection{Method \code{update_lloq_substitute()}}{
 Updates the si.lloqSubstitute shiny widget.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLloqSubstitute(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_lloq_substitute(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2927,12 +3455,12 @@ Updates the si.lloqSubstitute shiny widget.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateUloqSubstitute"></a>}}
-\if{latex}{\out{\hypertarget{method-updateUloqSubstitute}{}}}
-\subsection{Method \code{updateUloqSubstitute()}}{
+\if{html}{\out{<a id="method-update_uloq_substitute"></a>}}
+\if{latex}{\out{\hypertarget{method-update_uloq_substitute}{}}}
+\subsection{Method \code{update_uloq_substitute()}}{
 Updates the si.uloqSubstitute shiny widget.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateUloqSubstitute(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_uloq_substitute(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2956,14 +3484,14 @@ Updates the si.uloqSubstitute shiny widget.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mutateLoq"></a>}}
-\if{latex}{\out{\hypertarget{method-mutateLoq}{}}}
-\subsection{Method \code{mutateLoq()}}{
+\if{html}{\out{<a id="method-mutate_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_loq}{}}}
+\subsection{Method \code{mutate_loq()}}{
 Calls the mutation routine of the instance variable loq on the instance variable filteredData.
 The reult is stored in the instance variable loqMutatedData
 Updates the instance class status.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$mutateLoq(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$mutate_loq(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -2980,6 +3508,96 @@ Updates the instance class status.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$mutateLoq(input, output, session)
+#' @description
+#' Updates the numerical loq statistics table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqMutateStatisticsTbl(input, output, session)
+updateLoqMutateStatisticsTbl = function(input, output, session){
+  if(private$.status$query(processName = "loqMutated")){
+    output$tbl.loqMutateStatistics <- DT::renderDataTable(
+      self$loq$loqStatistics \%>\%
+        format.data.frame(scientific = FALSE, digits = 3) \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '350px',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("loqStatistics"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )#DT::datatable
+    )#output
+  }#if
+  else{
+    output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
+  }#else
+}, #function
+#' @description
+#' Updates the numerical loq outliers table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqMutateOutlierTbl(input, output, session)
+updateLoqMutateOutlierTbl = function(input, output, session){
+  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  t <- NULL
+  if(self$status$query(processName = "loqMutated")){
+    dfData <- self$filteredMetadata$rawData \%>\%
+      dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
+    dfOutlier <- self$loq$outliers
+    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+    t <- dfData \%>\%
+      dplyr::slice(idx) \%>\%
+      dplyr::mutate_if(is.numeric, round, 3) \%>\%
+      DT::datatable(
+        options = list(
+          scrollX = TRUE,
+          scrollY = '350px',
+          paging = FALSE,
+          dom = "Blfrtip",
+          buttons = list(list(
+            extend = 'csv',
+            filename = self$fileName$bluntFileName("loqOutlier"),
+            text = "Download"
+          ))#nuttons
+        )#options
+      )#DT::datatable
+    for (featureName in self$loqMutatedData$numericFeatureNames){
+      featureOutlier <- dfOutlier \%>\%
+        dplyr::filter(feature == featureName) \%>\%
+        dplyr::mutate_if(is.numeric, round, 3)
+      if (nrow(featureOutlier)>0){
+        t <- DT::formatStyle(t,
+                             featureName,
+                             backgroundColor = styleEqual(dfData \%>\%
+                                                            dplyr::select(!!featureName) \%>\%
+                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+                                                            unlist() \%>\%
+                                                            as.numeric() \%>\%
+                                                            round(digits = 3),
+                                                          featureOutlier[["color"]])
+
+        )#t
+      }#if
+    }#for
+  }#if
+  output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
+}, #function
 }
 \if{html}{\out{</div>}}
 
@@ -2987,70 +3605,12 @@ Updates the instance class status.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateStatisticsTbl}{}}}
-\subsection{Method \code{updateLoqMutateStatisticsTbl()}}{
-Updates the numerical loq statistics table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateOutlierTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateOutlierTbl}{}}}
-\subsection{Method \code{updateLoqMutateOutlierTbl()}}{
-Updates the numerical loq outliers table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateOutlierTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateOutlierTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateDataTbl}{}}}
-\subsection{Method \code{updateLoqMutateDataTbl()}}{
+\if{html}{\out{<a id="method-update_loq_mutate_data_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_mutate_data_tbl}{}}}
+\subsection{Method \code{update_loq_mutate_data_tbl()}}{
 Updates the numerical loq mutate outliers table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateDataTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_mutate_data_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3074,12 +3634,12 @@ Updates the numerical loq mutate outliers table.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateStatisticsGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateStatisticsGraphic}{}}}
-\subsection{Method \code{updateLoqMutateStatisticsGraphic()}}{
+\if{html}{\out{<a id="method-update_loq_mutate_statistics_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_mutate_statistics_graphic}{}}}
+\subsection{Method \code{update_loq_mutate_statistics_graphic()}}{
 Updates the loq mutate statistics graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateStatisticsGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_mutate_statistics_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3093,22 +3653,14 @@ Updates the loq mutate statistics graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateStatisticsGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateFeatureGraphic"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateFeatureGraphic}{}}}
-\subsection{Method \code{updateLoqMutateFeatureGraphic()}}{
+\if{html}{\out{<a id="method-update_loq_mutate_attribute_graphic"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_mutate_attribute_graphic}{}}}
+\subsection{Method \code{update_loq_mutate_attribute_graphic()}}{
 Updates the loq mutate feature graphic.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateFeatureGraphic(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_mutate_attribute_graphic(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3132,12 +3684,12 @@ Updates the loq mutate feature graphic.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqMutateFeatureTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqMutateFeatureTbl}{}}}
-\subsection{Method \code{updateLoqMutateFeatureTbl()}}{
+\if{html}{\out{<a id="method-update_loq_mutate_attribute_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_mutate_attribute_tbl}{}}}
+\subsection{Method \code{update_loq_mutate_attribute_tbl()}}{
 Updates the numeric loq mutate feature table.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqMutateFeatureTbl(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_mutate_attribute_tbl(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3394,35 +3946,6 @@ Updates the cb.trafoMutateMirror shiny widget.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateTrafoMutateGui"></a>}}
-\if{latex}{\out{\hypertarget{method-updateTrafoMutateGui}{}}}
-\subsection{Method \code{updateTrafoMutateGui()}}{
-Updates the gui.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoMutateGui(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetTrafoMutateGui"></a>}}
 \if{latex}{\out{\hypertarget{method-resetTrafoMutateGui}{}}}
 \subsection{Method \code{resetTrafoMutateGui()}}{
@@ -3442,14 +3965,27 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetTrafoMutateGui(input, output, session)
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-updateTrafoMutateGui"></a>}}
+\if{latex}{\out{\hypertarget{method-updateTrafoMutateGui}{}}}
+\subsection{Method \code{updateTrafoMutateGui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateTrafoMutateGui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoMutateFit"></a>}}
@@ -4267,35 +4803,44 @@ Updates the tbl.imputeDetectDetail table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeMissingsDetailTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
 
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeMissingsDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeMissingsDataTbl}{}}}
-\subsection{Method \code{updateImputeMissingsDataTbl()}}{
-Updates the tbl.imputeDetectData table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeMissingsDataTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsDataTbl(input, output, session)
+                            #' @description
+                            #' Updates the tbl.imputeDetectData table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            #' @examples
+                            #' x$updateImputeMissingsDataTbl(input, output, session)
+                            updateImputeMissingsDataTbl = function(input, output, session){
+                              if(self$status$query(processName = "naDetected")){
+                                output$tbl.imputeMissingsData <- DT::renderDataTable(
+                                  self$filteredMetadata$rawData \%>\%
+                                    dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") \%>\%
+                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("imputationSiteDetectionData") \%>\%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }#if
+                              else{
+                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
+                              }#else
+                            }, #function
 }
 \if{html}{\out{</div>}}
 
@@ -4820,35 +5365,61 @@ Updates the numerical outlier table.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{x$updateImputeOutliersDetailTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateImputeOutliersDataTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateImputeOutliersDataTbl}{}}}
-\subsection{Method \code{updateImputeOutliersDataTbl()}}{
-Updates the numerical outliers data table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateImputeOutliersDataTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersDataTbl(input, output, session)
+#' @description
+#' Updates the numerical outliers data table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateImputeOutliersDataTbl(input, output, session)
+updateImputeOutliersDataTbl = function(input, output, session){
+  # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+  # t <- NULL
+  # if(self$status$query(processName = "outliersDetected")){
+  #   dfData <- self$filteredMetadata$rawData \%>\%
+  #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
+  #   dfOutlier <- self$outliers$outliers
+  #   # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
+  #   t <- dfData \%>\%
+  #     dplyr::mutate_if(is.numeric, round, 3) \%>\%
+  #     DT::datatable(
+  #       options = list(
+  #         scrollX = TRUE,
+  #         scrollY = '350px',
+  #         paging = FALSE,
+  #         dom = "Blfrtip",
+  #         buttons = list(list(
+  #           extend = 'csv',
+  #           filename = self$fileName$predict("OutliersData") \%>\%
+  #             tools::file_path_sans_ext(),
+  #           text = "Download"
+  #         ))#buttons
+  #       )#options
+  #     )#DT::datatable
+  #   for (featureName in self$normalizedData$numericalAttributeNames){
+  #     featureOutlier <- dfOutlier \%>\%
+  #       dplyr::filter(feature == featureName) \%>\%
+  #       dplyr::mutate_if(is.numeric, round, 3)
+  #     if (nrow(featureOutlier)>0){
+  #       t <- DT::formatStyle(t,
+  #                            featureName,
+  #                            backgroundColor = styleEqual(dfData \%>\%
+  #                                                           dplyr::select(!!featureName) \%>\%
+  #                                                           dplyr::slice(featureOutlier[["measurement"]]) \%>\%
+  #                                                           unlist() \%>\%
+  #                                                           as.numeric() \%>\%
+  #                                                           round(digits = 3),
+  #                                                         featureOutlier[["color"]])
+  #
+  #       )#t
+  #     }#if
+  #   }#for
+  # }#if
+  # output$tbl.outliersImputeData <- DT::renderDataTable(t)
+}, #function
 }
 \if{html}{\out{</div>}}
 
@@ -6681,209 +7252,108 @@ Updtates the tbl.correlationValidationData table.
                                 output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
                               } #else
                             }, #function
-}
-\if{html}{\out{</div>}}
+#' @description
+#' Updates the tbl.loqInfo table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateLoqInfo(input, output, session)
+updateLoqInfo = function(input, output, session){
+  if(private$.status$query(processName = "dataImported")){
+    output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '75vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("loqData_type"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )#DT::Datatable
+    })#output
+  }#if
+  else{
+    output$tbl.loqInfo <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 
-}
+#' @description
+#' Updates the tbl.metadataInfo table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateMetadataInfo(input, output, session)
+updateMetadataInfo = function(input, output, session){
+  if(private$.status$query(processName = "metadataImported")){
+    output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '75vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("metadata_type"),
+              text = "Download"
+            )) #buttons
+          )#options
+        )#DT::datatable
+    })#output
+  }#if
+  else{
+    output$tbl.metadataInfo <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateRawDataInfo"></a>}}
-\if{latex}{\out{\hypertarget{method-updateRawDataInfo}{}}}
-\subsection{Method \code{updateRawDataInfo()}}{
-Updates the tbl.rawDataInfo table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateRawDataInfo(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateRawDataInfo(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateLoqInfo"></a>}}
-\if{latex}{\out{\hypertarget{method-updateLoqInfo}{}}}
-\subsection{Method \code{updateLoqInfo()}}{
-Updates the tbl.loqInfo table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateLoqInfo(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqInfo(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateMetadataInfo"></a>}}
-\if{latex}{\out{\hypertarget{method-updateMetadataInfo}{}}}
-\subsection{Method \code{updateMetadataInfo()}}{
-Updates the tbl.metadataInfo table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateMetadataInfo(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateMetadataInfo(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateRawDataStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateRawDataStatisticsTbl}{}}}
-\subsection{Method \code{updateRawDataStatisticsTbl()}}{
-Updates the tbl.rawDataStatistics table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateRawDataStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateRawDataStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateFilterTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateFilterTbl}{}}}
-\subsection{Method \code{updateFilterTbl()}}{
-Updates the tbl.filter table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateFilterTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateFilterTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateFilterStatisticsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateFilterStatisticsTbl}{}}}
-\subsection{Method \code{updateFilterStatisticsTbl()}}{
-Updates the tbl.filterStatistics table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateFilterStatisticsTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateFilterStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateFilterMissingsTbl"></a>}}
-\if{latex}{\out{\hypertarget{method-updateFilterMissingsTbl}{}}}
-\subsection{Method \code{updateFilterMissingsTbl()}}{
-Updates the tbl.filterMissings table.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$updateFilterMissingsTbl(input, output, session)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{input}}{Pointer to shiny input}
-
-\item{\code{output}}{Pointer to shiny output}
-
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateFilterMissingsTbl(input, output, session)
+#' @description
+#' Updates the tbl.rawDataStatistics table.
+#' @param input
+#' Pointer to shiny input
+#' @param output
+#' Pointer to shiny output
+#' @param session
+#' Pointer to shiny session
+#' @examples
+#' x$updateRawDataStatisticsTbl(input, output, session)
+updateRawDataStatisticsTbl = function(input, output, session){
+  if(private$.status$query(processName = "dataImported")){
+    output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() \%>\%
+        format.data.frame(scientific = TRUE, digits = 4) \%>\%
+        DT::datatable(
+          extensions = "Buttons",
+          options = list(
+            scrollX = TRUE,
+            scrollY = '25vh',
+            paging = FALSE,
+            dom = "Blfrtip",
+            buttons = list(list(
+              extend = 'csv',
+              filename = self$fileName$bluntFileName("rawData_statistics"),
+              text = "Download"
+            ))#buttons
+          )#options
+        )}#DT::datatable
+    )#output
+  }#if
+  else{
+    output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
+  }#else
+}, #function
 }
 \if{html}{\out{</div>}}
 
@@ -6937,7 +7407,7 @@ Exports the pguIMP analysis results
 \describe{
 \item{\code{input}}{Pointer to shiny input}
 
-\item{\code{file}}{export filename
+\item{\code{fileName}}{export filename
 (character)}
 }
 \if{html}{\out{</div>}}
@@ -7014,12 +7484,12 @@ in pdf format.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-hideOutdatedResults"></a>}}
-\if{latex}{\out{\hypertarget{method-hideOutdatedResults}{}}}
-\subsection{Method \code{hideOutdatedResults()}}{
+\if{html}{\out{<a id="method-hide_outdated_results"></a>}}
+\if{latex}{\out{\hypertarget{method-hide_outdated_results}{}}}
+\subsection{Method \code{hide_outdated_results()}}{
 Updates the gui if analysis parameters change.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$hideOutdatedResults(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$hide_outdated_results(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -7035,7 +7505,7 @@ Updates the gui if analysis parameters change.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{x$hideOutdatedResults(input, output, session)
+\preformatted{x$hide_outdated_results(input, output, session)
 }
 \if{html}{\out{</div>}}
 

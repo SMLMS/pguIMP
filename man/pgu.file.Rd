@@ -7,61 +7,16 @@
 \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-Handles file names
+Handles file names for the pguIMP shiny web interface.
 }
 \details{
-Menages the file names and upload specifications for the pguIMP dataset.
+The class stores filenames and upload specifications for the pguIMP shiny web interface in its instance variables.
 }
 \section{Construction}{
 
 x <- pguIMP::pgu.file$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.file$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.file$new()
-
-## ------------------------------------------------
-## Method `pgu.file$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.file$splitFileName`
-## ------------------------------------------------
-
-x$splitFileName()
-
-## ------------------------------------------------
-## Method `pgu.file$updateTimeString`
-## ------------------------------------------------
-
-x$updateTimeString()
-
-## ------------------------------------------------
-## Method `pgu.file$mergeFileName`
-## ------------------------------------------------
-
-x$mergeFileName()
-
-## ------------------------------------------------
-## Method `pgu.file$bluntFileName`
-## ------------------------------------------------
-
-x$bluntFileName(value = "infected")
-
-## ------------------------------------------------
-## Method `pgu.file$exportFileName`
-## ------------------------------------------------
-
-x$exportFileName(value = "infected")
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -71,37 +26,19 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{uploadFileName}}{Returns the instance variable uploadFileName
 (character)}
 
-\item{\code{setUploadFileName}}{Sets the instance variable uploadFileName
-(character)}
-
 \item{\code{fileName}}{Returns the instance variable fileName
-(character)}
-
-\item{\code{setFileName}}{Sets the instance variable fileName
 (character)}
 
 \item{\code{baseName}}{Returns the instance variable baseName
 (character)}
 
-\item{\code{setBaseName}}{Sets the instance variable baseName
-(character)}
-
 \item{\code{folderName}}{Returns the instance variable folderName
-(character)}
-
-\item{\code{setFolderName}}{Sets the instance variable folderName
 (character)}
 
 \item{\code{suffix}}{Returns the instance variable suffix
 (character)}
 
-\item{\code{setSuffix}}{Sets the instance variable suffix
-(character)}
-
-\item{\code{exportType}}{Returns the instance variable exportType
-(character)}
-
-\item{\code{setExportType}}{Sets the instance variable exportType
+\item{\code{exportSuffix}}{Returns the instance variable exportSuffix
 (character)}
 
 \item{\code{timeString}}{Returns the instance variable timeString
@@ -110,49 +47,16 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item{\code{sheetIndex}}{Returns the instance variable sheetIndex
 (numeric)}
 
-\item{\code{setSheetIndex}}{Sets the instance variable sheetIndex
-(numeric)}
-
-\item{\code{dataSheet}}{Returns the instance variable dataSheet
-(character)}
-
-\item{\code{setDataSheet}}{Sets the instance variable dataSheet
-(character)}
-
-\item{\code{loqSheet}}{Returns the instance variable loqSheet
-(character)}
-
-\item{\code{setLoqSheet}}{Sets the instance variable loqSheet
-(character)}
-
-\item{\code{metadataSheet}}{Returns the instance variable metadataSheet
-(character)}
-
-\item{\code{setMetadataSheet}}{Sets the instance variable metadataSheet
-(character)}
-
 \item{\code{separator}}{Returns the instance variable separator
-(character)}
-
-\item{\code{setSeparator}}{Sets the instance variable separator
 (character)}
 
 \item{\code{skipRows}}{Returns the instance variable skipRows
 (numeric)}
 
-\item{\code{setSkipRows}}{Sets the instance variable skipRows
-(numeric)}
-
-\item{\code{header}}{Returns the instance variable header
-(logical)}
-
-\item{\code{setHeader}}{Sets the instance variable header
+\item{\code{columnNames}}{Returns the instance variable columnNames
 (logical)}
 
 \item{\code{naChar}}{Returns the instance variable naChar
-(character)}
-
-\item{\code{setNaChar}}{Sets the instance variable naChar
 (character)}
 }
 \if{html}{\out{</div>}}
@@ -161,13 +65,11 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.file$new()}}
-\item \href{#method-finalize}{\code{pgu.file$finalize()}}
 \item \href{#method-print}{\code{pgu.file$print()}}
-\item \href{#method-splitFileName}{\code{pgu.file$splitFileName()}}
-\item \href{#method-updateTimeString}{\code{pgu.file$updateTimeString()}}
-\item \href{#method-mergeFileName}{\code{pgu.file$mergeFileName()}}
-\item \href{#method-bluntFileName}{\code{pgu.file$bluntFileName()}}
-\item \href{#method-exportFileName}{\code{pgu.file$exportFileName()}}
+\item \href{#method-reset}{\code{pgu.file$reset()}}
+\item \href{#method-fit}{\code{pgu.file$fit()}}
+\item \href{#method-predict}{\code{pgu.file$predict()}}
+\item \href{#method-fit_predict}{\code{pgu.file$fit_predict()}}
 \item \href{#method-clone}{\code{pgu.file$clone()}}
 }
 }
@@ -175,40 +77,66 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Creates and returns a new \code{pgu.file} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$new()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-A new \code{pgu.file} object.
-(pguIMP::pgu.importer)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.file$new()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
 Clears the heap and
 indicates that instance of \code{pgu.file} is removed from heap.
+
+
+Splits fileName and writes the results in the class' instance variables
+folderName, baseName, suffix.
+
+
+Stores the current system time into the instance variable timeString.
+
+
+Creates and returns a new object of type pgu.file.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$finalize()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.file$new(
+  uploadFileName = "",
+  fileName = "",
+  sheetIndex = 1,
+  separator = ",",
+  skipRows = 0,
+  columnNames = TRUE,
+  naChar = "NA"
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{uploadFileName}}{Name of uploaded file.
+(string)}
+
+\item{\code{fileName}}{Actual file name.
+(string)}
+
+\item{\code{sheetIndex}}{Index excel sheet to import.
+(integer)}
+
+\item{\code{separator}}{Character for column separation.
+(character)}
+
+\item{\code{skipRows}}{Number of rows to skip.
+(integer)}
+
+\item{\code{columnNames}}{Indicates if the data source file has a columnNames.
+(logical)}
+
+\item{\code{naChar}}{Character for missing values.
+(string)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new pgu.file object.
+(pguIMP::pgu.file)
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Prints instance variables of a \code{pgu.file} object.
+Prints the instance variables of the object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.file$print()}\if{html}{\out{</div>}}
 }
@@ -216,123 +144,105 @@ Prints instance variables of a \code{pgu.file} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-splitFileName"></a>}}
-\if{latex}{\out{\hypertarget{method-splitFileName}{}}}
-\subsection{Method \code{splitFileName()}}{
-Splits fileName and writes the results in the class' instance variables
-folderName, baseName, suffix.
+\if{html}{\out{<a id="method-reset"></a>}}
+\if{latex}{\out{\hypertarget{method-reset}{}}}
+\subsection{Method \code{reset()}}{
+Resets the instance variables of the object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$splitFileName()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$splitFileName()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-updateTimeString"></a>}}
-\if{latex}{\out{\hypertarget{method-updateTimeString}{}}}
-\subsection{Method \code{updateTimeString()}}{
-Gets the current system time and
-stores it into the class' instance variable timeString.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$updateTimeString()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTimeString()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mergeFileName"></a>}}
-\if{latex}{\out{\hypertarget{method-mergeFileName}{}}}
-\subsection{Method \code{mergeFileName()}}{
-Updates the class' instance variable fileName
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$mergeFileName()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$mergeFileName()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-bluntFileName"></a>}}
-\if{latex}{\out{\hypertarget{method-bluntFileName}{}}}
-\subsection{Method \code{bluntFileName()}}{
-Returns an updated fileName without suffix.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$bluntFileName(value = "character")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.file$reset(
+  uploadFileName = "",
+  fileName = "",
+  sheetIndex = 1,
+  separator = ",",
+  skipRows = 0,
+  columnNames = TRUE,
+  naChar = "NA"
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{user defined file name extension
-(character)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-blunt file name without suffix
-(character)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$bluntFileName(value = "infected")
-}
-\if{html}{\out{</div>}}
+\item{\code{uploadFileName}}{Name of uploaded file.
+(string)}
 
+\item{\code{fileName}}{Actual file name.
+(string)}
+
+\item{\code{sheetIndex}}{Index excel sheet to import.
+(integer)}
+
+\item{\code{separator}}{Character for column separation.
+(character)}
+
+\item{\code{skipRows}}{Number of rows to skip.
+(integer)}
+
+\item{\code{columnNames}}{Indicates if the data source file has a columnNames.
+(logical)}
+
+\item{\code{naChar}}{Character for missing values.
+(string)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-fit}{}}}
+\subsection{Method \code{fit()}}{
+Extracts information about upload specifications from the instance variables.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.file$fit()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-exportFileName"></a>}}
-\if{latex}{\out{\hypertarget{method-exportFileName}{}}}
-\subsection{Method \code{exportFileName()}}{
-Returns an export file name
+\if{html}{\out{<a id="method-predict"></a>}}
+\if{latex}{\out{\hypertarget{method-predict}{}}}
+\subsection{Method \code{predict()}}{
+Predicts an export file name.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.file$exportFileName()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.file$predict(affix = "analysis")}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-export fileName
-(character)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$exportFileName(value = "infected")
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{affix}}{User dedined file name affix.
+(string)}
 }
 \if{html}{\out{</div>}}
-
+}
+\subsection{Returns}{
+A file name.
+(string)
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-fit_predict"></a>}}
+\if{latex}{\out{\hypertarget{method-fit_predict}{}}}
+\subsection{Method \code{fit_predict()}}{
+Extracts information about upload specifications from the instance variables
+and predicts an export file name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.file$fit_predict(affix = "analysis")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{affix}}{User dedined file name affix.
+(string)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A file name.
+(string)
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

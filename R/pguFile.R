@@ -1,17 +1,17 @@
 #' @title pgu.fie
 #'
 #' @description
-#' Handles file names
+#' Handles file names for the pguIMP shiny web interface.
 #'
 #' @details
-#' Menages the file names and upload specifications for the pguIMP dataset.
+#' The class stores filenames and upload specifications for the pguIMP shiny web interface in its instance variables.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:
 #' x <- pguIMP::pgu.file$new()
 #'
 #' @import R6
-#' @import tools
+#' @importFrom  tools file_path_sans_ext file_ext
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -24,22 +24,49 @@ pgu.file <- R6::R6Class("pgu.file",
                         # instance variables
                         ####################
                         private = list(
+                          #######################
+                          # instance variablies #
+                          #######################
                           .uploadFileName = "character",
                           .fileName = "character",
                           .baseName = "character",
                           .folderName = "character",
                           .suffix = "character",
-                          .exportType = "character",
+                          .exportSuffix = "character",
                           .timeString = "character",
                           .sheetIndex = "numeric",
-                          .dataSheet = "character",
-                          .loqSheet = "characetr",
-                          .metadataSheet = "character",
                           .separator = "character",
                           .skipRows = "numeric",
-                          .header = "logical",
-                          .naChar ="character"
-                        ),
+                          .columnNames = "logical",
+                          .naChar ="character",
+
+                          ####################
+                          # private fuctions #
+                          ####################
+                          #' @description
+                          #' Clears the heap and
+                          #' indicates that instance of `pgu.file` is removed from heap.
+                          finalize = function(){
+                            print("Instance of pgu.fileDesign removed from heap")
+                          }, #end pgu.file$finalize
+
+                          #' @description
+                          #' Splits fileName and writes the results in the class' instance variables
+                          #' folderName, baseName, suffix.
+                          split_file_name = function(){
+                            private$.baseName <- tools::file_path_sans_ext(basename(self$fileName))
+                            private$.folderName <- dirname(self$fileName)
+                            private$.suffix <- tools::file_ext(self$fileName)
+                          }, #end pgu.file$split_file_name
+
+                          #' @description
+                          #' Stores the current system time into the instance variable timeString.
+                          update_time_string = function(){
+                            private$.timeString <- Sys.time() %>%
+                              format("%y%m%d-%H%M%S")
+                          } #end pgu.file$update_time_string
+                        ), #end pgu.file$private
+
                         ##################
                         # accessor methods
                         ##################
@@ -47,314 +74,241 @@ pgu.file <- R6::R6Class("pgu.file",
                           #' @field uploadFileName
                           #' Returns the instance variable uploadFileName
                           #' (character)
-                          uploadFileName = function(){
+                          uploadFileName = function()
+                          {
                             return(private$.uploadFileName)
-                          },
-                          #' @field setUploadFileName
-                          #' Sets the instance variable uploadFileName
-                          #' (character)
-                          setUploadFileName = function(val = "character"){
-                            private$.uploadFileName <- val
                           },
                           #' @field fileName
                           #' Returns the instance variable fileName
                           #' (character)
-                          fileName = function(){
+                          fileName = function()
+                          {
                             return(private$.fileName)
-                          },
-                          #' @field setFileName
-                          #' Sets the instance variable fileName
-                          #' (character)
-                          setFileName = function(val = "character"){
-                            private$.fileName <- val
                           },
                           #' @field baseName
                           #' Returns the instance variable baseName
                           #' (character)
-                          baseName = function(){
+                          baseName = function()
+                          {
                             return(private$.baseName)
-                          },
-                          #' @field setBaseName
-                          #' Sets the instance variable baseName
-                          #' (character)
-                          setBaseName = function(val = "chatacter"){
-                            private$.baseName <- val
                           },
                           #' @field folderName
                           #' Returns the instance variable folderName
                           #' (character)
-                          folderName = function(){
+                          folderName = function()
+                          {
                             return(private$.folderName)
-                          },
-                          #' @field setFolderName
-                          #' Sets the instance variable folderName
-                          #' (character)
-                          setFolderName = function(val = "character"){
-                            private$.folderName <- val
                           },
                           #' @field suffix
                           #' Returns the instance variable suffix
                           #' (character)
-                          suffix = function(){
+                          suffix = function()
+                          {
                             return(private$.suffix)
                           },
-                          #' @field setSuffix
-                          #' Sets the instance variable suffix
+                          #' @field exportSuffix
+                          #' Returns the instance variable exportSuffix
                           #' (character)
-                          setSuffix = function(val = "character"){
-                            private$.suffix <- val
-                          },
-                          #' @field exportType
-                          #' Returns the instance variable exportType
-                          #' (character)
-                          exportType = function(){
-                            return(private$.exportType)
-                          },
-                          #' @field setExportType
-                          #' Sets the instance variable exportType
-                          #' (character)
-                          setExportType = function(val = "character"){
-                            private$.exportType <- val
+                          exportSuffix = function()
+                          {
+                            return(private$.exportSuffix)
                           },
                           #' @field timeString
                           #' Returns the instance variable timeString
                           #' (character)
-                          timeString = function(){
+                          timeString = function()
+                          {
                             return(private$.timeString)
                           },
                           #' @field sheetIndex
                           #' Returns the instance variable sheetIndex
                           #' (numeric)
-                          sheetIndex = function(){
+                          sheetIndex = function()
+                          {
                             return(private$.sheetIndex)
-                          },
-                          #' @field setSheetIndex
-                          #' Sets the instance variable sheetIndex
-                          #' (numeric)
-                          setSheetIndex = function(val = "numeric"){
-                            private$.sheetIndex <- val
-                          },
-                          #' @field dataSheet
-                          #' Returns the instance variable dataSheet
-                          #' (character)
-                          dataSheet = function(){
-                            return(private$.dataSheet)
-                          },
-                          #' @field setDataSheet
-                          #' Sets the instance variable dataSheet
-                          #' (character)
-                          setDataSheet = function(val = "character"){
-                            private$.dataSheet <- val
-                          },
-                          #' @field loqSheet
-                          #' Returns the instance variable loqSheet
-                          #' (character)
-                          loqSheet = function(){
-                            return(private$.loqSheet)
-                          },
-                          #' @field setLoqSheet
-                          #' Sets the instance variable loqSheet
-                          #' (character)
-                          setLoqSheet = function(val = "character"){
-                            private$.loqSheet <- val
-                          },
-                          #' @field metadataSheet
-                          #' Returns the instance variable metadataSheet
-                          #' (character)
-                          metadataSheet = function(){
-                            return(private$.metadataSheet)
-                          },
-                          #' @field setMetadataSheet
-                          #' Sets the instance variable metadataSheet
-                          #' (character)
-                          setMetadataSheet = function(val = "character"){
-                            private$.metadataSheet <- val
                           },
                           #' @field separator
                           #' Returns the instance variable separator
                           #' (character)
-                          separator = function(){
+                          separator = function()
+                          {
                             return(private$.separator)
-                          },
-                          #' @field setSeparator
-                          #' Sets the instance variable separator
-                          #' (character)
-                          setSeparator = function(val = "character"){
-                            private$.separator <- val
                           },
                           #' @field skipRows
                           #' Returns the instance variable skipRows
                           #' (numeric)
-                          skipRows = function(){
+                          skipRows = function()
+                          {
                             return(private$.skipRows)
                           },
-                          #' @field setSkipRows
-                          #' Sets the instance variable skipRows
-                          #' (numeric)
-                          setSkipRows = function(val = "numeric"){
-                            private$.skipRows <- val
-                          },
-                          #' @field header
-                          #' Returns the instance variable header
+                          #' @field columnNames
+                          #' Returns the instance variable columnNames
                           #' (logical)
-                          header = function(){
-                            return(private$.header)
-                          },
-                          #' @field setHeader
-                          #' Sets the instance variable header
-                          #' (logical)
-                          setHeader = function(val = "logical"){
-                            private$.header <- val
+                          columnNames = function()
+                          {
+                            return(private$.columnNames)
                           },
                           #' @field naChar
                           #' Returns the instance variable naChar
                           #' (character)
-                          naChar = function(){
+                          naChar = function()
+                          {
                             return(private$.naChar)
-                          },
-                          #' @field setNaChar
-                          #' Sets the instance variable naChar
-                          #' (character)
-                          setNaChar = function(val = "character"){
-                            private$.naChar <- val
                           }
-                        ),
-                        ###################
-                        # memory management
-                        ###################
+                        ), #end pgu.file$active
+
+                        ####################
+                        # public functions #
+                        ####################
                         public = list(
                           #' @description
-                          #' Creates and returns a new `pgu.file` object.
+                          #' Creates and returns a new object of type pgu.file.
+                          #' @param uploadFileName
+                          #' Name of uploaded file.
+                          #' (string)
+                          #' @param fileName
+                          #' Actual file name.
+                          #' (string)
+                          #' @param sheetIndex
+                          #' Index excel sheet to import.
+                          #' (integer)
+                          #' @param separator
+                          #' Character for column separation.
+                          #' (character)
+                          #' @param skipRows
+                          #' Number of rows to skip.
+                          #' (integer)
+                          #' @param columnNames
+                          #' Indicates if the data source file has a columnNames.
+                          #' (logical)
+                          #' @param naChar
+                          #' Character for missing values.
+                          #' (string)
                           #' @return
-                          #' A new `pgu.file` object.
-                          #' (pguIMP::pgu.importer)
-                          #' @examples
-                          #' x <- pguIMP:pgu.file$new()
-                          initialize = function(){
-                            private$.uploadFileName <- character(length(0))
-                            private$.fileName <- character(length(0))
-                            private$.baseName <- character(length(0))
-                            private$.folderName <- character(length(0))
-                            private$.suffix <- character(length(0))
-                            private$.exportType <- "pguIMP"
-                            private$.sheetIndex <- 0
-                            private$.dataSheet <- "raw_data"
-                            private$.loqSheet <- "loq"
-                            private$.metadataSheet <- "metadata"
-                            private$.separator <- character(length(0))
-                            private$.skipRows <- 0
-                            private$.header = TRUE
-                            private$.naChar <- "NA"
-                            self$updateTimeString()
-                          }, #function
+                          #' A new pgu.file object.
+                          #' (pguIMP::pgu.file)
+                          initialize = function(uploadFileName = "",
+                                                fileName = "",
+                                                sheetIndex = 1,
+                                                separator = ",",
+                                                skipRows = 0,
+                                                columnNames = TRUE,
+                                                naChar = "NA")
+                          {
+                            self$reset(uploadFileName = uploadFileName,
+                                       fileName = fileName,
+                                       sheetIndex = sheetIndex,
+                                       separator = separator,
+                                       skipRows = skipRows,
+                                       columnNames = columnNames,
+                                       naChar = naChar)
+                          }, #pgu.file$initialize()
 
                           #' @description
-                          #' Clears the heap and
-                          #' indicates that instance of `pgu.file` is removed from heap.
-                          finalize = function(){
-                            print("Instance of pgu.fileDesign removed from heap")
-                          }, #function
-
-                          ##########################
-                          # print instance variables
-                          ##########################
-                          #' @description
-                          #' Prints instance variables of a `pgu.file` object.
+                          #' Prints the instance variables of the object.
                           #' @return
                           #' string
-                          #' @examples
-                          #' x$print()
-                          #' print(x)
-                          print = function(){
-                            rString <- sprintf("\npgu.file\n")
+                          print = function()
+                          {
+                            rString <- sprintf("\npgu.file:\n")
+                            rString <- sprintf("%suploadFileName: %s\n", rString, self$uploadFileName)
+                            rString <- sprintf("%sfileName: %s\n", rString, self$fileName)
+                            rString <- sprintf("%sbaseName: %s\n", rString, self$baseName)
+                            rString <- sprintf("%ssuffix: %s\n", rString, self$suffix)
+                            rString <- sprintf("%sexportSuffix: %s\n", rString, self$exportSuffix)
+                            rString <- sprintf("%stimeString: %s\n", rString, self$timeString)
+                            rString <- sprintf("%ssheetIndex: %i\n", rString, self$sheetIndex)
+                            rString <- sprintf("%sseparator: %s\n", rString, self$separator)
+                            rString <- sprintf("%sskipRows: %i\n", rString, self$skipRows)
+                            rString <- sprintf("%scolumnNames: %s\n", rString, self$columnNames)
+                            rString <- sprintf("%snaChar: %s\n", rString, self$naChar)
+                            rString <- sprintf("%s\n\n", rString)
                             cat(rString)
-                            fString <- sprintf("uploadFileName: %s\nfileName: %s\nbaseName: %s\nsuffix: %s\nexportType: %s\ntimeString: %s\nsheetIndex: %i\nseparator: %s\nskipRows: %i\nheader: %s\nnaChar: %s\n",
-                                               self$uploadFileName,
-                                               self$fileName,
-                                               self$baseName,
-                                               self$suffix,
-                                               self$exportType,
-                                               self$timeString,
-                                               self$sheetIndex,
-                                               self$separator,
-                                               self$skipRows,
-                                               self$header,
-                                               self$naChar
-                            )
-                            cat(fString)
-                            cat("\n\n")
                             invisible(self)
-                          }, #function
-
-                          ####################
-                          # public functions #
-                          ####################
-                          #' @description
-                          #' Splits fileName and writes the results in the class' instance variables
-                          #' folderName, baseName, suffix.
-                          #' @examples
-                          #' x$splitFileName()
-                          splitFileName = function(){
-                            self$setBaseName <- tools::file_path_sans_ext(basename(self$fileName))
-                            self$setFolderName <- dirname(self$fileName)
-                            self$setSuffix <- tools::file_ext(self$fileName)
-                          }, #function
+                          }, #end pgu.file$print()
 
                           #' @description
-                          #' Gets the current system time and
-                          #' stores it into the class' instance variable timeString.
-                          #' @examples
-                          #' x$updateTimeString()
-                          updateTimeString = function(){
-                            private$.timeString <- Sys.time() %>%
-                              format("%y%m%d-%H%M%S")
-                          }, #function
-
-                          #' @description
-                          #' Updates the class' instance variable fileName
-                          #' @examples
-                          #' x$mergeFileName()
-                          mergeFileName = function(){
-                            private$.fileName <- sprintf("%s_%s_%s.%s",
-                                                         self$baseName,
-                                                         self$exportType,
-                                                         self$timeString,
-                                                         self$suffix)
-                          }, #function
-
-                          #' @description
-                          #' Returns an updated fileName without suffix.
-                          #' @param value
-                          #' user defined file name extension
+                          #' Resets the instance variables of the object.
+                          #' @param uploadFileName
+                          #' Name of uploaded file.
+                          #' (string)
+                          #' @param fileName
+                          #' Actual file name.
+                          #' (string)
+                          #' @param sheetIndex
+                          #' Index excel sheet to import.
+                          #' (integer)
+                          #' @param separator
+                          #' Character for column separation.
                           #' (character)
+                          #' @param skipRows
+                          #' Number of rows to skip.
+                          #' (integer)
+                          #' @param columnNames
+                          #' Indicates if the data source file has a columnNames.
+                          #' (logical)
+                          #' @param naChar
+                          #' Character for missing values.
+                          #' (string)
+                          reset = function(uploadFileName = "",
+                                           fileName = "",
+                                           sheetIndex = 1,
+                                           separator = ",",
+                                           skipRows = 0,
+                                           columnNames = TRUE,
+                                           naChar = "NA")
+                          {
+                            private$.uploadFileName <- uploadFileName
+                            private$.fileName <- fileName
+                            private$.exportSuffix <- "xlsx"
+                            private$.sheetIndex <- as.integer(sheetIndex)
+                            private$.separator <- separator
+                            private$.skipRows <- as.integer(skipRows)
+                            private$.columnNames <- as.logical(columnNames)
+                            private$.naChar <- naChar
+                            self$fit()
+                          }, #end pgu.file$reset
+
+                          #' @description
+                          #' Extracts information about upload specifications from the instance variables.
+                          fit = function()
+                          {
+                            private$update_time_string()
+                            private$split_file_name()
+                          }, #end pgu.file$fit
+
+                          #' @description
+                          #' Predicts an export file name.
+                          #' @param affix
+                          #' User dedined file name affix.
+                          #' (string)
                           #' @return
-                          #' blunt file name without suffix
-                          #' (character)
-                          #' @examples
-                          #' x$bluntFileName(value = "infected")
-                          bluntFileName = function(value = "character"){
-                            self$updateTimeString()
-                            sprintf("%s_%s_%s",
+                          #' A file name.
+                          #' (string)
+                          predict = function(affix = "analysis")
+                          {
+                            sprintf("%s_pguIMP_%s_%s.%s",
                                     self$baseName,
-                                    value,
-                                    self$timeString) %>%
-                              return()
-                          }, #function
-
-                          #' @description
-                          #' Returns an export file name
-                          #' @return
-                          #' export fileName
-                          #' (character)
-                          #' @examples
-                          #' x$exportFileName(value = "infected")
-                          exportFileName = function(){
-                            sprintf("%s_%s_%s.%s",
-                                    self$baseName,
-                                    self$exportType,
+                                    affix,
                                     self$timeString,
-                                    self$suffix) %>%
+                                    self$exportSuffix) %>%
                               return()
-                          }#function
-                        )#public
-)#class
+                          }, #end pgu.file$predict
+
+                          #' @description
+                          #' Extracts information about upload specifications from the instance variables
+                          #' and predicts an export file name.
+                          #' @param affix
+                          #' User dedined file name affix.
+                          #' (string)
+                          #' @return
+                          #' A file name.
+                          #' (string)
+                          fit_predict = function(affix = "analysis")
+                          {
+                            self$fit()
+                            self$predict(affix = affix) %>%
+                              return()
+                          }
+                        ) #end pgu.file$public
+)#end pgu.file

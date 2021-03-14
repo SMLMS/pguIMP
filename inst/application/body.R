@@ -25,33 +25,76 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           width = menueColumnWidth,
           shiny::h1("Upload"),
           shiny::fileInput(
-            "fi.import",
-            label = h5(" Select Excel file "),
-            accept = c(".xls", ".xlsx"),
+            inputId = "fi.import",
+            label = h5(" Select file "),
+            accept = c(".csv", ".txt", ".xls", ".xlsx"),
             width = "100%"
           ),
           shiny::hr(),
-          shiny::actionButton("ab.import",
-                              label = h5("Import"),
-                              width = "100%")
+          shiny::numericInput(
+            inputId = "ni.importSheetIndex",
+            label = shiny::h5("Select sheet"),
+            value = 1,
+            min = 1,
+            step = 1,
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::selectInput(
+            inputId = "si.importSeparator",
+            label = shiny::h5("Separator"),
+            choices = c(",", ";", "tab"),
+            selected = ",",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::numericInput(
+            inputId = "ni.importSkip",
+            label = shiny::h5("Skip rows"),
+            value = 0,
+            min = 0,
+            step = 1,
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::selectInput(
+            inputId = "si.importColnames",
+            label = shiny::h5("Column names"),
+            choices = c("FALSE", "TRUE"),
+            selected = "TRUE",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::selectInput(
+            inputId = "si.importNaChar",
+            label = shiny::h5("Na character"),
+            choices = c("na", "nan", "Na"),
+            selected = "na",
+            width = "100%"
+          ),
+          shiny::hr(),
+          shiny::actionButton("ab.importReset",
+                              label = h5("Reset"),
+                              width = "100%"
+          )
         ),
         shiny::column(
           width = dataColumnWidth,
-          shinydashboard::tabBox(
-            width = 12,
-            title = "Data Types",
-            # The id lets us use input$tabset1 on the server to find the current tab
-            id = "tabsetImport",
-            height = "100%",
-            shiny::tabPanel("raw data",
-                            DT::dataTableOutput("tbl.rawDataInfo", width = "100%")
-            ),
-            shiny::tabPanel("loq",
-                            DT::dataTableOutput("tbl.loqInfo", width = "100%")
-            ),
-            shiny::tabPanel("metadata",
-                            DT::dataTableOutput("tbl.metadataInfo", width = "100%")
-            )
+          shiny::h3("Data types"),
+          DT::dataTableOutput(
+            outputId = "tbl.importDataTypes",
+            width = "100%"),
+          shiny::hr(),
+          shiny::h3("Data summary"),
+          DT::dataTableOutput(
+            outputId = "tbl.importDataStatistics",
+            width = "100%"
+          ),
+          shiny::br(),
+          shiny::h3("Missings summary"),
+          DT::dataTableOutput(
+            outputId = "tbl.importMissingsStatistics",
+            width = "100%"
           )
         )
       )
@@ -85,7 +128,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         shiny::column(
           width = dataColumnWidth,
           shiny::h3("Select Filter"),
-          DT::dataTableOutput("tbl.filter", width = "100%"),
+          DT::dataTableOutput("tbl.filterSelect", width = "100%"),
           shiny::fluidRow(
             shiny::column(
               width = 6,
@@ -153,6 +196,78 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   ),
 
   shinydashboard::tabItem(
+    tabName = "tab_define_loq",
+    shiny::fluidPage(
+      width = 12,
+      title = "Define LOQs",
+      shiny::column(
+        width = menueColumnWidth,
+        shiny::h1("LOQ"),
+        shiny::hr(),
+        shiny::fileInput(
+          inputId = "fi.LoqImport",
+          label = h5(" Select file "),
+          accept = c(".csv", ".txt", ".xls", ".xlsx"),
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::numericInput(
+          inputId = "ni.LoqSheetIndex",
+          label = shiny::h5("Select sheet"),
+          value = 1,
+          min = 1,
+          step = 1,
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::selectInput(
+          inputId = "si.LoqSeparator",
+          label = shiny::h5("Separator"),
+          choices = c(",", ";", "tab"),
+          selected = ",",
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::numericInput(
+          inputId = "ni.LoqSkip",
+          label = shiny::h5("Skip rows"),
+          value = 0,
+          min = 0,
+          step = 1,
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::selectInput(
+          inputId = "si.LoqColnames",
+          label = shiny::h5("Column names"),
+          choices = c("FALSE", "TRUE"),
+          selected = "TRUE",
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::selectInput(
+          inputId = "si.LoqNaChar",
+          label = shiny::h5("Na character"),
+          choices = c("na", "nan", "Na"),
+          selected = "na",
+          width = "100%"
+        ),
+        shiny::hr(),
+        shiny::actionButton(
+          inputId = "ab.LoqDefineReset",
+          label = "Reset",
+          width = "100%"
+        )
+      ),
+      shiny::column(
+        width = dataColumnWidth,
+        shiny::h3("LOQ values"),
+        DT::dataTableOutput("tbl.loqDefineValues")
+      )
+    )
+  ),
+
+  shinydashboard::tabItem(
     tabName = "tab_detect_loq",
     shiny::fluidPage(
       width = 12,
@@ -189,6 +304,9 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::h3("Define LOQ"),
+          DT::dataTableOutput("tbl.loqDefine", width = "100%"),
+          shiny::br(),
           shiny::h3("LOQ Distribution"),
           shiny::plotOutput("plt.loqDetectStatistics"),
           shiny::br(),
@@ -210,10 +328,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           DT::dataTableOutput("tbl.loqDetectStatistics"),
           shiny::br(),
           shiny::h3("LOQ Outlier"),
-          DT::dataTableOutput("tbl.loqDetectOutlier"),
-          shiny::br(),
-          shiny::h3("LOQ Data"),
-          DT::dataTableOutput("tbl.loqDetectData")
+          DT::dataTableOutput("tbl.loqDetectOutlier")
         )
       )
     )
@@ -279,12 +394,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             )
           ),
           shiny::br(),
-          shiny::br(),
-          shiny::h3("LOQ Statistics"),
-          DT::dataTableOutput("tbl.loqMutateStatistics"),
-          shiny::br(),
-          shiny::h3("LOQ Outlier"),
-          DT::dataTableOutput("tbl.loqMutateOutlier"),
           shiny::br(),
           shiny::h3("LOQ Data"),
           DT::dataTableOutput("tbl.loqMutateData")
@@ -580,11 +689,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::br(),
           shiny::hr(),
           shiny::h3("Missings Details"),
-          DT::dataTableOutput("tbl.imputeMissingsDetail"),
-          shiny::br(),
-          shiny::br(),
-          shiny::h3("Missings Data"),
-          DT::dataTableOutput("tbl.imputeMissingsData")
+          DT::dataTableOutput("tbl.imputeMissingsDetail")
         )
       )
     )
@@ -722,10 +827,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           DT::dataTableOutput("tbl.outliersImputeStatistics"),
           shiny::hr(),
           shiny::h3("Outlier Details"),
-          DT::dataTableOutput("tbl.outliersImputeDetail"),
-          shiny::hr(),
-          shiny::h3("Outlier Data"),
-          DT::dataTableOutput("tbl.outliersImputeData")
+          DT::dataTableOutput("tbl.outliersImputeDetail")
         )
       )
     )

@@ -51,6 +51,7 @@ Imports:
     writexl
 Collate:
     'dLogLikelihood.R'
+    'importDataSet.R'
     'normalDistribution.R'
     'pguCorrValidator.R'
     'pguCorrelator.R'

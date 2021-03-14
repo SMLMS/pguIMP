@@ -30,7 +30,81 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    .impR_mat = "matrix",
                                    .orgP_mat = "matrix",
                                    .impP_mat = "matrix",
-                                   .corr_df = "tbl_df"
+                                   .corr_df = "tbl_df",
+                                   .summary_df = "tbl_df",
+
+                                   #' @description
+                                   #' Clears the heap and
+                                   #' indicates if instance of `pgu.corrValidator` is removed from heap.
+                                   finalize = function()
+                                   {
+                                     print("Instance of pgu.corrValidator removed from heap")
+                                   },
+
+                                   #' @description
+                                   #' Summary of the correlation deviation distribution.
+                                   calc_summary = function()
+                                   {
+                                     if(nrow(self$corr_df)>1)
+                                     {
+                                       test_result <- self$corr_df %>%
+                                         dplyr::pull(cor_delta) %>%
+                                         t.test(mu = 0, alternative = "two.sided")
+
+                                       summary_df <- self$corr_df %>%
+                                         dplyr::select(cor_delta) %>%
+                                         dplyr::summarise(
+                                           min = min(cor_delta),
+                                           q25 = quantile(cor_delta, probs = c(0.25)),
+                                           mu = mean(cor_delta),
+                                           median = median(cor_delta),
+                                           sigma = sd(cor_delta),
+                                           q75 = quantile(cor_delta, probs = c(0.75)),
+                                           max = max(cor_delta)) %>%
+                                         dplyr::mutate(t.statistic = test_result$statistic) %>%
+                                         dplyr::mutate(p.Value = test_result$p.value) %>%
+                                         t() %>%
+                                         as.data.frame() %>%
+                                         tibble::rownames_to_column() %>%
+                                         tibble::as_tibble()
+
+                                       colnames(summary_df) <- c("statistics", "values")
+
+                                       private$.summary_df <- summary_df
+                                     }
+
+                                   }, #function
+
+                                   #' @description
+                                   #' Creates a square matrix which dimension corresponds to the length
+                                   #' of the instance variable featureNames. The matrix entries are set to a distinct `value`.
+                                   reset_matrix = function(value = "numeric")
+                                   {
+                                     n = length(self$featureNames)
+                                     df <- matrix(data = value,
+                                                  nrow = n,
+                                                  ncol = n,
+                                                  dimnames = list(self$featureNames, self$featureNames))
+                                     return(df)
+                                   },#function
+
+                                   #' @description
+                                   #' Flattens the results transforms them into a dataframe
+                                   #' and stores it into the instance variable corr_df.
+                                   flatten_matrix = function()
+                                   {
+                                     ut <- upper.tri(self$orgR_mat)
+                                     private$.corr_df <- tibble::tibble(
+                                       row = rownames(self$orgR_mat)[row(self$orgR_mat)[ut]],
+                                       column = rownames(self$orgR_mat)[col(self$orgR_mat)[ut]],
+                                       cor_org  = self$orgR_mat[ut],
+                                       p_org = self$orgP_mat[ut],
+                                       cor_imp  = self$impR_mat[ut],
+                                       p_imp = self$impP_mat[ut]
+                                     ) %>%
+                                       dplyr::mutate(cor_delta = cor_imp - cor_org)
+                                   } #function
+
                                  ), #private
                                  ##################
                                  # accessor methods
@@ -71,6 +145,12 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' (tibble::tibble)
                                    corr_df = function(){
                                      return(private$.corr_df)
+                                   },
+                                   #' @field summary_df
+                                   #' Returns the instance variable summary_df.
+                                   #' (tibble::tibble)
+                                   summary_df = function(){
+                                     return(private$.summary_df)
                                    }
                                  ), #active
                                  ###################
@@ -92,14 +172,9 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' y <- impute(x)
                                    #' obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
                                    initialize = function(org_df = "tbl_df", imp_df = "tbl_df"){
-                                     self$validate(org_df, imp_df)
+                                     self$reset()
                                    },
-                                   #' @description
-                                   #' Clears the heap and
-                                   #' indicates if instance of `pgu.corrValidator` is removed from heap.
-                                   finalize = function(){
-                                     print("Instance of pgu.corrValidator removed from heap")
-                                   },
+
                                    #' @description
                                    #' Prints instance variables of a `pgu.corrValidator` object.
                                    #' @return
@@ -123,48 +198,14 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @examples
                                    #' pgu.corrValidator$reset()
                                    reset = function(){
-                                     private$.orgR_mat <- self$resetMatrix(value = 0)
-                                     private$.impR_mat <- self$resetMatrix(value = 0)
-                                     private$.orgP_mat <- self$resetMatrix(value = 1)
-                                     private$.impP_mat <- self$resetMatrix(value = 1)
-                                     self$flattenMatrix()
+                                     private$.orgR_mat <- private$reset_matrix(value = 0)
+                                     private$.impR_mat <- private$reset_matrix(value = 0)
+                                     private$.orgP_mat <- private$reset_matrix(value = 1)
+                                     private$.impP_mat <- private$reset_matrix(value = 1)
+                                     private$flatten_matrix()
+                                     #private$calc_summary()
                                    },
-                                   #' @description
-                                   #' Creates a square matrix which dimension corresponds to the length
-                                   #' of the instance variable featureNames. The matrix entries are set to a distinct `value`.
-                                   #' @param value
-                                   #' The value the matrix entries are set to.
-                                   #' (numeric)
-                                   #' @return
-                                   #' A square matrix.
-                                   #' (matrix)
-                                   #' @examples
-                                   #' matrix <- pgu.corrValidator$resetMatrix(value)
-                                   resetMatrix = function(value = "numeric"){
-                                     n = length(self$featureNames)
-                                     df <- matrix(data = value,
-                                                  nrow = n,
-                                                  ncol = n,
-                                                  dimnames = list(self$featureNames, self$featureNames))
-                                     return(df)
-                                   },#function
-                                   #' @description
-                                   #' Flattens the results transforms them into a dataframe
-                                   #' and stores it into the instance variable corr_df.
-                                   #' @examples
-                                   #' pgu.corrValidatior$flattenMatrix()
-                                   flattenMatrix = function() {
-                                     ut <- upper.tri(self$orgR_mat)
-                                     private$.corr_df <- tibble::tibble(
-                                       row = rownames(self$orgR_mat)[row(self$orgR_mat)[ut]],
-                                       column = rownames(self$orgR_mat)[col(self$orgR_mat)[ut]],
-                                       cor_org  = self$orgR_mat[ut],
-                                       p_org = self$orgP_mat[ut],
-                                       cor_imp  = self$impR_mat[ut],
-                                       p_imp = self$impP_mat[ut]
-                                     ) %>%
-                                       dplyr::mutate(cor_delta = cor_imp - cor_org)
-                                   }, #function
+
                                    #' @description
                                    #' Runs the corraltion analysis.
                                    #' @param org_df
@@ -173,74 +214,44 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @param imp_df
                                    #' Adataframe comprising the imputed data.
                                    #' (tibble::tibble)
-                                   #' @examples
-                                   #' pgu.corrValidator$validate(org_df, imp_df)
-                                   validate = function(org_df = "tbl_df", imp_df = "tbl_df"){
-                                     if(!tibble::is_tibble(org_df)){
-                                       org_df <- tibble::tibble(names = c("none"),
-                                                                values = as.numeric(c(NA)))
+                                   fit = function(org_df = "tbl_df", imp_df = "tbl_df")
+                                     {
+                                     if((tibble::is_tibble(org_df)) & (tibble::is_tibble(imp_df)))
+                                       {
+                                       private$.featureNames <- org_df %>%
+                                         dplyr::select_if(is.numeric) %>%
+                                         colnames()
+
+                                       if((nrow(org_df) > 4) & (nrow(imp_df) > 4)){
+                                         res_org <- org_df %>%
+                                           dplyr::select(dplyr::all_of(self$featureNames)) %>%
+                                           as.matrix() %>%
+                                           Hmisc::rcorr(type = "pearson")
+
+                                         private$.orgR_mat <- res_org$r
+                                         private$.orgP_mat <- res_org$P
+
+                                         res_imp <- imp_df %>%
+                                           dplyr::select(dplyr::all_of(self$featureNames)) %>%
+                                           as.matrix() %>%
+                                           Hmisc::rcorr(type = "pearson")
+
+                                         private$.impR_mat <- res_imp$r
+                                         private$.impP_mat <- res_imp$P
+
+                                         private$flatten_matrix()
+                                         private$calc_summary()
+                                       }
+                                       else{
+                                         self$reset()
+                                       }
                                      }
-
-                                     private$.featureNames <- org_df %>%
-                                       dplyr::select_if(is.numeric) %>%
-                                       colnames()
-
-                                     if(nrow(org_df) > 4){
-                                       res_org <- org_df %>%
-                                         dplyr::select(dplyr::all_of(self$featureNames)) %>%
-                                         as.matrix() %>%
-                                         Hmisc::rcorr(type = "pearson")
-
-                                       private$.orgR_mat <- res_org$r
-                                       private$.orgP_mat <- res_org$P
-
-                                       res_imp <- imp_df %>%
-                                         dplyr::select(dplyr::all_of(self$featureNames)) %>%
-                                         as.matrix() %>%
-                                         Hmisc::rcorr(type = "pearson")
-
-                                       private$.impR_mat <- res_imp$r
-                                       private$.impP_mat <- res_imp$P
-
-                                       self$flattenMatrix()
-                                     }
-                                     else{
+                                     else {
                                        self$reset()
                                      }
+
+
                                    }, #validate
-
-                                   #' @description
-                                   #' Summary of the correlation deviation distribution.
-                                   #' @return
-                                   #' A dataframe comprising the summary of the correlation deviation distribution.
-                                   #' (tibble::tibble)
-                                   #' @examples
-                                   #' df <- pgu.corrValidator$summary()
-                                   summary = function(){
-                                     test_result <- self$corr_df %>%
-                                       dplyr::pull(cor_delta) %>%
-                                       t.test(mu = 0, alternative = "two.sided")
-
-                                     summary_df <- self$corr_df %>%
-                                       dplyr::select(cor_delta) %>%
-                                       dplyr::summarise(tibble(min = min(cor_delta),
-                                                               q25 = quantile(cor_delta, probs = c(0.25)),
-                                                               mu = mean(cor_delta),
-                                                               median = median(cor_delta),
-                                                               sigma = sd(cor_delta),
-                                                               q75 = quantile(cor_delta, probs = c(0.75)),
-                                                               max = max(cor_delta))) %>%
-                                       dplyr::mutate(t.statistic = test_result$statistic) %>%
-                                       dplyr::mutate(p.Value = test_result$p.value) %>%
-                                       t() %>%
-                                       as.data.frame() %>%
-                                       tibble::rownames_to_column() %>%
-                                       tibble::as_tibble()
-
-                                     colnames(summary_df) <- c("statistics", "values")
-
-                                     return(summary_df)
-                                   }, #function
 
                                    #' @description
                                    #' Plots the correlation analysis results.

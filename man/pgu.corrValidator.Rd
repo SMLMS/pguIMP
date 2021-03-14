@@ -41,30 +41,6 @@ print(pgu.corrValidator)
 pgu.corrValidator$reset()
 
 ## ------------------------------------------------
-## Method `pgu.corrValidator$resetMatrix`
-## ------------------------------------------------
-
-matrix <- pgu.corrValidator$resetMatrix(value)
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$flattenMatrix`
-## ------------------------------------------------
-
-pgu.corrValidatior$flattenMatrix()
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$validate`
-## ------------------------------------------------
-
-pgu.corrValidator$validate(org_df, imp_df)
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$summary`
-## ------------------------------------------------
-
-df <- pgu.corrValidator$summary()
-
-## ------------------------------------------------
 ## Method `pgu.corrValidator$correlationScatterPlot`
 ## ------------------------------------------------
 
@@ -113,6 +89,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 
 \item{\code{corr_df}}{Returns the instance variable corr_df.
 (tibble::tibble)}
+
+\item{\code{summary_df}}{Returns the instance variable summary_df.
+(tibble::tibble)}
 }
 \if{html}{\out{</div>}}
 }
@@ -120,13 +99,9 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{pgu.corrValidator$new()}}
-\item \href{#method-finalize}{\code{pgu.corrValidator$finalize()}}
 \item \href{#method-print}{\code{pgu.corrValidator$print()}}
 \item \href{#method-reset}{\code{pgu.corrValidator$reset()}}
-\item \href{#method-resetMatrix}{\code{pgu.corrValidator$resetMatrix()}}
-\item \href{#method-flattenMatrix}{\code{pgu.corrValidator$flattenMatrix()}}
-\item \href{#method-validate}{\code{pgu.corrValidator$validate()}}
-\item \href{#method-summary}{\code{pgu.corrValidator$summary()}}
+\item \href{#method-fit}{\code{pgu.corrValidator$fit()}}
 \item \href{#method-correlationScatterPlot}{\code{pgu.corrValidator$correlationScatterPlot()}}
 \item \href{#method-correlationBarPlot}{\code{pgu.corrValidator$correlationBarPlot()}}
 \item \href{#method-correlationBoxPlot}{\code{pgu.corrValidator$correlationBoxPlot()}}
@@ -138,6 +113,21 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Clears the heap and
+indicates if instance of \code{pgu.corrValidator} is removed from heap.
+
+
+Summary of the correlation deviation distribution.
+
+
+Creates a square matrix which dimension corresponds to the length
+of the instance variable featureNames. The matrix entries are set to a distinct \code{value}.
+
+
+Flattens the results transforms them into a dataframe
+and stores it into the instance variable corr_df.
+
+
 Creates and returns a new \code{pgu.corrValidator} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$new(org_df = "tbl_df", imp_df = "tbl_df")}\if{html}{\out{</div>}}
@@ -165,17 +155,6 @@ obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
 }
 \if{html}{\out{</div>}}
 
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clears the heap and
-indicates if instance of \code{pgu.corrValidator} is removed from heap.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$finalize()}\if{html}{\out{</div>}}
 }
 
 }
@@ -220,62 +199,12 @@ Resets the object \code{pgu.corrValidator} based on the instance variable featur
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-resetMatrix"></a>}}
-\if{latex}{\out{\hypertarget{method-resetMatrix}{}}}
-\subsection{Method \code{resetMatrix()}}{
-Creates a square matrix which dimension corresponds to the length
-of the instance variable featureNames. The matrix entries are set to a distinct \code{value}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$resetMatrix(value = "numeric")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{value}}{The value the matrix entries are set to.
-(numeric)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A square matrix.
-(matrix)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{matrix <- pgu.corrValidator$resetMatrix(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-flattenMatrix"></a>}}
-\if{latex}{\out{\hypertarget{method-flattenMatrix}{}}}
-\subsection{Method \code{flattenMatrix()}}{
-Flattens the results transforms them into a dataframe
-and stores it into the instance variable corr_df.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$flattenMatrix()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidatior$flattenMatrix()
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-validate"></a>}}
-\if{latex}{\out{\hypertarget{method-validate}{}}}
-\subsection{Method \code{validate()}}{
+\if{html}{\out{<a id="method-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-fit}{}}}
+\subsection{Method \code{fit()}}{
 Runs the corraltion analysis.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$validate(org_df = "tbl_df", imp_df = "tbl_df")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$fit(org_df = "tbl_df", imp_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -289,36 +218,6 @@ Runs the corraltion analysis.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidator$validate(org_df, imp_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-summary"></a>}}
-\if{latex}{\out{\hypertarget{method-summary}{}}}
-\subsection{Method \code{summary()}}{
-Summary of the correlation deviation distribution.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$summary()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-A dataframe comprising the summary of the correlation deviation distribution.
-(tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{df <- pgu.corrValidator$summary()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-correlationScatterPlot"></a>}}

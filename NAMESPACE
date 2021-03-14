@@ -2,6 +2,7 @@
 
 export(IMPgui)
 export(dLogLikelihood)
+export(importDataSet)
 export(normalDistribution)
 export(pgu.corrValidator)
 export(pgu.correlator)
@@ -61,3 +62,5 @@ import(stats)
 import(tidyverse)
 import(tools)
 import(writexl)
+importFrom(tools,file_ext)
+importFrom(tools,file_path_sans_ext)
