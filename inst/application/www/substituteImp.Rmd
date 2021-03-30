@@ -1,0 +1,60 @@
+---
+title: "Substitute Imputation Sites"
+output: html_document
+---
+
+# Help
+Substitutes the native or in previously generated imputation points in the data set with the help of classical statistics or predictions from multivariate machine learning models.
+
+### Feature
+Selects a feature for univariate graphical analysis.
+
+### Mutation Method
+Sets the model for substitution imputation sites.
+
+### Number on Neighbors
+Sets the number of neighbors to be analyzed by the knn-model based substitution method.
+
+### Fraction of Predictors
+Sets the number of predictors given to the mice package.
+
+### Outflux Threshold
+Sets a threshold value for the outflow variable used in the mice package. According to Stef van Buuren's [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/), the outflux of a feature quantifies how well its observed data connect to the missing data on other variables.
+
+### Imputation Seed
+Sets the seed for the random number generator in order to guarantee reproducible substitution results. 
+
+### Iterations
+Sets the number of times the substitution analysis is run. From all possible results, the best seed is kept.
+
+### Substitute
+Performs the substitution of imputation sites based on the selected model.
+
+### Reset
+Resets the graphical user interface to the parameters of the last model used for imputation site substitution.
+
+## Analysis
+
+### Imputation Site Heatmap
+Overview graph of the frequency of imputation sites in the dataset. Left: Fraction of imputation sites per feature. Right: Heatmap listing recurring patterns in the occurrence of imputation sites in the instances. (The analysis is performed using the VIM package.)
+
+### Flux Plot
+Influx vs. Outflux plot. The influx of a variable quantifies how well its missing data connect to the observed data on other variables. The outflux of a variable quantifies how well its observed data connect to the missing data on other variables. See Stef van Buuren's [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/) for detailed information. (The plot is created using the mice package.)
+
+### Feature Plot
+A univariate graphical analysis of the selected feature. The analysis requires the selection of a numerical feature. A boxplot is shown with the individual values superimposed as a point cloud. Imputation sites are color coded. The corresponding distribution of values is shown as a bar chart.
+
+### Feature Data
+Table that provides detailed univariate information on the imputation site values of the selected feature.
+
+### Imputation Site Statistics
+A table summarizing the results of the imputation site distribution. For each feature, the absolute number of imputation sites is displayed. In addition, the number of trusted instances is listed, as well as the fraction of imputation sites. 
+
+### Imputation Site Distribution
+Tabular information about recurring patterns in the occurrence of imputation sites in the instances.
+
+### Imputation Site Detail
+Tabular information of all instances containing imputation sites.
+
+### Imputation Site Data
+The transformed and normalized data set after substitution of imputation sites.

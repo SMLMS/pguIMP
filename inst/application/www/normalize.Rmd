@@ -1,0 +1,40 @@
+---
+title: "Normalize Data"
+output: html_document
+---
+
+# Help
+Normalizes the values of the transformed data to a user-defined range of values.
+
+## Menu
+
+### Feature
+Selects a feature. Shows a graphical analysis of the results of the normalization process.
+
+### Normalization Type
+Selects a method for normalization.
+
+### Normalize
+Performs the normalization process
+
+### Reset
+Resets the graphical user interface to the parameters used within the last normalization performed.
+
+## Analysis
+
+
+### Feature Plot
+A univariate graphical analysis of the selected feature. The analysis requires the selection of a numerical feature. A boxplot is shown with the individual values superimposed as a point cloud. The corresponding distribution of values is shown as a bar chart.
+
+### Feature Statistics
+A table that provides statistical information on the normalized feature. Included are the minimum value (Min.), the first quantile (1st Qu.), the media, the mean value, the third quantile (3rd Qu.), the maximum value (Max.), the number of missing values (NA's).
+
+
+### Model Parameters
+A table containing the normalization parameters. Included are the feature maximum (max), the feature mean value (mean), the feature minimum (min) and the standard deviation of the features instance values (sigma).
+
+### Normalized data statistics
+A table that provides statistical information on the normalized data set. Included are the minimum value (Min.), the first quantile (1st Qu.), the media, the mean value, the third quartile (3rd Qu.), the maximum value (Max.), the number of missing values (NA's).
+
+### Normalized data
+The normalized data set.

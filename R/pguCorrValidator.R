@@ -290,7 +290,7 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                      p <- self$corr_df %>%
                                        dplyr::select(c("cor_delta")) %>%
                                        ggplot2::ggplot(mapping = ggplot2::aes_string(x = "cor_delta"), na.rm=TRUE) +
-                                       ggplot2::geom_bar(stat = "bin") +
+                                       ggplot2::geom_bar(stat = "bin", bins = 30) +
                                        ggplot2::ylab("counts") +
                                        ggplot2::xlab("value") +
                                        ggplot2::theme_linedraw() +
@@ -337,10 +337,15 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #'  show()
                                    correlationCompoundPlot = function(){
                                        p1 <- self$correlationBoxPlot()
-                                       limits <- ggplot2::layer_scales(p1)$y$range$range
                                        p2 <- self$correlationBarPlot() +
-                                         ggplot2::scale_x_continuous(position = "top", limits=limits) +
+                                         ggplot2::scale_x_continuous(position = "top") +
                                          ggplot2::coord_flip()
+                                       limits <- ggplot2::layer_scales(p2)$x$range$range
+                                       p1 <- p1 +
+                                         ggplot2::scale_y_continuous(limits = limits)
+
+
+
                                        p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)),
                                                                     top = textGrob(label = "Distribution of r(imp) - r(org)"))
                                      return(p)

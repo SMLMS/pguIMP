@@ -1,0 +1,36 @@
+---
+title: "Upload LOQs"
+output: html_document
+---
+
+# Help
+Import a dataset that contains information about the LOQs of the respective features of the dataset. The dataset has the following format: (table)
+An example of a LOQ dataset can be downloaded here: (link)
+
+## Menu
+
+### Select file
+Opens a graphical user interface in which the data set to be imported can be selected.
+
+### Select sheet
+Defines the data sheet of an .xlsx file in which the record to be loaded is located.
+
+### Separator
+Defines the separator of columns in .txt files.
+
+### Skip rows
+Number of lines that should not be included in the import.
+
+### Column names
+Defines whether the first row in the dataset contains the feature names.
+
+### Na character
+Defines the entry for missing values.
+
+### Reset
+Resets the graphical user interface to the currently selected settings.
+
+## Analysis
+
+### LOQ values
+A table containing the loaded LLOQ and ULOQ values of each feature.

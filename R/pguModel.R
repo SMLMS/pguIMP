@@ -568,13 +568,15 @@ pgu.model <- R6::R6Class("pgu.model",
                                    xLimits <- ggplot2::layer_scales(p1)$x$range$range
                                    p2 <- model$plotResiduals() +
                                      ggplot2::scale_x_continuous(position = "bottom", limits=xLimits)
-                                   yLimits <- ggplot2::layer_scales(p2)$y$range$range
                                    p3 <- model$plotResidualDist() +
-                                     ggplot2::coord_flip() +
-                                     ggplot2::scale_x_continuous(position = "bottom", limits=yLimits)
+                                     ggplot2::coord_flip()
+                                   yLimits <- ggplot2::layer_scales(p3)$x$range$range
+                                   p2 <- p2 +
+                                     ggplot2::scale_y_continuous(limits=yLimits)
 
                                    p4 <- model$normalQQPlot()
-                                   p <- gridExtra::grid.arrange(p1,p2,p3,p4, layout_matrix = rbind(c(1,1,4),c(2,2,3)))
+                                   p <- gridExtra::grid.arrange(p1,p2,p3,p4, layout_matrix = rbind(c(1,1,4),c(2,2,3))) %>%
+                                     suppressMessages()
                                    return(p)
                                  }#function
                                )#public

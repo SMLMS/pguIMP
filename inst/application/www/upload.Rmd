@@ -1,0 +1,41 @@
+---
+title: "Upload"
+output:
+  html_document:
+---
+# Help
+Manages the upload of the dataset. The data needs to be of type .csv, .txt, .xlsx. A test data set can be obtained via (Link) 
+
+## Upload Menu
+
+### Select file
+Opens a graphical user interface in which the data set to be imported can be selected.
+
+### Select sheet
+Defines the data sheet of an .xlsx file in which the record to be loaded is located.
+
+### Separator
+Defines the separator of columns in .txt files.
+
+### Skip rows
+Number of lines that should not be included in the import.
+
+### Column names
+Defines whether the first row in the dataset contains the feature names.
+
+### Na character
+Defines the entry for missing values.
+
+### Reset
+Resets the graphical user interface to the currently selected settings.
+
+## Upload Analysis Results
+
+### Data types
+Lists the variable names and the data types identified in each case.
+
+### Data summary
+A table that provides statistical information on numerical features. Included are the minimum value (Min.), the first quantile (1st Qu.), the media, the mean value, the third quartile (3rd Qu.), the maximum value (Max.), the number of missing values (NA's).
+
+### Missings summary
+A table describing the distribution of missing values in the data set.

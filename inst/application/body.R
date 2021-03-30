@@ -2,6 +2,7 @@
 #'
 #' @import shiny
 #' @import shinydashboard
+#' @import shinyWidgets
 #' @import shinyjs
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
@@ -30,7 +31,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             accept = c(".csv", ".txt", ".xls", ".xlsx"),
             width = "100%"
           ),
-          shiny::hr(),
           shiny::numericInput(
             inputId = "ni.importSheetIndex",
             label = shiny::h5("Select sheet"),
@@ -39,7 +39,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             step = 1,
             width = "100%"
           ),
-          shiny::hr(),
           shiny::selectInput(
             inputId = "si.importSeparator",
             label = shiny::h5("Separator"),
@@ -47,7 +46,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = ",",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::numericInput(
             inputId = "ni.importSkip",
             label = shiny::h5("Skip rows"),
@@ -56,7 +54,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             step = 1,
             width = "100%"
           ),
-          shiny::hr(),
           shiny::selectInput(
             inputId = "si.importColnames",
             label = shiny::h5("Column names"),
@@ -64,7 +61,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = "TRUE",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::selectInput(
             inputId = "si.importNaChar",
             label = shiny::h5("Na character"),
@@ -72,7 +68,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
             selected = "na",
             width = "100%"
           ),
-          shiny::hr(),
           shiny::actionButton("ab.importReset",
                               label = h5("Reset"),
                               width = "100%"
@@ -80,6 +75,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.uploadHelp"),
           shiny::h3("Data types"),
           DT::dataTableOutput(
             outputId = "tbl.importDataTypes",
@@ -196,21 +192,19 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
   ),
 
   shinydashboard::tabItem(
-    tabName = "tab_define_loq",
+    tabName = "tab_upload_loq",
     shiny::fluidPage(
       width = 12,
-      title = "Define LOQs",
+      title = "Upload LOQs",
       shiny::column(
         width = menueColumnWidth,
-        shiny::h1("LOQ"),
-        shiny::hr(),
+        shiny::h1("Import LOQs"),
         shiny::fileInput(
           inputId = "fi.LoqImport",
-          label = h5(" Select file "),
+          label = h5("Select file"),
           accept = c(".csv", ".txt", ".xls", ".xlsx"),
           width = "100%"
         ),
-        shiny::hr(),
         shiny::numericInput(
           inputId = "ni.LoqSheetIndex",
           label = shiny::h5("Select sheet"),
@@ -219,7 +213,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           step = 1,
           width = "100%"
         ),
-        shiny::hr(),
         shiny::selectInput(
           inputId = "si.LoqSeparator",
           label = shiny::h5("Separator"),
@@ -227,7 +220,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           selected = ",",
           width = "100%"
         ),
-        shiny::hr(),
         shiny::numericInput(
           inputId = "ni.LoqSkip",
           label = shiny::h5("Skip rows"),
@@ -236,7 +228,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           step = 1,
           width = "100%"
         ),
-        shiny::hr(),
         shiny::selectInput(
           inputId = "si.LoqColnames",
           label = shiny::h5("Column names"),
@@ -244,7 +235,6 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           selected = "TRUE",
           width = "100%"
         ),
-        shiny::hr(),
         shiny::selectInput(
           inputId = "si.LoqNaChar",
           label = shiny::h5("Na character"),
@@ -252,7 +242,57 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           selected = "na",
           width = "100%"
         ),
-        shiny::hr(),
+        shiny::actionButton(
+          inputId = "ab.LoqUploadReset",
+          label = "Reset",
+          width = "100%"
+        )
+      ),
+      shiny::column(
+        width = dataColumnWidth,
+        shiny::h3("LOQ values"),
+        DT::dataTableOutput("tbl.loqUploadValues")
+      )
+    )
+  ),
+
+  shinydashboard::tabItem(
+    tabName = "tab_define_loq",
+    shiny::fluidPage(
+      width = 12,
+      title = "Define LOQs",
+      shiny::column(
+        width = menueColumnWidth,
+        shiny::h1("Define LOQs"),
+        shiny::selectInput(
+          inputId = "si.LoqDefineFeature",
+          label = shiny::h5("Feature"),
+          choices = list(),
+          selected = 1,
+          width = "100%"
+        ),
+        shiny::numericInput(
+          inputId = "ni.LoqDefineLLOQ",
+          label = h5("LLOQ"),
+          value = NA,
+          width = "100%"
+        ),
+        shiny::numericInput(
+          inputId = "ni.LoqDefineULOQ",
+          label = h5("ULOQ"),
+          value = NA,
+          width = "100%"
+        ),
+        shiny::actionButton(
+          inputId = "ab.LoqDefineSet",
+          label = "set",
+          width = "100%"
+        ),
+        shiny::actionButton(
+          inputId = "ab.LoqDefineSetGlobally",
+          label = "set globally",
+          width = "100%"
+        ),
         shiny::actionButton(
           inputId = "ab.LoqDefineReset",
           label = "Reset",
@@ -275,7 +315,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Detect LOQ Outlier"),
+          shiny::h1("Detect LOQ Outliers"),
           shiny::selectInput(
             "si.loqDetectFeature",
             width = '100%',
@@ -293,12 +333,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.detectLoq",
-            label = "analyze LOQ",
+            label = "Detect Outliers",
             width = "100%"
           ),
           shiny::actionButton(
             inputId = "ab.resetDetectLoq",
-            label = "reset",
+            label = "Reset",
             width = "100%"
           )
         ),
@@ -307,7 +347,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::h3("Define LOQ"),
           DT::dataTableOutput("tbl.loqDefine", width = "100%"),
           shiny::br(),
-          shiny::h3("LOQ Distribution"),
+          shiny::h3("LOQ Outliers Distribution"),
           shiny::plotOutput("plt.loqDetectStatistics"),
           shiny::br(),
           shiny::fluidRow(
@@ -324,10 +364,10 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::br(),
           shiny::br(),
-          shiny::h3("LOQ Statistics"),
+          shiny::h3("LOQ Outliers Statistics"),
           DT::dataTableOutput("tbl.loqDetectStatistics"),
           shiny::br(),
-          shiny::h3("LOQ Outlier"),
+          shiny::h3("LOQ Outliers"),
           DT::dataTableOutput("tbl.loqDetectOutlier")
         )
       )
@@ -338,11 +378,11 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
     tabName = "tab_mutate_loq",
     shiny::fluidPage(
       width = 12,
-      title = "Mutate LOQ",
+      title = "Substitute LOQ Outliers",
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Mutate LOQ Outlier"),
+          shiny::h1("Substitute LOQ Outliers"),
           shiny::selectInput(
             "si.loqMutateFeature",
             width = '100%',
@@ -367,18 +407,18 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.mutateLoq",
-            label = "mutate LOQ",
+            label = "Substitute Outliers",
             width = "100%"
           ),
           shiny::actionButton(
             inputId = "ab.resetMutateLoq",
-            label = "reset",
+            label = "Reset",
             width = "100%"
           )
         ),
         shiny::column(
           width = dataColumnWidth,
-          shiny::h3("LOQ Distribution"),
+          shiny::h3("LOQ Outliers Distribution"),
           shiny::plotOutput("plt.loqMutateStatistics"),
           shiny::br(),
           shiny::fluidRow(
@@ -395,92 +435,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::br(),
           shiny::br(),
-          shiny::h3("LOQ Data"),
+          shiny::h3("Substituted LOQ Outliers Data"),
           DT::dataTableOutput("tbl.loqMutateData")
         )
       )
     )
   ),
-
-  # shinydashboard::tabItem(
-  #   tabName = "tab_detect_trafo",
-  #   shiny::fluidPage(
-  #     width = 12,
-  #     title = "Parameter Wizard",
-  #     shiny::fluidRow(
-  #       shiny::column(
-  #         width = menueColumnWidth,
-  #         shiny::h1("Detect Model Parameter"),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::checkboxInput(
-  #           "cb.wizardLog",
-  #           width = "100%",
-  #           label = h5("Log"),
-  #           value = TRUE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardRoot",
-  #           width = "100%",
-  #           label = h5("Root"),
-  #           value = TRUE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardArcsine",
-  #           width = "100%",
-  #           label = h5("arcsine"),
-  #           value = TRUE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardInverse",
-  #           width = "100%",
-  #           label = h5("inverse"),
-  #           value = TRUE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardTLOP",
-  #           width = "100%",
-  #           label = h5("tuckeyLOP"),
-  #           value = FALSE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardBoxCox",
-  #           width = "100%",
-  #           label = h5("boxCox"),
-  #           value = FALSE
-  #         ),
-  #         shiny::checkboxInput(
-  #           "cb.wizardMirror",
-  #           width = "100%",
-  #           label = h5("mirror"),
-  #           value = FALSE
-  #         ),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::actionButton(
-  #           inputId = "ab.wizardOptimize",
-  #           label = "optimize",
-  #           width = "100%"
-  #         ),
-  #         shiny::br(),
-  #         shiny::br(),
-  #         shiny::actionButton(
-  #           inputId = "ab.wizardReset",
-  #           label = "reset",
-  #           width = "100%"
-  #         )
-  #       ),
-  #       shiny::column(
-  #         width = dataColumnWidth,
-  #         shiny::h3("Optimal Transformations"),
-  #         DT::dataTableOutput("tbl.trafoDetectTypes"),
-  #         shiny::br(),
-  #         shiny::h3("Optimized Transformation Parameters"),
-  #         DT::dataTableOutput("tbl.trafoDetectParameters")
-  #       )
-  #     )
-  #   )
-  # ),
 
   shinydashboard::tabItem(
     tabName = "tab_mutate_trafo",
@@ -521,23 +481,17 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::actionButton(
             inputId = "ab.trafoMutateSetGlobal",
-            label = "set globally",
+            label = "Initialize Analysis",
             width = "100%"
           ),
           shiny::actionButton(
             inputId = "ab.trafoMutateFeature",
-            label = "set feature",
-            width = "100%"
-          ),
-          shiny::hr(),
-          shiny::actionButton(
-            inputId = "ab.trafoMutateFit",
-            label = "optimize",
+            label = "Transform Feature",
             width = "100%"
           ),
           shiny::actionButton(
             inputId = "ab.trafoMutateReset",
-            label = "reset",
+            label = "Reset",
             width = "100%"
           )
         ),
@@ -610,12 +564,12 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.trafoNormMutate",
-            label = "mutate",
+            label = "Normalize",
             width = "100%"
           ),
           shiny::actionButton(
             inputId = "ab.trafoNormReset",
-            label = "reset",
+            label = "Reset",
             width = "100%"
           )
         ),
@@ -958,7 +912,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
     tabName = "tab_analysis_validation",
     shiny::fluidPage(
       width = 12,
-      title = "Validate Imputation Results",
+      title = "Validate Preprocessing",
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
@@ -973,7 +927,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.validation",
-            label = "calculate",
+            label = "Validate",
             width = "100%"
           )
         ),

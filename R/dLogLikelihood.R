@@ -29,7 +29,7 @@
 
 dLogLikelihood = function(x = "numeric", pars = c(mu=0.0, sigma=1.0)){
   mu <- pars[1]
-  sigma <- pars[2]
+  sigma <- abs(pars[2])
   y <- stats::dnorm(x,mu,sigma,log = TRUE)
   return(-sum(y))
 }

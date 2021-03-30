@@ -1,0 +1,30 @@
+---
+title: "Validate Preprocessing"
+output: html_document
+---
+
+# Help
+Uni- and bivariate analyses validating the results of the preprocessing procedure. 
+
+## Menu
+
+### Feature
+Selects a feature for univariate graphical analysis.
+
+### Validate
+Performs the validation analysis.
+
+## Analysis
+
+### Validation analysis results
+Graphical validation of substitution of imputation sites. Left: Pareto density function of   the selected feature's instance value distribution. Middle: Boxplot of   the selected feature's instance value distribution. Upper right: Cumulative density function of   the selected feature's instance value distribution. Lower Right: qq-plot of   the selected feature's instance value distribution. The original distribution and the distribution with substituted imputation sites are color coded.
+
+### Test results
+Univariate comparison of the distributions of the respective feature instances in the original condition and with substituted imputation sites. The distributions are compared using the Kolgomorov-Smirnov test and Wilcoxon's rank test.
+
+### Central moments
+Table showing the central moments of the instance value distribution of each feature for either the original data or the date with substituted imputation sites. The deviation table shows the absolute deviation of the central moments of both data sets.
+
+### Correlation Validation Analysis
+Bivariate cross-wise correlation analysis between the individual features of a data set.
+The plot shows the correlation R-values between the individual features. Plotted are the R-values of the dataset with substituted imputation sites against those of the original dataset. The box plot below shows the distribution of the difference between the r-Values obtained from both data sets. Next to the Boxplot the statistics of the distribution shown in the box plot are listed. The data underlying the correlation validation analysis is shown in the Correlation Validation Data table.

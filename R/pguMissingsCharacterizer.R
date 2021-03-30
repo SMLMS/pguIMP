@@ -223,10 +223,8 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                                    plot.background = ggplot2::element_rect(fill = "transparent", color = NA), # bg of the plot
                                                    legend.background = ggplot2::element_rect(fill = "transparent"),
                                                    legend.key = ggplot2::element_rect(fill = "transparent"),
-                                                   axis.text.x = element_text(angle = 45, hjust = 1)
+                                                   axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
                                                  )
-
-
                                                return(p)
                                              }
                                            }#function

@@ -95,6 +95,8 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-predict}{\code{pgu.limitsOfQuantification$predict()}}
 \item \href{#method-attribute_lloq}{\code{pgu.limitsOfQuantification$attribute_lloq()}}
 \item \href{#method-attribute_uloq}{\code{pgu.limitsOfQuantification$attribute_uloq()}}
+\item \href{#method-set_attribute_lloq}{\code{pgu.limitsOfQuantification$set_attribute_lloq()}}
+\item \href{#method-set_attribute_uloq}{\code{pgu.limitsOfQuantification$set_attribute_uloq()}}
 \item \href{#method-attribute_outliers}{\code{pgu.limitsOfQuantification$attribute_outliers()}}
 \item \href{#method-plot_loq_distribution}{\code{pgu.limitsOfQuantification$plot_loq_distribution()}}
 \item \href{#method-attribute_bar_plot}{\code{pgu.limitsOfQuantification$attribute_bar_plot()}}
@@ -293,6 +295,54 @@ The attribute's uloq
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_attribute_lloq"></a>}}
+\if{latex}{\out{\hypertarget{method-set_attribute_lloq}{}}}
+\subsection{Method \code{set_attribute_lloq()}}{
+sets the attribute's specific lloq to value.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.limitsOfQuantification$set_attribute_lloq(
+  attribute = "character",
+  value = NA
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribute}}{The attribute to be updated
+(character)}
+
+\item{\code{value}}{The value parsed to the attributes lloq
+(numeric)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_attribute_uloq"></a>}}
+\if{latex}{\out{\hypertarget{method-set_attribute_uloq}{}}}
+\subsection{Method \code{set_attribute_uloq()}}{
+sets the attribute's specific uloq to value.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.limitsOfQuantification$set_attribute_uloq(
+  attribute = "character",
+  value = NA
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{attribute}}{The attribute to be updated
+(character)}
+
+\item{\code{value}}{The value parsed to the attributes lloq
+(numeric)}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-attribute_outliers"></a>}}

@@ -94,7 +94,7 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' and returns the result in form of a data frame.
                           reduce_statistics = function()
                           {
-                            if ("Mean" %in% self$statistics)
+                            if ("Mean" %in% colnames(self$statistics))
                             {
                               private$.reducedStatistics <- self$statistics %>%
                                 dplyr::select(c("Value", "Mean"))
@@ -111,7 +111,7 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' and returns the result in form of a data frame.
                           detect_missings = function()
                           {
-                            if("NA's" %in% self$statistics)
+                            if("NA's" %in% colnames(self$statistics))
                             {
                               len <- nrow(self$rawData)
                               private$.missingsStatistics <- self$statistics %>%

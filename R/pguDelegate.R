@@ -1027,7 +1027,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             }, #function
 
                             ########################
-                            # LOQ Define functions #
+                            # LOQ Upload functions #
                             ########################
                             #' @description
                             #' Initializes the LOQ object after filtering.
@@ -1043,7 +1043,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               {
                                 self$filteredData$numericalAttributeNames %>%
                                   private$.loq$reset()
-                                self$update_loq_define_gui(input, output, session)
+                                self$update_loq_upload_gui(input, output, session)
                                 private$.status$update(processName = "loqImported", value = TRUE)
                               }
                             },
@@ -1056,11 +1056,11 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            update_loq_define_gui = function(input, output, session)
+                            update_loq_upload_gui = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataFiltered"))
                               {
-                                output$tbl.loqDefineValues  <- DT::renderDataTable({
+                                output$tbl.loqUploadValues  <- DT::renderDataTable({
                                   self$loq$loq %>%
                                     DT::datatable(
                                       extensions = "Buttons",
@@ -1131,8 +1131,180 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               {
                                 private$.loq$reset(attribute_names = self$filteredData$numericalAttributeNames,
                                                    data_df = pguIMP::importDataSet(obj = self$loqFileName))
-                                self$update_loq_define_gui(input, output, session)
+                                self$update_loq_upload_gui(input, output, session)
                                 private$.status$update(processName = "loqImported", value = TRUE)
+                              }
+                            },
+
+                            ########################
+                            # LOQ Define functions #
+                            ########################
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_gui = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                self$update_loq_define_feature(input, output, session)
+                                self$update_loq_define_lloq(input, output, session)
+                                self$update_loq_define_uloq(input, output, session)
+                                self$update_loq_define_table(input, output, session)
+                              }
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_feature = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                shiny::updateSelectInput(session,
+                                                         inputId = "si.LoqDefineFeature",
+                                                         choices = self$loq$loq$attribute,
+                                                         selected = self$loq$loq$attribute[1])
+                              }
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_lloq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                shiny::updateNumericInput(session,
+                                                          inputId = "ni.LoqDefineLLOQ",
+                                                          value = self$loq$attribute_lloq(attribute = input$si.LoqDefineFeature))
+                              }
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_uloq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                shiny::updateNumericInput(session,
+                                                          inputId = "ni.LoqDefineULOQ",
+                                                          value = self$loq$attribute_uloq(attribute = input$si.LoqDefineFeature))
+                              }
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_table = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                output$tbl.loqDefineValues  <- DT::renderDataTable({
+                                  self$loq$loq %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '75vh',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict("LOQ_values") %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                })
+                              }#if
+                              else{
+                                output$tbl.loqDefineValues <- DT::renderDataTable(NULL)
+                              }#else
+                            },
+
+                            #' @description
+                            #' Updates the gui.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_loq_define_menu = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                self$update_loq_define_lloq(input, output, session)
+                                self$update_loq_define_uloq(input, output, session)
+                              }
+                            },
+
+                            #' @description
+                            #' Updates loq class.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            set_loq_define_values = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                private$.loq$set_attribute_lloq(attribute = input$si.LoqDefineFeature,
+                                                                value = input$ni.LoqDefineLLOQ)
+                                private$.loq$set_attribute_uloq(attribute = input$si.LoqDefineFeature,
+                                                                value = input$ni.LoqDefineULOQ)
+                              }
+                            },
+
+                            #' @description
+                            #' Updates loq class.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            set_loq_define_values_globally = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "dataFiltered"))
+                              {
+                                for(attribute in self$loq$loq$attribute)
+                                {
+                                  private$.loq$set_attribute_lloq(attribute = attribute,
+                                                                  value = input$ni.LoqDefineLLOQ)
+                                  private$.loq$set_attribute_uloq(attribute = attribute,
+                                                                  value = input$ni.LoqDefineULOQ)
+
+                                }
                               }
                             },
 
@@ -1213,6 +1385,27 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                                          choices = self$loq$naHandlingAlphabet,
                                                          selected = self$loq$naHandlingAgent)
                               }
+                            }, #function
+
+                            #' @description
+                            #' Runs the outlier detection routine of the instance variable outliers.
+                            #' Updates the instance class status.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            init_detect_loq = function(input, output, session){
+                              if(private$.status$query(processName = "loqImported")){
+                                private$.loq$setNaHandlingAgent <- self$loq$naHandlingAlphabet[1]
+                                self$filteredData$numerical_data() %>%
+                                  private$.loq$fit()
+                                private$.status$update(processName = "loqDetected", value = TRUE)
+                              }#if
+                              else{
+                                shiny::showNotification(paste("No filtered data set. Please filter data set first."),type = "error", duration = 10)
+                              }#else
                             }, #function
 
                             #' @description
@@ -1608,6 +1801,35 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
+                            init_mutate_loq = function(input, output, session)
+                            {
+                              if(private$.status$query(processName = "loqDetected"))
+                              {
+                                private$.loq$setLloqSubstituteAgent <- self$loq$lloqSubstituteAlphabet[1]
+                                private$.loq$setUloqSubstituteAgent <- self$loq$uloqSubstituteAlphabet[1]
+
+                                private$.loqMutatedData$setRawData <- self$filteredData$numerical_data() %>%
+                                  self$loq$predict() %>%
+                                  tibble::add_column(self$filteredData$categorical_data()) %>%
+                                  dplyr::select(dplyr::all_of(self$filteredData$attributeNames))
+                                private$.loqMutatedData$fit()
+                                private$.status$update(processName = "loqMutated", value = TRUE)
+                              }#if
+                              else{
+                                shiny::showNotification(paste("No loq outliers detected. Please screen for loq outliers first."),type = "error", duration = 10)
+                              }#else
+                            }, #function
+
+                            #' @description
+                            #' Calls the mutation routine of the instance variable loq on the instance variable filteredData.
+                            #' The reult is stored in the instance variable loqMutatedData
+                            #' Updates the instance class status.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
                             #' @examples
                             #' x$mutateLoq(input, output, session)
                             mutate_loq = function(input, output, session)
@@ -1847,6 +2069,48 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                                 output$plt.loqMutateFeature <- shiny::renderPlot(NULL, bg="transparent")
                               }#else
                             }, #function
+
+                            #' @description
+                            #' Updates the numeric loq mutate feature table.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            init_loq_mutate_attribute_tbl = function(input, output, session){
+                              if(private$.status$query(processName = "loqMutated"))
+                              {
+                                suffix <- sprintf("%s_outliers_mutated", self$loq$loq$attribute[1])
+                                data_df <- self$loq$attribute_outliers(attribute = self$loq$loq$attribute[1])
+                                idx <- dplyr::pull(data_df, instance)
+
+                                data_df <- data_df %>%
+                                  dplyr::mutate(mutated = dplyr::pull(self$loqMutatedData$rawData, self$loq$loq$attribute[1])[idx])
+
+                                output$tbl.loqMutateFeature <- DT::renderDataTable(
+                                  data_df %>%
+                                    format.data.frame(scientific = FALSE, digits = 3) %>%
+                                    DT::datatable(
+                                      extensions = "Buttons",
+                                      options = list(
+                                        scrollX = TRUE,
+                                        scrollY = '350px',
+                                        paging = FALSE,
+                                        dom = "Blfrtip",
+                                        buttons = list(list(
+                                          extend = 'csv',
+                                          filename = self$fileName$predict(suffix) %>%
+                                            tools::file_path_sans_ext(),
+                                          text = "Download"
+                                        ))#buttons
+                                      )#options
+                                    )#DT::datatable
+                                )#output
+                              }else{
+                                output$tbl.loqMutateFeature <- DT::renderDataTable(NULL)
+                              }
+                            },
 
                             #' @description
                             #' Updates the numeric loq mutate feature table.

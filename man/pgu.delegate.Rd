@@ -2212,11 +2212,20 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-update_exploration_abscissa_table}{\code{pgu.delegate$update_exploration_abscissa_table()}}
 \item \href{#method-update_exploration_ordinate_table}{\code{pgu.delegate$update_exploration_ordinate_table()}}
 \item \href{#method-reset_loq_values}{\code{pgu.delegate$reset_loq_values()}}
-\item \href{#method-update_loq_define_gui}{\code{pgu.delegate$update_loq_define_gui()}}
+\item \href{#method-update_loq_upload_gui}{\code{pgu.delegate$update_loq_upload_gui()}}
 \item \href{#method-query_loq}{\code{pgu.delegate$query_loq()}}
 \item \href{#method-import_loq}{\code{pgu.delegate$import_loq()}}
+\item \href{#method-update_loq_define_gui}{\code{pgu.delegate$update_loq_define_gui()}}
+\item \href{#method-update_loq_define_feature}{\code{pgu.delegate$update_loq_define_feature()}}
+\item \href{#method-update_loq_define_lloq}{\code{pgu.delegate$update_loq_define_lloq()}}
+\item \href{#method-update_loq_define_uloq}{\code{pgu.delegate$update_loq_define_uloq()}}
+\item \href{#method-update_loq_define_table}{\code{pgu.delegate$update_loq_define_table()}}
+\item \href{#method-update_loq_define_menu}{\code{pgu.delegate$update_loq_define_menu()}}
+\item \href{#method-set_loq_define_values}{\code{pgu.delegate$set_loq_define_values()}}
+\item \href{#method-set_loq_define_values_globally}{\code{pgu.delegate$set_loq_define_values_globally()}}
 \item \href{#method-update_loq_detect_gui}{\code{pgu.delegate$update_loq_detect_gui()}}
 \item \href{#method-update_loq_na_handling}{\code{pgu.delegate$update_loq_na_handling()}}
+\item \href{#method-init_detect_loq}{\code{pgu.delegate$init_detect_loq()}}
 \item \href{#method-detect_loq}{\code{pgu.delegate$detect_loq()}}
 \item \href{#method-update_loq_detect_statistics_tbl}{\code{pgu.delegate$update_loq_detect_statistics_tbl()}}
 \item \href{#method-update_loq_detect_outlier_tbl}{\code{pgu.delegate$update_loq_detect_outlier_tbl()}}
@@ -2226,10 +2235,12 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-update_loq_mutate_gui}{\code{pgu.delegate$update_loq_mutate_gui()}}
 \item \href{#method-update_lloq_substitute}{\code{pgu.delegate$update_lloq_substitute()}}
 \item \href{#method-update_uloq_substitute}{\code{pgu.delegate$update_uloq_substitute()}}
+\item \href{#method-init_mutate_loq}{\code{pgu.delegate$init_mutate_loq()}}
 \item \href{#method-mutate_loq}{\code{pgu.delegate$mutate_loq()}}
 \item \href{#method-update_loq_mutate_data_tbl}{\code{pgu.delegate$update_loq_mutate_data_tbl()}}
 \item \href{#method-update_loq_mutate_statistics_graphic}{\code{pgu.delegate$update_loq_mutate_statistics_graphic()}}
 \item \href{#method-update_loq_mutate_attribute_graphic}{\code{pgu.delegate$update_loq_mutate_attribute_graphic()}}
+\item \href{#method-init_loq_mutate_attribute_tbl}{\code{pgu.delegate$init_loq_mutate_attribute_tbl()}}
 \item \href{#method-update_loq_mutate_attribute_tbl}{\code{pgu.delegate$update_loq_mutate_attribute_tbl()}}
 \item \href{#method-optimizeTrafoParameter}{\code{pgu.delegate$optimizeTrafoParameter()}}
 \item \href{#method-updateDetectedTrafoTypes}{\code{pgu.delegate$updateDetectedTrafoTypes()}}
@@ -3018,12 +3029,12 @@ Initializes the LOQ object after filtering.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update_loq_define_gui"></a>}}
-\if{latex}{\out{\hypertarget{method-update_loq_define_gui}{}}}
-\subsection{Method \code{update_loq_define_gui()}}{
+\if{html}{\out{<a id="method-update_loq_upload_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_upload_gui}{}}}
+\subsection{Method \code{update_loq_upload_gui()}}{
 Updates the gui.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_gui(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_upload_gui(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3066,6 +3077,174 @@ Manages the loq data upload to the R server.
 Imports the loq data upload to the R server.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$import_loq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_gui"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_gui}{}}}
+\subsection{Method \code{update_loq_define_gui()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_gui(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_feature"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_feature}{}}}
+\subsection{Method \code{update_loq_define_feature()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_feature(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_lloq"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_lloq}{}}}
+\subsection{Method \code{update_loq_define_lloq()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_lloq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_uloq"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_uloq}{}}}
+\subsection{Method \code{update_loq_define_uloq()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_uloq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_table"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_table}{}}}
+\subsection{Method \code{update_loq_define_table()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_table(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_loq_define_menu"></a>}}
+\if{latex}{\out{\hypertarget{method-update_loq_define_menu}{}}}
+\subsection{Method \code{update_loq_define_menu()}}{
+Updates the gui.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_loq_define_menu(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_loq_define_values"></a>}}
+\if{latex}{\out{\hypertarget{method-set_loq_define_values}{}}}
+\subsection{Method \code{set_loq_define_values()}}{
+Updates loq class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$set_loq_define_values(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_loq_define_values_globally"></a>}}
+\if{latex}{\out{\hypertarget{method-set_loq_define_values_globally}{}}}
+\subsection{Method \code{set_loq_define_values_globally()}}{
+Updates loq class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$set_loq_define_values_globally(input, output, session)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -3166,6 +3345,28 @@ corresponding to the respective user defined parameter.
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-init_detect_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-init_detect_loq}{}}}
+\subsection{Method \code{init_detect_loq()}}{
+Runs the outlier detection routine of the instance variable outliers.
+Updates the instance class status.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$init_detect_loq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detect_loq"></a>}}
@@ -3484,6 +3685,29 @@ Updates the si.uloqSubstitute shiny widget.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-init_mutate_loq"></a>}}
+\if{latex}{\out{\hypertarget{method-init_mutate_loq}{}}}
+\subsection{Method \code{init_mutate_loq()}}{
+Calls the mutation routine of the instance variable loq on the instance variable filteredData.
+The reult is stored in the instance variable loqMutatedData
+Updates the instance class status.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$init_mutate_loq(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_loq"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate_loq}{}}}
 \subsection{Method \code{mutate_loq()}}{
@@ -3682,6 +3906,27 @@ Updates the loq mutate feature graphic.
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-init_loq_mutate_attribute_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-init_loq_mutate_attribute_tbl}{}}}
+\subsection{Method \code{init_loq_mutate_attribute_tbl()}}{
+Updates the numeric loq mutate feature table.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$init_loq_mutate_attribute_tbl(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_mutate_attribute_tbl"></a>}}

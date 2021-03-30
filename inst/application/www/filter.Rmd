@@ -1,0 +1,29 @@
+---
+title: "Filter"
+output: html_document
+---
+
+# Help
+Filters the data set based on the user's instructions. The filter settings are made directly in the "Select Filter" table.
+
+## Menu
+
+### Filter
+Selects all actively selected features and filters the columns according to the limits defined in the "Select Filter" table.
+
+### Filter inverse
+Selects all features that are not actively selected and filters the columns according to the limits defined in the "Select Filter" table.
+
+### Reset
+Resets the filter settings.
+
+## Analysis
+
+#### Select Filter
+In this interactive table, individual features can be actively selected by the user clicking on the respective columns. Furthermore, instances can be filtered by column values. For this purpose, individual limit values can be defined in the header for each feature. To finally apply the defined filter parameters to the dataset, the "Filter" or "Filter inverse" button must be pressed.
+
+#### Statistics
+A table that provides statistical information on numerical features. Included are the minimum value (Min.), the first quantile (1st Qu.), the media, the mean value, the third quartile (3rd Qu.), the maximum value (Max.), the number of missing values (NA's).
+
+### Missings
+A table describing the distribution of missing values in the data set.

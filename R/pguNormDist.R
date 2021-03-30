@@ -390,7 +390,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' x$createHistogram()
                                  createHistogram = function(){
                                    rawHist <- ggplot2::ggplot_build(ggplot2::ggplot(data = self$rawData, mapping = ggplot2::aes_string(x="x"))+
-                                                             ggplot2::geom_histogram(ggplot2::aes(y=..density..))
+                                                             ggplot2::geom_histogram(ggplot2::aes(y=..density..), bins = 30)
                                    )
                                    d <- tibble::tibble(x = rawHist$data[[1]]$x,
                                                        y_data =rawHist$data[[1]]$y)
@@ -443,7 +443,8 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @examples
                                  #' x$test.kolmogorow()
                                  test.kolmogorow = function(){
-                                   test <- stats::ks.test(self$rawData$x, "pnorm", mean=self$expMu, sd=self$expSigma)
+                                   # test <- stats::ks.test(self$rawData$x, "pnorm", mean=self$expMu, sd=self$expSigma)
+                                   test <- nortest::lillie.test(self$rawData$x)
                                    private$.d.kolmogorow <- test$statistic
                                    private$.p.kolmogorow <- test$p.value
                                  }, #function
@@ -579,7 +580,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  plotResiduals = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="x", y="res"))+
                                      ggplot2::geom_point()+
-                                     ggplot2::geom_smooth() +
+                                     ggplot2::geom_smooth(method = 'loess') +
                                      ggplot2::ggtitle("Residuals") +
                                      ggplot2::ylab("residuals") +
                                      ggplot2::xlab("value") +
@@ -604,7 +605,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="res"))+
-                                     ggplot2::geom_histogram() +
+                                     ggplot2::geom_histogram(bins = 30) +
                                      ggplot2::ggtitle("Residual distribution") +
                                      ggplot2::ylab("counts") +
                                      ggplot2::xlab("residual value") +
@@ -629,7 +630,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotRawResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="residuals"))+
-                                     ggplot2::geom_histogram() +
+                                     ggplot2::geom_histogram(bins = 30) +
                                      ggplot2::ggtitle("Residual distribution") +
                                      ggplot2::ylab("counts") +
                                      ggplot2::xlab("residual value") +
@@ -654,7 +655,7 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #'  show()
                                  plotRawDataDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="x"))+
-                                     ggplot2::geom_histogram() +
+                                     ggplot2::geom_histogram(bins = 30) +
                                      ggplot2::ggtitle("Feature distribution") +
                                      ggplot2::theme_linedraw() +
                                      ggplot2::ylab("counts") +

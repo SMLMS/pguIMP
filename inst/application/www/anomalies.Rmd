@@ -1,0 +1,50 @@
+---
+title: "Detect Anomalies"
+output: html_document
+---
+
+# Help
+Identification of data anomalies by univariate analysis of the values of each feature using models of classical statistics as well as unsupervised machine learning.
+
+## Menu
+
+### Feature
+Selects a feature. Shows a graphical analysis of the results of the normalization process.
+
+### Detection Method
+Selects a model for anomaly detection.
+
+### Grubbs parameters
+Defines the alpha value for Grubbs tests for outliers.
+
+### DBSCAN parameters
+Defines the epsilon distance and the minimal number of samples per cluster (minSamples) for the training of a DBSCAN noise detection model.
+
+### SVM parameters
+Selects the gamma and nu parameters for the training of a one class SVM anomaly detection model.
+
+### KNN parameters
+Selects the number of neighbors (k) and the cutoff for training a KNN based anomaly detection model.
+
+### Anomalies seed
+Selects the seed used in model training to ensure reproducibility.
+
+### Detect anomalies
+Performs the anomaly detection procedure based on the selected model.
+
+### Reset
+Resets the graphical user interface to the parameters of the last model used for anomaly detection.
+
+## Analysis
+
+### Outlier Distribution
+Graphical representation of the occurrence of anomalies per feature. Values above the the feature mean are defined as high or low and are color coded.
+
+### Feature Plot
+A univariate graphical analysis of the selected feature. The analysis requires the selection of a numerical feature. A boxplot is shown with the individual values superimposed as a point cloud. Values identified as anomalies are color coded. The corresponding distribution of values is shown as a bar chart.
+
+### Feature Data
+Table that provides detailed univariate information on the values of the selected feature that are identified as anomalies.
+
+### Outlier Statistics
+A table summarizing the results of the anomaly detection procedure. For each feature, the absolute number of anomalies is displayed. In addition, the number of instances is listed, as well as the number of anomalies above and below feature mean and the respective fraction of detected anomalies. 

@@ -1,0 +1,56 @@
+---
+title: "Transform Data"
+output: html_document
+---
+
+# Help
+Performs a mathematical transformation of the data and checks if the transformed data deviate in their distribution from a normal distribution.
+
+## Menu
+
+### Feature
+Selects a feature. Displays the results of the graphical univariate normality tests for the selected feature. Allows to customize the transformation parameters for the selected feature.
+
+### Transformation Type
+Selects a mathematical function for transformation.
+
+### Lambda LOP
+The actual lambda value for power transformation Tukey's LOP.
+
+### Mirror
+Checkbox indicating whether the data should be mirrored at the origin before transformation.
+
+### Initialize Analysis
+Optimizes the lambda LOP value and initially performs the analysis with the selected "Transformation Type". If TukeyLOP has been selected for the "Transformation Type", the transformation is performed with the optimal lambda values.
+
+### Transform Feature
+Performs the transformation of the selected feature using the user defined "Transformation Type" and "lambda LOP" value if "TukeyLOP is selected.
+
+### Reset
+Resets the graphical user interface to the parameters used within the last transformation performed.
+
+## Analysis
+
+### Feature Transformation
+Univariate graphical analysis of the distribution of transformed feature values. Upper left: Histogram of the feature values. The blue line shows a model in form of a normal distribution whose parameters have been optimized to best describe the distribution. Lower left: Point plot of the residuals between the model and the transformed values from the upper left graph. Upper right: QQ-plot between the transformed data and the optimized model. Lower right: Histogram of the residuals between the model and the transformed data.
+
+### Model Parameter
+Model parameter of the normal distribution that best describes the transformed feature.
+
+### Model Quality
+Result of the statistical tests of the transformed feature for normality. The Shapiro-Wilk test, the Lilliefors (Kolmogorov-Smirnov) test, and the Anderson-Darling test are performed. 
+
+### Global Transformation Parameter
+A tabular overview of the parameters on which the data transformation is based.
+
+### Global Model Parameter
+The model parameters of the Optimized Normal Distributions.
+
+### Global Model Quality
+Estimates of the agreement between the optimized models and the values of the transformed data set.
+
+### Global Test Result
+The results of the tests for normality for the complete data set.
+
+### Transformed Data
+The transformed data set.

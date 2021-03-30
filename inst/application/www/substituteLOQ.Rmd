@@ -1,0 +1,38 @@
+---
+title: "Substitute LOQ Outliers"
+output: html_document
+---
+
+# Help
+Substitutes values which have been defined in the "Detect LOQ Outliers" as "<LLOQ" or ">ULOQ" with user-defined values.
+
+## Menu
+
+### Feature
+Choose a feature to display the univariate graphical analysis of its outlier substitution.
+
+### LLOQ Substitute
+Defines if and if yes, by which value "<LLOQ" outliers should be substituted. In case of substitution by NA's, these instances will be further handled later in the "Substitute Imputation Sites" routine.
+
+### ULOQ Substitute
+Defines if and if yes, by which value ">ULOQ" outliers should be substituted. In case of substitution by NA's, these instances will be further handled later in the "Substitute Imputation Sites" routine.
+
+### Substitute
+Runs the substitution procedure
+
+### Reset
+Resets the graphical user interface to the parameters used during the last analysis.
+
+## Analysis
+
+### LOQ Outliers Distribution
+Graphical representation of the occurrence of LOQ outliers per feature. Values above the ULOQ and below the LLOQ are color coded.
+
+### Feature Plot
+A univariate graphical analysis of the selected feature. The analysis requires the selection of a numerical feature. A boxplot is shown with the individual values superimposed as a point cloud. Substituted values above the ULOQ and below the LLOQ are color coded. The corresponding distribution of values is shown as a bar chart.
+
+### Feature Data
+Table that provides detailed univariate information on the substituted values of the selected feature that are outside the intervals defined by LLOQ and ULOQ. Here the "value" column indicates the original value and "mutated" indicates the substituted value of the instance.
+
+### LOQ Substituted Data
+Displays the dataset after the "Substitute LOQ Outliers " routine.

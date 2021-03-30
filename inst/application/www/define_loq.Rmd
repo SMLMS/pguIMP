@@ -1,0 +1,32 @@
+---
+title: "Define LOQs"
+output: html_document
+---
+
+# Help
+Sets the LOQs to user defined values.
+
+## Menu
+
+### Feature
+Select a feature whose LOQs are to be adjusted.
+
+### LLOQ
+Displays the current LLOQ of the selected feature. The value can be adjusted and applied via the "set" button for the respective feature and via the "set globally" button for all features.
+
+### ULOQ
+Displays the current ULOQ of the selected feature. The value can be adjusted and applied via the "set" button for the respective feature and via the "set globally" button for all features.
+
+### Set
+Accepts the current "LLOQ" and "ULOQ" values for the selected "Feature". 
+
+### Set globally
+Accepts the current "LLOQ" and "ULOQ" values for all features.
+
+### Reset
+Resets the LOQs.
+
+## Analysis
+
+### LOQ values
+A table containing the loaded LLOQ and ULOQ values of each feature.

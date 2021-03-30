@@ -1,0 +1,33 @@
+---
+title: "Detect Missings"
+output: html_document
+---
+
+# Help
+Checks whether the data set contains missing values. These may either have been initially present in the data set or may have been artificially created by the LOQ analysis.
+
+## Menu
+
+### Detect Missings
+Performs the detection analysis.
+
+## Analysis
+
+#### Missing Statistics
+Overview graph of the frequency of missing values in the dataset. Left: Fraction of missing values per feature. Right: Heatmap listing recurring patterns in the occurrence of missing values in the instances. (The analysis is performed using the VIM package.)
+
+### Missings Statistics
+Tabular information about the proportion of missing values per characteristic.
+
+### Missings Distribution
+Tabular information about recurring patterns in the occurrence of missing values in the instances.
+
+### Missings Vs. Existings
+Feature wise comparison of the value distributions of instances that are missing in a reference feature against the value distribution that are present in the reference feature features. The comparison is performed for each feature / reference feature pair. For overview purposes, this graph is generated only up to a number of 8 features in the dataset.
+
+### Missings Statistics Mean
+Tabular information about the Missings Vs. Existings analysis. 
+Instances of the explanatory feature are clustered into two groups depending on whether they are present or absent in the dependent feature. The analysis result is given by the mean value (followed by the standard deviation) of the value distribution of the respective group of the explanatory feature. Die Beiden Verteilungen werden. Continuous data are compared with a Kruskal Wallis test. Discrete data are compared with a chi-squared test. (The analysis is based on the missings_compare function of the finalfit Package.)
+
+### Missings Details
+A table containing all instances of the dataset with missing values.

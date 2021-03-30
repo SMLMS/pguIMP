@@ -1,0 +1,38 @@
+---
+title: "Detect LOQ Outliers"
+output: html_document
+---
+
+# Help
+Detects values that are outside the interval defined by the LOQs. The occurrence of these outliers is analyzed graphically.
+
+## Menu
+
+### Feature
+Selects a feature for univariate graphical analysis.
+
+### NA Handling
+Defines the handling of missing values. They can either be kept or considered as values that are above the ULOQ or below the LLOQ. This has an influence on the substitution of these values. Thus, values above the ULOQ or below the LLOQ are substituted in the "Substitute LOQ Outliers" menu, while missing values are substituted in the "Substitute Imputation Sites" menu.
+
+### Detect Outliers
+Performs the analysis.
+
+### Reset
+Resets the graphical user interface to the parameters used during the last analysis.
+
+## Analysis
+
+### LOQ Outliers Distribution
+Graphical representation of the occurrence of LOQ outliers per feature. Values above the ULOQ and below the LLOQ are color coded.
+
+### Feature Plot
+A univariate graphical analysis of the selected feature. The analysis requires the selection of a numerical feature. A boxplot is shown with the individual values superimposed as a point cloud. Values above the ULOQ and below the LLOQ are color coded. The corresponding distribution of values is shown as a bar chart.
+
+### Feature Data
+Table that provides detailed univariate information on the values of the selected feature that are outside the intervals defined by LLOQ and ULOQ.
+
+### LOQ Statistics
+A table summarizing the results of the LOQ analysis. For each feature, the defined "LLOQ" and "ULOQ" are displayed. In addition, the number of instances is listed, as well as the number of instances above the ULOQ and below the LLOQ and the respective fraction of detected outliers. 
+
+#### LOQ Outlier
+Detailed table listing and characterizing value above the respective ULOQ or below the respective LLOQ.

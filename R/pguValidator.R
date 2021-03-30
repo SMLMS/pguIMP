@@ -184,7 +184,9 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                                             y = imp,
                                                             alternative = "two.sided",
                                                             simulate.p.value=TRUE,
-                                                            B=2000)
+                                                            B=2000,
+                                                            exact = FALSE)
+
                                  tibble::tibble(feature = c(feature),
                                                 d.Kolmogorow = c(test_obj$statistic),
                                                 p.Kolmogorow = c(test_obj$p.value)) %>%
@@ -448,8 +450,8 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                    ggplot2::ggplot(mapping=ggplot2::aes_string(x=feature,y="value"), na.rm=TRUE)+
                                    ggplot2::geom_boxplot(na.rm=TRUE, outlier.shape = NA)+
                                    ggplot2::geom_jitter(ggplot2::aes(color = type), na.rm=TRUE) +
-                                   ggplot2::geom_hline(yintercept=lloq, linetype="dashed") +
-                                   ggplot2::geom_hline(yintercept=uloq, linetype="dashed") +
+                                   ggplot2::geom_hline(yintercept=lloq, linetype="dashed", na.rm = TRUE) +
+                                   ggplot2::geom_hline(yintercept=uloq, linetype="dashed", na.rm = TRUE) +
                                    ggplot2::theme_linedraw() +
                                    ggplot2::theme(
                                      panel.background = ggplot2::element_rect(fill = "transparent"), # bg of the panel
@@ -488,85 +490,90 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @examples
                                #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
                                featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", lloq = "numeric", uloq = "numeric", impIdx_df = "tbl_df", feature = "character"){
-                                 title_str <- sprintf("Imputation quality analysis of %s", feature)
+                                 p <- NULL
+                                 if((feature %in% colnames(org_df)) & (feature %in% colnames(imp_df)))
+                                 {
 
-                                 org <- org_df %>%
-                                   dplyr::select(dplyr::all_of(feature)) %>%
-                                   # tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   as.numeric()
-                                 imp <- imp_df %>%
-                                   dplyr::select(dplyr::all_of(feature)) %>%
-                                   # tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   as.numeric()
+                                   title_str <- sprintf("Imputation quality analysis of %s", feature)
 
-                                 org_hist <- org %>%
-                                   purrr::discard(is.na) %>%
-                                   hist(plot = FALSE)
-                                 org_min <- org_hist$breaks[1]
-                                 org_max <- org_hist$breaks[length(org_hist$breaks)]
+                                   org <- org_df %>%
+                                     dplyr::select(dplyr::all_of(feature)) %>%
+                                     # tidyr::drop_na() %>%
+                                     dplyr::pull(feature) %>%
+                                     as.numeric()
+                                   imp <- imp_df %>%
+                                     dplyr::select(dplyr::all_of(feature)) %>%
+                                     # tidyr::drop_na() %>%
+                                     dplyr::pull(feature) %>%
+                                     as.numeric()
 
-                                 imp_hist <- imp %>%
-                                   purrr::discard(is.na) %>%
-                                   hist(plot = FALSE)
-                                 imp_min <- imp_hist$breaks[1]
-                                 imp_max <- imp_hist$breaks[length(imp_hist$breaks)]
+                                   org_hist <- org %>%
+                                     purrr::discard(is.na) %>%
+                                     hist(plot = FALSE)
+                                   org_min <- org_hist$breaks[1]
+                                   org_max <- org_hist$breaks[length(org_hist$breaks)]
 
-                                 data_min <- min(c(org_min, imp_min))
-                                 data_max <- max(c(org_max, imp_max))
+                                   imp_hist <- imp %>%
+                                     purrr::discard(is.na) %>%
+                                     hist(plot = FALSE)
+                                   imp_min <- imp_hist$breaks[1]
+                                   imp_max <- imp_hist$breaks[length(imp_hist$breaks)]
 
-                                 org_pdf_obj <- density(org, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
-                                 imp_pdf_obj <- density(imp, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
+                                   data_min <- min(c(org_min, imp_min))
+                                   data_max <- max(c(org_max, imp_max))
 
-                                 dist_df <- tibble::tibble(x = org_pdf_obj$x,
-                                                           org_pdf = org_pdf_obj$y,
-                                                           imp_pdf = imp_pdf_obj$y)
-                                 dist_df <- dist_df %>%
-                                   dplyr::mutate(org_cdf = cumsum(org_pdf)*abs(x[2] - x[1])) %>%
-                                   dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
+                                   org_pdf_obj <- density(org, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
+                                   imp_pdf_obj <- density(imp, bw = "nrd0", adjust = 1, kernel = "gaussian",from = data_min, to = data_max, n=512, na.rm=TRUE)
 
-                                 pde_org <- org_df %>%
-                                   dplyr::select(dplyr::all_of(feature)) %>%
-                                   tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   DataVisualizations::ParetoDensityEstimation()
+                                   dist_df <- tibble::tibble(x = org_pdf_obj$x,
+                                                             org_pdf = org_pdf_obj$y,
+                                                             imp_pdf = imp_pdf_obj$y)
+                                   dist_df <- dist_df %>%
+                                     dplyr::mutate(org_cdf = cumsum(org_pdf)*abs(x[2] - x[1])) %>%
+                                     dplyr::mutate(imp_cdf = cumsum(imp_pdf)*abs(x[2] - x[1]))
 
-                                 pde_imp <- imp_df %>%
-                                   dplyr::select(dplyr::all_of(feature)) %>%
-                                   tidyr::drop_na() %>%
-                                   dplyr::pull(feature) %>%
-                                   DataVisualizations::ParetoDensityEstimation()
+                                   pde_org <- org_df %>%
+                                     dplyr::select(dplyr::all_of(feature)) %>%
+                                     tidyr::drop_na() %>%
+                                     dplyr::pull(feature) %>%
+                                     DataVisualizations::ParetoDensityEstimation()
 
-                                 pde_df <- tibble::tibble(value = c(pde_org$kernels, pde_imp$kernels),
-                                                          pde = c(pde_org$paretoDensity, pde_imp$paretoDensity),
-                                                          data = c(rep("original", times = length(pde_org$kernels)), rep("imputed", times = length(pde_imp$kernels))))
+                                   pde_imp <- imp_df %>%
+                                     dplyr::select(dplyr::all_of(feature)) %>%
+                                     tidyr::drop_na() %>%
+                                     dplyr::pull(feature) %>%
+                                     DataVisualizations::ParetoDensityEstimation()
+
+                                   pde_df <- tibble::tibble(value = c(pde_org$kernels, pde_imp$kernels),
+                                                            pde = c(pde_org$paretoDensity, pde_imp$paretoDensity),
+                                                            data = c(rep("original", times = length(pde_org$kernels)), rep("imputed", times = length(pde_imp$kernels))))
 
 
-                                 box_df <- tibble::tibble(original = org,
-                                                          imputed = imp)
+                                   box_df <- tibble::tibble(original = org,
+                                                            imputed = imp)
 
-                                 impIdx <- impIdx_df %>%
-                                   dplyr::filter(feature == !!feature) %>%
-                                   dplyr::pull(idx) %>%
-                                   as.integer()
+                                   impIdx <- impIdx_df %>%
+                                     dplyr::filter(feature == !!feature) %>%
+                                     dplyr::pull(idx) %>%
+                                     as.integer()
 
-                                 type_vec  <- rep("original", nrow(box_df))
-                                 type_vec[impIdx] <- "imputed"
+                                   type_vec  <- rep("original", nrow(box_df))
+                                   type_vec[impIdx] <- "imputed"
 
-                                 box_df <- box_df %>%
-                                   dplyr::mutate(type = type_vec)
+                                   box_df <- box_df %>%
+                                     dplyr::mutate(type = type_vec)
 
-                                 p1 <- self$featurePdf(pde_df) +
-                                   ggplot2::theme(legend.position = "none")
-                                 p2 <- self$featureBoxPlot(data_df = box_df, lloq = lloq, uloq = uloq, feature = feature) +
-                                   ggplot2::theme(legend.position = "none")
-                                 p3 <- self$featureCdf(dist_df) +
-                                   ggplot2::theme(legend.position = "top")
-                                 p4 <- self$featureVs(org, imp)
-                                 p <- gridExtra::grid.arrange(p1,p2,p3, p4,
-                                                              layout_matrix = rbind(c(1,1,2,3),c(1,1,2,4)),
-                                                              top = grid::textGrob(title_str, gp = grid::gpar(fontsize=20)))
+                                   p1 <- self$featurePdf(pde_df) +
+                                     ggplot2::theme(legend.position = "none")
+                                   p2 <- self$featureBoxPlot(data_df = box_df, lloq = lloq, uloq = uloq, feature = feature) +
+                                     ggplot2::theme(legend.position = "none")
+                                   p3 <- self$featureCdf(dist_df) +
+                                     ggplot2::theme(legend.position = "top")
+                                   p4 <- self$featureVs(org, imp)
+                                   p <- gridExtra::grid.arrange(p1,p2,p3, p4,
+                                                                layout_matrix = rbind(c(1,1,2,3),c(1,1,2,4)),
+                                                                top = grid::textGrob(title_str, gp = grid::gpar(fontsize=20)))
+                                 }
                                  return(p)
                                } #featurePlot
 

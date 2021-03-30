@@ -512,7 +512,7 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                   feature <- dplyr::sym(feature)
                                   p <- data_df %>%
                                     ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
-                                    ggplot2::geom_bar(stat = "bin") +
+                                    ggplot2::geom_bar(stat = "bin", bins=30) +
                                     ggplot2::ylab("counts") +
                                     ggplot2::xlab("value") +
                                     ggplot2::theme_linedraw() +
@@ -578,24 +578,17 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                                    legend.key = ggplot2::element_blank(),
                                                    legend.background = ggplot2::element_blank())
 
-                                  limits1 <- ggplot2::layer_scales(p1)$y$range$range
 
                                   p2 <- self$featureBarPlot(data_df, feature)
 
-                                  limits2 <- ggplot2::layer_scales(p2)$x$range$range
-
-                                  limits <- c(min(c(limits1[1], limits2[1])),
-                                              max(c(limits1[2], limits2[2]))
-                                  )
+                                  limits <- ggplot2::layer_scales(p2)$x$range$range
 
                                   p1 <- p1 +
                                     ggplot2::scale_y_continuous(limits=limits)
 
                                   p2 <- p2 +
-                                    ggplot2::scale_x_continuous(position = "top", limits=limits) +
+                                    ggplot2::scale_x_continuous(position = "top") +
                                     ggplot2::coord_flip()
-
-                                  # p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))
 
                                   p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1,2),c(1,1,2)),
                                                                top = textGrob(label = sprintf("Distribution of %s", feature)))

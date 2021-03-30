@@ -5,6 +5,8 @@
 #' @import shiny
 #' @import shinydashboard
 #' @import shinyjs
+#' @import shinyWidgets
+#'
 #'
 #' @include pguDelegate.R
 #'
@@ -36,6 +38,17 @@ server <- function(input, output, session) {
     delegate$update_import_gui(input, output, session)
   })
 
+  shiny::observeEvent(input$sb.importHelp, {
+
+    wd <- getwd()
+    tempReport <- file.path(wd, "help/Help_upload.html")
+    # shiny::includeHTML(tempReport)
+    # shiny::showModal(renderUI(shiny::HTML(readLines(tempReport))))
+    output$html.uploadHelp <- shiny::renderUI({
+      shiny::includeHTML(tempReport)
+    })
+  })
+
   shiny::observeEvent(input$ab.filterSet,{
     delegate$update_filter(input, output, session)
     delegate$filter_data(input, output, session)
@@ -43,7 +56,22 @@ server <- function(input, output, session) {
     delegate$update_filter_missings_tbl(input, output, session)
     delegate$update_exploration_gui(input, output, session)
     delegate$reset_loq_values(input, output, session)
+    delegate$init_detect_loq(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
     delegate$update_loq_detect_gui(input, output, session)
+    delegate$update_loq_detect_statistics_graphic(input, output, session)
+    delegate$update_loq_detect_attribute_graphic(input, output, session)
+    delegate$update_loq_detect_attribute_tbl(input, output, session)
+    delegate$update_loq_detect_statistics_tbl(input, output, session)
+    delegate$update_loq_detect_outlier_tbl(input, output, session)
+    delegate$init_mutate_loq(input, output, session)
+    delegate$update_loq_mutate_gui(input, output, session)
+    delegate$update_loq_mutate_statistics_graphic(input, output, session)
+    delegate$update_loq_mutate_attribute_graphic(input, output, session)
+    delegate$init_loq_mutate_attribute_tbl(input, output, session)
+    delegate$update_loq_mutate_data_tbl(input, output, session)
+    delegate$resetTrafoMutateGui(input, output, session)
     delegate$hide_outdated_results(input, output, session)
     analysisFinished(FALSE)
   })
@@ -55,6 +83,8 @@ server <- function(input, output, session) {
     delegate$update_filter_missings_tbl(input, output, session)
     delegate$update_exploration_gui(input, output, session)
     delegate$reset_loq_values(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
     delegate$update_loq_detect_gui(input, output, session)
     delegate$hide_outdated_results(input, output, session)
     analysisFinished(FALSE)
@@ -69,6 +99,8 @@ server <- function(input, output, session) {
     delegate$update_filter_missings_tbl(input, output, session)
     delegate$update_exploration_gui(input, output, session)
     delegate$reset_loq_values(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
     delegate$hide_outdated_results(input, output, session)
     analysisFinished(FALSE)
   })
@@ -90,19 +122,46 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$fi.LoqImport, {
     delegate$query_loq(input, output, session)
     delegate$import_loq(input, output, session)
-    delegate$update_loq_detect_gui(input, output, session)
-    delegate$update_loq_detect_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
+    delegate$hide_outdated_results(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$ab.LoqUploadReset, {
+    delegate$reset_loq_values(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
+    delegate$hide_outdated_results(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$si.LoqDefineFeature, {
+    delegate$update_loq_define_menu(input, output, session)
+  })
+
+  shiny::observeEvent(input$ab.LoqDefineSet, {
+    delegate$set_loq_define_values(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_table(input, output, session)
+    delegate$hide_outdated_results(input, output, session)
+    analysisFinished(FALSE)
+  })
+
+  shiny::observeEvent(input$ab.LoqDefineSetGlobally, {
+    delegate$set_loq_define_values_globally(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_table(input, output, session)
     delegate$hide_outdated_results(input, output, session)
     analysisFinished(FALSE)
   })
 
   shiny::observeEvent(input$ab.LoqDefineReset, {
     delegate$reset_loq_values(input, output, session)
-    delegate$update_loq_detect_gui(input, output, session)
+    delegate$update_loq_upload_gui(input, output, session)
+    delegate$update_loq_define_gui(input, output, session)
     delegate$hide_outdated_results(input, output, session)
     analysisFinished(FALSE)
   })
-
 
   shiny::observeEvent(input$ab.detectLoq, {
     delegate$detect_loq(input, output, session)
@@ -145,34 +204,23 @@ server <- function(input, output, session) {
     delegate$update_loq_mutate_gui(input, output, session)
   })
 
-  # shiny::observeEvent(input$ab.wizardOptimize, {
-  #   delegate$optimizeTrafoParameter(input, output, session)
-  #   delegate$updateDetectedTrafoTypes(input, output, session)
-  #   delegate$updateDetectedTrafoParameter(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
+  # shiny::observeEvent(input$ab.trafoMutateFit,{
+  #   delegate$trafoMutateFit(input, output, session)
+  #   delegate$updateTrafoMutateGui(input, output, session)
+  #   delegate$updateTrafoMutateFeatureGraphic(input, output, session)
+  #   delegate$updateTrafoMutateFeatureParameterTbl(input, output, session)
+  #   delegate$updateTrafoMutateFeatureQualityTbl(input, output, session)
+  #   delegate$updateTrafoMutateGlobalParameterTbl(input, output, session)
+  #   delegate$updateTrafoMutateGlobalModelTbl(input, output, session)
+  #   delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
+  #   delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
+  #   delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
+  #   delegate$hide_outdated_results(input, output, session)
   #   analysisFinished(FALSE)
   # })
-  #
-  # shiny::observeEvent(input$ab.wizardReset, {
-  #   delegate$updateTrafoDetectGui(input, output, session)
-  # })
-
-  shiny::observeEvent(input$ab.trafoMutateFit,{
-    delegate$trafoMutateFit(input, output, session)
-    delegate$updateTrafoMutateGui(input, output, session)
-    delegate$updateTrafoMutateFeatureGraphic(input, output, session)
-    delegate$updateTrafoMutateFeatureParameterTbl(input, output, session)
-    delegate$updateTrafoMutateFeatureQualityTbl(input, output, session)
-    delegate$updateTrafoMutateGlobalParameterTbl(input, output, session)
-    delegate$updateTrafoMutateGlobalModelTbl(input, output, session)
-    delegate$updateTrafoMutateGlobalQualityTbl(input, output, session)
-    delegate$updateTrafoMutateGlobalTestsTbl(input, output, session)
-    delegate$updateTrafoMutateGlobalDataTbl(input, output, session)
-    delegate$hide_outdated_results(input, output, session)
-    analysisFinished(FALSE)
-  })
 
   shiny::observeEvent(input$ab.trafoMutateSetGlobal, {
+    delegate$trafoMutateFit(input, output, session)
     delegate$trafoMutateGlobal(input, output, session)
     delegate$updateTrafoMutateGui(input, output, session)
     delegate$updateTrafoMutateFeatureGraphic(input, output, session)
@@ -310,40 +358,6 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$si.analysisValidationFeature, {
     delegate$updateAnalysisValidationGraphic(input, output, session)
   })
-
-  # shiny::observeEvent(input$ab.correlation, {
-  #   delegate$correlate(input, output, session)
-  #   delegate$updateCorrelationMatrixPPearsonTbl(input, output, session)
-  #   delegate$updateCorrelationMatrixRTbl(input, output, session)
-  #   delegate$updateCorrelationMatrixPKendallTbl(input, output, session)
-  #   delegate$updateCorrelationMatrixTauTbl(input, output, session)
-  #   delegate$updateCorrelationMatrixPSpearmanTbl(input, output, session)
-  #   delegate$updateCorrelationMatrixRhoTbl(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
-  # })
-  #
-  # shiny::observeEvent(input$ab.regression, {
-  #   delegate$regression(input, output, session)
-  #   delegate$updateRegressionGui(input, output, session)
-  #   delegate$updateRegressionGraphic(input, output, session)
-  #   delegate$updateRegressionModelTbl(input, output, session)
-  #   delegate$updateRegressionInterceptTbl(input, output, session)
-  #   delegate$updateRegressionPInterceptTbl(input, output, session)
-  #   delegate$updateRegressionSlopeTbl(input, output, session)
-  #   delegate$updateRegressionPSlopeTbl(input, output, session)
-  #   delegate$hideOutdatedResults(input, output, session)
-  # })
-  #
-  # shiny::observeEvent(input$si.regressionAbs, {
-  #   delegate$updateRegressionOrdinate(input, output, session)
-  #   delegate$updateRegressionGraphic(input, output, session)
-  #   delegate$updateRegressionModelTbl(input, output, session)
-  # })
-  #
-  # shiny::observeEvent(input$si.regressionOrd, {
-  #   delegate$updateRegressionGraphic(input, output, session)
-  #   delegate$updateRegressionModelTbl(input, output, session)
-  # })
 
   shiny::observe({
     if (analysisFinished()) {

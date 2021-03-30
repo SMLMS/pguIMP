@@ -1047,15 +1047,18 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                      progress$inc(0.5)
                                    }#if
-                                   if(ncol(data_df) < 2){
+                                   if(!ncol(data_df) > 2){
                                      e <- simpleError("The number of features needs to be larger than 2.")
                                      stop(e)
                                    }#if
-                                   if (ncol(data_df) < self$nNeighbors + 1){
-                                     self$setNNeighbors <- ncol(data_df) - 1
+                                   if (nrow(data_df) < self$nNeighbors + 1){
+                                     self$setNNeighbors <- nrow(data_df) - 1
                                      sprintf("\nWarning in pgu.imputation$imputeByKnn: nNeighbors set to: %i\n", self$nNeighbors) %>%
                                        cat()
                                    }#if
+                                   data_df %>%
+                                     as.data.frame() %>%
+                                     print()
                                    data_df %>%
                                      as.data.frame() %>%
                                      DMwR::knnImputation(k=self$nNeighbors,
@@ -1428,7 +1431,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    feature <- dplyr::sym(feature)
                                    p <- data_df %>%
                                      ggplot2::ggplot(mapping = ggplot2::aes_string(x=feature), na.rm=TRUE) +
-                                     ggplot2::geom_bar(stat = "bin") +
+                                     ggplot2::geom_bar(stat = "bin", bins = 30) +
                                      ggplot2::ylab("counts") +
                                      ggplot2::xlab("value") +
                                      ggplot2::theme_linedraw() +
@@ -1503,21 +1506,21 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                                     legend.key = ggplot2::element_blank(),
                                                     legend.background = ggplot2::element_blank())
 
-                                   limits1 <- ggplot2::layer_scales(p1)$y$range$range
+                                   # limits1 <- ggplot2::layer_scales(p1)$y$range$range
 
                                    p2 <- self$featureBarPlot(data_df, feature)
 
-                                   limits2 <- ggplot2::layer_scales(p2)$x$range$range
+                                   limits <- ggplot2::layer_scales(p2)$x$range$range
 
-                                   limits <- c(min(c(limits1[1], limits2[1])),
-                                               max(c(limits1[2], limits2[2]))
-                                   )
+                                   # limits <- c(min(c(limits1[1], limits2[1])),
+                                   #             max(c(limits1[2], limits2[2]))
+                                   # )
 
                                    p1 <- p1 +
                                      ggplot2::scale_y_continuous(limits=limits)
 
                                    p2 <- p2 +
-                                     ggplot2::scale_x_continuous(position = "top", limits=limits) +
+                                     ggplot2::scale_x_continuous(position = "top") +
                                      ggplot2::coord_flip()
 
                                    # p <- gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,2),c(1,2)))

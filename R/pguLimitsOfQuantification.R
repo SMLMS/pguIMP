@@ -242,7 +242,7 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                                 if(private$attributes_are_known(attributeNames))
                                                 {
                                                   private$.loqStatistics <- self$loq %>%
-                                                    dplyr::mutate(instances = c(rep(nrow(self$loq), length(attributeNames))),
+                                                    dplyr::mutate(instances = c(rep(nrow(data_df), length(attributeNames))),
                                                                   belowLloq = as.integer(c(rep(0, length(attributeNames)))),
                                                                   aboveUloq = as.integer(c(rep(0, length(attributeNames)))),
                                                                   loqOutliers = as.integer(c(rep(0, length(attributeNames)))),
@@ -435,7 +435,7 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                               private$.naHandlingAlphabet <- c("keep", "<LLOQ", ">ULOQ")
                                               self$setNaHandlingAgent <- self$naHandlingAlphabet[1]
                                               if (!is.character(attribute_names)){
-                                                attributes <- c("Sample Name")
+                                                attribute_names <- c("Sample Name")
                                               }
                                               self$reset(attribute_names)
                                             }, #pguIMP::pgu.limitsOfQuantification$initialize
@@ -552,6 +552,45 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                               return(limit)
                                             }, #function
 
+                                            #' @description
+                                            #' sets the attribute's specific lloq to value.
+                                            #' @param attribute
+                                            #' The attribute to be updated
+                                            #' (character)
+                                            #' @param value
+                                            #' The value parsed to the attributes lloq
+                                            #' (numeric)
+                                            set_attribute_lloq = function(attribute = "character", value = NA){
+                                              limit <- NA
+                                              if(is.numeric(value))
+                                              {
+                                                limit <- value
+                                              }
+                                              if(private$attributes_are_known(attributes = attribute)){
+                                                attributeIdx <- stringr::str_detect(self$loq$attribute, attribute)
+                                                private$.loq$LLOQ[attributeIdx] <- as.numeric(limit)
+                                              }# if
+                                            }, #function
+
+                                            #' @description
+                                            #' sets the attribute's specific uloq to value.
+                                            #' @param attribute
+                                            #' The attribute to be updated
+                                            #' (character)
+                                            #' @param value
+                                            #' The value parsed to the attributes lloq
+                                            #' (numeric)
+                                            set_attribute_uloq = function(attribute = "character", value = NA){
+                                              limit <- NA
+                                              if(is.numeric(value))
+                                              {
+                                                limit <- value
+                                              }
+                                              if(private$attributes_are_known(attributes = attribute)){
+                                                attributeIdx <- stringr::str_detect(self$loq$attribute, attribute)
+                                                private$.loq$ULOQ[attributeIdx] <- as.numeric(limit)
+                                              }# if
+                                            }, #function
 
                                             #' @description
                                             #' Returns the detected outliers of a given attribute.

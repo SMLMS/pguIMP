@@ -23,7 +23,17 @@ IMPgui <- function() {
   if (appDir == "") {
     stop("Could not find application. Try re-installing `pguIMP`.", call. = FALSE)
   }
+  vwr = shiny::dialogViewer('pguIMP', width = 1600, height = 1200)
   appDir %>%
   shiny::shinyAppDir() %>%
-    shiny::runApp(launch.browser = TRUE)
+    shiny::runGadget(viewer = vwr)
+    # shiny::runApp(
+    #   port = getOption("shiny.port"),
+    #   launch.browser = getOption("shiny.launch.browser", interactive()),
+    #   host = getOption("shiny.host", "127.0.0.1"),
+    #   workerId = "",
+    #   quiet = FALSE,
+    #   display.mode = c("auto", "normal", "showcase"),
+    #   test.mode = getOption("shiny.testmode", FALSE)
+    # )
 }
