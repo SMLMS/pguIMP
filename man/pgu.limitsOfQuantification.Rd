@@ -217,10 +217,18 @@ Feature names need to be 'attribute', 'LLOQ' and 'ULOQ'.
 \if{html}{\out{<a id="method-fit"></a>}}
 \if{latex}{\out{\hypertarget{method-fit}{}}}
 \subsection{Method \code{fit()}}{
+Analyses the data dets for instances outside of the LOQ defined value interval.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.limitsOfQuantification$fit(data_df = "tbl_df")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_df}}{Dataframe to be analyzed}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-predict"></a>}}

@@ -479,6 +479,10 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                             }, #pguIMP::pgu.limitsOfQuantification$reset
 
 
+                                            #' @description
+                                            #' Analyses the data dets for instances outside of the LOQ defined value interval.
+                                            #' @param data_df
+                                            #' Dataframe to be analyzed
                                             fit = function(data_df = "tbl_df")
                                             {
                                               # private$reset_outliers()

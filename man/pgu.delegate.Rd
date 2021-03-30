@@ -2332,6 +2332,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 \item \href{#method-reportFileName}{\code{pgu.delegate$reportFileName()}}
 \item \href{#method-writeReport}{\code{pgu.delegate$writeReport()}}
 \item \href{#method-hide_outdated_results}{\code{pgu.delegate$hide_outdated_results()}}
+\item \href{#method-update_help_html}{\code{pgu.delegate$update_help_html()}}
 \item \href{#method-clone}{\code{pgu.delegate$clone()}}
 }
 }
@@ -7652,7 +7653,7 @@ Exports the pguIMP analysis results
 \describe{
 \item{\code{input}}{Pointer to shiny input}
 
-\item{\code{fileName}}{export filename
+\item{\code{file}}{export filename
 (character)}
 }
 \if{html}{\out{</div>}}
@@ -7756,6 +7757,27 @@ Updates the gui if analysis parameters change.
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-update_help_html"></a>}}
+\if{latex}{\out{\hypertarget{method-update_help_html}{}}}
+\subsection{Method \code{update_help_html()}}{
+Updates the gui if analysis parameters change.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{pgu.delegate$update_help_html(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{Pointer to shiny input}
+
+\item{\code{output}}{Pointer to shiny output}
+
+\item{\code{session}}{Pointer to shiny session}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

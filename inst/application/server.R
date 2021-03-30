@@ -38,16 +38,7 @@ server <- function(input, output, session) {
     delegate$update_import_gui(input, output, session)
   })
 
-  shiny::observeEvent(input$sb.importHelp, {
 
-    wd <- getwd()
-    tempReport <- file.path(wd, "help/Help_upload.html")
-    # shiny::includeHTML(tempReport)
-    # shiny::showModal(renderUI(shiny::HTML(readLines(tempReport))))
-    output$html.uploadHelp <- shiny::renderUI({
-      shiny::includeHTML(tempReport)
-    })
-  })
 
   shiny::observeEvent(input$ab.filterSet,{
     delegate$update_filter(input, output, session)
@@ -402,6 +393,10 @@ server <- function(input, output, session) {
                                      )
                                  )
     )
+  })
+
+  shiny::observeEvent(input$switch.help, {
+    delegate$update_help_html(input, output, session)
   })
 }
 

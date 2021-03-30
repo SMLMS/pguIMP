@@ -6035,7 +6035,7 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 
                             #' @description
                             #' Exports the pguIMP analysis results
-                            #' @param fileName
+                            #' @param file
                             #' export filename
                             #' (character)
                             #' @param input
@@ -6044,7 +6044,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' x$exportData(input, file="result.xlsx")
                             exportData = function(input, file){
                               if(self$status$query(processName = "validated")){
-                                print(file)
                                 private$.exporter$setFileName <- file
                                 gui_parameter <- tibble::tibble(
                                   loq_na_handling = c(self$loq$naHandlingAgent),
@@ -6323,6 +6322,107 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                               #   output$tbl.regressionSlope <- DT::renderDataTable(NULL)
                               #   output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
                               # }#if
+                            }, #function
+
+                            #########################
+                            # update help interface #
+                            #########################
+                            #' @description
+                            #' Updates the gui if analysis parameters change.
+                            #' @param input
+                            #' Pointer to shiny input
+                            #' @param output
+                            #' Pointer to shiny output
+                            #' @param session
+                            #' Pointer to shiny session
+                            update_help_html = function(input, output, session)
+                            {
+                              if(input$switch.help)
+                              {
+                                wd <- getwd()
+                                help_folder <- file.path(wd, "www/_site")
+                                output$html.uploadHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("upload.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.filterHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("filter.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.exploreHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("explore.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.uploadLOQHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("upload_loq.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.defineLOQHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("define_loq.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.detectLOQHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("detect_loq.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.substituteLOQHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("substitute_loq.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.transformHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("transform.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.normalizeHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("normalize.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.missingsHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("missings.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.anomaliesHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("anomalies.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.substituteImpHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("substitute_imp.html") %>%
+                                    shiny::includeHTML()
+                                })
+                                output$html.validateHelp <- shiny::renderUI({
+                                  help_folder %>%
+                                    file.path("validate.html") %>%
+                                    shiny::includeHTML()
+                                })
+                              }
+                              else
+                              {
+                                output$html.uploadHelp <- shiny::renderUI({NULL})
+                                output$html.filterHelp <- shiny::renderUI({NULL})
+                                output$html.exploreHelp <- shiny::renderUI({NULL})
+                                output$html.uploadLOQHelp <- shiny::renderUI({NULL})
+                                output$html.defineLOQHelp <- shiny::renderUI({NULL})
+                                output$html.detectLOQHelp <- shiny::renderUI({NULL})
+                                output$html.substituteLOQHelp <- shiny::renderUI({NULL})
+                                output$html.transformHelp <- shiny::renderUI({NULL})
+                                output$html.normalizeHelp <- shiny::renderUI({NULL})
+                                output$html.missingsHelp <- shiny::renderUI({NULL})
+                                output$html.anomaliesHelp <- shiny::renderUI({NULL})
+                                output$html.substituteImpHelp <- shiny::renderUI({NULL})
+                                output$html.validateHelp <- shiny::renderUI({NULL})
+                              }
                             }#function
                           )#public
 )#class

@@ -106,7 +106,7 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' x <- pguIMP:pgu.filter$new(data_df = y)
                             initialize = function(data_df = "tbl_df")
                             {
-                              if(!tibble::is.tibble(data_df)){
+                              if(!tibble::is_tibble(data_df)){
                                 tibble::tibble(names <- "none",
                                                values <- c(NA)) %>%
                                   self$reset()

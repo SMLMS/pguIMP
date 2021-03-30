@@ -4,6 +4,7 @@
 #' @return shiny application object
 #'
 #' @import shiny
+#' @import shinyWidgets
 #'
 #' @include dLogLikelihood.R
 #' @include sLogLikelihood.R

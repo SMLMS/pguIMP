@@ -122,7 +122,7 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' Sets the instance variable rawData
                           #' (tibble::tibble)
                           setRawData = function(data_df = "tbl_df"){
-                            if(tibble::is.tibble(data_df))
+                            if(tibble::is_tibble(data_df))
                             {
                               private$.rawData <- data_df
                             }

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Transform Data</title>
+
+<script src="site_libs/header-attrs-2.4/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Transform Data</h1>
+
+</div>
+
+
+<div id="help" class="section level1">
+<h1>Help</h1>
+<p>Performs a mathematical transformation of the data and checks if the transformed data deviate in their distribution from a normal distribution.</p>
+<div id="menu" class="section level2">
+<h2>Menu</h2>
+<div id="feature" class="section level3">
+<h3>Feature</h3>
+<p>Selects a feature. Displays the results of the graphical univariate normality tests for the selected feature. Allows to customize the transformation parameters for the selected feature.</p>
+</div>
+<div id="transformation-type" class="section level3">
+<h3>Transformation Type</h3>
+<p>Selects a mathematical function for transformation.</p>
+</div>
+<div id="lambda-lop" class="section level3">
+<h3>Lambda LOP</h3>
+<p>The actual lambda value for power transformation Tukey’s LOP.</p>
+</div>
+<div id="mirror" class="section level3">
+<h3>Mirror</h3>
+<p>Checkbox indicating whether the data should be mirrored at the origin before transformation.</p>
+</div>
+<div id="initialize-analysis" class="section level3">
+<h3>Initialize Analysis</h3>
+<p>Optimizes the lambda LOP value and initially performs the analysis with the selected “Transformation Type”. If TukeyLOP has been selected for the “Transformation Type”, the transformation is performed with the optimal lambda values.</p>
+</div>
+<div id="transform-feature" class="section level3">
+<h3>Transform Feature</h3>
+<p>Performs the transformation of the selected feature using the user defined “Transformation Type” and “lambda LOP” value if "TukeyLOP is selected.</p>
+</div>
+<div id="reset" class="section level3">
+<h3>Reset</h3>
+<p>Resets the graphical user interface to the parameters used within the last transformation performed.</p>
+</div>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<div id="feature-transformation" class="section level3">
+<h3>Feature Transformation</h3>
+<p>Univariate graphical analysis of the distribution of transformed feature values. Upper left: Histogram of the feature values. The blue line shows a model in form of a normal distribution whose parameters have been optimized to best describe the distribution. Lower left: Point plot of the residuals between the model and the transformed values from the upper left graph. Upper right: QQ-plot between the transformed data and the optimized model. Lower right: Histogram of the residuals between the model and the transformed data.</p>
+</div>
+<div id="model-parameter" class="section level3">
+<h3>Model Parameter</h3>
+<p>Model parameter of the normal distribution that best describes the transformed feature.</p>
+</div>
+<div id="model-quality" class="section level3">
+<h3>Model Quality</h3>
+<p>Result of the statistical tests of the transformed feature for normality. The Shapiro-Wilk test, the Lilliefors (Kolmogorov-Smirnov) test, and the Anderson-Darling test are performed.</p>
+</div>
+<div id="global-transformation-parameter" class="section level3">
+<h3>Global Transformation Parameter</h3>
+<p>A tabular overview of the parameters on which the data transformation is based.</p>
+</div>
+<div id="global-model-parameter" class="section level3">
+<h3>Global Model Parameter</h3>
+<p>The model parameters of the Optimized Normal Distributions.</p>
+</div>
+<div id="global-model-quality" class="section level3">
+<h3>Global Model Quality</h3>
+<p>Estimates of the agreement between the optimized models and the values of the transformed data set.</p>
+</div>
+<div id="global-test-result" class="section level3">
+<h3>Global Test Result</h3>
+<p>The results of the tests for normality for the complete data set.</p>
+</div>
+<div id="transformed-data" class="section level3">
+<h3>Transformed Data</h3>
+<p>The transformed data set.</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

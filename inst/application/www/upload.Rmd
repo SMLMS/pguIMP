@@ -1,7 +1,6 @@
 ---
 title: "Upload"
-output:
-  html_document:
+output: html_document
 ---
 # Help
 Manages the upload of the dataset. The data needs to be of type .csv, .txt, .xlsx. A test data set can be obtained via (Link) 

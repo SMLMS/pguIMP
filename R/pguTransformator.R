@@ -63,7 +63,8 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                      data_df <- tibble::tibble(names <- "none",
                                                                values <- c(NA))
                                    }
-                                   private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox")
+                                   # private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox")
+                                   private$.trafoAlphabet <-c("none", "log2", "logNorm", "log10", "tukeyLOP", "boxCox")
                                    self$resetTrafoParameter(data_df)
                                  }, #function
 

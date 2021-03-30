@@ -123,6 +123,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.filterHelp"),
           shiny::h3("Select Filter"),
           DT::dataTableOutput("tbl.filterSelect", width = "100%"),
           shiny::fluidRow(
@@ -168,6 +169,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.exploreHelp"),
           shiny::h3("Feature Scatter Plot"),
           shiny::plotOutput("plt.exploreGraphic"),
           shiny::fluidRow(
@@ -250,6 +252,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       ),
       shiny::column(
         width = dataColumnWidth,
+        shiny::htmlOutput(outputId = "html.uploadLOQHelp"),
         shiny::h3("LOQ values"),
         DT::dataTableOutput("tbl.loqUploadValues")
       )
@@ -301,6 +304,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
       ),
       shiny::column(
         width = dataColumnWidth,
+        shiny::htmlOutput(outputId = "html.defineLOQHelp"),
         shiny::h3("LOQ values"),
         DT::dataTableOutput("tbl.loqDefineValues")
       )
@@ -344,6 +348,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.detectLOQHelp"),
           shiny::h3("Define LOQ"),
           DT::dataTableOutput("tbl.loqDefine", width = "100%"),
           shiny::br(),
@@ -418,6 +423,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.substituteLOQHelp"),
           shiny::h3("LOQ Outliers Distribution"),
           shiny::plotOutput("plt.loqMutateStatistics"),
           shiny::br(),
@@ -497,6 +503,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.transformHelp"),
           shiny::h3("Feature Transformation"),
           shiny::plotOutput("plt.trafoMutateFeature", height = "600"),
           shiny::br(),
@@ -575,6 +582,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.normalizeHelp"),
           shiny::fluidRow(
             shiny::column(
               width = 6,
@@ -620,6 +628,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.missingsHelp"),
           shiny::h3("Missings Statistics"),
           shiny::plotOutput("plt.imputeMissingsSummary"),
           shiny::br(),
@@ -761,6 +770,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.anomaliesHelp"),
           shiny::h3("Outlier Distribution"),
           shiny::plotOutput("plt.outliersImputeSummary"),
           shiny::hr(),
@@ -869,6 +879,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.substituteImpHelp"),
           shiny::h3("Imputation Site Heatmap"),
           shiny::plotOutput("plt.imputeMutateSummary"),
           shiny::hr(),
@@ -933,6 +944,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
         ),
         shiny::column(
           width = dataColumnWidth,
+          shiny::htmlOutput(outputId = "html.validateHelp"),
           shiny::h3("Validation analysis results"),
           shiny::plotOutput("plt.analysisValidationFeature"),
           shiny::hr(),
