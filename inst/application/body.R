@@ -801,11 +801,11 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
     tabName = "tab_mutate_impute",
     shiny::fluidPage(
       width = 12,
-      title = "Mutate Imputation Sites",
+      title = "Substitute Imputation Sites",
       shiny::fluidRow(
         shiny::column(
           width = menueColumnWidth,
-          shiny::h1("Mutate Imputation Sites"),
+          shiny::h1("Substitute Imputation Sites"),
           shiny::selectInput(
             "si.imputeMutateFeature",
             label = h5("Feature"),
@@ -815,7 +815,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           ),
           shiny::selectInput(
             "si.imputeMutateMethod",
-            label = h5("Mutation Method"),
+            label = h5("Substitution Method"),
             width = "100%",
             choices = list(),
             selected = 1
@@ -868,7 +868,7 @@ body <- shinydashboard::dashboardBody(shinydashboard::tabItems(
           shiny::hr(),
           shiny::actionButton(
             inputId = "ab.imputeMutateMutate",
-            label = "mutate imputation sites",
+            label = "Substitute imputation sites",
             width = "100%"
           ),
           shiny::actionButton(

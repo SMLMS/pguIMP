@@ -11,6 +11,6 @@
 # create the shiny application user interface header.
 
 header <- shinydashboard::dashboardHeader(
-  title = "PGU IMP",
-  shinydashboard::dropdownMenuOutput("helpMenu")
+  title = "PGU IMP"
+  # shinydashboard::dropdownMenuOutput("helpMenu")
 )
