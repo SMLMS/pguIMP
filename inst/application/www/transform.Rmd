@@ -3,7 +3,7 @@ title: "Transform Data"
 output: html_document
 ---
 
-# Help
+# Transform Data Help
 Performs a mathematical transformation of the data and checks if the transformed data deviate in their distribution from a normal distribution.
 
 ## Menu

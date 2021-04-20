@@ -3,7 +3,7 @@ title: "Detect LOQ Outliers"
 output: html_document
 ---
 
-# Help
+# Detect LOQ Outliers Help
 Detects values that are outside the interval defined by the LOQs. The occurrence of these outliers is analyzed graphically.
 
 ## Menu

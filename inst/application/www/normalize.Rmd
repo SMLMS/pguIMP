@@ -3,7 +3,7 @@ title: "Normalize Data"
 output: html_document
 ---
 
-# Help
+# Normalize Data Help
 Normalizes the values of the transformed data to a user-defined range of values.
 
 ## Menu

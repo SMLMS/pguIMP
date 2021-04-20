@@ -3,7 +3,7 @@ title: "Upload LOQs"
 output: html_document
 ---
 
-# Help
+# Upload LOQs Help
 Import a dataset that contains information about the LOQs of the respective features of the dataset. The dataset has the following format: (table)
 An example of a LOQ dataset can be downloaded here: (link)
 

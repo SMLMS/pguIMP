@@ -3,7 +3,7 @@ title: "Detect Missings"
 output: html_document
 ---
 
-# Help
+# Detect Missings Help
 Checks whether the data set contains missing values. These may either have been initially present in the data set or may have been artificially created by the LOQ analysis.
 
 ## Menu

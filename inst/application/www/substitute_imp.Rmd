@@ -3,7 +3,7 @@ title: "Substitute Imputation Sites"
 output: html_document
 ---
 
-# Help
+# Substitute Imputation Sites Help
 Substitutes the native or in previously generated imputation points in the data set with the help of classical statistics or predictions from multivariate machine learning models.
 
 ### Feature

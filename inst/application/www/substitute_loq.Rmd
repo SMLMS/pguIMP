@@ -3,7 +3,7 @@ title: "Substitute LOQ Outliers"
 output: html_document
 ---
 
-# Help
+# Substitute LOQ Outliers Help
 Substitutes values which have been defined in the "Detect LOQ Outliers" as "<LLOQ" or ">ULOQ" with user-defined values.
 
 ## Menu

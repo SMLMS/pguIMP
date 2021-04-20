@@ -3,7 +3,7 @@ title: "Explore"
 output: html_document
 ---
 
-# Help
+# Explore Help
 Enables graphical uni- as well as bivariate analysis of the data.
 
 ## Menu

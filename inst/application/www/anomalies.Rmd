@@ -3,7 +3,7 @@ title: "Detect Anomalies"
 output: html_document
 ---
 
-# Help
+# Detect Anomalies Help
 Identification of data anomalies by univariate analysis of the values of each feature using models of classical statistics as well as unsupervised machine learning.
 
 ## Menu

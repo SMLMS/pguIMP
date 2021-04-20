@@ -3,7 +3,7 @@ title: "Filter"
 output: html_document
 ---
 
-# Help
+# Filter Help
 Filters the data set based on the user's instructions. The filter settings are made directly in the "Select Filter" table.
 
 ## Menu

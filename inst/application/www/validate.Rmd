@@ -3,7 +3,7 @@ title: "Validate Preprocessing"
 output: html_document
 ---
 
-# Help
+# Validate Preprocessing Help
 Uni- and bivariate analyses validating the results of the preprocessing procedure. 
 
 ## Menu

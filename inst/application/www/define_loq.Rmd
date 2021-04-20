@@ -3,7 +3,7 @@ title: "Define LOQs"
 output: html_document
 ---
 
-# Help
+# Define LOQs Help
 Sets the LOQs to user defined values.
 
 ## Menu
