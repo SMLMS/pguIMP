@@ -355,7 +355,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
 
                                  #' @description
                                  #' Gathers the distribution of imputation sites within the data frame.
-                                 #' The information is stored within the classes instance variable `imputationSiteDistribution`
+                                 #' The information is stored within the classes instance variable imputationSiteDistribution.
                                  #' @param data_df
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
@@ -437,69 +437,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    private$.amv <- VIM::aggr(numeric_df, plot=FALSE)
                                  }, #function
 
-                                 #' ####################
-                                 #' # public functions #
-                                 #' ####################
-                                 #' #' @description
-                                 #' #' Resets instance variables and
-                                 #' #' identifies missings in the normalized and Z-score transfromed data set.
-                                 #' #' @param data
-                                 #' #' Dataframe to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' resetImputationStatistics = function(data_df = "tbl_df"){
-                                 #'   numericData <- data_df %>%
-                                 #'     dplyr::select_if(is.numeric)
-                                 #'   features <- numericData %>%
-                                 #'     colnames()
-                                 #'   measurements <- c(rep(0.0, length(features)))
-                                 #'   existings <- c(rep(0.0, length(features)))
-                                 #'   missings <- c(rep(0.0, length(features)))
-                                 #'   fractionOfMissings <- c(rep(0.0, length(features)))
-                                 #'   private$.imputationStatistics <- tibble::tibble(features, measurements, existings, missings, fractionOfMissings)
-                                 #'   private$.amv <- VIM::aggr(numericData, plot=FALSE)
-                                 #'   self$gatherImputationStatistics(data_df)
-                                 #'   self$detectImputationSites(data_df)
-                                 #' } #function
 
-                                 # reset imputation sites
-                                 # reset pgumputation (both)
-                                 # handle imputation sites
-
-                                 #' ####################
-                                 #' # helper functions #
-                                 #' ####################
-                                 #' #' @description
-                                 #' #' Returns the position of an attribute within a data frame.
-                                 #' #' @param feature
-                                 #' #' The attribute's name.
-                                 #' #' (character)
-                                 #' #' @return
-                                 #' #' The postion of the attribute.
-                                 #' #' (numeric)
-                                 #' featureIdx = function(feature = "character"){
-                                 #'   idx <- match(feature, self$imputationStatistics[["features"]])
-                                 #'   if(is.na(idx)){
-                                 #'     rString <- sprintf("\nWarning in pgu.imputation: feature %s is not known\n",
-                                 #'                        feature)
-                                 #'     cat(rString)
-                                 #'   }#if
-                                 #'   return(idx)
-                                 #' }, #function
-                                 #'
-                                 #' #' @description
-                                 #' #' Selects features cotaining imputation sites from a dataset.
-                                 #' #' @param data_df
-                                 #' #' Dataframe to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @return
-                                 #' #' The filtered data frame.
-                                 #' #' (tibble::tibble)
-                                 #' filterFeatures = function(data_df = "tbl_df"){
-                                 #'   data_df %>%
-                                 #'     dplyr::select(private$.imputationStatistics[["features"]]) %>%
-                                 #'     return()
-                                 #' }, #function
-                                 #'
                                  #' @description
                                  #' Returns the position of an attribute's imputation sites within a data frame.
                                  #' @param featureName
@@ -541,101 +479,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    }#if
                                    return(nanFeature)
                                  }, #function
-                                 #'
-                                 #' #######################
-                                 #' # missings statistics #
-                                 #' #######################
-                                 #' #' @description
-                                 #' #' Calculates the number of values of a vector.
-                                 #' #' @param value
-                                 #' #' A vector comprising numeric data.
-                                 #' #' (numeric)
-                                 #' #' @return
-                                 #' #' The lenght of the vector.
-                                 #' #' (numeric)
-                                 #' gatherMeasurements = function(value = "numeric"){
-                                 #'   return(length(value))
-                                 #' }, #function
-                                 #'
-                                 #' #' @description
-                                 #' #' Calculates the number of missing values of a vector.
-                                 #' #' @param value
-                                 #' #' A vector comprising numeric data.
-                                 #' #' (numeric)
-                                 #' #' @return
-                                 #' #' The number of missing in the vector.
-                                 #' #' (numeric)
-                                 #' gatherMissings = function(value = "numeric"){
-                                 #'   y <- sum(is.na(value))
-                                 #'   return(y)
-                                 #' }, #function
-                                 #'
-                                 #' #' @description
-                                 #' #' Calculates the number of existing values of a vector.
-                                 #' #' @param value
-                                 #' #' A vector comprising numeric data.
-                                 #' #' (numeric)
-                                 #' #' @return
-                                 #' #' The number of existing values in the vector.
-                                 #' #' (numeric)
-                                 #' gatherExistings = function(value = "numeric"){
-                                 #'   y <- sum(!is.na(value))
-                                 #'   return(y)
-                                 #' }, #function
-                                 #'
-                                 #' #' @description
-                                 #' #' Calculates the fraction of missing values of a vector.
-                                 #' #' @param value
-                                 #' #' A vector comprising numeric data.
-                                 #' #' (numeric)
-                                 #' #' @return
-                                 #' #' The fraction of missing values in the vector.
-                                 #' #' (numeric)
-                                 #' gatherFractionOfMissings =  function(value = "numeric"){
-                                 #'   y <- 100.0*sum(is.na(value))/length(value)
-                                 #'   return(y)
-                                 #' }, #function
-                                 #'
-                                 #' #' @description
-                                 #' #' Gathers statistical information about missing values
-                                 #' #' that are provided by the classes public `gather` functions.
-                                 #' #' The information is stored within the classes instance variable `imputationParameter`
-                                 #' #' @param data
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' gatherImputationStatistics = function(data = "tbl_df"){
-                                 #'   filteredData <- data %>%
-                                 #'     self$filterFeatures()
-                                 #'   private$.imputationParameter["measurements"] <- filteredData %>%
-                                 #'     apply(MARGIN=2, FUN=self$gatherMeasurements)
-                                 #'   private$.imputationParameter["existings"] <- filteredData %>%
-                                 #'     apply(MARGIN=2, FUN=self$gatherExistings)
-                                 #'   private$.imputationParameter["missings"] <- filteredData %>%
-                                 #'     apply(MARGIN=2, FUN=self$gatherMissings)
-                                 #'   private$.imputationParameter["fractionOfMissings"] <- filteredData %>%
-                                 #'     apply(MARGIN=2, FUN=self$gatherFractionOfMissings)
-                                 #' }, #function
-                                 #'
-                                 #' ###########################
-                                 #' # detect imputation sites #
-                                 #' ###########################
-                                 #' #' @description
-                                 #' #' Detects missing values within the data frame and
-                                 #' #' writes the to the instance variable `imputationsites`.
-                                 #' #' @param data
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @param  feature
-                                 #' #' The attribute within the data frame to be analyzed.
-                                 #' detectImputationSites = function(data = "tbl_df"){
-                                 #'   private$.imputationSites <- data %>%
-                                 #'     self$filterFeatures() %>%
-                                 #'     is.na() %>%
-                                 #'     which(arr.ind=TRUE) %>%
-                                 #'     tibble::as_tibble() %>%
-                                 #'     dplyr::mutate(features = self$imputationParameter[["features"]][col])
-                                 #' }, #function
-                                 #'
 
                                  #####################
                                  # detect predictors #
@@ -1216,106 +1059,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                    # colnames(imputed_df) <- data_col_names
                                    # return(imputed_df)
                                  }, #functions
-
-
-                                 #' #' @description
-                                 #' #' Substitutes imputation sites by values generated by a different methods of the amelia package.
-                                 #' #' The procedure is run without bound information.
-                                 #' #' Returns the cleaned dataframe.
-                                 #' #' Display the progress if shiny is loaded.
-                                 #' #' @param data_df
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @param progress
-                                 #' #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-                                 #' #' (shiny::Progress)
-                                 #' #' @return
-                                 #' #' Cleaned dataframe.
-                                 #' #' (tibble:tibble)
-                                 #' imputeByAmelia = function(data_df = "tbl_df", progress = "Progress"){
-                                 #'   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                 #'     progress$inc(1)
-                                 #'   }#if
-                                 #'   ameliaOutput <- data_df %>%
-                                 #'     Amelia::amelia()#(m = 1, parallel = "multicore", ncpus = 8)
-                                 #'   ameliaOutput$imputations[[1]] %>%
-                                 #'     tibble::as_tibble() %>%
-                                 #'     return()
-                                 #' }, #function
-
-                                 #' #' @description
-                                 #' #' Substitutes imputation sites by values generated by a different methods of the amelia package.
-                                 #' #' The procedure is run with bound information.
-                                 #' #' Returns the cleaned dataframe.
-                                 #' #' Display the progress if shiny is loaded.
-                                 #' #' @param data_df
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @param progress
-                                 #' #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-                                 #' #' (shiny::Progress)
-                                 #' #' @return
-                                 #' #' Cleaned dataframe.
-                                 #' #' (tibble:tibble)
-                                 #' imputeByAmeliaBound = function(data_df = "tbl_df", progress = "Progress"){
-                                 #'   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
-                                 #'     progress$inc(length(self$imputationStatistics[["feature"]]))
-                                 #'   }#if
-                                 #'   tblBounds = data.frame(column=c(1:ncol(data_df)),
-                                 #'                          lower=c(0),
-                                 #'                          upper=sapply(data_df,stats::quantile,probs = c(0.25),names=FALSE, na.rm = TRUE)) %>%
-                                 #'     as.matrix()
-                                 #'   ameliaOutput <- data_df %>%
-                                 #'     Amelia::amelia(bounds=tblBounds)#(m = 1, parallel = "multicore", ncpus = 8)
-                                 #'   ameliaOutput$imputations[[1]] %>%
-                                 #'     tibble::as_tibble() %>%
-                                 #'     return()
-                                 #' }, #function
-                                 #'
-                                 #' ##########
-                                 #' # output #
-                                 #' ##########
-                                 #' #' @description
-                                 #' #' Numeric representation of the distribution of missing values within the data frame.
-                                 #' #' @param data
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @return
-                                 #' #' A data frame
-                                 #' #' (tibble::tibble)
-                                 #' imputationSiteDistribution = function(data = "tbl_df"){
-                                 #'   d <- data %>%
-                                 #'     self$filterFeatures() %>%
-                                 #'     as.data.frame() %>%
-                                 #'     mice::md.pattern(plot=FALSE)
-                                 #'   # colnames(d)[-1] <- "Sites"
-                                 #'   colnames(d)[length(colnames(d))] <- "Sites"
-                                 #'   rownames(d)[length(rownames(d))] <- "Sum"
-                                 #'   return(d)
-                                 #' }, #function
-                                 #'
-                                 #'
-                                 #' #' @description
-                                 #' #' Merges the numeric attributes of the pguIMP data with its metadata.
-                                 #' #' @param dfData
-                                 #' #' The data frame to be analyzed.
-                                 #' #' (tibble::tibble)
-                                 #' #' @param dfMetadata
-                                 #' #' The corresponding metadata.
-                                 #' #' (tibble::tibble)
-                                 #' #' @return
-                                 #' #' A data frame
-                                 #' #' (tibble::tibble)
-                                 #' mergeImputationSiteData = function(dfData = "tbl_df", dfMetadata = "tbl_df"){
-                                 #'   dfMerge <- dfData
-                                 #'   if(nrow(dfData) == nrow(dfMetadata)){
-                                 #'     dfMerge <- dplyr::bind_cols(dfMetadata, dfData)
-                                 #'   }#if
-                                 #'   dfMerge %>%
-                                 #'     dplyr::filter_all(dplyr::any_vars(is.na(.))) %>%
-                                 #'     return()
-                                 #' }, #function
-                                 #'
 
                                  ##################
                                  # plot functions #
