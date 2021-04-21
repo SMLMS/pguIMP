@@ -29,6 +29,6 @@ transposeTibble = function(obj = "tbl_df"){
     tibble::as_tibble() %>%
     dplyr::rename_all(~ c(cNames)) %>%
     dplyr::mutate(parameter = vNames) %>%
-    dplyr::select(parameter, dplyr::everything()) %>%
+    dplyr::select(c("parameter"), dplyr::everything()) %>%
     return()
 }

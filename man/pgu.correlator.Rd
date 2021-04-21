@@ -10,7 +10,7 @@
 A class that performs pairwise correlation on the pguIMP data set.
 }
 \details{
-
+A class that performs pairwise correlation on the pguIMP data set.
 }
 \section{Construction}{
 

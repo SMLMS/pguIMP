@@ -226,7 +226,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @seealso [fitFeature()]
                                  fitData = function(progress = "Progress"){
                                    for (feature in self$modelParameter[["features"]]){
                                      if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){

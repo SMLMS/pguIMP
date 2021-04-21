@@ -23,6 +23,8 @@
 #' @import psych
 #' @import VIM
 #'
+#'@include pguDMwR.R
+#'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
 #' @export

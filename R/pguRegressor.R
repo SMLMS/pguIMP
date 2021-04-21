@@ -4,7 +4,7 @@
 #' A class that performs pairwise robust regression on the pguIMP data set.
 #'
 #' @details
-#'
+#' A class that performs pairwise robust regression on the pguIMP data set.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:

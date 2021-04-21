@@ -18,9 +18,6 @@ These can be used to scale data.
 x <- pguIMP::pgu.model$new(data)
 }
 
-\seealso{
-\code{\link[=fitFeature]{fitFeature()}}
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

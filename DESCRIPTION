@@ -1,5 +1,5 @@
 Package: pguIMP
-Title: Reproducible cleaning of biomedical laboratory data.
+Title: pguIMP
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Sebastian",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "malkusch@med.uni-frankfurt.de",
            comment = c(ORCID = "0000-0001-6766-140X"))
-Description: Reproducible cleaning of biomedical laboratory data using methods of visualization,error correction and transformation implemented as interactive R-notebooks
+Description: Reproducible cleaning of biomedical laboratory data using methods of visualization,error correction and transformation implemented as interactive R-notebooks.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -67,6 +67,7 @@ Collate:
     'pguExporter.R'
     'pguValidator.R'
     'pguImputation.R'
+    'pguOutlierDetection.R'
     'pguOutliers.R'
     'pguMissingsCharacterizer.R'
     'pguMissings.R'
@@ -80,6 +81,5 @@ Collate:
     'pguDelegate.R'
     'transposeTibble.R'
     'pguIMP.R'
-    'pguOutlierDetection.R'
     'pguRegressor.R'
 VignetteBuilder: knitr

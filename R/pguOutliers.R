@@ -20,6 +20,8 @@
 #' @import e1071
 #' @import DT
 #'
+#' @include pguOutlierDetection.R
+#'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
 #' @export

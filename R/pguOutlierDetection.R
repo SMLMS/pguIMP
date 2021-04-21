@@ -76,12 +76,12 @@ nnk=function(x,k=0.05*nrow(x),cutoff=.95,Method="euclidean",rnames=FALSE,boottim
     if(rnames==TRUE)
     {
       s=subset(data,Class=="Outlier")
-      gplot=ggplot2::ggplot(data,ggplot2::aes(data[,1],data[,2]))+ggplot2::geom_point(ggplot2::aes(colour=Class,pch=Class))+ggplot2::geom_text(data=s,aes(x=s[,1],y=s[,2],label=rownames(s)),colour="Red", hjust = "inward",check_overlap = T)+ggplot2::ggtitle("Outlier plot using kth nearest neighbour distance")+xlab("Variable1")+ylab("Variable2")+ggplot2::scale_color_manual(values=cols)
+      gplot=ggplot2::ggplot(data,ggplot2::aes(data[,1],data[,2]))+ggplot2::geom_point(ggplot2::aes(colour=Class,pch=Class))+ggplot2::geom_text(data=s,ggplot2::aes(x=s[,1],y=s[,2],label=rownames(s)),colour="Red", hjust = "inward",check_overlap = T)+ggplot2::ggtitle("Outlier plot using kth nearest neighbour distance")+ggplot2::xlab("Variable1")+ggplot2::ylab("Variable2")+ggplot2::scale_color_manual(values=cols)
 
     }else
     {dd=cbind(data,1:nrow(data))
     s=subset(dd,Class=="Outlier")
-    gplot=ggplot2::ggplot(data,ggplot2::aes(data[,1],data[,2]))+ggplot2::geom_point(ggplot2::aes(colour=Class,pch=Class))+ggplot2::geom_text(data=s,aes(x=s[,1],y=s[,2],label=s[,3]),colour="Red", hjust = "inward",check_overlap = T)+ggplot2::ggtitle("Outlier plot using kth nearest neighbour distance")+xlab("Variable1")+ylab("Variable2")+scale_color_manual(values=cols)
+    gplot=ggplot2::ggplot(data,ggplot2::aes(data[,1],data[,2]))+ggplot2::geom_point(ggplot2::aes(colour=Class,pch=Class))+ggplot2::geom_text(data=s,ggplot2::aes(x=s[,1],y=s[,2],label=s[,3]),colour="Red", hjust = "inward",check_overlap = T)+ggplot2::ggtitle("Outlier plot using kth nearest neighbour distance")+ggplot2::xlab("Variable1")+ggplot2::ylab("Variable2")+ggplot2::scale_color_manual(values=cols)
     }
     l=list("Outlier Observations"=out,"Location of Outlier"=loc,"Outlier Probability"=p[is.na(p)==F],"Scatter plot"=gplot)
   }else if(ncol(x)==3)

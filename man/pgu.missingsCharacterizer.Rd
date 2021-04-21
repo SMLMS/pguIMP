@@ -10,7 +10,7 @@
 A class that characterizes the origin of missing values.
 }
 \details{
-
+A class that characterizes the origin of missing values.
 }
 \section{Construction}{
 

@@ -1150,59 +1150,7 @@ Updates the numerical loq table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session
-#' @description
-#' Updates the numerical loq data table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-update_loq_detect_data_tbl = function(input, output, session){
-options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-t <- NULL
-if(self$status$query(processName = "loqDetected")){
-dfData <- self$filteredMetadata$rawData \%>\%
-dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
-dfOutlier <- self$loq$outliers
-idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
-t <- dfData \%>\%
-dplyr::mutate_if(is.numeric, round, 3) \%>\%
-DT::datatable(
-options = list(
-scrollX = TRUE,
-scrollY = '350px',
-paging = FALSE,
-dom = "Blfrtip",
-buttons = list(list(
-extend = 'csv',
-filename = self$fileName$bluntFileName("loqData"),
-text = "Download"
-))#buttons
-)#options
-)#DT::datatable
-for (featureName in self$filteredData$numericFeatureNames){
-featureOutlier <- dfOutlier \%>\%
-dplyr::filter(feature == featureName) \%>\%
-dplyr::mutate_if(is.numeric, round, 3)
-if (nrow(featureOutlier)>0){
-t <- DT::formatStyle(t,
-featureName,
-backgroundColor = styleEqual(dfData \%>\%
-dplyr::select(!!featureName) \%>\%
-dplyr::slice(featureOutlier[\link{"measurement"}]) \%>\%
-unlist() \%>\%
-as.numeric() \%>\%
-round(digits = 3),
-featureOutlier[\link{"color"}])\preformatted{    )#t
-  \}#if
-\}#for
-}
-
-}#if
-output$tbl.loqDetectData <- DT::renderDataTable(t)
-}, #function}
+\item{\code{session}}{Pointer to shiny session}
 }
 \if{html}{\out{</div>}}
 }
@@ -1374,93 +1322,7 @@ Updates the instance class status.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session
-#' @description
-#' Updates the numerical loq statistics table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-updateLoqMutateStatisticsTbl = function(input, output, session){
-if(private$.status$query(processName = "loqMutated")){
-output$tbl.loqMutateStatistics <- DT::renderDataTable(
-self$loq$loqStatistics \%>\%
-format.data.frame(scientific = FALSE, digits = 3) \%>\%
-DT::datatable(
-extensions = "Buttons",
-options = list(
-scrollX = TRUE,
-scrollY = '350px',
-paging = FALSE,
-dom = "Blfrtip",
-buttons = list(list(
-extend = 'csv',
-filename = self$fileName$bluntFileName("loqStatistics"),
-text = "Download"
-))#buttons
-)#options
-)#DT::datatable
-)#output
-}#if
-else{
-output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
-}#else
-}, #function
-#' @description
-#' Updates the numerical loq outliers table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-updateLoqMutateOutlierTbl = function(input, output, session){
-options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-t <- NULL
-if(self$status$query(processName = "loqMutated")){
-dfData <- self$filteredMetadata$rawData \%>\%
-dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
-dfOutlier <- self$loq$outliers
-idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
-t <- dfData \%>\%
-dplyr::slice(idx) \%>\%
-dplyr::mutate_if(is.numeric, round, 3) \%>\%
-DT::datatable(
-options = list(
-scrollX = TRUE,
-scrollY = '350px',
-paging = FALSE,
-dom = "Blfrtip",
-buttons = list(list(
-extend = 'csv',
-filename = self$fileName$bluntFileName("loqOutlier"),
-text = "Download"
-))#nuttons
-)#options
-)#DT::datatable
-for (featureName in self$loqMutatedData$numericFeatureNames){
-featureOutlier <- dfOutlier \%>\%
-dplyr::filter(feature == featureName) \%>\%
-dplyr::mutate_if(is.numeric, round, 3)
-if (nrow(featureOutlier)>0){
-t <- DT::formatStyle(t,
-featureName,
-backgroundColor = styleEqual(dfData \%>\%
-dplyr::select(!!featureName) \%>\%
-dplyr::slice(featureOutlier[\link{"measurement"}]) \%>\%
-unlist() \%>\%
-as.numeric() \%>\%
-round(digits = 3),
-featureOutlier[\link{"color"}])\preformatted{    )#t
-  \}#if
-\}#for
-}
-
-}#if
-output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
-}, #function}
+\item{\code{session}}{Pointer to shiny session}
 }
 \if{html}{\out{</div>}}
 }

@@ -4,7 +4,7 @@
 #' A class that characterizes the origin of missing values.
 #'
 #' @details
-#'
+#' A class that characterizes the origin of missing values.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:
