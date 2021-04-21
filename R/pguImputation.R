@@ -17,7 +17,6 @@
 #' @import outliers
 #' @import MASS
 #' @import DT
-#' @import DMwR
 #' @import mice
 #' @import RWeka
 #' @import Amelia
@@ -1061,11 +1060,11 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                      print()
                                    data_df %>%
                                      as.data.frame() %>%
-                                     DMwR::knnImputation(k=self$nNeighbors,
-                                                         scale = TRUE,
-                                                         meth = "weighAvg",
-                                                         distData = NULL
-                                                         ) %>%
+                                     pguIMP::knnImputation(k=self$nNeighbors,
+                                                           scale = TRUE,
+                                                           meth = "weighAvg",
+                                                           distData = NULL
+                                     ) %>%
                                      tibble::as_tibble() %>%
                                      return()
                                  }, #function

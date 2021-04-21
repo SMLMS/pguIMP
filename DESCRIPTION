@@ -55,6 +55,7 @@ Collate:
     'normalDistribution.R'
     'pguCorrValidator.R'
     'pguCorrelator.R'
+    'pguDMwR.R'
     'pguFile.R'
     'pguData.R'
     'pguFilter.R'
@@ -78,4 +79,8 @@ Collate:
     'pguDelegate.R'
     'transposeTibble.R'
     'pguIMP.R'
+    'pguOutlierDetection.R'
     'pguRegressor.R'
+VignetteBuilder: knitr
+Suggests: 
+    rmarkdown

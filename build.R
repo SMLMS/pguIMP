@@ -9,4 +9,4 @@ library("roxygen2")
 devtools::document()
 
 # for later documentation
-devtools::use_vignette('introduction')
+use_vignette('introduction')

@@ -18,7 +18,6 @@
 #' @import outliers
 #' @import dbscan
 #' @import e1071
-#' @import OutlierDetection
 #' @import DT
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
@@ -869,7 +868,7 @@ pgu.outliers <- R6::R6Class("pgu.outliers",
                                                               color = character(0))
                                 tryCatch({
                                   knn_model <- feature_df %>%
-                                    OutlierDetection::nnk(k=self$k, cutoff = self$cutoff)
+                                    pguIMP::nnk(k=self$k, cutoff = self$cutoff)
                                   feature_idx <- knn_model$`Location of Outlier`
                                 },
                                 error = function(e) {
