@@ -17,49 +17,6 @@ Menages the import of the pguIMP dataset
 x <- pguIMP::pgu.importer$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.importer$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.importer$new()
-
-## ------------------------------------------------
-## Method `pgu.importer$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.importer$suffixIsKnown`
-## ------------------------------------------------
-
-y <- pgu.file$new()
-x$suffixIsKnown(obj = y)
-
-## ------------------------------------------------
-## Method `pgu.importer$importData`
-## ------------------------------------------------
-
-y <- pgu.file$new()
-z <- x$importData(obj = y)
-
-## ------------------------------------------------
-## Method `pgu.importer$importLoq`
-## ------------------------------------------------
-
-y <- pgu.file$new()
-z <- x$importLoq(obj = y)
-
-## ------------------------------------------------
-## Method `pgu.importer$importMetadata`
-## ------------------------------------------------
-
-y <- pgu.file$new()
-z <- x$importMetadata(obj = y)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -97,14 +54,6 @@ Creates and returns a new \code{pgu.importer} object.
 A new \code{pgu.importer} object.
 (pguIMP::pgu.importer)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.importer$new()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -129,15 +78,6 @@ Prints instance variables of a \code{pgu.importer} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-suffixIsKnown"></a>}}
@@ -160,15 +100,6 @@ Takes an instance of pgu.file and tests if the suffix is valid.
 test result
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- pgu.file$new()
-x$suffixIsKnown(obj = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-importData"></a>}}
@@ -191,15 +122,6 @@ Takes an instance of pgu.file imports a dataset.
 data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- pgu.file$new()
-z <- x$importData(obj = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-importLoq"></a>}}
@@ -222,15 +144,6 @@ Takes an instance of pgu.file imports a loq  dataset.
 data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- pgu.file$new()
-z <- x$importLoq(obj = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-importMetadata"></a>}}
@@ -253,15 +166,6 @@ Takes an instance of pgu.file imports a metadata dataset.
 data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- pgu.file$new()
-z <- x$importMetadata(obj = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -17,43 +17,6 @@ A class that characterizes the origin of missing values.
 x <- pguIMP::pgu.missingsCharacterizer$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.missingsCharacterizer$new`
-## ------------------------------------------------
-
-x <- tibble::tibble()
-obj <- pguIMP::pgu.missingsCharacterizer$new(data_df = x)
-
-## ------------------------------------------------
-## Method `pgu.missingsCharacterizer$print`
-## ------------------------------------------------
-
-obj$print()
-print(obj)
-
-## ------------------------------------------------
-## Method `pgu.missingsCharacterizer$reset`
-## ------------------------------------------------
-
-x <- tibble::tibble
-obj$reset(data_df = x)
-
-## ------------------------------------------------
-## Method `pgu.missingsCharacterizer$analyze`
-## ------------------------------------------------
-
-x <- tibble::tibble
-obj$analyze(data_df = x)
-
-## ------------------------------------------------
-## Method `pgu.missingsCharacterizer$plot_pair_dist`
-## ------------------------------------------------
-
-x <- tibble::tibble
-obj$plot_pair_dist(data_df = x)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -107,15 +70,6 @@ Creates and returns a new \code{pgu.missingsCharacterizer} object.
 A new \code{pgu.missingsCharacterizer} object.
 (pguIMP::pgu.missingsCharacterizer)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- tibble::tibble()
-obj <- pguIMP::pgu.missingsCharacterizer$new(data_df = x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -140,15 +94,6 @@ Prints instance variables of a \code{pgu.missingsCharacterizer} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{obj$print()
-print(obj)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -168,15 +113,6 @@ and resets the instance variables.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- tibble::tibble
-obj$reset(data_df = x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-analyze"></a>}}
@@ -198,15 +134,6 @@ resets the instance variables and analyzes a dataframe.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- tibble::tibble
-obj$analyze(data_df = x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plot_pair_dist"></a>}}
@@ -225,15 +152,6 @@ Plots the analysis result.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- tibble::tibble
-obj$plot_pair_dist(data_df = x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

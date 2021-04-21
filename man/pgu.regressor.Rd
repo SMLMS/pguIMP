@@ -17,133 +17,6 @@ A class that performs pairwise robust regression on the pguIMP data set.
 x <- pguIMP::pgu.regressor$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.regressor$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.regressor$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.regressor$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.regressor$resetRegressor`
-## ------------------------------------------------
-
-x$resetRegressor(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.regressor$resetDiagonal`
-## ------------------------------------------------
-
-data <- x$resetDiagonal(data)
-
-## ------------------------------------------------
-## Method `pgu.regressor$resetMatrix`
-## ------------------------------------------------
-
-matrix <- x$resetMatrix(value)
-
-## ------------------------------------------------
-## Method `pgu.regressor$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "time")
-
-## ------------------------------------------------
-## Method `pgu.regressor$featureIsValid`
-## ------------------------------------------------
-
-y <- x$featureIsValid(feature = "time")
-
-## ------------------------------------------------
-## Method `pgu.regressor$featurePairIsValid`
-## ------------------------------------------------
-
-y <- x$featurePairIsValid(abscissa = "time", ordinate = "infected")
-
-## ------------------------------------------------
-## Method `pgu.regressor$createModel`
-## ------------------------------------------------
-
-x$createModel(data, abscissa = "time", ordinate = "infected")
-
-## ------------------------------------------------
-## Method `pgu.regressor$createRegressionMatrix`
-## ------------------------------------------------
-
-x$createRegressionMatrix(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.regressor$printModel`
-## ------------------------------------------------
-
-x$printModel(abscissa = "time", ordinate = "healthy") \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.regressor$printInterceptTbl`
-## ------------------------------------------------
-
-x$printInterceptTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.regressor$printPInterceptTbl`
-## ------------------------------------------------
-
-x$printPInterceptTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.regressor$printSlopeTbl`
-## ------------------------------------------------
-
-x$printSlopeTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.regressor$printPSlopeTbl`
-## ------------------------------------------------
-
-x$printPSlopeTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.regressor$plotRegression`
-## ------------------------------------------------
-
-x$plotRegression() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.regressor$plotResidualDist`
-## ------------------------------------------------
-
-x$plotResidualDist() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.regressor$plotResidualBox`
-## ------------------------------------------------
-
-x$plotResidualBox() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.regressor$plotModel`
-## ------------------------------------------------
-
-x$plotModel(data, abscissa = "time", ordinate = "death") \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -222,15 +95,6 @@ Creates and returns a new \code{pgu.regressor} object.
 A new \code{pgu.regressor} object.
 (pguIMP::pgu.regressor)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.regressor$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -255,15 +119,6 @@ Prints instance variables of a \code{pgu.regressor} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetRegressor"></a>}}
@@ -286,14 +141,6 @@ Progresse is indicated by the progress object passed to the function.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetRegressor(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetDiagonal"></a>}}
@@ -316,14 +163,6 @@ Sets the diagonal of a square matrix to NA.
 A matrix with its diagonal reset to NA.
 (matrix)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data <- x$resetDiagonal(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetMatrix"></a>}}
@@ -348,14 +187,6 @@ The diagonal is set to NA.
 A square matrix.
 (matrix)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{matrix <- x$resetMatrix(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -378,14 +209,6 @@ Determines the numerical index of the column of an attribute based on the attrib
 The attributes column index.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "time")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIsValid"></a>}}
@@ -408,14 +231,6 @@ Checks if the feature is known to the class.
 The test result.
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$featureIsValid(feature = "time")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePairIsValid"></a>}}
@@ -444,14 +259,6 @@ Checks a if a pair of attributes different and known to the class.
 The test result.
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$featurePairIsValid(abscissa = "time", ordinate = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createModel"></a>}}
@@ -481,14 +288,6 @@ The model is stored as instance variable.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createModel(data, abscissa = "time", ordinate = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createRegressionMatrix"></a>}}
@@ -516,14 +315,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createRegressionMatrix(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printModel"></a>}}
@@ -550,15 +341,6 @@ and returns it.
 The analyis result as a dataframe.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printModel(abscissa = "time", ordinate = "healthy") \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printInterceptTbl"></a>}}
@@ -573,15 +355,6 @@ Transfroms instance variable intercept to a dataframe and returns it.
 Dataframe of instance variable intercept.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printInterceptTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printPInterceptTbl"></a>}}
@@ -596,15 +369,6 @@ Transfroms instance variable pIntercept to a dataframe and returns it.
 Dataframe of instance variable pIntercept.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printPInterceptTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printSlopeTbl"></a>}}
@@ -619,15 +383,6 @@ Transfroms instance variable slope to a dataframe and returns it.
 Dataframe of instance variable slope.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printSlopeTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printPSlopeTbl"></a>}}
@@ -642,15 +397,6 @@ Transfroms instance variable pSlope to a dataframe and returns it.
 Dataframe of instance variable pSlope.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printPSlopeTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotRegression"></a>}}
@@ -666,15 +412,6 @@ stored within the instance variable of the class.
 A scatter plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotRegression() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotResidualDist"></a>}}
@@ -690,15 +427,6 @@ stored within the instance variable of the class.
 A histogram plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotResidualDist() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotResidualBox"></a>}}
@@ -714,15 +442,6 @@ stored within the instance variable of the class.
 A box plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotResidualBox() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotModel"></a>}}
@@ -757,15 +476,6 @@ and creates a composite graph based on their results.
 A composite graph.
 (gridExtra::grid.arrange)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotModel(data, abscissa = "time", ordinate = "death") \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -19,81 +19,6 @@ Performs a Kolmogorow-Smirnow test.
 x <- pguIMP::pgu.validator$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.validator$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.validator$new(seed = 42)
-
-## ------------------------------------------------
-## Method `pgu.validator$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.validator$resetValidator`
-## ------------------------------------------------
-
-x$resetValidator()
-
-## ------------------------------------------------
-## Method `pgu.validator$kolmogorowTestFeature`
-## ------------------------------------------------
-
-x$kolmogorowTestFeature(org, imp, feature)
-
-## ------------------------------------------------
-## Method `pgu.validator$wilcoxonTestFeature`
-## ------------------------------------------------
-
-x$wilcoxonTestFeature(org, imp, feature)
-
-## ------------------------------------------------
-## Method `pgu.validator$centralMomentsFeature`
-## ------------------------------------------------
-
-x$centralMomentsFeature(values, feature)
-
-## ------------------------------------------------
-## Method `pgu.validator$validate`
-## ------------------------------------------------
-
-x$validate(org, imp, progress)
-
-## ------------------------------------------------
-## Method `pgu.validator$featurePdf`
-## ------------------------------------------------
-
-p <- x$featurePdf(data_df)
-
-## ------------------------------------------------
-## Method `pgu.validator$featureCdf`
-## ------------------------------------------------
-
-p <- x$featureCdf(data_df)
-
-## ------------------------------------------------
-## Method `pgu.validator$featureVs`
-## ------------------------------------------------
-
-p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
-
-## ------------------------------------------------
-## Method `pgu.validator$featureBoxPlot`
-## ------------------------------------------------
-
-p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
-
-## ------------------------------------------------
-## Method `pgu.validator$featurePlot`
-## ------------------------------------------------
-
-p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -163,14 +88,6 @@ Creates and returns a new \code{pgu.validator} object.
 A new \code{pgu.validator} object.
 (pguIMP::pgu.validator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.validator$new(seed = 42)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -195,15 +112,6 @@ Prints instance variables of a \code{pgu.validator} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetValidator"></a>}}
@@ -212,14 +120,6 @@ print(x)
 Resets instance variables
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.validator$resetValidator()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetValidator()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -255,14 +155,6 @@ using a two-sided Kolmorogow-Smirnow test with simulated p-vaue distribution.
 One row dataframe comprising the test results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$kolmogorowTestFeature(org, imp, feature)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-wilcoxonTestFeature"></a>}}
@@ -296,14 +188,6 @@ using a two-sided Wilcoxon/Mann-Whitney test.
 One row dataframe comprising the test results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$wilcoxonTestFeature(org, imp, feature)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-centralMomentsFeature"></a>}}
@@ -329,14 +213,6 @@ Estimates estimates the central moments of the given distribution.
 One row dataframe comprising the statistics.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$centralMomentsFeature(values, feature)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validate"></a>}}
@@ -368,14 +244,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$validate(org, imp, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePdf"></a>}}
@@ -399,14 +267,6 @@ Returns the plot
 A ggplot2 object
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featurePdf(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureCdf"></a>}}
@@ -430,14 +290,6 @@ Returns the plot
 A ggplot2 object
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featureCdf(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureVs"></a>}}
@@ -464,14 +316,6 @@ Returns the plot
 A ggplot2 object
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBoxPlot"></a>}}
@@ -508,14 +352,6 @@ Receives a dataframe and information about the lloq and uloq and retuns a boxplo
 A ggplot2 object
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePlot"></a>}}
@@ -562,14 +398,6 @@ Returns the plot
 A ggplot2 object
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

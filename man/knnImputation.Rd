@@ -17,6 +17,9 @@ knnImputation(data, k = 10, scale = TRUE, meth = "weighAvg", distData = NULL)
 
 \item{distData}{Distance to the case}
 }
+\value{
+cleaned data
+}
 \description{
 Imputes missings using kNN.
 }

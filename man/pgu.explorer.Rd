@@ -17,77 +17,6 @@ Pariwise anlysis of attributes from the pguIMP dataset.
 x <- pguIMP::pgu.explorer$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.explorer$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.explorer$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.explorer$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.explorer$reset`
-## ------------------------------------------------
-
-x$reset(abj, abs = "time", ord = "infected")
-
-## ------------------------------------------------
-## Method `pgu.explorer$scatterPlot`
-## ------------------------------------------------
-
-x$scatterPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$abscissaBarPlot`
-## ------------------------------------------------
-
-x$abscissaBarPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$abscissaBoxPlot`
-## ------------------------------------------------
-
-x$abscissaBoxPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$abscissaPlot`
-## ------------------------------------------------
-
-x$abscissaPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$ordinateBarPlot`
-## ------------------------------------------------
-
-x$ordinateBarPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$ordinateBoxPlot`
-## ------------------------------------------------
-
-x$ordinateBoxPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.explorer$ordinatePlot`
-## ------------------------------------------------
-
-x$ordinatePlot() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -179,15 +108,6 @@ Creates and returns a new \code{pgu.explorer} object.
 A new \code{pgu.explorer} object.
 (pguIMP::pgu.optimizer)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.explorer$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -201,15 +121,6 @@ Prints instance variables of a \code{pgu.explorer} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -234,14 +145,6 @@ Resets the instance of the pgu.explorer class
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$reset(abj, abs = "time", ord = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit"></a>}}
@@ -266,15 +169,6 @@ Creates and returns a scatter plot abscissa and ordinate value pairs.
 Scatter plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scatterPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-abscissaBarPlot"></a>}}
@@ -289,15 +183,6 @@ Creates and returns a histogram from the abscissa values.
 Bar plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$abscissaBarPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-abscissaBoxPlot"></a>}}
@@ -312,15 +197,6 @@ Creates and returns a box plot from the abscissa values.
 Box plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$abscissaBoxPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-abscissaPlot"></a>}}
@@ -335,15 +211,6 @@ Creates and returns a compund graphical analysis of the abscissa values.
 Compound plot
 (gridExtra::grid.arrange)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$abscissaPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ordinateBarPlot"></a>}}
@@ -358,15 +225,6 @@ Creates and returns a histogram from the ordinate values.
 Bar plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$ordinateBarPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ordinateBoxPlot"></a>}}
@@ -381,15 +239,6 @@ Creates and returns a box plot from the ordinate values.
 Box plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$ordinateBoxPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ordinatePlot"></a>}}
@@ -404,15 +253,6 @@ Creates and returns a compund graphical analysis of the ordinate values.
 Compound plot
 (gridExtra::grid.arrange)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$ordinatePlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

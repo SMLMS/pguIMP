@@ -144,9 +144,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' A new `pgu.correlator` object.
                                  #' (pguIMP::pgu.correlator)
-                                 #' @examples
-                                 #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.correlator$new(data = y)
                                  initialize = function(data = "tbl_df"){
                                    if(class(data)[1] != "tbl_df"){
                                      data <- tibble::tibble(names <- "none",
@@ -167,9 +164,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' Prints instance variables of a `pgu.correlator` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.correlator\n")
                                    cat(rString)
@@ -197,8 +191,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @param progress
                                  #' Keeps track of the analysis progress.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$resetCorrelator(data, progress)
                                  resetCorrelator = function(data = "tbl_df", progress = "Progress"){
                                    private$.featureNames <- data %>%
                                      dplyr::select_if(is.numeric) %>%
@@ -221,8 +213,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' A square matrix.
                                  #' (matrix)
-                                 #' @examples
-                                 #' matrix <- x$resetMatrix(value)
                                  resetMatrix = function(value = "numeric"){
                                    n = length(self$featureNames)
                                    df <- matrix(data = value,
@@ -242,8 +232,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' The attributes column index.
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$featureIdx(feature = "time")
                                  featureIdx = function(feature = "character"){
                                    idx <- match(feature, self$featureNames)
                                    if(is.na(idx)){
@@ -269,8 +257,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' The cname of the correlation test.
                                  #' Valid coiced are defined by the instance variable `method`.
                                  #' (chatacter)
-                                 #' @examples
-                                 #' x$calcCorrelationNumeric(abscissa = x, ordinate = y, method = "pearson")
                                  calcCorrelationNumeric = function(abscissa = "numeric", ordinate = "numeric", method = "character"){
                                    private$.test <- stats::cor.test(x = abscissa,
                                                                     y = ordinate,
@@ -292,8 +278,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$createCorrelationMatrixPearson(data, progress)
                                  createCorrelationMatrixPearson = function(data = "tbl_df", progress = "Progress"){
                                    for (abs in self$featureNames){
                                      for (ord in self$featureNames){
@@ -324,8 +308,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$createCorrelationMatrixKendall(data, progress)
                                  createCorrelationMatrixKendall = function(data = "tbl_df", progress = "Progress"){
                                    for (abs in self$featureNames){
                                      for (ord in self$featureNames){
@@ -357,8 +339,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$createCorrelationMatrixSpearman(data, progress)
                                  createCorrelationMatrixSpearman = function(data = "tbl_df", progress = "Progress"){
                                    for (abs in self$featureNames){
                                      for (ord in self$featureNames){
@@ -386,8 +366,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$correlate(data, progress)
                                  correlate = function(data = "tbl_df", progress = "Progress"){
                                    self$createCorrelationMatrixPearson(data, progress)
                                    self$createCorrelationMatrixKendall(data, progress)
@@ -403,9 +381,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' The analyis result as a dataframe.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printFeature() %>%
-                                 #'  print()
                                  printFeature = function(){
                                    df <- data.frame(
                                      abscissa = self$abscissa,
@@ -429,9 +404,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `r`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printRTbl() %>%
-                                 #'  print()
                                  printRTbl = function(){
                                    self$r %>%
                                      tibble::as_tibble() %>%
@@ -445,9 +417,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `pPearson`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printPPearsonTbl() %>%
-                                 #'  print()
                                  printPPearsonTbl = function(){
                                    self$pPearson %>%
                                      tibble::as_tibble() %>%
@@ -461,9 +430,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `tau`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printTauTbl() %>%
-                                 #'  print()
                                  printTauTbl = function(){
                                    self$tau %>%
                                      tibble::as_tibble() %>%
@@ -477,9 +443,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `pKendall`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printPKendallTbl() %>%
-                                 #'  print()
                                  printPKendallTbl = function(){
                                    self$pKendall %>%
                                      tibble::as_tibble() %>%
@@ -493,9 +456,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `rho`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printRhoTbl() %>%
-                                 #'  print()
                                  printRhoTbl = function(){
                                    self$rho %>%
                                      tibble::as_tibble() %>%
@@ -509,9 +469,6 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' @return
                                  #' Dataframe of instance variable `pSpearman`.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printPSpearmanTbl() %>%
-                                 #'  print()
                                  printPSpearmanTbl = function(){
                                    self$pSpearman %>%
                                      tibble::as_tibble() %>%

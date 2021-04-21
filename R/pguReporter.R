@@ -65,9 +65,6 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                               #' @return
                               #' A new `pgu.reporter` object.
                               #' (pguIMP::pgu.report)
-                              #' @examples
-                              #' y <- "report.pdf"
-                              #' x <- pguIMP:pgu.reporter$new(name = y)
                               initialize = function(name = "character"){
                                 self$setFilename <- name
                               },#function
@@ -84,9 +81,6 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                               #' Prints instance variables of a `pgu.reporter` object.
                               #' @return
                               #' string
-                              #' @examples
-                              #' x$print()
-                              #' print(x)
                               print = function() {
                                 sprintf("\npgu.reporter\n\nReport will be written to: %s", self$filename) %>%
                                   cat()
@@ -101,8 +95,6 @@ pgu.reporter <- R6::R6Class("pgu.reporter",
                               #' A list of class objects that are passed to the rmarkdown script.
                               #' @return
                               #' t.b.a.
-                              #' @examples
-                              #' x$write_report(obj)
                               write_report = function(obj){
                                 report_dir <- tempdir()
 

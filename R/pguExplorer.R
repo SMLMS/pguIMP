@@ -177,9 +177,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' A new `pgu.explorer` object.
                           #' (pguIMP::pgu.optimizer)
-                          #' @examples
-                          #' y <- tibble:tibble()
-                          #' x <- pguIMP:pgu.explorer$new(data = y)
                           initialize = function(data_df = "tbl_df")
                           {
                             if(!tibble::is_tibble(data_df)){
@@ -201,9 +198,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' Prints instance variables of a `pgu.explorer` object.
                           #' @return
                           #' string
-                          #' @examples
-                          #' x$print()
-                          #' print(x)
                           print = function()
                           {
                             rString <- sprintf("\npgu.explorer\n")
@@ -233,8 +227,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @param ord
                           #' The ordinate attribute
                           #' (character)
-                          #' @examples
-                          #' x$reset(abj, abs = "time", ord = "infected")
                           reset = function(data_df = "tbl_df", abs = "character", ord = "character")
                           {
                             self$setRawData <- data_df
@@ -259,9 +251,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Scatter plot
                           #' (ggplot2::ggplot)
-                          #' @examples
-                          #' x$scatterPlot() %>%
-                          #'  show()
                           scatterPlot = function(){
                             p <- self$rawData %>%
                               ggplot2::ggplot(mapping = ggplot2::aes_string(x = as.name(self$abscissa), y = as.name(self$ordinate)), na.rm = TRUE) +
@@ -282,9 +271,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Bar plot
                           #' (ggplot2::ggplot)
-                          #' @examples
-                          #' x$abscissaBarPlot() %>%
-                          #'  show()
                           abscissaBarPlot = function(){
                             p <- NULL
                             if(private$abscissa_is_numeric()){
@@ -309,9 +295,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Box plot
                           #' (ggplot2::ggplot)
-                          #' @examples
-                          #' x$abscissaBoxPlot() %>%
-                          #'  show()
                           abscissaBoxPlot = function(){
                             p <- NULL
                             if(private$abscissa_is_numeric()){
@@ -339,9 +322,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Compound plot
                           #' (gridExtra::grid.arrange)
-                          #' @examples
-                          #' x$abscissaPlot() %>%
-                          #'  show()
                           abscissaPlot = function(){
                             p <- NULL
                             if(private$abscissa_is_numeric()){
@@ -361,9 +341,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Bar plot
                           #' (ggplot2::ggplot)
-                          #' @examples
-                          #' x$ordinateBarPlot() %>%
-                          #'  show()
                           ordinateBarPlot = function(){
                             p <- NULL
                             if(private$ordinate_is_numeric()){
@@ -388,9 +365,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Box plot
                           #' (ggplot2::ggplot)
-                          #' @examples
-                          #' x$ordinateBoxPlot() %>%
-                          #'  show()
                           ordinateBoxPlot = function(){
                             p <- NULL
                             if(private$ordinate_is_numeric()){
@@ -418,9 +392,6 @@ pgu.explorer <- R6::R6Class("pgu.explorer",
                           #' @return
                           #' Compound plot
                           #' (gridExtra::grid.arrange)
-                          #' @examples
-                          #' x$ordinatePlot() %>%
-                          #'  show()
                           ordinatePlot = function(){
                             p <- NULL
                             if(private$ordinate_is_numeric()){

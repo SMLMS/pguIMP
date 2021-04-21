@@ -99,9 +99,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A new `pgu.regressor` object.
                                  #' (pguIMP::pgu.regressor)
-                                 #' @examples
-                                 #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.regressor$new(data = y)
                                  initialize = function(data = "tbl_df"){
                                    if(class(data)[1] != "tbl_df"){
                                      data <- tibble::tibble(names <- "none",
@@ -122,9 +119,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' Prints instance variables of a `pgu.regressor` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.regressor\n")
                                    cat(rString)
@@ -155,8 +149,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @param progress
                                  #' Keeps track of the analysis progress.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$resetRegressor(data, progress)
                                  resetRegressor = function(data = "tbl_df", progress = "Progress"){
                                    self$setFeatureNames <- data %>%
                                      dplyr::select_if(is.numeric) %>%
@@ -171,8 +163,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A matrix with its diagonal reset to NA.
                                  #' (matrix)
-                                 #' @examples
-                                 #' data <- x$resetDiagonal(data)
                                  resetDiagonal = function(data = "matrix"){
                                    if(nrow(data) == ncol(data)){
                                      for (i in 1:nrow(data)){
@@ -194,8 +184,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A square matrix.
                                  #' (matrix)
-                                 #' @examples
-                                 #' matrix <- x$resetMatrix(value)
                                  resetMatrix = function(value = "numeric"){
                                    n <- length(self$featureNames)
                                    df <- matrix(data = value,
@@ -218,8 +206,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' The attributes column index.
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$featureIdx(feature = "time")
                                  featureIdx = function(feature = "character"){
                                    idx <- match(c(feature), self$featureNames)
                                    if(is.na(idx)){
@@ -237,8 +223,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' The test result.
                                  #' (logical)
-                                 #' @examples
-                                 #' y <- x$featureIsValid(feature = "time")
                                  featureIsValid = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    if(is.na(idx)){
@@ -259,8 +243,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' The test result.
                                  #' (logical)
-                                 #' @examples
-                                 #' y <- x$featurePairIsValid(abscissa = "time", ordinate = "infected")
                                  featurePairIsValid = function(abscissa = "character", ordinate = "character"){
                                    val <- TRUE
                                    if(!self$featureIsValid(abscissa)){val <- FALSE}
@@ -283,8 +265,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @param ordinate
                                  #' An attribute's name that equals a column name in the data.
                                  #' (character)
-                                 #' @examples
-                                 #' x$createModel(data, abscissa = "time", ordinate = "infected")
                                  createModel = function(data = "tbl_df", abscissa = "character", ordinate = "character"){
                                    if(self$featurePairIsValid(abscissa, ordinate)){
                                      ord <- paste0("`", ordinate, "`")
@@ -309,8 +289,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$createRegressionMatrix(data, progress)
                                  createRegressionMatrix = function(data = "tbl_df", progress = "Progress"){
                                    for (abscissa in self$featureNames){
                                      for (ordinate in self$featureNames){
@@ -350,9 +328,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' The analyis result as a dataframe.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printModel(abscissa = "time", ordinate = "healthy") %>%
-                                 #'  print()
                                  printModel = function(abscissa = "character", ordinate = "character"){
                                    t <- NULL
                                    if(self$featurePairIsValid(abscissa, ordinate)){
@@ -376,9 +351,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' Dataframe of instance variable intercept.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printInterceptTbl() %>%
-                                 #'  print()
                                  printInterceptTbl = function(){
                                    self$intercept %>%
                                      tibble::as_tibble() %>%
@@ -391,9 +363,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' Dataframe of instance variable pIntercept.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printPInterceptTbl() %>%
-                                 #'  print()
                                  printPInterceptTbl = function(){
                                    self$pIntercept %>%
                                      tibble::as_tibble() %>%
@@ -406,9 +375,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' Dataframe of instance variable slope.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printSlopeTbl() %>%
-                                 #'  print()
                                  printSlopeTbl = function(){
                                    self$slope %>%
                                      tibble::as_tibble() %>%
@@ -421,9 +387,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' Dataframe of instance variable pSlope.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$printPSlopeTbl() %>%
-                                 #'  print()
                                  printPSlopeTbl = function(){
                                    self$pSlope %>%
                                      tibble::as_tibble() %>%
@@ -441,9 +404,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A scatter plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotRegression() %>%
-                                 #'  show()
                                  plotRegression = function(){
                                    abs <- dplyr::sym(names(self$model$model)[2])
                                    ord <- dplyr::sym(names(self$model$model)[1])
@@ -463,9 +423,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A histogram plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotResidualDist() %>%
-                                 #'  show()
                                  plotResidualDist = function(){
                                    p <- tibble::enframe(self$model$residuals, name=c("index")) %>%
                                      ggplot2::ggplot(mapping=ggplot2::aes_string(x="value"), na.rm=TRUE)+
@@ -480,9 +437,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A box plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotResidualBox() %>%
-                                 #'  show()
                                  plotResidualBox = function(){
                                    p <- tibble::enframe(self$model$residuals, name=c("index")) %>%
                                      ggplot2::ggplot(mapping=ggplot2::aes_string(y="value"), na.rm=TRUE)+
@@ -510,9 +464,6 @@ pgu.regressor <- R6::R6Class("pgu.regressor",
                                  #' @return
                                  #' A composite graph.
                                  #' (gridExtra::grid.arrange)
-                                 #' @examples
-                                 #' x$plotModel(data, abscissa = "time", ordinate = "death") %>%
-                                 #'  show()
                                  plotModel = function(data = "tbl_df", abscissa = "character", ordinate = "character"){
                                    p <- NULL
                                    if(self$featurePairIsValid(abscissa, ordinate)){

@@ -16,10 +16,8 @@ RoxygenNote: 7.1.1
 URL: https://github.com/SMLMS/pguIMP
 BugReports: https://github.com/SMLMS/pguIMP/issues
 Imports:
-    shiny (>= 1.4.0.2),
     R6 (>= 2.4.1),
     Amelia,
-    DMwR,
     DT,
     DataVisualizations,
     dbscan,
@@ -27,9 +25,9 @@ Imports:
     finalfit,
     GGally,
     Hmisc,
+    kableExtra,
     knitr,
     MASS,
-    OutlierDetection,
     RWeka,
     VIM,
     bbmle,
@@ -42,9 +40,12 @@ Imports:
     pracma,
     psych,
     rcompanion,
+    rmarkdown,
     robust,
+    shiny,
     shinydashboard,
     shinyjs,
+    shinyWidgets,
     stats,
     tidyverse,
     tools,
@@ -82,5 +83,3 @@ Collate:
     'pguOutlierDetection.R'
     'pguRegressor.R'
 VignetteBuilder: knitr
-Suggests: 
-    rmarkdown

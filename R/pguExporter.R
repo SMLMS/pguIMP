@@ -63,8 +63,6 @@ pgu.exporter <- R6::R6Class("pgu.exporter",
                               #' @return
                               #' A new `pgu.exporter` object.
                               #' (pguIMP::pgu.exporter)
-                              #' @examples
-                              #' x <- pguIMP:pgu.exporter$new()
                               initialize = function() {
                                 private$.suffixAlphabet <- c("xlsx")
                               },
@@ -81,9 +79,6 @@ pgu.exporter <- R6::R6Class("pgu.exporter",
                               #' Prints instance variables of a `pgu.exporter` object.
                               #' @return
                               #' string
-                              #' @examples
-                              #' x$print()
-                              #' print(x)
                               print = function() {
                                 rString <- sprintf("\npgu.exporter\n")
                                 cat(rString)
@@ -100,8 +95,6 @@ pgu.exporter <- R6::R6Class("pgu.exporter",
                               ####################
                               #' @description
                               #' extracts the suffix from the fileName
-                              #' @examples
-                              #' x$extractSuffix()
                               extractSuffix = function(){
                                 private$.suffix <- tools::file_ext(self$fileName)
                               },
@@ -110,9 +103,6 @@ pgu.exporter <- R6::R6Class("pgu.exporter",
                               #' @param obj
                               #' A tibble or list of tibble.
                               #' If obj is a list, each member will be written to a seperate sheet.
-                              #' @examples
-                              #' data <- tibble::tibble()
-                              #' x$writeDataToExcel(obj = data)
                               writeDataToExcel = function(obj = "list"){
                                 print("write obj")
                                 print(typeof(obj))

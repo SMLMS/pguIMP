@@ -72,9 +72,6 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                            #' @return
                                            #' A new `pgu.missingsCharacterizer` object.
                                            #' (pguIMP::pgu.missingsCharacterizer)
-                                           #' @examples
-                                           #' x <- tibble::tibble()
-                                           #' obj <- pguIMP::pgu.missingsCharacterizer$new(data_df = x)
                                            initialize = function(data_df = "tbl_df"){
                                              self$reset(data_df)
                                            }, #function
@@ -89,9 +86,6 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                            #' Prints instance variables of a `pgu.missingsCharacterizer` object.
                                            #' @return
                                            #' string
-                                           #' @examples
-                                           #' obj$print()
-                                           #' print(obj)
                                            print = function(){
                                              rString <- sprintf("\npgu.missingsCharacterizer\n")
                                              cat(rString)
@@ -111,9 +105,6 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                            #' @param data_df
                                            #' The data to be analyzed.
                                            #' (tibble::tibble)
-                                           #' @examples
-                                           #' x <- tibble::tibble
-                                           #' obj$reset(data_df = x)
                                            reset = function(data_df = "tbl_df"){
                                              if(!tibble::is_tibble(data_df)){
                                                data_df <- tibble::tibble(NULL)
@@ -134,9 +125,6 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                            #' @param progress
                                            #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                            #' (shiny::Progress)
-                                           #' @examples
-                                           #' x <- tibble::tibble
-                                           #' obj$analyze(data_df = x)
                                            analyze  = function(data_df = "tbl_df", progress = "Progress"){
                                              if(!tibble::is_tibble(data_df)){
                                                data_df <- tibble::tibble(NULL)
@@ -206,9 +194,6 @@ pgu.missingsCharacterizer <- R6::R6Class("pgu.missingsCharacterizer",
                                            #' @param data_df
                                            #' The data to be analyzed.
                                            #' (tibble::tibble)
-                                           #' @examples
-                                           #' x <- tibble::tibble
-                                           #' obj$plot_pair_dist(data_df = x)
                                            plot_pair_dist = function(data_df = "tbl_df"){
                                              if(length(self$featureAlphabet)>10){
                                                return(NULL)

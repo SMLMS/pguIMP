@@ -17,34 +17,6 @@ The filtering is done by column and row indices.
 x <- pguIMP::pgu.filter$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.filter$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.filter$new(data_df = y)
-
-## ------------------------------------------------
-## Method `pgu.filter$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.filter$reset`
-## ------------------------------------------------
-
-x$reset(data)
-
-## ------------------------------------------------
-## Method `pgu.filter$predict`
-## ------------------------------------------------
-
-y <- x$filter(data_df)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -106,15 +78,6 @@ Creates and returns a new pguIMP::pgu.filter object.
 A new pguIMP::pgu.filter object.
 (pguIMP::pgu.filter)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.filter$new(data_df = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -128,15 +91,6 @@ Prints instance variables of a pguIMP::pgu.filter object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -155,14 +109,6 @@ Resets the filter parameter colIdx and rowIdx to the full dataframe.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$reset(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-predict"></a>}}
@@ -185,14 +131,6 @@ Filters and returns the given data frame.
 The filtered data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$filter(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

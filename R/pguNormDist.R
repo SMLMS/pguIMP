@@ -224,9 +224,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A new `pgu.normDist` object.
                                  #' (pguIMP::pgu.normDist)
-                                 #' @examples
-                                 #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.normDist$new(data = y)
                                  initialize = function(data = "tbl_df"){
                                    if(class(data)[1] != "tbl_df"){
                                      data <- tibble::tibble(names <- "none",
@@ -248,9 +245,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' Prints instance variables of a `pgu.normDist` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.normDist:\n%s\n", self$featureName)
                                    cat(rString)
@@ -267,8 +261,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @param data
                                  #' Dataframe to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$resetNormDist(data)
                                  resetNormDist = function(data = "tbl_df"){
                                    if ((ncol(data) ==1) & (is.numeric(data[[1]]))){
                                      private$.featureName <- colnames(data)
@@ -304,8 +296,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
 
                                  #' @description
                                  #' Resets instance variables in case of a failed analysis.
-                                 #' @examples
-                                 #' x$resetFail()
                                  resetFail = function(){
                                    private$.expMu <- NA
                                    private$.expSigma <- NA
@@ -333,8 +323,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' Optimizes the logLikelihood between the data and a normal distribution
                                  #' with respect to the expectation value and standard deviation.
                                  #' The quality of the best model ist calculated subsequently.
-                                 #' @examples
-                                 #' x$optimize()
                                  optimize = function(){
                                    estMu <- mean(self$rawData[["x"]], na.rm=TRUE)
                                    estSigma <- sd(self$rawData[["x"]], na.rm=TRUE)
@@ -386,8 +374,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @description
                                  #' Creates a histogram from the instance variable `rawData`.
                                  #' The histogram is stored in the instance variable `histogram`.
-                                 #' @examples
-                                 #' x$createHistogram()
                                  createHistogram = function(){
                                    rawHist <- ggplot2::ggplot_build(ggplot2::ggplot(data = self$rawData, mapping = ggplot2::aes_string(x="x"))+
                                                              ggplot2::geom_histogram(ggplot2::aes(y=..density..), bins = 30)
@@ -404,8 +390,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' Performes a qq-analysis of the instance variable `rawData`
                                  #' The qq-analysis is stored in the attributes `sample_quantile`
                                  #' and `theoretical_quantile` of the instance variable `rawData`.
-                                 #' @examples
-                                 #' x$normalQQData()
                                  normalQQData = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(sample="x"))+
                                      ggplot2::stat_qq()+
@@ -425,8 +409,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' `w.shapiro`.
                                  #' The p-value of the test is stored in the instance variable
                                  #' `p.shapiro`
-                                 #' @examples
-                                 #' x$test.shapiro()
                                  test.shapiro = function(){
                                    test <- stats::shapiro.test(self$rawData$x)
                                    private$.w.shapiro <- test$statistic
@@ -440,8 +422,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' `d.kolmogorow`.
                                  #' The p-value of the test is stored in the instance variable
                                  #' `p.kolmogorow`
-                                 #' @examples
-                                 #' x$test.kolmogorow()
                                  test.kolmogorow = function(){
                                    # test <- stats::ks.test(self$rawData$x, "pnorm", mean=self$expMu, sd=self$expSigma)
                                    test <- nortest::lillie.test(self$rawData$x)
@@ -456,8 +436,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' `a.anderson`.
                                  #' The p-value of the test is stored in the instance variable
                                  #' `p.anderson`
-                                 #' @examples
-                                 #' x$test.anderson()
                                  test.anderson = function(){
                                    test <- nortest::ad.test(self$rawData$x)
                                    private$.a.anderson <- test$statistic
@@ -473,8 +451,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' String of the results of the fitting routine
                                  #' (character)
-                                 #' @examples
-                                 #' x$fitResult()
                                  fitResult = function(){
                                    s <- sprintf("MLE Fit Result:\nmu = %.5f\nsigma = %.5f\nlogLikelihood = %.5f\nnumber of data points = %i\ndegrees of freedom = %i\nBIC = %.5f\nAIC = %.5f\nAICc = %.5f\nRMSE = %.5f",
                                                 self$expMu, self$expSigma, self$logLikelihood, self$dataPoints, self$degOfFreedom, self$bic, self$aic, self$aicc, self$rmse)
@@ -492,8 +468,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' String of the results of the testing routine
                                  #' (character)
-                                 #' @examples
-                                 #' x$testResult(testName = )
                                  testResult = function(testName = "Shapiro-Wilk"){
                                    switch (testName,
                                            "Shapiro-Wilk"={
@@ -529,8 +503,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' String of the results of the testing routine
                                  #' (character)
-                                 #' @examples
-                                 #' x$testResultCompendium()
                                  testResultCompendium = function(){
                                    s <- "\nStatistical test results:"
                                    for (name in self$testNames) {
@@ -548,9 +520,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A bar plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotHistogram() %>%
-                                 #'  show()
                                  plotHistogram = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping = ggplot2::aes_string(x="x", y="y_data"))+
                                      ggplot2::geom_col()+
@@ -574,9 +543,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A scatter plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotResiduals() %>%
-                                 #'  show()
                                  plotResiduals = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="x", y="res"))+
                                      ggplot2::geom_point()+
@@ -600,9 +566,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A bar plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotResidualDist() %>%
-                                 #'  show()
                                  plotResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$histogram, mapping=ggplot2::aes_string(x="res"))+
                                      ggplot2::geom_histogram(bins = 30) +
@@ -625,9 +588,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A bar plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotRawResidualDist() %>%
-                                 #'  show()
                                  plotRawResidualDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="residuals"))+
                                      ggplot2::geom_histogram(bins = 30) +
@@ -650,9 +610,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A bar plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$plotRawDataDist() %>%
-                                 #'  show()
                                  plotRawDataDist = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(x="x"))+
                                      ggplot2::geom_histogram(bins = 30) +
@@ -675,9 +632,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @return
                                  #' A qq-plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$normalQQPlot() %>%
-                                 #'  show()
                                  normalQQPlot = function(){
                                    p <- ggplot2::ggplot(data=self$rawData, mapping=ggplot2::aes_string(sample="x"))+
                                      ggplot2::stat_qq()+
@@ -701,8 +655,6 @@ pgu.normDist <- R6::R6Class("pgu.normDist",
                                  #' @description
                                  #' Runs the optimization process and performs all implemented quality controls.
                                  #' Additionally performs hypothesis tests for nromality.
-                                 #' @examples
-                                 #' x$fit()
                                  fit = function(){
                                    self$optimize()
                                    if(self$fitSuccess){

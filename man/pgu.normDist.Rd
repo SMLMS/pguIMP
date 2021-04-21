@@ -22,136 +22,6 @@ with respect to the expectation value und standard deviation.
 x <- pguIMP::pgu.normDist$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.normDist$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.normDist$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.normDist$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.normDist$resetNormDist`
-## ------------------------------------------------
-
-x$resetNormDist(data)
-
-## ------------------------------------------------
-## Method `pgu.normDist$resetFail`
-## ------------------------------------------------
-
-x$resetFail()
-
-## ------------------------------------------------
-## Method `pgu.normDist$optimize`
-## ------------------------------------------------
-
-x$optimize()
-
-## ------------------------------------------------
-## Method `pgu.normDist$createHistogram`
-## ------------------------------------------------
-
-x$createHistogram()
-
-## ------------------------------------------------
-## Method `pgu.normDist$normalQQData`
-## ------------------------------------------------
-
-x$normalQQData()
-
-## ------------------------------------------------
-## Method `pgu.normDist$test.shapiro`
-## ------------------------------------------------
-
-x$test.shapiro()
-
-## ------------------------------------------------
-## Method `pgu.normDist$test.kolmogorow`
-## ------------------------------------------------
-
-x$test.kolmogorow()
-
-## ------------------------------------------------
-## Method `pgu.normDist$test.anderson`
-## ------------------------------------------------
-
-x$test.anderson()
-
-## ------------------------------------------------
-## Method `pgu.normDist$fitResult`
-## ------------------------------------------------
-
-x$fitResult()
-
-## ------------------------------------------------
-## Method `pgu.normDist$testResult`
-## ------------------------------------------------
-
-x$testResult(testName = )
-
-## ------------------------------------------------
-## Method `pgu.normDist$testResultCompendium`
-## ------------------------------------------------
-
-x$testResultCompendium()
-
-## ------------------------------------------------
-## Method `pgu.normDist$plotHistogram`
-## ------------------------------------------------
-
-x$plotHistogram() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$plotResiduals`
-## ------------------------------------------------
-
-x$plotResiduals() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$plotResidualDist`
-## ------------------------------------------------
-
-x$plotResidualDist() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$plotRawResidualDist`
-## ------------------------------------------------
-
-x$plotRawResidualDist() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$plotRawDataDist`
-## ------------------------------------------------
-
-x$plotRawDataDist() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$normalQQPlot`
-## ------------------------------------------------
-
-x$normalQQPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normDist$fit`
-## ------------------------------------------------
-
-x$fit()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -280,15 +150,6 @@ Creates and returns a new \code{pgu.normDist} object.
 A new \code{pgu.normDist} object.
 (pguIMP::pgu.normDist)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.normDist$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -313,15 +174,6 @@ Prints instance variables of a \code{pgu.normDist} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetNormDist"></a>}}
@@ -340,14 +192,6 @@ Resets instance variables
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetNormDist(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetFail"></a>}}
@@ -356,14 +200,6 @@ Resets instance variables
 Resets instance variables in case of a failed analysis.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$resetFail()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetFail()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -378,14 +214,6 @@ The quality of the best model ist calculated subsequently.
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$optimize()}\if{html}{\out{</div>}}
 }
 
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$optimize()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createHistogram"></a>}}
@@ -395,14 +223,6 @@ Creates a histogram from the instance variable \code{rawData}.
 The histogram is stored in the instance variable \code{histogram}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$createHistogram()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createHistogram()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -415,14 +235,6 @@ The qq-analysis is stored in the attributes \code{sample_quantile}
 and \code{theoretical_quantile} of the instance variable \code{rawData}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$normalQQData()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$normalQQData()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -440,14 +252,6 @@ The p-value of the test is stored in the instance variable
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$test.shapiro()}\if{html}{\out{</div>}}
 }
 
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$test.shapiro()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-test.kolmogorow"></a>}}
@@ -461,14 +265,6 @@ The p-value of the test is stored in the instance variable
 \code{p.kolmogorow}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$test.kolmogorow()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$test.kolmogorow()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -486,14 +282,6 @@ The p-value of the test is stored in the instance variable
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$test.anderson()}\if{html}{\out{</div>}}
 }
 
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$test.anderson()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fitResult"></a>}}
@@ -509,14 +297,6 @@ in form of a formated string.
 String of the results of the fitting routine
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fitResult()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-testResult"></a>}}
@@ -542,14 +322,6 @@ or \code{Anderson-Darling}.
 String of the results of the testing routine
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$testResult(testName = )
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-testResultCompendium"></a>}}
@@ -568,14 +340,6 @@ in form of a formated string.
 String of the results of the testing routine
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$testResultCompendium()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotHistogram"></a>}}
@@ -591,15 +355,6 @@ in form of a bar plot and overlays the corresponding normal distribution.
 A bar plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotHistogram() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotResiduals"></a>}}
@@ -615,15 +370,6 @@ Displays the residuals between the instance variable
 A scatter plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotResiduals() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotResidualDist"></a>}}
@@ -639,15 +385,6 @@ Displays the distribution of the residuals between the distribution of the insta
 A bar plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotResidualDist() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotRawResidualDist"></a>}}
@@ -663,15 +400,6 @@ Displays the distribution of the residuals between the distribution of the insta
 A bar plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotRawResidualDist() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotRawDataDist"></a>}}
@@ -687,15 +415,6 @@ Displays the distribution of the instance variable
 A bar plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotRawDataDist() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-normalQQPlot"></a>}}
@@ -711,15 +430,6 @@ Displays a qqplot of the instance variable
 A qq-plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$normalQQPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit"></a>}}
@@ -729,14 +439,6 @@ Runs the optimization process and performs all implemented quality controls.
 Additionally performs hypothesis tests for nromality.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.normDist$fit()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fit()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }

@@ -19,166 +19,6 @@ For this purpose outliers are handled as imputation sites.
 x <- pguIMP::pgu.outliers$new(data_df)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.outliers$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.outliers$new(data_df = y)
-
-## ------------------------------------------------
-## Method `pgu.outliers$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.outliers$resetOutliers`
-## ------------------------------------------------
-
-x$resetOutliers(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.outliers$filterFeatures`
-## ------------------------------------------------
-
-matrix <- x$filterFeatures(data)
-
-## ------------------------------------------------
-## Method `pgu.outliers$checkFeatureValidity`
-## ------------------------------------------------
-
-x$checkFeatureValidity(data_df, "ifected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectOutliersParameter`
-## ------------------------------------------------
-
-x$detectOutliersParameter(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$outliersFeatureList`
-## ------------------------------------------------
-
-idx <- x$outliersFeatureList(data)
-
-## ------------------------------------------------
-## Method `pgu.outliers$featureOutlier`
-## ------------------------------------------------
-
-f <- x$featureOutlier(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$one_hot`
-## ------------------------------------------------
-
-x$one_hot(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectOutliers`
-## ------------------------------------------------
-
-x$detectOutliers(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectByGrubbs`
-## ------------------------------------------------
-
-x$detectByGrubbs(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$grubbs_numeric`
-## ------------------------------------------------
-
-y <- x$runGrubbs(data, feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectByDbscan`
-## ------------------------------------------------
-
-x$detectByDBSCAN(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$dbscan_numeric`
-## ------------------------------------------------
-
-x$dbscan_numeric(data_df,"infected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectBySvm`
-## ------------------------------------------------
-
-x$detectBySvm(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$svm_numeric`
-## ------------------------------------------------
-
-x$svm_numeric(data_df,"infected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$detectByKnn`
-## ------------------------------------------------
-
-x$detectByKnn(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$knn_numeric`
-## ------------------------------------------------
-
-x$knn_numeric(data_df,"infected")
-
-## ------------------------------------------------
-## Method `pgu.outliers$setImputationSites`
-## ------------------------------------------------
-
-mutated_df <- x$setImputationSites(data_df)
-
-## ------------------------------------------------
-## Method `pgu.outliers$calcOutliersStatistics`
-## ------------------------------------------------
-
-x$calcOutliersStatistics(data)
-
-## ------------------------------------------------
-## Method `pgu.outliers$outlierTable`
-## ------------------------------------------------
-
-data \%>\%
- x$outlierTable() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.outliers$plotOutliersDistribution`
-## ------------------------------------------------
-
-x$plotOutliersDistribution() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.outliers$featureBarPlot`
-## ------------------------------------------------
-
-x$featureBarPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.outliers$featureBoxPlotWithSubset`
-## ------------------------------------------------
-
-x$featureBoxPlotWithSubset() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.outliers$featurePlot`
-## ------------------------------------------------
-
-x$featurePlot() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -346,15 +186,6 @@ Creates and returns a new \code{pgu.outliers} object.
 A new \code{pgu.outliers} object.
 (pguIMP::pgu.outliers)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.outliers$new(data_df = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -379,15 +210,6 @@ Prints instance variables of a \code{pgu.outliers} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetOutliers"></a>}}
@@ -408,14 +230,6 @@ Progresse is indicated by the progress object passed to the function.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetOutliers(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filterFeatures"></a>}}
@@ -438,14 +252,6 @@ Filters attributes from the given dataframe that are known to the class.
 A filterd dataframe.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{matrix <- x$filterFeatures(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-checkFeatureValidity"></a>}}
@@ -467,14 +273,6 @@ Checks if the feature consists of a sufficient number of instances.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$checkFeatureValidity(data_df, "ifected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectOutliersParameter"></a>}}
@@ -495,14 +293,6 @@ Results are stored to instance variable outliersParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectOutliersParameter(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-outliersFeatureList"></a>}}
@@ -527,14 +317,6 @@ If multiple attributes' row entries were identified as outliers, the row is char
 Vector of row characteristics.
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$outliersFeatureList(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureOutlier"></a>}}
@@ -557,14 +339,6 @@ Returns the detected outliers of a given attribute.
 The attribute's outliers
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{f <- x$featureOutlier(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-one_hot"></a>}}
@@ -585,14 +359,6 @@ The result is stored in the instance variable one_hot_df.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$one_hot(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectOutliers"></a>}}
@@ -615,14 +381,6 @@ Detects anomalies in a data frame by one-dimensional analysis of each feature.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectOutliers(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectByGrubbs"></a>}}
@@ -648,14 +406,6 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectByGrubbs(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-grubbs_numeric"></a>}}
@@ -683,14 +433,6 @@ The function indicates a find by a positive feedback.
 Feedback if an outlier was found.
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$runGrubbs(data, feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectByDbscan"></a>}}
@@ -717,14 +459,6 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectByDBSCAN(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-dbscan_numeric"></a>}}
@@ -755,14 +489,6 @@ Display the progress if shiny is loaded.
 A data frame comprising the information about detected anomalies of the feature.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$dbscan_numeric(data_df,"infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectBySvm"></a>}}
@@ -789,14 +515,6 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectBySvm(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-svm_numeric"></a>}}
@@ -827,14 +545,6 @@ Display the progress if shiny is loaded.
 A data frame comprising the information about detected anomalies of the feature.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$svm_numeric(data_df,"infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectByKnn"></a>}}
@@ -861,14 +571,6 @@ Display the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectByKnn(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-knn_numeric"></a>}}
@@ -899,14 +601,6 @@ Display the progress if shiny is loaded.
 A data frame comprising the information about detected anomalies of the feature.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$knn_numeric(data_df,"infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setImputationSites"></a>}}
@@ -929,14 +623,6 @@ Replaces the detected anomalies of a user provided data frame with \code{NA} for
 A data frame with anomalies replaced by \code{NA}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{mutated_df <- x$setImputationSites(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-calcOutliersStatistics"></a>}}
@@ -956,14 +642,6 @@ and stores the results in the instance variable \code{outliersStatistcs}.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$calcOutliersStatistics(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-outlierTable"></a>}}
@@ -986,16 +664,6 @@ Creates a datatable with substituted outliers highlightes by colored background.
 A colored datatable
 (DT::datatable)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data \%>\%
- x$outlierTable() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotOutliersDistribution"></a>}}
@@ -1010,15 +678,6 @@ Displays the occurrence of outlier candidates per attribute as bar plot.
 A bar plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotOutliersDistribution() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBarPlot"></a>}}
@@ -1044,15 +703,6 @@ Displays the distribution of an attribute's values as histogram.
 A histogram.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBarPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBoxPlotWithSubset"></a>}}
@@ -1081,15 +731,6 @@ Displays the distribution of an attribute's vlues as box plot.
 A box plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBoxPlotWithSubset() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePlot"></a>}}
@@ -1115,15 +756,6 @@ Displays the distribution of an attribute's values as a composition of a box plo
 A composite plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featurePlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

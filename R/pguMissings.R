@@ -73,9 +73,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' A new `pgu.missings` object.
                               #' (pguIMP::pgu.missings)
-                              #' @examples
-                              #' y <- tibble:tibble()
-                              #' x <- pguIMP:pgu.missings$new(data_df = y)
                               initialize = function(data_df = "tbl_df"){
                                 if(!tibble::is_tibble(data_df)){
                                   data_df <- tibble::tibble(names <- "none",
@@ -98,9 +95,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' Prints instance variables of a `pgu.missings` object.
                               #' @return
                               #' string
-                              #' @examples
-                              #' x$print()
-                              #' print(x)
                               print = function(){
                                 rString <- sprintf("\npgu.missings\n")
                                 cat(rString)
@@ -119,8 +113,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @param data_df
                               #' Dataframe to be analyzed.
                               #' (tibble::tibble)
-                              #' @examples
-                              #' x$resetImputtaionParameter(data_df)
                               resetImputationParameter = function(data_df = "tbl_df"){
                                 numericData <- data_df %>%
                                   dplyr::select_if(is.numeric)
@@ -148,8 +140,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The postion of the attribute.
                               #' (numeric)
-                              #' @examples
-                              #' idx <- x$featureIdx(feature = "infected")
                               featureIdx = function(feature = "character"){
                                 idx <- match(feature, self$imputationParameter[["features"]])
                                 if(is.na(idx)){
@@ -168,8 +158,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The filtered data frame.
                               #' (tibble::tibble)
-                              #' @examples
-                              #' idx <- x$filterFeatures(data_df)
                               filterFeatures = function(data_df = "tbl_df"){
                                 data_df %>%
                                   dplyr::select(private$.imputationParameter[["features"]]) %>%
@@ -187,8 +175,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The lenght of the vector.
                               #' (numeric)
-                              #' @examples
-                              #' idx <- x$gatherMeasurements(value)
                               gatherMeasurements = function(value = "numeric"){
                                 return(length(value))
                               }, #function
@@ -201,8 +187,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The number of missing in the vector.
                               #' (numeric)
-                              #' @examples
-                              #' idx <- x$gatherMissings(value)
                               gatherMissings = function(value = "numeric"){
                                 y <- sum(is.na(value))
                                 return(y)
@@ -216,8 +200,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The number of existing values in the vector.
                               #' (numeric)
-                              #' @examples
-                              #' idx <- x$gatherExistings(value)
                               gatherExistings = function(value = "numeric"){
                                 y <- sum(!is.na(value))
                                 return(y)
@@ -231,8 +213,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' The fraction of missing values in the vector.
                               #' (numeric)
-                              #' @examples
-                              #' idx <- x$gatherFractionOfMissings(value)
                               gatherFractionOfMissings =  function(value = "numeric"){
                                 y <- 100.0*sum(is.na(value))/length(value)
                                 return(y)
@@ -245,8 +225,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
-                              #' @examples
-                              #' x$gatherInformationStatistics(data_df)
                               gatherImputationStatistics = function(data_df = "tbl_df"){
                                 filteredData <- data_df %>%
                                   self$filterFeatures()
@@ -267,8 +245,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
-                              #' @examples
-                              #' x$one_hot(data_df)
                               one_hot = function(data_df = "tbl_df"){
                                 if(!tibble::is_tibble(data_df)){
                                   print("Warning: data_df needs to by of type tibble.")
@@ -288,8 +264,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @param data_df
                               #' The data frame to be analyzed.
                               #' (tibble::tibble)
-                              #' @examples
-                              #' y <- x$detectImputationsites(data_df)
                               detectImputationSites = function(data_df = "tbl_df"){
                                 private$.imputationSites <- data_df %>%
                                   self$filterFeatures() %>%
@@ -311,10 +285,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' A data frame
                               #' (tibble::tibble)
-                              #' @examples
-                              #' data %>%
-                              #'  x$imputationSiteDistribution() %>%
-                              #'  print()
                               imputationSiteDistribution = function(data_df = "tbl_df"){
                                 d <- data_df %>%
                                   self$filterFeatures() %>%
@@ -338,10 +308,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' #' @return
                               #' #' A data frame
                               #' #' (tibble::tibble)
-                              #' #' @examples
-                              #' #' data %>%
-                              #' #'  x$mergeImputationSiteData() %>%
-                              #' #'  print()
                               #' mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
                               #'   dfMerge <- data_df
                               #'   if(nrow(data_df) == nrow(metadata_df)){
@@ -360,9 +326,6 @@ pgu.missings <- R6::R6Class("pgu.missings",
                               #' @return
                               #' A heatmap plot.
                               #' (ggplot2::ggplot)
-                              #' @examples
-                              #' x$imputationSiteHeatMap() %>%
-                              #'  show()
                               imputationSiteHeatMap = function(){
                                 p <- plot(self$amv,
                                           col=c('navyblue','red'),

@@ -48,8 +48,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' @return
                                   #' A new `pgu.importer` object.
                                   #' (pguIMP::pgu.importer)
-                                  #' @examples
-                                  #' x <- pguIMP:pgu.importer$new()
                                   initialize = function(){
                                     private$.suffixes <- c("xls", "xlsx")
                                   }, #function
@@ -67,9 +65,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' Prints instance variables of a `pgu.importer` object.
                                   #' @return
                                   #' string
-                                  #' @examples
-                                  #' x$print()
-                                  #' print(x)
                                   print = function(){
                                     rString <- sprintf("\npgu.importer\nsuffixes:\n")
                                     for (suffix in self$suffixes){
@@ -90,9 +85,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' @return
                                   #' test result
                                   #' (logical)
-                                  #' @examples
-                                  #' y <- pgu.file$new()
-                                  #' x$suffixIsKnown(obj = y)
                                   suffixIsKnown = function(obj = "pgu.file"){
                                     if(sum(obj$suffix == self$suffixes)>0){
                                       return(TRUE)
@@ -110,9 +102,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' @return
                                   #' data frame
                                   #' (tibble::tibble)
-                                  #' @examples
-                                  #' y <- pgu.file$new()
-                                  #' z <- x$importData(obj = y)
                                   importData = function(obj = "pgu.file"){
                                     if(self$suffixIsKnown(obj)){
                                       switch(obj$suffix,
@@ -140,9 +129,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' @return
                                   #' data frame
                                   #' (tibble::tibble)
-                                  #' @examples
-                                  #' y <- pgu.file$new()
-                                  #' z <- x$importLoq(obj = y)
                                   importLoq = function(obj = "pgu.file"){
                                     if(self$suffixIsKnown(obj)){
                                       switch(obj$suffix,
@@ -170,9 +156,6 @@ pgu.importer <- R6::R6Class("pgu.importer",
                                   #' @return
                                   #' data frame
                                   #' (tibble::tibble)
-                                  #' @examples
-                                  #' y <- pgu.file$new()
-                                  #' z <- x$importMetadata(obj = y)
                                   importMetadata = function(obj = "pgu.file"){
                                     if(self$suffixIsKnown(obj)){
                                       switch(obj$suffix,

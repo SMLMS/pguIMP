@@ -10,8 +10,7 @@
 #' @return
 #' A data frame
 #' (tibble::tibble)
-#' @examples
-#' importDataSet()
+#'
 
 importDataSet = function(obj = "pgu.file")
 {

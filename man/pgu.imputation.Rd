@@ -18,445 +18,6 @@ Replaces imputation sites by nissing values and substitutes NAs by classical and
 x <- pguIMP::pgu.imputation$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.imputation$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.imputation$new()
-
-## ------------------------------------------------
-## Method `pgu.imputation$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.imputation$gatherImputationSites`
-## ------------------------------------------------
-
-x$gatherImputtaionSites(data)
-
-## ------------------------------------------------
-## Method `pgu.imputation$gatherImputationSiteStatistics`
-## ------------------------------------------------
-
-x$gatherInformationSiteStatistics(data_df)
-
-## ------------------------------------------------
-## Method `pgu.imputation$gatherImputationSiteDistribution`
-## ------------------------------------------------
-
-x$gatherImputationSiteDistribution(data_df)
-
-## ------------------------------------------------
-## Method `pgu.imputation$insertImputationSites`
-## ------------------------------------------------
-
-x$insertImputationSites(data_df)
-
-## ------------------------------------------------
-## Method `pgu.imputation$one_hot`
-## ------------------------------------------------
-
-x$one_hot(data_df)
-
-## ------------------------------------------------
-## Method `pgu.imputation$analyzeImputationSites`
-## ------------------------------------------------
-
-x$analyzeImputationSites(data_df)
-####################
-# public functions #
-####################
-#' @description
-#' Resets instance variables and
-#' identifies missings in the normalized and Z-score transfromed data set.
-#' @param data
-#' Dataframe to be analyzed.
-#' (tibble::tibble)
-#' @examples
-#' x$resetImputtaionParameter(data)
-resetImputationStatistics = function(data_df = "tbl_df"){
-  numericData <- data_df \%>\%
-    dplyr::select_if(is.numeric)
-  features <- numericData \%>\%
-    colnames()
-  measurements <- c(rep(0.0, length(features)))
-  existings <- c(rep(0.0, length(features)))
-  missings <- c(rep(0.0, length(features)))
-  fractionOfMissings <- c(rep(0.0, length(features)))
-  private$.imputationStatistics <- tibble::tibble(features, measurements, existings, missings, fractionOfMissings)
-  private$.amv <- VIM::aggr(numericData, plot=FALSE)
-  self$gatherImputationStatistics(data_df)
-  self$detectImputationSites(data_df)
-} #function
-####################
-# helper functions #
-####################
-#' @description
-#' Returns the position of an attribute within a data frame.
-#' @param feature
-#' The attribute's name.
-#' (character)
-#' @return
-#' The postion of the attribute.
-#' (numeric)
-#' @examples
-#' idx <- x$featureIdx(feature = "infected")
-featureIdx = function(feature = "character"){
-  idx <- match(feature, self$imputationStatistics[["features"]])
-  if(is.na(idx)){
-    rString <- sprintf("\nWarning in pgu.imputation: feature \%s is not known\n",
-                       feature)
-    cat(rString)
-  }#if
-  return(idx)
-}, #function
-
-#' @description
-#' Selects features cotaining imputation sites from a dataset.
-#' @param data_df
-#' Dataframe to be analyzed.
-#' (tibble::tibble)
-#' @return
-#' The filtered data frame.
-#' (tibble::tibble)
-#' @examples
-#' idx <- x$filterFeatures(data)
-filterFeatures = function(data_df = "tbl_df"){
-  data_df \%>\%
-    dplyr::select(private$.imputationStatistics[["features"]]) \%>\%
-    return()
-}, #function
-
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputationSiteIdxByFeature`
-## ------------------------------------------------
-
-idx <- x$imputationIdxByFeature(featureName = "infected")
-
-
-## ------------------------------------------------
-## Method `pgu.imputation$nanFeatureList`
-## ------------------------------------------------
-
-idx <- x$nanFeatureList(data)
-
-#######################
-# missings statistics #
-#######################
-#' @description
-#' Calculates the number of values of a vector.
-#' @param value
-#' A vector comprising numeric data.
-#' (numeric)
-#' @return
-#' The lenght of the vector.
-#' (numeric)
-#' @examples
-#' idx <- x$gatherMeasurements(value)
-gatherMeasurements = function(value = "numeric"){
-  return(length(value))
-}, #function
-
-#' @description
-#' Calculates the number of missing values of a vector.
-#' @param value
-#' A vector comprising numeric data.
-#' (numeric)
-#' @return
-#' The number of missing in the vector.
-#' (numeric)
-#' @examples
-#' idx <- x$gatherMissings(value)
-gatherMissings = function(value = "numeric"){
-  y <- sum(is.na(value))
-  return(y)
-}, #function
-
-#' @description
-#' Calculates the number of existing values of a vector.
-#' @param value
-#' A vector comprising numeric data.
-#' (numeric)
-#' @return
-#' The number of existing values in the vector.
-#' (numeric)
-#' @examples
-#' idx <- x$gatherExistings(value)
-gatherExistings = function(value = "numeric"){
-  y <- sum(!is.na(value))
-  return(y)
-}, #function
-
-#' @description
-#' Calculates the fraction of missing values of a vector.
-#' @param value
-#' A vector comprising numeric data.
-#' (numeric)
-#' @return
-#' The fraction of missing values in the vector.
-#' (numeric)
-#' @examples
-#' idx <- x$gatherFractionOfMissings(value)
-gatherFractionOfMissings =  function(value = "numeric"){
-  y <- 100.0*sum(is.na(value))/length(value)
-  return(y)
-}, #function
-
-#' @description
-#' Gathers statistical information about missing values
-#' that are provided by the classes public `gather` functions.
-#' The information is stored within the classes instance variable `imputationParameter`
-#' @param data
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @examples
-#' x$gatherInformationStatistics(value)
-gatherImputationStatistics = function(data = "tbl_df"){
-  filteredData <- data \%>\%
-    self$filterFeatures()
-  private$.imputationParameter["measurements"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherMeasurements)
-  private$.imputationParameter["existings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherExistings)
-  private$.imputationParameter["missings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherMissings)
-  private$.imputationParameter["fractionOfMissings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherFractionOfMissings)
-}, #function
-
-###########################
-# detect imputation sites #
-###########################
-#' @description
-#' Detects missing values within the data frame and
-#' writes the to the instance variable `imputationsites`.
-#' @param data
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @param  feature
-#' The attribute within the data frame to be analyzed.
-#' @examples
-#' y <- x$detectImputationsites(data, feature = "infected")
-detectImputationSites = function(data = "tbl_df"){
-  private$.imputationSites <- data \%>\%
-    self$filterFeatures() \%>\%
-    is.na() \%>\%
-    which(arr.ind=TRUE) \%>\%
-    tibble::as_tibble() \%>\%
-    dplyr::mutate(features = self$imputationParameter[["features"]][col])
-}, #function
-
-
-## ------------------------------------------------
-## Method `pgu.imputation$average_number_of_predictors`
-## ------------------------------------------------
-
-x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
-
-## ------------------------------------------------
-## Method `pgu.imputation$detectPredictors`
-## ------------------------------------------------
-
-x$detectPredictors(data_df)
-
-## ------------------------------------------------
-## Method `pgu.imputation$handleImputationSites`
-## ------------------------------------------------
-
-x$handleImputationSites(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByMedian`
-## ------------------------------------------------
-
-x$imputeByMedian(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByMean`
-## ------------------------------------------------
-
-x$imputeByMean(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByExpectationValue`
-## ------------------------------------------------
-
-x$imputeByExpectationValue(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByMC`
-## ------------------------------------------------
-
-x$imputeByMC(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByKnn`
-## ------------------------------------------------
-
-x$imputeByKnn(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByMice`
-## ------------------------------------------------
-
-x$imputeByMice(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputeByM5P`
-## ------------------------------------------------
-
-x$imputeByM5P(data, progress)
-#' @description
-#' Substitutes imputation sites by values generated by a different methods of the amelia package.
-#' The procedure is run without bound information.
-#' Returns the cleaned dataframe.
-#' Display the progress if shiny is loaded.
-#' @param data_df
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @param progress
-#' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-#' (shiny::Progress)
-#' @return
-#' Cleaned dataframe.
-#' (tibble:tibble)
-#' @examples
-#' x$imputeByAmelia(data, progress)
-imputeByAmelia = function(data_df = "tbl_df", progress = "Progress"){
-  if(("shiny" \%in\% (.packages())) & (class(progress)[1] == "Progress")){
-    progress$inc(1)
-  }#if
-  ameliaOutput <- data_df \%>\%
-    Amelia::amelia()#(m = 1, parallel = "multicore", ncpus = 8)
-  ameliaOutput$imputations[[1]] \%>\%
-    tibble::as_tibble() \%>\%
-    return()
-}, #function
-#' @description
-#' Substitutes imputation sites by values generated by a different methods of the amelia package.
-#' The procedure is run with bound information.
-#' Returns the cleaned dataframe.
-#' Display the progress if shiny is loaded.
-#' @param data_df
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @param progress
-#' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
-#' (shiny::Progress)
-#' @return
-#' Cleaned dataframe.
-#' (tibble:tibble)
-#' @examples
-#' x$imputeByAmeliaBound(data, progress)
-imputeByAmeliaBound = function(data_df = "tbl_df", progress = "Progress"){
-  if(("shiny" \%in\% (.packages())) & (class(progress)[1] == "Progress")){
-    progress$inc(length(self$imputationStatistics[["feature"]]))
-  }#if
-  tblBounds = data.frame(column=c(1:ncol(data_df)),
-                         lower=c(0),
-                         upper=sapply(data_df,stats::quantile,probs = c(0.25),names=FALSE, na.rm = TRUE)) \%>\%
-    as.matrix()
-  ameliaOutput <- data_df \%>\%
-    Amelia::amelia(bounds=tblBounds)#(m = 1, parallel = "multicore", ncpus = 8)
-  ameliaOutput$imputations[[1]] \%>\%
-    tibble::as_tibble() \%>\%
-    return()
-}, #function
-
-##########
-# output #
-##########
-#' @description
-#' Numeric representation of the distribution of missing values within the data frame.
-#' @param data
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @return
-#' A data frame
-#' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$imputationSiteDistribution() \%>\%
-#'  print()
-imputationSiteDistribution = function(data = "tbl_df"){
-  d <- data \%>\%
-    self$filterFeatures() \%>\%
-    as.data.frame() \%>\%
-    mice::md.pattern(plot=FALSE)
-  # colnames(d)[-1] <- "Sites"
-  colnames(d)[length(colnames(d))] <- "Sites"
-  rownames(d)[length(rownames(d))] <- "Sum"
-  return(d)
-}, #function
-
-
-#' @description
-#' Merges the numeric attributes of the pguIMP data with its metadata.
-#' @param dfData
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @param dfMetadata
-#' The corresponding metadata.
-#' (tibble::tibble)
-#' @return
-#' A data frame
-#' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$mergeImputationSiteData() \%>\%
-#'  print()
-mergeImputationSiteData = function(dfData = "tbl_df", dfMetadata = "tbl_df"){
-  dfMerge <- dfData
-  if(nrow(dfData) == nrow(dfMetadata)){
-    dfMerge <- dplyr::bind_cols(dfMetadata, dfData)
-  }#if
-  dfMerge \%>\%
-    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
-    return()
-}, #function
-
-
-## ------------------------------------------------
-## Method `pgu.imputation$imputationSiteHeatMap`
-## ------------------------------------------------
-
-x$imputationSiteHeatMap() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.imputation$featureBarPlot`
-## ------------------------------------------------
-
-x$featureBarPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.imputation$featureBoxPlotWithSubset`
-## ------------------------------------------------
-
-x$featureBoxPlotWithSubset() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.imputation$featurePlot`
-## ------------------------------------------------
-
-x$featurePlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.imputation$fluxPlot`
-## ------------------------------------------------
-
-x$fluxPlot() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -609,14 +170,6 @@ Options are: ""none", "median", "mean", "expValue", "monteCarlo", "knn", "pmm", 
 A new \code{pgu.imputation} object.
 (pguIMP::pgu.imputation)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.imputation$new()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -641,15 +194,6 @@ Prints instance variables of a \code{pgu.imputation} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherImputationSites"></a>}}
@@ -674,14 +218,6 @@ Gathers imputation sites from pguIMP's missings and outliers class.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$gatherImputtaionSites(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherImputationSiteStatistics"></a>}}
@@ -701,14 +237,6 @@ The information is stored within the classes instance variable \code{imputationS
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$gatherInformationSiteStatistics(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherImputationSiteDistribution"></a>}}
@@ -732,14 +260,6 @@ The information is stored within the classes instance variable \code{imputationS
 A data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$gatherImputationSiteDistribution(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-insertImputationSites"></a>}}
@@ -763,14 +283,6 @@ and returns the mutated dataframe.
 A mutated version of data_df.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$insertImputationSites(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-one_hot"></a>}}
@@ -791,14 +303,6 @@ The result is stored in the instance variable one_hot_df.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$one_hot(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-analyzeImputationSites"></a>}}
@@ -813,15 +317,9 @@ Takes a dataframe and analyses the imputation sites.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{data_df}}{The data frame to be analyzed.
-(tibble::tibble)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$analyzeImputationSites(data_df)
-####################
-# public functions #
+(tibble::tibble)
+####################public functions
+
 ####################
 #' @description
 #' Resets instance variables and
@@ -829,24 +327,22 @@ Takes a dataframe and analyses the imputation sites.
 #' @param data
 #' Dataframe to be analyzed.
 #' (tibble::tibble)
-#' @examples
-#' x$resetImputtaionParameter(data)
 resetImputationStatistics = function(data_df = "tbl_df"){
-  numericData <- data_df \%>\%
-    dplyr::select_if(is.numeric)
-  features <- numericData \%>\%
-    colnames()
-  measurements <- c(rep(0.0, length(features)))
-  existings <- c(rep(0.0, length(features)))
-  missings <- c(rep(0.0, length(features)))
-  fractionOfMissings <- c(rep(0.0, length(features)))
-  private$.imputationStatistics <- tibble::tibble(features, measurements, existings, missings, fractionOfMissings)
-  private$.amv <- VIM::aggr(numericData, plot=FALSE)
-  self$gatherImputationStatistics(data_df)
-  self$detectImputationSites(data_df)
+numericData <- data_df \%>\%
+dplyr::select_if(is.numeric)
+features <- numericData \%>\%
+colnames()
+measurements <- c(rep(0.0, length(features)))
+existings <- c(rep(0.0, length(features)))
+missings <- c(rep(0.0, length(features)))
+fractionOfMissings <- c(rep(0.0, length(features)))
+private$.imputationStatistics <- tibble::tibble(features, measurements, existings, missings, fractionOfMissings)
+private$.amv <- VIM::aggr(numericData, plot=FALSE)
+self$gatherImputationStatistics(data_df)
+self$detectImputationSites(data_df)
 } #function
-####################
-# helper functions #
+####################helper functions
+
 ####################
 #' @description
 #' Returns the position of an attribute within a data frame.
@@ -856,16 +352,14 @@ resetImputationStatistics = function(data_df = "tbl_df"){
 #' @return
 #' The postion of the attribute.
 #' (numeric)
-#' @examples
-#' idx <- x$featureIdx(feature = "infected")
 featureIdx = function(feature = "character"){
-  idx <- match(feature, self$imputationStatistics[["features"]])
-  if(is.na(idx)){
-    rString <- sprintf("\nWarning in pgu.imputation: feature \%s is not known\n",
-                       feature)
-    cat(rString)
-  }#if
-  return(idx)
+idx <- match(feature, self$imputationStatistics[\link{"features"}])
+if(is.na(idx)){
+rString <- sprintf("\nWarning in pgu.imputation: feature \%s is not known\n",
+feature)
+cat(rString)
+}#if
+return(idx)
 }, #function
 
 #' @description
@@ -876,19 +370,14 @@ featureIdx = function(feature = "character"){
 #' @return
 #' The filtered data frame.
 #' (tibble::tibble)
-#' @examples
-#' idx <- x$filterFeatures(data)
 filterFeatures = function(data_df = "tbl_df"){
-  data_df \%>\%
-    dplyr::select(private$.imputationStatistics[["features"]]) \%>\%
-    return()
-}, #function
-
+data_df \%>\%
+dplyr::select(private$.imputationStatistics[\link{"features"}]) \%>\%
+return()
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputationSiteIdxByFeature"></a>}}
@@ -911,15 +400,6 @@ Returns the position of an attribute's imputation sites within a data frame.
 The postion of the imputation sites.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$imputationIdxByFeature(featureName = "infected")
-
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-nanFeatureList"></a>}}
@@ -943,13 +423,9 @@ If multiple attributes' row entries are missing, the row is characterized by \co
 \subsection{Returns}{
 Vector of row characteristics.
 (character)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$nanFeatureList(data)
 
-#######################
-# missings statistics #
+#######################missings statistics
+
 #######################
 #' @description
 #' Calculates the number of values of a vector.
@@ -959,10 +435,8 @@ Vector of row characteristics.
 #' @return
 #' The lenght of the vector.
 #' (numeric)
-#' @examples
-#' idx <- x$gatherMeasurements(value)
 gatherMeasurements = function(value = "numeric"){
-  return(length(value))
+return(length(value))
 }, #function
 
 #' @description
@@ -973,11 +447,9 @@ gatherMeasurements = function(value = "numeric"){
 #' @return
 #' The number of missing in the vector.
 #' (numeric)
-#' @examples
-#' idx <- x$gatherMissings(value)
 gatherMissings = function(value = "numeric"){
-  y <- sum(is.na(value))
-  return(y)
+y <- sum(is.na(value))
+return(y)
 }, #function
 
 #' @description
@@ -988,11 +460,9 @@ gatherMissings = function(value = "numeric"){
 #' @return
 #' The number of existing values in the vector.
 #' (numeric)
-#' @examples
-#' idx <- x$gatherExistings(value)
 gatherExistings = function(value = "numeric"){
-  y <- sum(!is.na(value))
-  return(y)
+y <- sum(!is.na(value))
+return(y)
 }, #function
 
 #' @description
@@ -1003,62 +473,51 @@ gatherExistings = function(value = "numeric"){
 #' @return
 #' The fraction of missing values in the vector.
 #' (numeric)
-#' @examples
-#' idx <- x$gatherFractionOfMissings(value)
 gatherFractionOfMissings =  function(value = "numeric"){
-  y <- 100.0*sum(is.na(value))/length(value)
-  return(y)
+y <- 100.0*sum(is.na(value))/length(value)
+return(y)
 }, #function
 
 #' @description
 #' Gathers statistical information about missing values
-#' that are provided by the classes public `gather` functions.
-#' The information is stored within the classes instance variable `imputationParameter`
+#' that are provided by the classes public \code{gather} functions.
+#' The information is stored within the classes instance variable \code{imputationParameter}
 #' @param data
 #' The data frame to be analyzed.
 #' (tibble::tibble)
-#' @examples
-#' x$gatherInformationStatistics(value)
 gatherImputationStatistics = function(data = "tbl_df"){
-  filteredData <- data \%>\%
-    self$filterFeatures()
-  private$.imputationParameter["measurements"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherMeasurements)
-  private$.imputationParameter["existings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherExistings)
-  private$.imputationParameter["missings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherMissings)
-  private$.imputationParameter["fractionOfMissings"] <- filteredData \%>\%
-    apply(MARGIN=2, FUN=self$gatherFractionOfMissings)
+filteredData <- data \%>\%
+self$filterFeatures()
+private$.imputationParameter\link{"measurements"} <- filteredData \%>\%
+apply(MARGIN=2, FUN=self$gatherMeasurements)
+private$.imputationParameter\link{"existings"} <- filteredData \%>\%
+apply(MARGIN=2, FUN=self$gatherExistings)
+private$.imputationParameter\link{"missings"} <- filteredData \%>\%
+apply(MARGIN=2, FUN=self$gatherMissings)
+private$.imputationParameter\link{"fractionOfMissings"} <- filteredData \%>\%
+apply(MARGIN=2, FUN=self$gatherFractionOfMissings)
 }, #function
 
-###########################
-# detect imputation sites #
+###########################detect imputation sites
+
 ###########################
 #' @description
 #' Detects missing values within the data frame and
-#' writes the to the instance variable `imputationsites`.
+#' writes the to the instance variable \code{imputationsites}.
 #' @param data
 #' The data frame to be analyzed.
 #' (tibble::tibble)
 #' @param  feature
 #' The attribute within the data frame to be analyzed.
-#' @examples
-#' y <- x$detectImputationsites(data, feature = "infected")
 detectImputationSites = function(data = "tbl_df"){
-  private$.imputationSites <- data \%>\%
-    self$filterFeatures() \%>\%
-    is.na() \%>\%
-    which(arr.ind=TRUE) \%>\%
-    tibble::as_tibble() \%>\%
-    dplyr::mutate(features = self$imputationParameter[["features"]][col])
+private$.imputationSites <- data \%>\%
+self$filterFeatures() \%>\%
+is.na() \%>\%
+which(arr.ind=TRUE) \%>\%
+tibble::as_tibble() \%>\%
+dplyr::mutate(features = self$imputationParameter[\link{"features"}][col])
 }, #function
-
 }
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-average_number_of_predictors"></a>}}
@@ -1092,14 +551,6 @@ using the mice::quickpred routine.
 Average_number_of_predictors.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectPredictors"></a>}}
@@ -1124,14 +575,6 @@ instance variable exclude_vec.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectPredictors(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-handleImputationSites"></a>}}
@@ -1160,14 +603,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$handleImputationSites(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByMedian"></a>}}
@@ -1195,14 +630,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByMedian(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByMean"></a>}}
@@ -1230,14 +657,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByMean(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByExpectationValue"></a>}}
@@ -1268,14 +687,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByExpectationValue(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByMC"></a>}}
@@ -1305,14 +716,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByMC(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByKnn"></a>}}
@@ -1340,14 +743,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByKnn(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByMice"></a>}}
@@ -1377,14 +772,6 @@ Display the progress if shiny is loaded.
 Cleaned dataframe.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByMice(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeByM5P"></a>}}
@@ -1411,10 +798,6 @@ Display the progress if shiny is loaded.
 \subsection{Returns}{
 Cleaned dataframe.
 (tibble:tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeByM5P(data, progress)
 #' @description
 #' Substitutes imputation sites by values generated by a different methods of the amelia package.
 #' The procedure is run without bound information.
@@ -1429,17 +812,15 @@ Cleaned dataframe.
 #' @return
 #' Cleaned dataframe.
 #' (tibble:tibble)
-#' @examples
-#' x$imputeByAmelia(data, progress)
 imputeByAmelia = function(data_df = "tbl_df", progress = "Progress"){
-  if(("shiny" \%in\% (.packages())) & (class(progress)[1] == "Progress")){
-    progress$inc(1)
-  }#if
-  ameliaOutput <- data_df \%>\%
-    Amelia::amelia()#(m = 1, parallel = "multicore", ncpus = 8)
-  ameliaOutput$imputations[[1]] \%>\%
-    tibble::as_tibble() \%>\%
-    return()
+if(("shiny" \%in\% (.packages())) & (class(progress)\link{1} == "Progress")){
+progress$inc(1)
+}#if
+ameliaOutput <- data_df \%>\%
+Amelia::amelia()#(m = 1, parallel = "multicore", ncpus = 8)
+ameliaOutput$imputations[\link{1}] \%>\%
+tibble::as_tibble() \%>\%
+return()
 }, #function
 #' @description
 #' Substitutes imputation sites by values generated by a different methods of the amelia package.
@@ -1455,25 +836,23 @@ imputeByAmelia = function(data_df = "tbl_df", progress = "Progress"){
 #' @return
 #' Cleaned dataframe.
 #' (tibble:tibble)
-#' @examples
-#' x$imputeByAmeliaBound(data, progress)
 imputeByAmeliaBound = function(data_df = "tbl_df", progress = "Progress"){
-  if(("shiny" \%in\% (.packages())) & (class(progress)[1] == "Progress")){
-    progress$inc(length(self$imputationStatistics[["feature"]]))
-  }#if
-  tblBounds = data.frame(column=c(1:ncol(data_df)),
-                         lower=c(0),
-                         upper=sapply(data_df,stats::quantile,probs = c(0.25),names=FALSE, na.rm = TRUE)) \%>\%
-    as.matrix()
-  ameliaOutput <- data_df \%>\%
-    Amelia::amelia(bounds=tblBounds)#(m = 1, parallel = "multicore", ncpus = 8)
-  ameliaOutput$imputations[[1]] \%>\%
-    tibble::as_tibble() \%>\%
-    return()
+if(("shiny" \%in\% (.packages())) & (class(progress)\link{1} == "Progress")){
+progress$inc(length(self$imputationStatistics[\link{"feature"}]))
+}#if
+tblBounds = data.frame(column=c(1:ncol(data_df)),
+lower=c(0),
+upper=sapply(data_df,stats::quantile,probs = c(0.25),names=FALSE, na.rm = TRUE)) \%>\%
+as.matrix()
+ameliaOutput <- data_df \%>\%
+Amelia::amelia(bounds=tblBounds)#(m = 1, parallel = "multicore", ncpus = 8)
+ameliaOutput$imputations[\link{1}] \%>\%
+tibble::as_tibble() \%>\%
+return()
 }, #function
 
-##########
-# output #
+##########output
+
 ##########
 #' @description
 #' Numeric representation of the distribution of missing values within the data frame.
@@ -1483,21 +862,16 @@ imputeByAmeliaBound = function(data_df = "tbl_df", progress = "Progress"){
 #' @return
 #' A data frame
 #' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$imputationSiteDistribution() \%>\%
-#'  print()
 imputationSiteDistribution = function(data = "tbl_df"){
-  d <- data \%>\%
-    self$filterFeatures() \%>\%
-    as.data.frame() \%>\%
-    mice::md.pattern(plot=FALSE)
-  # colnames(d)[-1] <- "Sites"
-  colnames(d)[length(colnames(d))] <- "Sites"
-  rownames(d)[length(rownames(d))] <- "Sum"
-  return(d)
-}, #function
+d <- data \%>\%
+self$filterFeatures() \%>\%
+as.data.frame() \%>\%
+mice::md.pattern(plot=FALSE)colnames(d)-1 <- "Sites"
 
+colnames(d)\link{length(colnames(d))} <- "Sites"
+rownames(d)\link{length(rownames(d))} <- "Sum"
+return(d)
+}, #function
 
 #' @description
 #' Merges the numeric attributes of the pguIMP data with its metadata.
@@ -1510,25 +884,16 @@ imputationSiteDistribution = function(data = "tbl_df"){
 #' @return
 #' A data frame
 #' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$mergeImputationSiteData() \%>\%
-#'  print()
 mergeImputationSiteData = function(dfData = "tbl_df", dfMetadata = "tbl_df"){
-  dfMerge <- dfData
-  if(nrow(dfData) == nrow(dfMetadata)){
-    dfMerge <- dplyr::bind_cols(dfMetadata, dfData)
-  }#if
-  dfMerge \%>\%
-    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
-    return()
+dfMerge <- dfData
+if(nrow(dfData) == nrow(dfMetadata)){
+dfMerge <- dplyr::bind_cols(dfMetadata, dfData)
+}#if
+dfMerge \%>\%
+dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
+return()
 }, #function
-
 }
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputationSiteHeatMap"></a>}}
@@ -1543,15 +908,6 @@ Displays the distribution of missing values in form of a heatmap.
 A heatmap plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputationSiteHeatMap() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBarPlot"></a>}}
@@ -1577,15 +933,6 @@ Displays the distribution of an attribute values as histogram.
 A histogram.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBarPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBoxPlotWithSubset"></a>}}
@@ -1614,15 +961,6 @@ Displays the distribution of an attribute's values as box plot.
 A box plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBoxPlotWithSubset() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePlot"></a>}}
@@ -1648,15 +986,6 @@ Displays the distribution of an attribute's values as a composition of a box plo
 A composite plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featurePlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fluxPlot"></a>}}
@@ -1671,15 +1000,6 @@ Displays an influx/outflux plot
 A composite plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fluxPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -1,7 +1,6 @@
 #' @title nnk
 #' @description
 #' Outlier detection using kth Nearest Neighbour Distance method
-
 #' Takes a dataset and finds its outliers using distance-based method
 #' @param x dataset for which outliers are to be found
 #' @param k No. of nearest neighbours to be used, default value is 0.05*nrow(x)
@@ -9,14 +8,13 @@
 #' @param Method Distance method, default is Euclidean
 #' @param rnames Logical value indicating whether the dataset has rownames, default value is False
 #' @param boottimes Number of bootsrap samples to find the cutoff, default is 100 samples
-
 #' @details nnk computes kth nearest neighbour distance of an observation and based on the bootstrapped cutoff, labels an observation as outlier. Outlierliness of the labelled 'Outlier' is also reported and it is the bootstrap estimate of probability of the observation being an outlier. For bivariate data, it also shows the scatterplot of the data with labelled outliers.
 #' @return Outlier Observations: A matrix of outlier observations
 #' @return Location of Outlier: Vector of Sr. no. of outliers
 #' @return Outlier probability: Vector of proportion of times an outlier exceeds local bootstrap cutoff
 #' @references Hautamaki, V., Karkkainen, I., and Franti, P. 2004. Outlier detection using k-nearest neighbour graph. In Proc. IEEE Int. Conf. on Pattern Recognition (ICPR), Cambridge, UK.
 #' @author Vinay Tiwari, Akanksha Kashikar
-
+#' @export
 #' @examples
 #' #Create dataset
 #' X=iris[,1:4]

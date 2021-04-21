@@ -17,55 +17,6 @@ A class that performs pairwise correlation on the pguIMP data set.
 x <- pguIMP::pgu.correlator$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$new`
-## ------------------------------------------------
-
-x <- tibble::tibble()
-y <- impute(x)
-obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$print`
-## ------------------------------------------------
-
-pgu.corrValidator$print()
-print(pgu.corrValidator)
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$reset`
-## ------------------------------------------------
-
-pgu.corrValidator$reset()
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$correlationScatterPlot`
-## ------------------------------------------------
-
-pgu.corrValidator$correlationScatterPlot()
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$correlationBarPlot`
-## ------------------------------------------------
-
-x$correlationBarPlot() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$correlationBoxPlot`
-## ------------------------------------------------
-
-pgu.corrValidator$correlationBoxPlot()
-
-## ------------------------------------------------
-## Method `pgu.corrValidator$correlationCompoundPlot`
-## ------------------------------------------------
-
-x$correlationCompoundPlot() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -147,16 +98,6 @@ Creates and returns a new \code{pgu.corrValidator} object.
 A new \code{pgu.corrValidator} object.
 (pguIMP::pgu.corrValidator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- tibble::tibble()
-y <- impute(x)
-obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -170,15 +111,6 @@ Prints instance variables of a \code{pgu.corrValidator} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidator$print()
-print(pgu.corrValidator)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -187,14 +119,6 @@ print(pgu.corrValidator)
 Resets the object \code{pgu.corrValidator} based on the instance variable featureNames..
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$reset()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidator$reset()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -228,14 +152,6 @@ Plots the correlation analysis results.
 \if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$correlationScatterPlot()}\if{html}{\out{</div>}}
 }
 
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidator$correlationScatterPlot()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-correlationBarPlot"></a>}}
@@ -250,15 +166,6 @@ Creates and returns a histogram from the cor_delat values.
 Bar plot
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$correlationBarPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-correlationBoxPlot"></a>}}
@@ -267,14 +174,6 @@ Bar plot
 Plots the correlation analysis results.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.corrValidator$correlationBoxPlot()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{pgu.corrValidator$correlationBoxPlot()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -291,15 +190,6 @@ Creates and returns a compund graphical analysis of the cor_delta values.
 Compound plot
 (gridExtra::grid.arrange)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$correlationCompoundPlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -17,10 +17,6 @@ The transposed data frame.
 \description{
 Transposes a tibble
 }
-\examples{
-y <- tansposeTibble(obj=df)
-
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

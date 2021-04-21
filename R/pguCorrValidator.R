@@ -167,10 +167,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @return
                                    #' A new `pgu.corrValidator` object.
                                    #' (pguIMP::pgu.corrValidator)
-                                   #' @examples
-                                   #' x <- tibble::tibble()
-                                   #' y <- impute(x)
-                                   #' obj <- pguIMP::pgu.corrValidator$new(org_df = x, imp_df = y)
                                    initialize = function(org_df = "tbl_df", imp_df = "tbl_df"){
                                      self$reset()
                                    },
@@ -179,9 +175,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' Prints instance variables of a `pgu.corrValidator` object.
                                    #' @return
                                    #' string
-                                   #' @examples
-                                   #' pgu.corrValidator$print()
-                                   #' print(pgu.corrValidator)
                                    print = function(){
                                      rString <- sprintf("\npgu.correlator\n")
                                      cat(rString)
@@ -195,8 +188,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #####################
                                    #' @description
                                    #' Resets the object `pgu.corrValidator` based on the instance variable featureNames..
-                                   #' @examples
-                                   #' pgu.corrValidator$reset()
                                    reset = function(){
                                      private$.orgR_mat <- private$reset_matrix(value = 0)
                                      private$.impR_mat <- private$reset_matrix(value = 0)
@@ -255,8 +246,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
 
                                    #' @description
                                    #' Plots the correlation analysis results.
-                                   #' @examples
-                                   #' pgu.corrValidator$correlationScatterPlot()
                                    correlationScatterPlot = function(){
                                      p <- self$corr_df %>%
                                        dplyr::mutate(pair = paste(row, column, sep = "/\n")) %>%
@@ -283,9 +272,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @return
                                    #' Bar plot
                                    #' (ggplot2::ggplot)
-                                   #' @examples
-                                   #' x$correlationBarPlot() %>%
-                                   #'  show()
                                    correlationBarPlot = function(){
                                      p <- self$corr_df %>%
                                        dplyr::select(c("cor_delta")) %>%
@@ -305,8 +291,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
 
                                    #' @description
                                    #' Plots the correlation analysis results.
-                                   #' @examples
-                                   #' pgu.corrValidator$correlationBoxPlot()
                                    correlationBoxPlot = function(){
                                      p <- self$corr_df %>%
                                        dplyr::select(c("cor_delta")) %>%
@@ -332,9 +316,6 @@ pgu.corrValidator <- R6::R6Class("pgu.corrValidator",
                                    #' @return
                                    #' Compound plot
                                    #' (gridExtra::grid.arrange)
-                                   #' @examples
-                                   #' x$correlationCompoundPlot() %>%
-                                   #'  show()
                                    correlationCompoundPlot = function(){
                                        p1 <- self$correlationBoxPlot()
                                        p2 <- self$correlationBarPlot() +

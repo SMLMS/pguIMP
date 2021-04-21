@@ -233,8 +233,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A new `pgu.imputation` object.
                                  #' (pguIMP::pgu.imputation)
-                                 #' @examples
-                                 #' x <- pguIMP:pgu.imputation$new()
                                  initialize = function(seed = 42, iterations = 4, imputationAgent = "none", nNeighbors = 3, pred_frac = 1.0, outflux_thr = 0.5){
                                    private$.imputationAgentAlphabet <- c("none", "median", "mean", "mu", "mc", "knn", "pmm", "cart", "rf", "M5P")
                                    self$setSeed <- seed
@@ -265,9 +263,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' Prints instance variables of a `pgu.imputation` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.imputation\n")
                                    cat(rString)
@@ -291,8 +286,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param  outliers_df
                                  #' Dataframe comprising information about the imputation sites of pguIMP's outliers class.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$gatherImputtaionSites(data)
                                  gatherImputationSites = function(missings_df = "tbl_df", outliers_df = "tbl_df"){
                                    input_correct <- TRUE
                                    if(!tibble::is_tibble(missings_df)){
@@ -333,8 +326,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param data_df
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$gatherInformationSiteStatistics(data_df)
                                  gatherImputationSiteStatistics = function(data_df = "tbl_df"){
                                    if(tibble::is_tibble(data_df)){
                                      private$.imputationStatistics <- private$.imputationSites %>%
@@ -371,8 +362,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A data frame
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$gatherImputationSiteDistribution(data_df)
                                  gatherImputationSiteDistribution = function(data_df = "tbl_df"){
                                    if(tibble::is_tibble(data_df)){
                                    d <- data_df %>%
@@ -396,8 +385,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A mutated version of data_df.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$insertImputationSites(data_df)
                                  insertImputationSites = function(data_df = "tbl_df"){
                                    for(name in colnames(data_df)){
                                      temp_idx <- self$imputationSites %>%
@@ -425,8 +412,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param data_df
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$one_hot(data_df)
                                  one_hot = function(data_df = "tbl_df"){
                                    if(!tibble::is_tibble(data_df)){
                                      print("Warning: data_df needs to by of type tibble.")
@@ -442,8 +427,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param data_df
                                  #' The data frame to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$analyzeImputationSites(data_df)
                                  analyzeImputationSites = function(data_df = "tbl_df"){
                                    numeric_df <- data_df %>%
                                      dplyr::select_if(is.numeric)
@@ -463,8 +446,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @param data
                                  #' #' Dataframe to be analyzed.
                                  #' #' (tibble::tibble)
-                                 #' #' @examples
-                                 #' #' x$resetImputtaionParameter(data)
                                  #' resetImputationStatistics = function(data_df = "tbl_df"){
                                  #'   numericData <- data_df %>%
                                  #'     dplyr::select_if(is.numeric)
@@ -495,8 +476,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The postion of the attribute.
                                  #' #' (numeric)
-                                 #' #' @examples
-                                 #' #' idx <- x$featureIdx(feature = "infected")
                                  #' featureIdx = function(feature = "character"){
                                  #'   idx <- match(feature, self$imputationStatistics[["features"]])
                                  #'   if(is.na(idx)){
@@ -515,8 +494,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The filtered data frame.
                                  #' #' (tibble::tibble)
-                                 #' #' @examples
-                                 #' #' idx <- x$filterFeatures(data)
                                  #' filterFeatures = function(data_df = "tbl_df"){
                                  #'   data_df %>%
                                  #'     dplyr::select(private$.imputationStatistics[["features"]]) %>%
@@ -531,8 +508,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' The postion of the imputation sites.
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$imputationIdxByFeature(featureName = "infected")
                                  imputationSiteIdxByFeature =  function(featureName = "character"){
                                    self$imputationSites %>%
                                      dplyr::filter(feature == featureName) %>%
@@ -552,8 +527,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Vector of row characteristics.
                                  #' (character)
-                                 #' @examples
-                                 #' idx <- x$nanFeatureList(data)
                                  nanFeatureList = function(data_df = "tbl_df"){
                                    nanFeature <- c(rep("complete", nrow(data_df)))
                                    if (nrow(self$imputationSites) > 0) {
@@ -580,8 +553,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The lenght of the vector.
                                  #' #' (numeric)
-                                 #' #' @examples
-                                 #' #' idx <- x$gatherMeasurements(value)
                                  #' gatherMeasurements = function(value = "numeric"){
                                  #'   return(length(value))
                                  #' }, #function
@@ -594,8 +565,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The number of missing in the vector.
                                  #' #' (numeric)
-                                 #' #' @examples
-                                 #' #' idx <- x$gatherMissings(value)
                                  #' gatherMissings = function(value = "numeric"){
                                  #'   y <- sum(is.na(value))
                                  #'   return(y)
@@ -609,8 +578,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The number of existing values in the vector.
                                  #' #' (numeric)
-                                 #' #' @examples
-                                 #' #' idx <- x$gatherExistings(value)
                                  #' gatherExistings = function(value = "numeric"){
                                  #'   y <- sum(!is.na(value))
                                  #'   return(y)
@@ -624,8 +591,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' The fraction of missing values in the vector.
                                  #' #' (numeric)
-                                 #' #' @examples
-                                 #' #' idx <- x$gatherFractionOfMissings(value)
                                  #' gatherFractionOfMissings =  function(value = "numeric"){
                                  #'   y <- 100.0*sum(is.na(value))/length(value)
                                  #'   return(y)
@@ -638,8 +603,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @param data
                                  #' #' The data frame to be analyzed.
                                  #' #' (tibble::tibble)
-                                 #' #' @examples
-                                 #' #' x$gatherInformationStatistics(value)
                                  #' gatherImputationStatistics = function(data = "tbl_df"){
                                  #'   filteredData <- data %>%
                                  #'     self$filterFeatures()
@@ -664,8 +627,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' (tibble::tibble)
                                  #' #' @param  feature
                                  #' #' The attribute within the data frame to be analyzed.
-                                 #' #' @examples
-                                 #' #' y <- x$detectImputationsites(data, feature = "infected")
                                  #' detectImputationSites = function(data = "tbl_df"){
                                  #'   private$.imputationSites <- data %>%
                                  #'     self$filterFeatures() %>%
@@ -695,8 +656,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Average_number_of_predictors.
                                  #' (numeric)
-                                 #' @examples
-                                 #' x$average_number_of_predictors(data_df, minpuc = 0, mincor = 0.1)
                                  average_number_of_predictors = function(data_df = "tbl_df", minpuc = 0, mincor = 0.1){
                                    pred_dist <- data_df %>%
                                      # dplyr::select(-dplyr::all_of(self$exclude_vec)) %>%
@@ -719,8 +678,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @param data_df
                                  #' The dataframe to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$detectPredictors(data_df)
                                  detectPredictors = function(data_df = "tbl_df"){
                                    private$.flux_df <- data_df %>%
                                      mice::flux() %>%
@@ -766,8 +723,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$handleImputationSites(data, progress)
                                  handleImputationSites = function(data_df = "tbl_df", progress = "Progress"){
                                    if(is.na(self$imputationAgent)){
                                      print("Warning: Error in pgu.imputation imputationAgent is not valid. Will be set to none.")
@@ -814,8 +769,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByMedian(data, progress)
                                  imputeByMedian = function(data_df = "tbl_df", progress = "Progress"){
                                    for (feature in self$imputationStatistics[["feature"]]){
                                      if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
@@ -843,8 +796,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByMean(data, progress)
                                  imputeByMean = function(data_df = "tbl_df", progress = "Progress"){
                                    for (feature in self$imputationStatistics[["feature"]]){
                                      if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
@@ -872,8 +823,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByExpectationValue(data, progress)
                                  imputeByExpectationValue = function(data_df = "tbl_df", progress = "Progress"){
                                    for (feature in self$imputationStatistics[["feature"]]){
                                      if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
@@ -926,8 +875,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByMC(data, progress)
                                  imputeByMC = function(data_df = "tbl_df", progress = "Progress"){
                                    imputed_df <- data_df
                                    # Calculate Errors
@@ -1040,8 +987,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByKnn(data, progress)
                                  imputeByKnn = function(data_df = "tbl_df", progress = "Progress"){
                                    if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                      progress$inc(0.5)
@@ -1084,8 +1029,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByMice(data, progress)
                                  imputeByMice = function(data_df, progress = "Progress") {
                                    nPred <- trunc(ncol(data_df) * self$pred_frac)
                                    if (ncol(data_df) < nPred){
@@ -1173,8 +1116,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' Cleaned dataframe.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$imputeByM5P(data, progress)
                                  imputeByM5P = function(data_df = "tbl_df", progress = "Progress"){
                                    nPred <- trunc(ncol(data_df) * self$pred_frac)
                                    if (ncol(data_df) < nPred){
@@ -1291,8 +1232,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' Cleaned dataframe.
                                  #' #' (tibble:tibble)
-                                 #' #' @examples
-                                 #' #' x$imputeByAmelia(data, progress)
                                  #' imputeByAmelia = function(data_df = "tbl_df", progress = "Progress"){
                                  #'   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                  #'     progress$inc(1)
@@ -1318,8 +1257,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' Cleaned dataframe.
                                  #' #' (tibble:tibble)
-                                 #' #' @examples
-                                 #' #' x$imputeByAmeliaBound(data, progress)
                                  #' imputeByAmeliaBound = function(data_df = "tbl_df", progress = "Progress"){
                                  #'   if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                  #'     progress$inc(length(self$imputationStatistics[["feature"]]))
@@ -1346,10 +1283,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' A data frame
                                  #' #' (tibble::tibble)
-                                 #' #' @examples
-                                 #' #' data %>%
-                                 #' #'  x$imputationSiteDistribution() %>%
-                                 #' #'  print()
                                  #' imputationSiteDistribution = function(data = "tbl_df"){
                                  #'   d <- data %>%
                                  #'     self$filterFeatures() %>%
@@ -1373,10 +1306,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' #' @return
                                  #' #' A data frame
                                  #' #' (tibble::tibble)
-                                 #' #' @examples
-                                 #' #' data %>%
-                                 #' #'  x$mergeImputationSiteData() %>%
-                                 #' #'  print()
                                  #' mergeImputationSiteData = function(dfData = "tbl_df", dfMetadata = "tbl_df"){
                                  #'   dfMerge <- dfData
                                  #'   if(nrow(dfData) == nrow(dfMetadata)){
@@ -1396,9 +1325,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A heatmap plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$imputationSiteHeatMap() %>%
-                                 #'  show()
                                  imputationSiteHeatMap = function(){
                                    p <- plot(self$amv,
                                              col=c('navyblue','red'),
@@ -1423,9 +1349,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A histogram.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$featureBarPlot() %>%
-                                 #'  show()
                                  featureBarPlot = function(data_df = "tbl_df", feature = "character"){
                                    feature <- dplyr::sym(feature)
                                    p <- data_df %>%
@@ -1454,9 +1377,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A box plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$featureBoxPlotWithSubset() %>%
-                                 #'  show()
                                  featureBoxPlotWithSubset = function(data_df = "tbl_df", feature = "character"){
                                    imputation_idx <- self$imputationSites %>%
                                      dplyr::filter(feature == !!feature) %>%
@@ -1496,9 +1416,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A composite plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$featurePlot() %>%
-                                 #'  show()
                                  featurePlot = function(data_df = "tbl_df", feature = "character"){
                                    p1 <- self$featureBoxPlotWithSubset(data_df, feature) +
                                      ggplot2::theme(legend.position = c(0.9, 0.9),
@@ -1534,9 +1451,6 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  #' @return
                                  #' A composite plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' x$fluxPlot() %>%
-                                 #'  show()
                                  fluxPlot = function(){
                                    p <- self$flux_df %>%
                                      ggplot2::ggplot(mapping = ggplot2::aes_string(x="influx", y="outflux", label="rowname")) +

@@ -59,8 +59,6 @@ pgu.status <- R6::R6Class("pgu.status",
                           #' @return
                           #' A new `pgu.status` object.
                           #' (pguIMP::pgu.status)
-                          #' @examples
-                          #' x <- pguIMP:pgu.status$new()
                           initialize = function() {
                             print("Instance of pgu.status allocated")
                             self$reset()
@@ -78,9 +76,6 @@ pgu.status <- R6::R6Class("pgu.status",
                           #' Prints instance variables of a `pgu.status` object.
                           #' @return
                           #' string
-                          #' @examples
-                          #' x$print()
-                          #' print(x)
                           print = function() {
                             message <- sprintf("\npgu.status\n\n")
                             for (i in (1:length(self$processAlphabet))){
@@ -95,8 +90,6 @@ pgu.status <- R6::R6Class("pgu.status",
                           ####################
                           #' @description
                           #' resets the intance variables `processAlphabet` and `processStatus` to their initial values (FALSE).
-                          #' @examples
-                          #' x$reset()
                           reset = function(){
                             private$.processAlphabet <- c("dataUploaded", "dataImported", "dataFiltered", "loqImported",
                                                           "loqDetected", "loqMutated", "modelOptimized", "modelDefined", "normalized", "naDetected",
@@ -111,8 +104,6 @@ pgu.status <- R6::R6Class("pgu.status",
                           #' @param value
                           #' Indicates if the process ended with success.
                           #' (logical)
-                          #' @examples
-                          #' x$update(processName = "correlated", value = TRUE)
                           update = function(processName = "character", value = "logical"){
                             processFactor <- factor(processName, levels = self$processAlphabet)
                             idx <- as.integer(processFactor)
@@ -130,9 +121,6 @@ pgu.status <- R6::R6Class("pgu.status",
                           #' @return
                           #' Status of the queried process
                           #' (logical)
-                          #' @examples
-                          #' y <- x$query(processName = "correlated")
-                          #' print(y)
                           query = function(processName = "character"){
                             processFactor <- factor(processName, levels = self$processAlphabet)
                             idx <- as.integer(processFactor)

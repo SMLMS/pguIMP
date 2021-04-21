@@ -98,8 +98,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A new `pgu.validator` object.
                                #' (pguIMP::pgu.validator)
-                               #' @examples
-                               #' x <- pguIMP:pgu.validator$new(seed = 42)
                                initialize = function(seed = 42){
                                  self$setSeed <- seed
                                  self$resetValidator()
@@ -117,9 +115,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' Prints instance variables of a `pgu.validator` object.
                                #' @return
                                #' string
-                               #' @examples
-                               #' x$print()
-                               #' print(x)
                                print = function(){
                                  rString <- sprintf("\npgu.validator:\n")
                                  cat(rString)
@@ -136,8 +131,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                ####################
                                #' @description
                                #' Resets instance variables
-                               #' @examples
-                               #' x$resetValidator()
                                resetValidator = function(){
                                  private$.testStatistics_df <- tibble::tibble(feature = character(0),
                                                                               d.Kolmogorow = numeric(0),
@@ -177,8 +170,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' One row dataframe comprising the test results.
                                #' (tibble::tibble)
-                               #' @examples
-                               #' x$kolmogorowTestFeature(org, imp, feature)
                                kolmogorowTestFeature = function(org = "numeric", imp = "numeric", feature = "character"){
                                  test_obj <- stats::ks.test(x = org,
                                                             y = imp,
@@ -208,8 +199,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' One row dataframe comprising the test results.
                                #' (tibble::tibble)
-                               #' @examples
-                               #' x$wilcoxonTestFeature(org, imp, feature)
                                wilcoxonTestFeature = function(org = "numeric", imp = "numeric", feature = "character"){
                                  test_obj <- stats::wilcox.test(x = org,
                                                                 y = imp,
@@ -231,8 +220,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' One row dataframe comprising the statistics.
                                #' (tibble::tibble)
-                               #' @examples
-                               #' x$centralMomentsFeature(values, feature)
                                centralMomentsFeature = function(values = "numeric",feature = "character"){
                                  cMoment_1 <- mean(values, na.rm = TRUE)
                                  cMoment_2 <- sd(values, na.rm = TRUE)^2
@@ -261,8 +248,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @param progress
                                #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
                                #' (shiny::Progress)
-                               #' @examples
-                               #' x$validate(org, imp, progress)
                                validate = function(org_df = "tbl_df", imp_df = "tbl_df", progress = "Progress"){
                                  self$resetValidator()
                                  set.seed(self$seed)
@@ -314,9 +299,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                # @return
                                # A ggplot2 object
                                # (ggplot2::ggplot)
-                               # @examples
-                               # p <- x$featurePdf(data_df)
-
                                # featurePdf = function(data_df = "tbl_df"){
                                #   title_str <- sprintf("probability density")
                                #   p <- data_df %>%
@@ -340,8 +322,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featurePdf(data_df)
                                featurePdf = function(data_df = "tbl_df"){
                                  p <- data_df %>%
                                    ggplot2::ggplot() +
@@ -366,8 +346,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featureCdf(data_df)
                                featureCdf = function(data_df = "tbl_df"){
                                  title_str <- sprintf("cumulative density")
                                  p <- data_df %>%
@@ -401,8 +379,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featureQQ(org = orgiginal_data, imp = imputed_data)
                                featureVs = function(org = "numeric", imp = "numeric"){
                                  min_val <- min(min(org), min(imp))
                                  max_val <- max(max(org), max(imp))
@@ -442,8 +418,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featureBoxPlot(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character")
                                featureBoxPlot = function(data_df = "tbl_df", lloq = "numeric", uloq = "numeric", feature = "character"){
                                  p <- data_df %>%
                                    tidyr::gather(key = !!feature, value="value", -type) %>%
@@ -487,8 +461,6 @@ pgu.validator <- R6::R6Class("pgu.validator",
                                #' @return
                                #' A ggplot2 object
                                #' (ggplot2::ggplot)
-                               #' @examples
-                               #' p <- x$featurePlot(org_df = orgiginal_data, imp_df = imputed_data, lloq = lloq, uloq=uloq, impIdx_df = indices, feature = "infected")
                                featurePlot = function(org_df = "tbl_df", imp_df = "tbl_df", lloq = "numeric", uloq = "numeric", impIdx_df = "tbl_df", feature = "character"){
                                  p <- NULL
                                  if((feature %in% colnames(org_df)) & (feature %in% colnames(imp_df)))

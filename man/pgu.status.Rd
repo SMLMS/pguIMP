@@ -23,40 +23,6 @@ step are available.
 x <- pguIMP::pgu.status$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.status$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.status$new()
-
-## ------------------------------------------------
-## Method `pgu.status$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.status$reset`
-## ------------------------------------------------
-
-x$reset()
-
-## ------------------------------------------------
-## Method `pgu.status$update`
-## ------------------------------------------------
-
-x$update(processName = "correlated", value = TRUE)
-
-## ------------------------------------------------
-## Method `pgu.status$query`
-## ------------------------------------------------
-
-y <- x$query(processName = "correlated")
-print(y)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -97,14 +63,6 @@ Creates and returns a new `pgu.status`` object.
 A new \code{pgu.status} object.
 (pguIMP::pgu.status)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.status$new()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -129,15 +87,6 @@ Prints instance variables of a \code{pgu.status} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -146,14 +95,6 @@ print(x)
 resets the intance variables \code{processAlphabet} and \code{processStatus} to their initial values (FALSE).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.status$reset()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$reset()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -177,14 +118,6 @@ updates the process status
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update(processName = "correlated", value = TRUE)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-query"></a>}}
@@ -207,15 +140,6 @@ Queries if a process has already been performed successfully.
 Status of the queried process
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$query(processName = "correlated")
-print(y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

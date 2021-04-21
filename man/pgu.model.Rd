@@ -18,154 +18,6 @@ These can be used to scale data.
 x <- pguIMP::pgu.model$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.model$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.model$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.model$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.model$resetModelParameter`
-## ------------------------------------------------
-
-x$resetModelParameter(data)
-
-## ------------------------------------------------
-## Method `pgu.model$resetModelList`
-## ------------------------------------------------
-
-x$resetModelList()
-
-## ------------------------------------------------
-## Method `pgu.model$resetModel`
-## ------------------------------------------------
-
-x$resetModel(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.model$setNormDist`
-## ------------------------------------------------
-
-x$setNormDist(data, feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$fitFeature`
-## ------------------------------------------------
-
-x$fitFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$fitData`
-## ------------------------------------------------
-
-x$fitData(progress)
-
-## ------------------------------------------------
-## Method `pgu.model$logFitResultsFeature`
-## ------------------------------------------------
-
-x$logFitResultsFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$logFailedFitResultsFeature`
-## ------------------------------------------------
-
-x$logFailedFitResultsFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$scaleNumeric`
-## ------------------------------------------------
-
-y <- x$scaleNumeric(value = c(1,2,3),feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$scaleData`
-## ------------------------------------------------
-
-y <- x$scaleData(data)
-
-## ------------------------------------------------
-## Method `pgu.model$rescaleNumeric`
-## ------------------------------------------------
-
-y <- x$rescaleNumeric(value = c(1,2,3),feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$rescaleData`
-## ------------------------------------------------
-
-y <- x$rescaleData(data)
-
-## ------------------------------------------------
-## Method `pgu.model$modelParameterData`
-## ------------------------------------------------
-
-y <- x$modelParameterData()
-
-## ------------------------------------------------
-## Method `pgu.model$modelParameterFeature`
-## ------------------------------------------------
-
-y <- x$modelParameterFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$modelQualityData`
-## ------------------------------------------------
-
-y <- x$modelQualityData()
-
-## ------------------------------------------------
-## Method `pgu.model$modelQualityFeature`
-## ------------------------------------------------
-
-y <- x$modelQualityFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$fitResultData`
-## ------------------------------------------------
-
-y <- x$fitResultData()
-
-## ------------------------------------------------
-## Method `pgu.model$fitResultFeature`
-## ------------------------------------------------
-
-y <- x$fitResultFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$testResultData`
-## ------------------------------------------------
-
-y <- x$testResultData()
-
-## ------------------------------------------------
-## Method `pgu.model$testResultFeature`
-## ------------------------------------------------
-
-y <- x$testResultFeature(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.model$plotModel`
-## ------------------------------------------------
-
-p <- x$plotModel(feature = "infected")
-}
 \seealso{
 \code{\link[=fitFeature]{fitFeature()}}
 }
@@ -235,15 +87,6 @@ Creates and returns a new \code{pgu.model} object.
 A new \code{pgu.model} object.
 (pguIMP::pgu.model)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.model$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -268,15 +111,6 @@ Prints instance variables of a \code{pgu.model} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetModelParameter"></a>}}
@@ -295,14 +129,6 @@ Resets instance variable \code{modelParameter}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetModelParameter(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetModelList"></a>}}
@@ -321,14 +147,6 @@ Resets instance variable \code{modelList}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetModelList()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetModel"></a>}}
@@ -352,14 +170,6 @@ Displays progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetModel(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setNormDist"></a>}}
@@ -382,14 +192,6 @@ entry of the instance variable \code{modelList}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$setNormDist(data, feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -412,21 +214,13 @@ Returns the index of a pgu.normDist object wihtin the instance variable \code{mo
 Index of attribute entry in dataframe
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fitFeature"></a>}}
 \if{latex}{\out{\hypertarget{method-fitFeature}{}}}
 \subsection{Method \code{fitFeature()}}{
 Runs the fit function of a pgu.normDist object at a
-user denied position within the instance variable \code{modelList.}
+user denied position within the instance variable modelList.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.model$fitFeature(feature = "character")}\if{html}{\out{</div>}}
 }
@@ -439,14 +233,6 @@ user denied position within the instance variable \code{modelList.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fitFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fitData"></a>}}
@@ -467,14 +253,6 @@ Displays progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fitData(progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-logFitResultsFeature"></a>}}
@@ -494,14 +272,6 @@ into the corrsponding attribute of instance variable \code{modelParameter}.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$logFitResultsFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-logFailedFitResultsFeature"></a>}}
@@ -522,14 +292,6 @@ in case of a failed fitting routine.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$logFailedFitResultsFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scaleNumeric"></a>}}
@@ -555,14 +317,6 @@ Scales numeric data based upon the model of a user defined attribute.
 scaled version of the given vector
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$scaleNumeric(value = c(1,2,3),feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scaleData"></a>}}
@@ -586,14 +340,6 @@ stored in the instance variable modelList..
 scaled version of the given dataframe
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$scaleData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescaleNumeric"></a>}}
@@ -619,14 +365,6 @@ Re-scales numeric data based upon the model of a user defined attribute.
 Re-scaled version of the given vector
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$rescaleNumeric(value = c(1,2,3),feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescaleData"></a>}}
@@ -650,14 +388,6 @@ stored in the instance variable modelList..
 Re-scaled version of the given dataframe
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$rescaleData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelParameterData"></a>}}
@@ -672,14 +402,6 @@ Returns the model parameter (expectation value, standard deviation).
 Dataframe comprising model parameter.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelParameterData()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelParameterFeature"></a>}}
@@ -703,14 +425,6 @@ for a user deined attribute.
 Dataframe comprising model parameter.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelParameterFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelQualityData"></a>}}
@@ -725,14 +439,6 @@ Returns the model parameters connected to model quality.
 Dataframe comprising model parameter.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelQualityData()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelQualityFeature"></a>}}
@@ -756,14 +462,6 @@ for a user deined attribute.
 Dataframe comprising model parameter.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelQualityFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fitResultData"></a>}}
@@ -778,14 +476,6 @@ Returns the model fit results.
 Dataframe comprising model fit results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$fitResultData()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fitResultFeature"></a>}}
@@ -809,14 +499,6 @@ for a user deined attribute.
 Dataframe comprising model fit results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$fitResultFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-testResultData"></a>}}
@@ -831,14 +513,6 @@ Returns the hypothesis test results.
 Dataframe comprising the hypothesis test results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$testResultData()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-testResultFeature"></a>}}
@@ -862,14 +536,6 @@ for a user deined attribute.
 Dataframe comprising the hypothesis test results.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$testResultFeature(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-plotModel"></a>}}
@@ -894,14 +560,6 @@ a user defined attribute.
 Composite result plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{p <- x$plotModel(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

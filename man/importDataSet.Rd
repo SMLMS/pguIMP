@@ -17,6 +17,3 @@ A data frame
 Extracts import options from a pguIMP::file instance
 and imports the desired record based on the passed information.
 }
-\examples{
-importDataSet()
-}

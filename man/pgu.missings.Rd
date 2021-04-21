@@ -17,121 +17,6 @@ Detects missing values in the transformed and normalized data set.
 x <- pguIMP::pgu.missings$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.missings$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.missings$new(data_df = y)
-
-## ------------------------------------------------
-## Method `pgu.missings$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.missings$resetImputationParameter`
-## ------------------------------------------------
-
-x$resetImputtaionParameter(data_df)
-
-## ------------------------------------------------
-## Method `pgu.missings$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.missings$filterFeatures`
-## ------------------------------------------------
-
-idx <- x$filterFeatures(data_df)
-
-## ------------------------------------------------
-## Method `pgu.missings$gatherMeasurements`
-## ------------------------------------------------
-
-idx <- x$gatherMeasurements(value)
-
-## ------------------------------------------------
-## Method `pgu.missings$gatherMissings`
-## ------------------------------------------------
-
-idx <- x$gatherMissings(value)
-
-## ------------------------------------------------
-## Method `pgu.missings$gatherExistings`
-## ------------------------------------------------
-
-idx <- x$gatherExistings(value)
-
-## ------------------------------------------------
-## Method `pgu.missings$gatherFractionOfMissings`
-## ------------------------------------------------
-
-idx <- x$gatherFractionOfMissings(value)
-
-## ------------------------------------------------
-## Method `pgu.missings$gatherImputationStatistics`
-## ------------------------------------------------
-
-x$gatherInformationStatistics(data_df)
-
-## ------------------------------------------------
-## Method `pgu.missings$one_hot`
-## ------------------------------------------------
-
-x$one_hot(data_df)
-
-## ------------------------------------------------
-## Method `pgu.missings$detectImputationSites`
-## ------------------------------------------------
-
-y <- x$detectImputationsites(data_df)
-
-## ------------------------------------------------
-## Method `pgu.missings$imputationSiteDistribution`
-## ------------------------------------------------
-
-data \%>\%
- x$imputationSiteDistribution() \%>\%
- print()
-#' @description
-#' Merges the numeric attributes of the pguIMP data with its metadata.
-#' @param data_df
-#' The data frame to be analyzed.
-#' (tibble::tibble)
-#' @param metadata_df
-#' The corresponding metadata.
-#' (tibble::tibble)
-#' @return
-#' A data frame
-#' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$mergeImputationSiteData() \%>\%
-#'  print()
-mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
-  dfMerge <- data_df
-  if(nrow(data_df) == nrow(metadata_df)){
-    dfMerge <- dplyr::bind_cols(metadata_df, data_df)
-  }#if
-  dfMerge \%>\%
-    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
-    return()
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.missings$imputationSiteHeatMap`
-## ------------------------------------------------
-
-x$imputationSiteHeatMap() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -194,15 +79,6 @@ Creates and returns a new \code{pgu.missings} object.
 A new \code{pgu.missings} object.
 (pguIMP::pgu.missings)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.missings$new(data_df = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -227,15 +103,6 @@ Prints instance variables of a \code{pgu.missings} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetImputationParameter"></a>}}
@@ -255,14 +122,6 @@ identifies missings in the normalized data set.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetImputtaionParameter(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -285,14 +144,6 @@ Returns the position of an attribute within a data frame.
 The postion of the attribute.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filterFeatures"></a>}}
@@ -315,14 +166,6 @@ Selects features cotaining missing values from a dataset.
 The filtered data frame.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$filterFeatures(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherMeasurements"></a>}}
@@ -345,14 +188,6 @@ Calculates the number of values of a vector.
 The lenght of the vector.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$gatherMeasurements(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherMissings"></a>}}
@@ -375,14 +210,6 @@ Calculates the number of missing values of a vector.
 The number of missing in the vector.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$gatherMissings(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherExistings"></a>}}
@@ -405,14 +232,6 @@ Calculates the number of existing values of a vector.
 The number of existing values in the vector.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$gatherExistings(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherFractionOfMissings"></a>}}
@@ -435,14 +254,6 @@ Calculates the fraction of missing values of a vector.
 The fraction of missing values in the vector.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$gatherFractionOfMissings(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-gatherImputationStatistics"></a>}}
@@ -463,14 +274,6 @@ The information is stored within the classes instance variable \code{imputationP
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$gatherInformationStatistics(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-one_hot"></a>}}
@@ -491,14 +294,6 @@ The result is stored in the instance variable one_hot_df.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$one_hot(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectImputationSites"></a>}}
@@ -518,14 +313,6 @@ writes the to the instance variable \code{imputationsites}.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$detectImputationsites(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputationSiteDistribution"></a>}}
@@ -547,12 +334,6 @@ Numeric representation of the distribution of missing values within the data fra
 \subsection{Returns}{
 A data frame
 (tibble::tibble)
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data \%>\%
- x$imputationSiteDistribution() \%>\%
- print()
 #' @description
 #' Merges the numeric attributes of the pguIMP data with its metadata.
 #' @param data_df
@@ -564,24 +345,16 @@ A data frame
 #' @return
 #' A data frame
 #' (tibble::tibble)
-#' @examples
-#' data \%>\%
-#'  x$mergeImputationSiteData() \%>\%
-#'  print()
 mergeImputationSiteData = function(data_df = "tbl_df", metadata_df = "tbl_df"){
-  dfMerge <- data_df
-  if(nrow(data_df) == nrow(metadata_df)){
-    dfMerge <- dplyr::bind_cols(metadata_df, data_df)
-  }#if
-  dfMerge \%>\%
-    dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
-    return()
+dfMerge <- data_df
+if(nrow(data_df) == nrow(metadata_df)){
+dfMerge <- dplyr::bind_cols(metadata_df, data_df)
+}#if
+dfMerge \%>\%
+dplyr::filter_all(dplyr::any_vars(is.na(.))) \%>\%
+return()
 }, #function
 }
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputationSiteHeatMap"></a>}}
@@ -596,15 +369,6 @@ Displays the distribution of missing values in form of a heatmap.
 A heatmap plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputationSiteHeatMap() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

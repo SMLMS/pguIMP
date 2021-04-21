@@ -17,28 +17,6 @@ I run at the end of the analysis.
 x <- pguIMP::pgu.reporter$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.reporter$new`
-## ------------------------------------------------
-
-y <- "report.pdf"
-x <- pguIMP:pgu.reporter$new(name = y)
-
-## ------------------------------------------------
-## Method `pgu.reporter$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.reporter$write_report`
-## ------------------------------------------------
-
-x$write_report(obj)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -84,15 +62,6 @@ Creates and returns a new \code{pgu.reporter} object.
 A new \code{pgu.reporter} object.
 (pguIMP::pgu.report)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- "report.pdf"
-x <- pguIMP:pgu.reporter$new(name = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -117,15 +86,6 @@ Prints instance variables of a \code{pgu.reporter} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-write_report"></a>}}
@@ -146,14 +106,6 @@ Writes a report of the pguIMP analysis to a pdf file.
 \subsection{Returns}{
 t.b.a.
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$write_report(obj)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

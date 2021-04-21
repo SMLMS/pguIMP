@@ -17,133 +17,6 @@ Performs a data normalization in order to achieve a standardized version of the 
 x <- pguIMP::pgu.normalizer$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.normalizer$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.normalizer$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$detectNormParameter`
-## ------------------------------------------------
-
-x$detectNormParameter(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_data`
-## ------------------------------------------------
-
-x$scale(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_minMax`
-## ------------------------------------------------
-
-x$scale_minMax(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_minMax_numeric`
-## ------------------------------------------------
-
-x$scale_minMax_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_mean`
-## ------------------------------------------------
-
-x$scale_mean(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_mean_numeric`
-## ------------------------------------------------
-
-x$scale_mean_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_zScore`
-## ------------------------------------------------
-
-x$scale_zScore(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$scale_zScore_numeric`
-## ------------------------------------------------
-
-x$scale_zScore_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_data`
-## ------------------------------------------------
-
-x$rescale(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_minMax`
-## ------------------------------------------------
-
-x$rescale_minMax(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_minMax_numeric`
-## ------------------------------------------------
-
-x$rescale_minMax_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_mean`
-## ------------------------------------------------
-
-x$rescale_mean(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_mean_numeric`
-## ------------------------------------------------
-
-x$rescale_mean_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_zScore`
-## ------------------------------------------------
-
-x$rescale_zScore(data_df)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$rescale_zScore_numeric`
-## ------------------------------------------------
-
-x$rescale_zScore_numeric(values)
-
-## ------------------------------------------------
-## Method `pgu.normalizer$featureBarPlot`
-## ------------------------------------------------
-
-x$featureBarPlot(data_df, ) \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normalizer$featureBoxPlotWithSubset`
-## ------------------------------------------------
-
-x$featureBoxPlotWithSubset() \%>\%
- show()
-
-## ------------------------------------------------
-## Method `pgu.normalizer$featurePlot`
-## ------------------------------------------------
-
-x$featurePlot() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -213,15 +86,6 @@ Creates and returns a new \code{pgu.normalizer} object.
 A new \code{pgu.normalizer} object.
 (pguIMP::pgu.normalizer)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.normalizer$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -246,15 +110,6 @@ Prints instance variables of a \code{pgu.normalizer} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-detectNormParameter"></a>}}
@@ -273,14 +128,6 @@ Resets instance variable \code{normParameter}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectNormParameter(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_data"></a>}}
@@ -303,14 +150,6 @@ Scales a tibble using the method defined by the instance variable normAgent
 A normalized version of the dataframe.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_minMax"></a>}}
@@ -332,14 +171,6 @@ Scales a tibble using min-max normalization
 \subsection{Returns}{
 A min-max normalized version of the dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_minMax(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_minMax_numeric"></a>}}
@@ -364,14 +195,6 @@ Scales a numeric object using min-max normalization
 \subsection{Returns}{
 A min-max normalized version of the numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_minMax_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_mean"></a>}}
@@ -393,14 +216,6 @@ Scales a tibble using mean normalization
 \subsection{Returns}{
 A mean normalized version of the dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_mean(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_mean_numeric"></a>}}
@@ -425,14 +240,6 @@ Scales a numeric object using mean normalization
 \subsection{Returns}{
 A mean normalized version of the numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_mean_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_zScore"></a>}}
@@ -454,14 +261,6 @@ Scales a tibble using z-score normalization
 \subsection{Returns}{
 A z-score normalized version of the dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_zScore(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-scale_zScore_numeric"></a>}}
@@ -486,14 +285,6 @@ Scales a numeric object using z-score normalization
 \subsection{Returns}{
 A z-score normalized version of the numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$scale_zScore_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_data"></a>}}
@@ -516,14 +307,6 @@ Rescales a tibble using the method defined by the instance variable normAgent
 A rescaled version of the normalized dataframe.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_minMax"></a>}}
@@ -545,14 +328,6 @@ Rescales a tibble using min-max normalization
 \subsection{Returns}{
 A rescaled version of a min-max normalized dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_minMax(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_minMax_numeric"></a>}}
@@ -577,14 +352,6 @@ Rescales a numeric object using min-max normalization
 \subsection{Returns}{
 Rescaled version of min-max normalized numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_minMax_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_mean"></a>}}
@@ -606,14 +373,6 @@ Rescales a tibble using mean normalization
 \subsection{Returns}{
 A rescaled version of a mean normalized dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_mean(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_mean_numeric"></a>}}
@@ -638,14 +397,6 @@ Rescales a numeric object using mean normalization
 \subsection{Returns}{
 Rescaled version of mean normalized numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_mean_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_zScore"></a>}}
@@ -667,14 +418,6 @@ Rescales a tibble using z-score normalization
 \subsection{Returns}{
 A rescaled version of a z-score normalized dataframe
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_zScore(data_df)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rescale_zScore_numeric"></a>}}
@@ -699,14 +442,6 @@ Rescales a numeric object using z-score normalization
 \subsection{Returns}{
 Rescaled version of z-score normalized numeric object
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$rescale_zScore_numeric(values)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBarPlot"></a>}}
@@ -732,15 +467,6 @@ Displays the distribution of an attribute values as histogram.
 A histogram.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBarPlot(data_df, ) \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureBoxPlotWithSubset"></a>}}
@@ -769,15 +495,6 @@ Displays the distribution of an attribute's values as box plot.
 A box plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featureBoxPlotWithSubset() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featurePlot"></a>}}
@@ -803,15 +520,6 @@ Displays the distribution of an attribute's values as a composition of a box plo
 A composite plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$featurePlot() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

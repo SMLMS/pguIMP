@@ -254,9 +254,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @return
                             #' A new `pgu.delegate` object.
                             #' (pguIMP::pgu.delegate)
-                            #' @examples
-                            #' y <- tibble:tibble()
-                            #' x <- pguIMP:pgu.delegate$new(data = y)
                             initialize = function(data = "tbl_df") {
                               print("Instance of pgu.delegate allocated")
                               private$.status <- pgu.status$new()
@@ -298,9 +295,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Prints instance variables of a `pgu.delegate` object.
                             #' @return
                             #' string
-                            #' @examples
-                            #' x$print()
-                            #' print(x)
                             print = function()
                             {
                               sprintf("\npgu.delegate\n\n") %>%
@@ -376,8 +370,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$query_data(input, output, session)
                             query_data = function(input, output, session)
                             {
                               if (length(input$fi.import$datapath) > 0){
@@ -413,8 +405,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$import_data(input, output, session)
                             import_data = function(input, output, session)
                             {
                               if (private$.status$query(processName = "dataUploaded")){
@@ -444,8 +434,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_import_data_Types_tbl(input, output, session)
                             update_import_data_Types_tbl = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -481,8 +469,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_import_data_statistics_tbl(input, output, session)
                             update_import_data_statistics_tbl = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -518,8 +504,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_import_missings_statistics_tbl(input, output, session)
                             update_import_missings_statistics_tbl = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -559,8 +543,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_filter_select_tbl(input, output, session)
                             update_filter_select_tbl = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -603,8 +585,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_filter(input, output, session)
                             update_filter = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -653,8 +633,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_filter_inverse(input, output, session)
                             update_filter_inverse = function(input, output, session){
                               if(private$.status$query(processName = "dataImported")){
                                 # if (length(input$tbl.filter_rows_all) < 1) {
@@ -706,8 +684,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$reset_filter(input, output, session)
                             reset_filter = function(input, output, session){
                               if(private$.status$query(processName = "dataImported")){
                                 private$.filterSet$reset(data_df = self$rawData$rawData)
@@ -727,8 +703,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$filter_data(input, output, session)
                             filter_data = function(input, output, session)
                             {
                               if(private$.status$query(processName = "dataImported")){
@@ -750,8 +724,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_filter_statistics_tbl(input, output, session)
                             update_filter_statistics_tbl = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.filterStatistics <- DT::renderDataTable({self$filteredData$statistics %>%
@@ -788,8 +760,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_filter_missings_tbl(input, output, session)
                             update_filter_missings_tbl = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.filterMissings <- DT::renderDataTable({self$filteredData$missingsStatistics %>%
@@ -829,8 +799,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_gui(input, output, session)
                             update_exploration_gui = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 private$.explorer$reset(data_df = self$filteredData$rawData,
@@ -854,8 +822,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_abscissa(input, output, session)
                             update_exploration_abscissa = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered"))
                               {
@@ -872,8 +838,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_ordinate(input, output, session)
                             update_exploration_ordinate = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered"))
                               {
@@ -891,8 +855,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_graphic(input, output, session)
                             update_exploration_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreGraphic <- shiny::renderPlot(
@@ -914,8 +876,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_abscissa_graphic(input, output, session)
                             update_exploration_abscissa_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreAbscissaGraphic <- shiny::renderPlot(
@@ -938,8 +898,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateExplorationOrdinateGraphic(input, output, session)
                             update_exploration_ordinate_graphic = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$plt.exploreOrdinateGraphic <- shiny::renderPlot(
@@ -962,8 +920,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_exploration_abscissa_table(input, output, session)
                             update_exploration_abscissa_table = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.exploreAbscissaStatistics <- DT::renderDataTable({
@@ -999,8 +955,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateExplorationOrdinateTable(input, output, session)
                             update_exploration_ordinate_table = function(input, output, session){
                               if(private$.status$query(processName = "dataFiltered")){
                                 output$tbl.exploreOrdinateStatistics <- DT::renderDataTable({
@@ -1320,8 +1274,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$importLoq(input, output, session)
                             #' importLoq = function(input, output, session){
                             #'   if (private$.status$query(processName = "dataImported")){
                             #'     tryCatch({
@@ -1350,8 +1302,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_loq_detect_gui(input, output, session)
                             update_loq_detect_gui = function(input, output, session){
                               if(private$.status$query(processName = "loqImported")){
                                 self$update_loq_na_handling(input, output, session)
@@ -1375,8 +1325,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$update_loq_na_handling(input, output, session)
                             update_loq_na_handling = function(input, output, session){
                               if(private$.status$query(processName = "loqImported"))
                               {
@@ -1417,8 +1365,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$detectLoq(input, output, session)
                             detect_loq = function(input, output, session){
                               if(private$.status$query(processName = "loqImported")){
                                 private$.loq$setNaHandlingAgent <- input$si.loqNaHandling
@@ -1439,8 +1385,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectStatisticsTbl(input, output, session)
                             update_loq_detect_statistics_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqDetected")){
                                 output$tbl.loqDetectStatistics <- DT::renderDataTable(
@@ -1476,8 +1420,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectOutlierTbl(input, output, session)
                             update_loq_detect_outlier_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqDetected"))
                               {
@@ -1557,8 +1499,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateLoqDetectDataTbl(input, output, session)
                             #' update_loq_detect_data_tbl = function(input, output, session){
                             #'   options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                             #'   t <- NULL
@@ -1612,8 +1552,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectStatisticsGraphic(input, output, session)
                             update_loq_detect_statistics_graphic = function(input, output, session){
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectStatistics <- shiny::renderPlot(
@@ -1635,8 +1573,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectFeatureGraphic(input, output, session)
                             update_loq_detect_attribute_graphic = function(input, output, session){
                               if(self$status$query(processName = "loqDetected")){
                                 output$plt.loqDetectFeature <- shiny::renderPlot(
@@ -1659,8 +1595,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqDetectFeatureTbl(input, output, session)
                             update_loq_detect_attribute_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqDetected"))
                               {
@@ -1736,8 +1670,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateGui(input, output, session)
                             update_loq_mutate_gui = function(input, output, session)
                             {
                               if(private$.status$query(processName = "loqDetected"))
@@ -1763,8 +1695,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLloqSubstitute(input, output, session)
                             update_lloq_substitute = function(input, output, session)
                             {
                               shiny::updateSelectInput(session,
@@ -1781,8 +1711,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateUloqSubstitute(input, output, session)
                             update_uloq_substitute = function(input, output, session)
                             {
                               shiny::updateSelectInput(session,
@@ -1830,8 +1758,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$mutateLoq(input, output, session)
                             mutate_loq = function(input, output, session)
                             {
                               if(private$.status$query(processName = "loqDetected"))
@@ -1859,8 +1785,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateLoqMutateStatisticsTbl(input, output, session)
                             #' updateLoqMutateStatisticsTbl = function(input, output, session){
                             #'   if(private$.status$query(processName = "loqMutated")){
                             #'     output$tbl.loqMutateStatistics <- DT::renderDataTable(
@@ -1895,8 +1819,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateLoqMutateOutlierTbl(input, output, session)
                             #' updateLoqMutateOutlierTbl = function(input, output, session){
                             #'   options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                             #'   t <- NULL
@@ -1951,8 +1873,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateDataTbl(input, output, session)
                             update_loq_mutate_data_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqMutated"))
                               {
@@ -2053,8 +1973,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateFeatureGraphic(input, output, session)
                             update_loq_mutate_attribute_graphic = function(input, output, session)
                               {
                               if(self$status$query(processName = "loqMutated"))
@@ -2120,8 +2038,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateLoqMutateFeatureTbl(input, output, session)
                             update_loq_mutate_attribute_tbl = function(input, output, session){
                               if(private$.status$query(processName = "loqMutated"))
                               {
@@ -2205,8 +2121,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$optimizeTrafoParameter(input, output, session)
                             optimizeTrafoParameter = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 trafoAlphabet <- c("none")
@@ -2251,8 +2165,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateDetectedTrafoTypes(input, output, session)
                             updateDetectedTrafoTypes = function(input, output, session){
                               if(self$status$query(processName = "modelOptimized")){
                                 output$tbl.trafoDetectTypes <- DT::renderDataTable(
@@ -2286,8 +2198,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateDetectedTrafoParameter(input, output, session)
                             updateDetectedTrafoParameter = function(input, output, session){
                               if(self$status$query(processName = "modelOptimized")){
                                 output$tbl.trafoDetectParameters <- DT::renderDataTable(
@@ -2322,8 +2232,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoDetectGui(input, output, session)
                             updateTrafoDetectGui = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 trafoAlphabet <- self$optimizer$trafoAlphabet
@@ -2371,8 +2279,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateFeature(input, output, session)
                             updateTrafoMutateFeature = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateSelectInput(session,
@@ -2390,8 +2296,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateType(input, output, session)
                             updateTrafoMutateType = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateSelectInput(session,
@@ -2410,8 +2314,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateLambdae(input, output, session)
                             updateTrafoMutateLambda = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateNumericInput(session,
@@ -2428,8 +2330,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateMirror(input, output, session)
                             updateTrafoMutateMirror = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 shiny::updateCheckboxInput(session,
@@ -2483,8 +2383,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$trafoMutateFit(input, output, session)
                             trafoMutateFit = function(input, output, session){
                               if(self$status$query(processName = "loqMutated")){
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericalAttributeNames))
@@ -2510,8 +2408,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$trafoMutateGlobal(input, output, session)
                             trafoMutateGlobal = function(input, output, session){
                               if(self$status$query(processName = "modelOptimized")){
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$loqMutatedData$numericalAttributeNames))
@@ -2553,8 +2449,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$trafoMutateFeature(input, output, session)
                             trafoMutateFeature = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 private$.transformator$setTrafoType(feature = input$si.trafoMutateFeature,
@@ -2629,8 +2523,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateFeatureGraphic(input, output, session)
                             updateTrafoMutateFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$plt.trafoMutateFeature <- shiny::renderPlot(
@@ -2651,8 +2543,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateFeatureParameterTbl(input, output, session)
                             updateTrafoMutateFeatureParameterTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateFeatureParameter <- DT::renderDataTable(
@@ -2689,8 +2579,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateFeatureQualityTbl(input, output, session)
                             updateTrafoMutateFeatureQualityTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateFeatureQuality <- DT::renderDataTable(
@@ -2727,8 +2615,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGlobalParameterTbl(input, output, session)
                             updateTrafoMutateGlobalParameterTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalParameter <- DT::renderDataTable(
@@ -2764,8 +2650,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGlobalModelTbl(input, output, session)
                             updateTrafoMutateGlobalModelTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalModel <- DT::renderDataTable(
@@ -2801,8 +2685,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGlobalQualityTbl(input, output, session)
                             updateTrafoMutateGlobalQualityTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalQuality <- DT::renderDataTable(
@@ -2838,8 +2720,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGlobalTestsTbl(input, output, session)
                             updateTrafoMutateGlobalTestsTbl = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 output$tbl.trafoMutateGlobalTests <- DT::renderDataTable(
@@ -2875,8 +2755,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoMutateGlobalDataTbl(input, output, session)
                             updateTrafoMutateGlobalDataTbl = function(input, output, session){
                               options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                               if(self$status$query(processName = "modelDefined")){
@@ -2915,8 +2793,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormFeature(input, output, session)
                             updateTrafoNormFeature = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 shiny::updateSelectInput(session,
@@ -2934,8 +2810,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormMethod(input, output, session)
                             updateTrafoNormMethod = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 shiny::updateSelectInput(session,
@@ -2954,8 +2828,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormGui(input, output, session)
                             updateTrafoNormGui = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 self$updateTrafoNormMethod(input, output, session)
@@ -2972,8 +2844,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$trafoNormMutate(input, output, session)
                             trafoNormMutate = function(input, output, session){
                               if(self$status$query(processName = "modelDefined")){
                                 private$.normalizer$setNormAgent <- input$si.trafoNormMethod
@@ -3001,8 +2871,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormFeatureGraphic(input, output, session)
                             updateTrafoNormFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
                                 output$plt.trafoNormFeature <- shiny::renderPlot(
@@ -3024,8 +2892,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$resetTrafoNormGui(input, output, session)
                             resetTrafoNormGui = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
                                 self$updateTrafoNormMethod(input, output, session)
@@ -3041,8 +2907,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
                             updateTrafoNormFeatureStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormFeatureStatistics <- DT::renderDataTable({
@@ -3078,8 +2942,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormStatisticsTbl(input, output, session)
                             updateTrafoNormStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormStatistics <- DT::renderDataTable({
@@ -3117,8 +2979,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateTrafoNormParameterTbl(input, output, session)
                             updateTrafoNormParameterTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormParameter <- DT::renderDataTable({
@@ -3157,8 +3017,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeNormDataTbl(input, output, session)
                             updateTrafoNormDataTbl = function(input, output, session){
                               if(private$.status$query(processName = "normalized")){
                                 output$tbl.trafoNormData <- DT::renderDataTable({
@@ -3200,8 +3058,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$imputeMissingsAnalyze(input, output, session)
                             imputeMissingsAnalyze = function(input, output, session){
                               if(self$status$query(processName = "normalized")){
                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$normalizedData$numericalAttributeNames))
@@ -3226,8 +3082,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsGraphic(input, output, session)
                             updateImputeMissingsGraphic = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$plt.imputeMissingsSummary <- shiny::renderPlot(
@@ -3248,8 +3102,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsStatisticsTbl(input, output, session)
                             updateImputeMissingsStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsStatistics <- DT::renderDataTable(
@@ -3285,8 +3137,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsDistributionTbl(input, output, session)
                             updateImputeMissingsDistributionTbl = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsDistribution <- DT::renderDataTable(
@@ -3322,8 +3172,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingCharacteristicsGraphic(input, output, session)
                             updateImputeMissingCharacteristicsGraphic = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$plt.imputeMissingsPairs <- shiny::renderPlot(
@@ -3345,8 +3193,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsCharacteristicsTbl(input, output, session)
                             updateImputeMissingsCharacteristicsTbl = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsCharacteristics <- DT::renderDataTable(
@@ -3381,8 +3227,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsDetailTbl(input, output, session)
                             updateImputeMissingsDetailTbl = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 output$tbl.imputeMissingsDetail <- DT::renderDataTable(
@@ -3419,8 +3263,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateImputeMissingsDataTbl(input, output, session)
 #'                             updateImputeMissingsDataTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "naDetected")){
 #'                                 output$tbl.imputeMissingsData <- DT::renderDataTable(
@@ -3460,8 +3302,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersMethod(input, output, session)
                             updateImputeOutliersMethod = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateSelectInput(session,
@@ -3480,8 +3320,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersFeature(input, output, session)
                             updateImputeOutliersFeature = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateSelectInput(session,
@@ -3499,8 +3337,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersAlpha(input, output, session)
                             updateImputeOutliersAlpha = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3517,8 +3353,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersEpsilon(input, output, session)
                             updateImputeOutliersEpsilon = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3535,8 +3369,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersMinSamples(input, output, session)
                             updateImputeOutliersMinSamples = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3553,8 +3385,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersGamma(input, output, session)
                             updateImputeOutliersGamma = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3571,8 +3401,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersNu(input, output, session)
                             updateImputeOutliersNu = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3589,8 +3417,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersCutoff(input, output, session)
                             updateImputeOutliersCutoff = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3607,8 +3433,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersK(input, output, session)
                             updateImputeOutliersK = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3625,8 +3449,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersSeed(input, output, session)
                             updateImputeOutliersSeed = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 shiny::updateNumericInput(session,
@@ -3643,8 +3465,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersGui(input, output, session)
                             updateImputeOutliersGui = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 self$updateImputeOutliersMethod(input, output, session)
@@ -3668,8 +3488,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$resetImputeOutliersGui(input, output, session)
                             resetImputeOutliersGui = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 self$updateImputeOutliersMethod(input, output, session)
@@ -3694,8 +3512,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$imputeOutliersDetect(input, output, session)
                             imputeOutliersDetect = function(input, output, session){
                               if(self$status$query(processName = "naDetected")){
                                 private$.outliers$setOutliersAgent <- input$si.imputeOutliersMethod
@@ -3731,8 +3547,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersGraphic(input, output, session)
                             updateImputeOutliersGraphic = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersImputeSummary <- shiny::renderPlot(
@@ -3753,8 +3567,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersFeatureGraphic(input, output, session)
                             updateImputeOutliersFeatureGraphic = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 output$plt.outliersImputeFeature <- shiny::renderPlot(
@@ -3777,8 +3589,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersFeatureTbl(input, output, session)
                             updateImputeOutliersFeatureTbl = function(input, output, session)
                             {
                               if(self$status$query(processName = "outliersDetected"))
@@ -3862,8 +3672,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersStatisticsTbl(input, output, session)
                             updateImputeOutliersStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "outliersDetected")){
                                 output$tbl.outliersImputeStatistics <- DT::renderDataTable(
@@ -3899,8 +3707,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeOutliersDetailTbl(input, output, session)
                             updateImputeOutliersDetailTbl = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected"))
                               {
@@ -3980,8 +3786,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateImputeOutliersDataTbl(input, output, session)
                             #' updateImputeOutliersDataTbl = function(input, output, session){
                             #'   # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                             #'   # t <- NULL
@@ -4039,8 +3843,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateFeature(input, output, session)
                             updateImputeMutateFeature = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateSelectInput(session,
@@ -4059,8 +3861,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateMethod(input, output, session)
                             updateImputeMutateMethod = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateSelectInput(session,
@@ -4079,8 +3879,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateNNeighbors(input, output, session)
                             updateImputeMutateNNeighbors = function(input,  output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
@@ -4097,8 +3895,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutatePredFrac(input, output, session)
                             updateImputeMutatePredFrac = function(input,  output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
@@ -4115,8 +3911,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateOutfluxThr(input, output, session)
                             updateImputeMutateOutfluxThr = function(input,  output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
@@ -4133,8 +3927,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateSeed(input, output, session)
                             updateImputeMutateSeed = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
@@ -4151,8 +3943,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateIterations(input, output, session)
                             updateImputeMutateIterations = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 shiny::updateNumericInput(session,
@@ -4169,8 +3959,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateGui(input, output, session)
                             updateImputeMutateGui = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 self$resetImputeMutateGui(input, output, session)
@@ -4186,8 +3974,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$resetImputeMutateGui(input, output, session)
                             resetImputeMutateGui = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 self$updateImputeMutateMethod(input, output, session)
@@ -4208,8 +3994,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$imputeMutateMutate(input, output, session)
                             imputeMutateMutate = function(input, output, session){
                               if(self$status$query(processName = "outliersDetected")){
                                 private$.imputer$setImputationAgent <- input$si.imputeMutateMethod
@@ -4280,8 +4064,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeFluxGraphic(input, output, session)
                             updateImputeFluxGraphic = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateFlux <- shiny::renderPlot(
@@ -4302,8 +4084,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateGraphic(input, output, session)
                             updateImputeMutateGraphic = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateSummary <- shiny::renderPlot(
@@ -4324,8 +4104,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateStatisticsTbl(input, output, session)
                             updateImputeMutateStatisticsTbl = function(input, output, session){
                               if(private$.status$query(processName = "imputed")){
                                 output$tbl.imputeMutateStatistics <- DT::renderDataTable(
@@ -4361,8 +4139,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateDistributionTbl(input, output, session)
                             updateImputeMutateDistributionTbl = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$tbl.imputeMutateDistribution <- DT::renderDataTable(
@@ -4398,8 +4174,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateFeatureDetailGraphic(input, output, session)
                             updateImputeMutateFeatureDetailGraphic = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$plt.imputeMutateFeatureDetail <- shiny::renderPlot(
@@ -4422,8 +4196,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateFeatureDetailTbl(input, output, session)
                             updateImputeMutateFeatureDetailTbl = function(input, output, session){
                               if (self$status$query(processName = "imputed")){
                                 output$tbl.imputeMutateFeatureDetail <- DT::renderDataTable(
@@ -4461,8 +4233,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateDetailTbl(input, output, session)
                             updateImputeMutateDetailTbl = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 dfImputationSites <- self$imputer$imputationSites
@@ -4502,8 +4272,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMutateDataTbl(input, output, session)
                             updateImputeMutateDataTbl = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 output$tbl.imputeMutateData <- DT::renderDataTable(
@@ -4543,8 +4311,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$outliersDetect(input, output, session)
                             #' outliersDetect = function(input, output, session){
                             #'   if(self$status$query(processName = "naDetected")){
                             #'     self$transformedData$numericData() %>%
@@ -4564,8 +4330,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersDetectGraphic(input, output, session)
                             #' updateOutliersDetectGraphic = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     output$plt.outliersDetectSummary <- shiny::renderPlot(
@@ -4585,8 +4349,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersDetectStatisticsTbl(input, output, session)
                             #' updateOutliersDetectStatisticsTbl = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     output$tbl.outliersDetectStatistics <- DT::renderDataTable(
@@ -4620,8 +4382,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersDetectDetailTbl(input, output, session)
                             #' updateOutliersDetectDetailTbl = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     dfOutlier <- self$outliers$outliers
@@ -4660,8 +4420,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersDetectDataTbl(input, output, session)
                             #' updateOutliersDetectDataTbl = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     output$tbl.outliersDetectData <- DT::renderDataTable(
@@ -4700,8 +4458,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateFeature(input, output, session)
                             #' updateOutliersMutateFeature = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     shiny::updateSelectInput(session,
@@ -4720,8 +4476,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateMethod(input, output, session)
                             #' updateOutliersMutateMethod = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     shiny::updateSelectInput(session,
@@ -4740,8 +4494,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateSeed(input, output, session)
                             #' updateOutliersMutateSeed = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     shiny::updateNumericInput(session,
@@ -4758,8 +4510,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateIterations(input, output, session)
                             #' updateOutliersMutateIterations = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     shiny::updateNumericInput(session,
@@ -4776,8 +4526,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateGui(input, output, session)
                             #' updateOutliersMutateGui = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     self$updateOutliersMutateFeature(input, output, session)
@@ -4796,8 +4544,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$outliersMutate(input, output, session)
                             #' outliersMutate = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersDetected")){
                             #'     private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
@@ -4839,8 +4585,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateFeatureDetailGraphic(input, output, session)
                             #' updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersMutated")){
                             #'     output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
@@ -4861,8 +4605,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateFeatureDetailTbl(input, output, session)
                             #' updateOutliersMutateFeatureDetailTbl = function(input, output, session){
                             #'   if (self$status$query(processName = "outliersMutated")){
                             #'     output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
@@ -4901,8 +4643,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateDetailTbl(input, output, session)
                             #' updateOutliersMutateDetailTbl = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersMutated")){
                             #'     dfOutlier <- self$outliers$outliers
@@ -4941,8 +4681,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateOutliersMutateDataTbl(input, output, session)
                             #' updateOutliersMutateDataTbl = function(input, output, session){
                             #'   if(self$status$query(processName = "outliersMutated")){
                             #'     output$tbl.outliersMutateData <- DT::renderDataTable(
@@ -4983,8 +4721,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$validate(input, output, session)
                             validate = function(input, output, session){
                               if(self$status$query(processName = "imputed")){
                                 progress <- shiny::Progress$new(session, min = 0, max  = 1.0)
@@ -5011,8 +4747,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateAnalysisValidationGui(input, output, session)
                             updateAnalysisValidationGui = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 shiny::updateSelectInput(session,
@@ -5038,8 +4772,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateAnalysisValidationGraphic(input, output, session)
                             updateAnalysisValidationGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.analysisValidationFeature <- shiny::renderPlot(
@@ -5065,8 +4797,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateAnalysisValidationTestTbl(input, output, session)
                             updateAnalysisValidationTestTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.analysisValidationTest <- DT::renderDataTable(
@@ -5105,8 +4835,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCentralMomentsOrgTbl(input, output, session)
                             updateCentralMomentsOrgTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.centralMomentsOrg <- DT::renderDataTable(
@@ -5144,8 +4872,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCentralMomentsImpTbl(input, output, session)
                             updateCentralMomentsImpTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.centralMomentsImp <- DT::renderDataTable(
@@ -5183,8 +4909,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCentralMomentsDeltaTbl(input, output, session)
                             updateCentralMomentsDeltaTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.centralMomentsDelta <- DT::renderDataTable(
@@ -5229,8 +4953,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationValidationScatterGraphic(input, output, session)
                             updateCorrelationValidationScatterGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.correlationValidationScatter <- shiny::renderPlot(
@@ -5251,8 +4973,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
                             updateCorrelationValidationBoxPlotGraphic = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$plt.correlationValidationBoxPlot <- shiny::renderPlot(
@@ -5274,8 +4994,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationValidationDeviationTbl(input, output, session)
                             updateCorrelationValidationDeviationTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.correlationValidationDeviation <- DT::renderDataTable(
@@ -5314,8 +5032,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationValidationDataTbl(input, output, session)
                             updateCorrelationValidationDataTbl = function(input, output, session){
                               if(self$status$query(processName = "validated")){
                                 output$tbl.correlationValidationData <- DT::renderDataTable(
@@ -5359,8 +5075,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$correlate(input, output, session)
 #'                             correlate = function(input, output, session){
 #'                               if(self$status$query(processName = "validated")){
 #'                                 progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
@@ -5385,8 +5099,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixRTbl(input, output, session)
 #'                             updateCorrelationMatrixRTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixR <- DT::renderDataTable(
@@ -5423,8 +5135,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixPPearsonTbl(input, output, session)
 #'                             updateCorrelationMatrixPPearsonTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
@@ -5461,8 +5171,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixTauTbl(input, output, session)
 #'                             updateCorrelationMatrixTauTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixTau <- DT::renderDataTable(
@@ -5499,8 +5207,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixPKendallTbl(input, output, session)
 #'                             updateCorrelationMatrixPKendallTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
@@ -5537,8 +5243,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixRhoTbl(input, output, session)
 #'                             updateCorrelationMatrixRhoTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixRho <- DT::renderDataTable(
@@ -5575,8 +5279,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateCorrelationMatrixPSpearmanTbl(input, output, session)
 #'                             updateCorrelationMatrixPSpearmanTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
@@ -5617,8 +5319,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$regression(input, output, session)
 #'                             regression = function(input, output, session){
 #'                               if(self$status$query(processName = "correlated")){
 #'                                 progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
@@ -5641,8 +5341,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionAbscissa(input, output, session)
 #'                             updateRegressionAbscissa = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 shiny::updateSelectInput(session,
@@ -5661,8 +5359,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionOrdinate(input, output, session)
 #'                             updateRegressionOrdinate = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
@@ -5682,8 +5378,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionGui(input, output, session)
 #'                             updateRegressionGui = function(input, output, session){
 #'                               self$updateRegressionAbscissa(input, output, session)
 #'                               self$updateRegressionOrdinate(input, output, session)
@@ -5697,8 +5391,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionGraphic(input, output, session)
 #'                             updateRegressionGraphic = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$plt.regressionFeature <- shiny::renderPlot(
@@ -5720,8 +5412,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionModelTbl(input, output, session)
 #'                             updateRegressionModelTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$tbl.regressionFeature <- DT::renderDataTable(
@@ -5758,8 +5448,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionInterceptTbl(input, output, session)
 #'                             updateRegressionInterceptTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$tbl.regressionIntercept <- DT::renderDataTable(
@@ -5796,8 +5484,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionPInterceptTbl(input, output, session)
 #'                             updateRegressionPInterceptTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$tbl.regressionPIntercept <- DT::renderDataTable(
@@ -5834,8 +5520,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionSlopeTbl(input, output, session)
 #'                             updateRegressionSlopeTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$tbl.regressionSlope <- DT::renderDataTable(
@@ -5872,8 +5556,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
 #'                             #' Pointer to shiny output
 #'                             #' @param session
 #'                             #' Pointer to shiny session
-#'                             #' @examples
-#'                             #' x$updateRegressionPSlopeTbl(input, output, session)
 #'                             updateRegressionPSlopeTbl = function(input, output, session){
 #'                               if(self$status$query(processName = "regression")){
 #'                                 output$tbl.regressionPSlope <- DT::renderDataTable(
@@ -5915,8 +5597,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateLoqInfo(input, output, session)
                             #' updateLoqInfo = function(input, output, session){
                             #'   if(private$.status$query(processName = "dataImported")){
                             #'     output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() %>%
@@ -5949,8 +5629,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateMetadataInfo(input, output, session)
                             #' updateMetadataInfo = function(input, output, session){
                             #'   if(private$.status$query(processName = "metadataImported")){
                             #'     output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() %>%
@@ -5983,8 +5661,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' #' Pointer to shiny output
                             #' #' @param session
                             #' #' Pointer to shiny session
-                            #' #' @examples
-                            #' #' x$updateRawDataStatisticsTbl(input, output, session)
                             #' updateRawDataStatisticsTbl = function(input, output, session){
                             #'   if(private$.status$query(processName = "dataImported")){
                             #'     output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() %>%
@@ -6026,8 +5702,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @return
                             #' export filename
                             #' (character)
-                            #' @examples
-                            #' y <- x$exportFileName(input, output, session)
                             exportFileName = function(input, output, session){
                               private$.fileName$predict() %>%
                                 return()
@@ -6040,8 +5714,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' (character)
                             #' @param input
                             #' Pointer to shiny input
-                            #' @examples
-                            #' x$exportData(input, file="result.xlsx")
                             exportData = function(input, file){
                               if(self$status$query(processName = "validated")){
                                 private$.exporter$setFileName <- file
@@ -6119,8 +5791,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @return
                             #' export filename
                             #' (character)
-                            #' @examples
-                            #' y <- x$reportFileName(input, output, session)
                             reportFileName = function(input, output, session){
                               private$.fileName$setSuffix <- "pdf"
                               private$.fileName$updateTimeString()
@@ -6136,8 +5806,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' @param file
                             #' export filename
                             #' (character)
-                            #' @examples
-                            #' x$write_report(input, file="report.pdf")
                             writeReport = function(input, file){
                               print("state")
                               print(str(input$tbl.filter_search_columns))
@@ -6210,8 +5878,6 @@ pgu.delegate <- R6::R6Class("pgu.delegate",
                             #' Pointer to shiny output
                             #' @param session
                             #' Pointer to shiny session
-                            #' @examples
-                            #' x$hide_outdated_results(input, output, session)
                             hide_outdated_results = function(input, output, session){
                               if(!private$.status$query(processName = "dataImported")){
                                 output$tbl.importDataTypes <- DT::renderDataTable(NULL)

@@ -17,91 +17,6 @@ Analysis is performed individually on each attribute.
 x <- pguIMP::pgu.optimizer$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.optimizer$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.optimizer$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$resetFeatures`
-## ------------------------------------------------
-
-x$resetFeatures(data = y)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$resetOptParameter`
-## ------------------------------------------------
-
-x$resetOptParameter()
-
-## ------------------------------------------------
-## Method `pgu.optimizer$resetOptTypes`
-## ------------------------------------------------
-
-x$resetOptTypes()
-
-## ------------------------------------------------
-## Method `pgu.optimizer$resetOptimizer`
-## ------------------------------------------------
-
-x$resetOptimizer(data)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "time")
-
-## ------------------------------------------------
-## Method `pgu.optimizer$modelParameterIsBigger`
-## ------------------------------------------------
-
-y <- x$modelParameterIsBigger(modelParameter = 3, referenceParameter = 2)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$modelParameterIsSmaller`
-## ------------------------------------------------
-
-y <- x$modelParameterIsSmaller(modelParameter = 2, referenceParameter = 3)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$updateTrafoType`
-## ------------------------------------------------
-
-t <- pgu.transformator$new(data)
-t <- x$updateTrafoType(transformator = t, type = "logNorm")
-
-## ------------------------------------------------
-## Method `pgu.optimizer$updateMirrorLogic`
-## ------------------------------------------------
-
-t <- pgu.transformator$new(data)
-t <- x$updateMirrorLogic(transformator = t, logic = TRUE)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$updateOptParameter`
-## ------------------------------------------------
-
-m <- pgu.model$new(data)
-x$updateOptParameter(model = m,type = "logNorm", logic = TRUE)
-
-## ------------------------------------------------
-## Method `pgu.optimizer$optimize`
-## ------------------------------------------------
-
-x$optimize(data, progress)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -173,15 +88,6 @@ Creates and returns a new \code{pgu.optimizer} object.
 A new \code{pgu.optimizer} object.
 (pguIMP::pgu.optimizer)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.optimizer$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -206,15 +112,6 @@ Prints instance variables of a \code{pgu.optimizer} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetFeatures"></a>}}
@@ -235,14 +132,6 @@ features,
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetFeatures(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetOptParameter"></a>}}
@@ -253,14 +142,6 @@ Initializes the instance variable optParameter.
 \if{html}{\out{<div class="r">}}\preformatted{pgu.optimizer$resetOptParameter()}\if{html}{\out{</div>}}
 }
 
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetOptParameter()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetOptTypes"></a>}}
@@ -269,14 +150,6 @@ Initializes the instance variable optParameter.
 Initializes the instance variable optTypes.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.optimizer$resetOptTypes()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetOptTypes()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -299,14 +172,6 @@ resetFeatures, setTrafoAlphabet, setMirror, resetOptParameter and resetOptTypes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetOptimizer(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -329,14 +194,6 @@ Determines the numerical index of the column of an attribute based on the attrib
 The attributes column index.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "time")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelParameterIsBigger"></a>}}
@@ -365,14 +222,6 @@ Compares a model parameter to a reference parameter and tests, if the model para
 Test Result
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelParameterIsBigger(modelParameter = 3, referenceParameter = 2)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-modelParameterIsSmaller"></a>}}
@@ -401,14 +250,6 @@ Compares a model parameter to a reference parameter and tests, if the model para
 Test Result
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$modelParameterIsSmaller(modelParameter = 2, referenceParameter = 3)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoType"></a>}}
@@ -438,15 +279,6 @@ sets the transformation type to a user defined value.
 An updated instance of the pgu.transformator class
 (pguIMP::pgu.transformator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{t <- pgu.transformator$new(data)
-t <- x$updateTrafoType(transformator = t, type = "logNorm")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateMirrorLogic"></a>}}
@@ -476,15 +308,6 @@ sets the mirrorLogic parameter to a user defined value.
 An updated instance of the pgu.transformator class
 (pguIMP::pgu.transformator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{t <- pgu.transformator$new(data)
-t <- x$updateMirrorLogic(transformator = t, logic = TRUE)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateOptParameter"></a>}}
@@ -515,15 +338,6 @@ and stores them in the instance variables optTypes and optParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{m <- pgu.model$new(data)
-x$updateOptParameter(model = m,type = "logNorm", logic = TRUE)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-optimize"></a>}}
@@ -547,14 +361,6 @@ in the instance variables optParameter, optTypes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$optimize(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoAlpahbetTblDf"></a>}}

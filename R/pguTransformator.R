@@ -55,9 +55,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A new `pgu.transformator` object.
                                  #' (pguIMP::pgu.transformator)
-                                 #' @examples
-                                 #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.transformator$new(data_df = y)
                                  initialize = function(data_df = "tbl_df"){
                                    if(!tibble::is_tibble(data_df)){
                                      data_df <- tibble::tibble(names <- "none",
@@ -81,9 +78,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' Prints instance variables of a `pgu.transformator` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.transformator\n")
                                    cat(rString)
@@ -100,8 +94,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' Dataframe to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$resetTrafoParameter(data)
                                  resetTrafoParameter = function(data  = "tbl_df"){
                                    features <- data %>%
                                      dplyr::select_if(is.numeric) %>%
@@ -132,8 +124,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (character)
-                                 #' @examples
-                                 #' y <- x$trafoType(feature = "infected")
                                  trafoType = function(feature = "character"){
                                    t <- "none"
                                    idx <- self$featureIdx(feature)
@@ -153,8 +143,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' Trafo type parameter. Valid choices are:
                                  #' "none", "exponential", "log2", "logNorm", "log10", "arcsine", "tukeyLOP", "boxCox".
                                  #' (character)
-                                 #' @examples
-                                 #' x$setTrafoType(feature = "infected", type = "logNorm")
                                  setTrafoType = function(feature = "character", type = "character"){
                                    idx <- self$featureIdx(feature)
                                    t <- factor(type, levels = self$trafoAlphabet)
@@ -177,8 +165,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$addConstant(feature = "infected")
                                  addConstant = function(feature = "character"){
                                    c <- 0.0
                                    idx <- self$featureIdx(feature)
@@ -197,8 +183,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (logical)
-                                 #' @examples
-                                 #' y <- x$mirrorLogic(feature = "infected")
                                  mirrorLogic = function(feature = "character"){
                                    l <- FALSE
                                    idx <- self$featureIdx(feature)
@@ -217,8 +201,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param logic
                                  #' Specifies whether the data should be mirrored at the coordinate origin.
                                  #' (logical)
-                                 #' @examples
-                                 #' x$setMirrorLogic(feature = "infected", logic = FALSE)
                                  setMirrorLogic = function(feature = "character", logic = "logical"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -238,8 +220,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$lambdaLOP(feature = "infected")
                                  lambdaLOP = function(feature = "character"){
                                    lambda <- 0.0
                                    idx <- self$featureIdx(feature)
@@ -258,8 +238,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param lambda
                                  #' Sets the feature specific exponential value.
                                  #' (numeric)
-                                 #' @examples
-                                 #' x$setLambdaLOP(feature = "infected", lambda = 2)
                                  setLambdaLOP = function(feature = "character", lambda = "numeric"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -279,8 +257,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$lambdaBC(feature = "infected")
                                  lambdaBC = function(feature = "character"){
                                    l <- 0.0
                                    idx <- self$featureIdx(feature)
@@ -302,8 +278,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value of entry.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$lambdaAS(feature = "infected")
                                  lambdaAS = function(feature = "character"){
                                    l <- 0.0
                                    idx <- self$featureIdx(feature)
@@ -324,8 +298,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Index of attribute entry in dataframe
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$featureIdx(feature = "infected")
                                  featureIdx =  function(feature = "character"){
                                    idx <- match(feature, self$trafoParameter[["features"]])
                                    if(is.na(idx)){
@@ -346,8 +318,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The addConst for the attribute
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$addConstGenerator(value = -0.5)
                                  addConstGenerator =  function(value = "numeric"){
                                    c <- 0.0
                                    # if (value <= 0.0){
@@ -372,8 +342,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' Value or vector of values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$mirrorNumeric(value = c(-0.5, 0.0, 0.5, 1.0))
                                  mirrorNumeric = function(value = "numeric"){
                                    return(-1.0 * value)
                                  }, #function
@@ -386,8 +354,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A data frame
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$mirrorData(data)
                                  mirrorData = function(data = "tbl_df"){
                                    for (feature in self$trafoParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -408,8 +374,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$calculateAddConst(data)
                                  calculateAddConst = function(data = "tbl_df"){
                                    private$.trafoParameter["addConst"] <- data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%
@@ -431,8 +395,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A numeric or a vector of numerics.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$translateNumeric(value = c(0.1, 0.2, 0.3), const = 4.0)
                                  translateNumeric =  function(value = "numeric", const = "numeric"){
                                    return(value + const)
                                  }, #function
@@ -448,8 +410,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$translateData(data)
                                  translateData = function(data = "tbl_df"){
                                    for (feature in self$trafoParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -472,8 +432,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A numeric or a vector of numerics.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$backTranslateNumeric(value = c(4.1, 4.2, 4.3), const = 4.0)
                                  backTranslateNumeric = function(value = "numeric", const = "numeric"){
                                    return(value - const)
                                  }, #function
@@ -489,8 +447,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$backTranslateData(data)
                                  backTranslateData = function(data = "tbl_df"){
                                    for (feature in self$trafoParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -517,8 +473,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The specific lambda factor.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$lambdaEstimator(value = c(4, 5, 6), feature = "infected")
                                  lambdaEstimator = function(value = "numeric", feature = "character"){
                                    lambda <- 1.0
                                    idx <- self$featureIdx(feature)
@@ -547,8 +501,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$estimateLambda(data)
                                  estimateLambda_temp = function(data = "tbl_df"){
                                    tempData <- data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%
@@ -567,8 +519,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$estimateLambda(data)
                                  estimateLambda = function(data = "tbl_df"){
                                    tempData <- data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%
@@ -593,8 +543,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The specific lambda factor.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$normalizeArcSine(value)
                                  normalizeArcSine = function(value  = "numeric"){
                                    return(max(value, na.rm=TRUE))
                                  }, #function
@@ -607,8 +555,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The specific lambda factor.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$optimizeTukeyLadderOfPowers(value)
                                  optimizeTukeyLadderOfPowers = function(value = "numeric"){
                                    lambda <- 1.0
                                    tryCatch({
@@ -646,8 +592,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The specific lambda factor.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$optimizeBoxCox(value)
                                  optimizeBoxCox = function(value = "numeric"){
                                    lambda <- 1.0
                                    tryCatch({
@@ -688,8 +632,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A transfromed version of the given numeric or vector of numerics.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformNumeric(value = c(4, 5, 6), feature = "infected")
                                  transformNumeric = function(value = "numeric", feature = "character"){
                                    tf <- numeric()
                                    idx <- self$featureIdx(feature)
@@ -720,8 +662,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$transformData(data)
                                  transformData = function(data = "tbl_df"){
                                    for (feature in self$trafoParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -744,8 +684,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformLogModulus(value, base = 2)
                                  transformLogModulus = function(value = "numeric", base="numeric"){
                                    return(log(value, base=base))
                                  }, #function
@@ -758,8 +696,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformSquareRoot(value)
                                  transformSquareRoot = function(value = "numeric"){
                                    return(sqrt(value))
                                  }, #function
@@ -772,8 +708,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformCubeRoot(value)
                                  transformCubeRoot = function(value = "numeric"){
                                    return((value)^(1/3))
                                  }, #function
@@ -790,8 +724,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformArcsine(value, lambda = max(value))
                                  transformArcsine = function(value = "numeric", lambda="numeric"){
                                    return(asin(sqrt((value)/lambda)))
                                  }, #function
@@ -804,8 +736,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformInverse(value)
                                  transformInverse = function(value = "numeric"){
                                    return(1.0/(value))
                                  }, #function
@@ -821,8 +751,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformTukeyLadderOfPowers(value, lambda = 0)
                                  transformTukeyLadderOfPowers = function(value = "numeric", lambda="numeric"){
                                    if(lambda > 0){
                                      return(value^lambda)
@@ -846,8 +774,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$transformBoxCox(value, lambda = 0)
                                  transformBoxCox = function(value = "numeric", lambda="numeric"){
                                    if (lambda == 0){
                                      return(self$transformLogModulus(value, base=exp(1)))
@@ -872,8 +798,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' An inverse transfromed version of the given numeric or vector of numerics.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformNumeric(value = c(4, 5, 6), feature = "infected")
                                  inverseTransformNumeric = function(value = "numeric", feature = "character"){
                                    tf <- numeric()
                                    idx <- self$featureIdx(feature)
@@ -907,8 +831,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' y <- x$inverseTransformData(data)
                                  inverseTransformData = function(data = "tbl_df"){
                                    for (feature in self$trafoParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -931,8 +853,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformLogModulus(value, base = 2)
                                  inverseTransformLogModulus = function(value = "numeric", base="numeric"){
                                    return (base^value)
                                  }, #function
@@ -945,8 +865,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformSquareRoot(value)
                                  inverseTransformSquareRoot = function(value = "numeric"){
                                    return(value^2)
                                  }, #function
@@ -959,8 +877,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformCubeRoot(value)
                                  inverseTransformCubeRoot = function(value = "numeric"){
                                    return(value^3)
                                  }, #function
@@ -976,8 +892,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformArcsine(value, lambda = max(value))
                                  inverseTransformArcsine = function(value = "numeric", lambda="numeric"){
                                    return(((sin(value))^2.0)*lambda)
                                  }, #function
@@ -990,8 +904,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformInverse(value)
                                  inverseTransformInverse = function(value = "numeric"){
                                    return(1.0/value)
                                  }, #function
@@ -1007,8 +919,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformTukeyLadderOfPowers(value, lambda = 0)
                                  inverseTransformTukeyLadderOfPowers = function(value = "numeric", lambda="numeric"){
                                    if(lambda > 0){
                                      return(value^(1/lambda))
@@ -1032,8 +942,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' The transformed values.
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$inverseTransformBoxCox(value, lambda = 0)
                                  inverseTransformBoxCox = function(value = "numeric", lambda="numeric"){
                                    if (lambda == 0){
                                      return(self$inverseTransformLogModulus(value, base=exp(1)))
@@ -1054,8 +962,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @param data
                                  #' A data frame.
                                  #' (tibble:tibble)
-                                 #' @examples
-                                 #' x$fit(data)
                                  fit = function(data = "tbl_df"){
                                    data %>%
                                      self$calculateAddConst()
@@ -1073,8 +979,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A mutated data frame.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$mutateData(data)
                                  mutateData = function(data = "tbl_df"){
                                    data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%
@@ -1094,8 +998,6 @@ pgu.transformator <- R6::R6Class("pgu.transformator",
                                  #' @return
                                  #' A mutated data frame.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$reverseMutateData(data)
                                  reverseMutateData = function(data = "tbl_df"){
                                    data %>%
                                      dplyr::select(self$trafoParameter[["features"]]) %>%

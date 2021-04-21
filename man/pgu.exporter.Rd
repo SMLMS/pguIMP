@@ -18,34 +18,6 @@ Each tibble is written to a separate sheet.
 x <- pguIMP::pgu.exporter$new()
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.exporter$new`
-## ------------------------------------------------
-
-x <- pguIMP:pgu.exporter$new()
-
-## ------------------------------------------------
-## Method `pgu.exporter$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.exporter$extractSuffix`
-## ------------------------------------------------
-
-x$extractSuffix()
-
-## ------------------------------------------------
-## Method `pgu.exporter$writeDataToExcel`
-## ------------------------------------------------
-
-data <- tibble::tibble()
-x$writeDataToExcel(obj = data)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -87,14 +59,6 @@ Creates and returns a new \code{pgu.exporter} object.
 A new \code{pgu.exporter} object.
 (pguIMP::pgu.exporter)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x <- pguIMP:pgu.exporter$new()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -119,15 +83,6 @@ Prints instance variables of a \code{pgu.exporter} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-extractSuffix"></a>}}
@@ -136,14 +91,6 @@ print(x)
 extracts the suffix from the fileName
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pgu.exporter$extractSuffix()}\if{html}{\out{</div>}}
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$extractSuffix()
-}
-\if{html}{\out{</div>}}
-
 }
 
 }
@@ -164,15 +111,6 @@ If obj is a list, each member will be written to a seperate sheet.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{data <- tibble::tibble()
-x$writeDataToExcel(obj = data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

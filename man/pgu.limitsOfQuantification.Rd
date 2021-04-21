@@ -17,28 +17,6 @@ more information
 x <- pguIMP::pgu.limitsOfQuantification$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.limitsOfQuantification$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.limitsOfQuantification$attribute_uloq`
-## ------------------------------------------------
-
-uloq <- x$featureUloq(attribute = "infected")
-
-## ------------------------------------------------
-## Method `pgu.limitsOfQuantification$plot_loq_distribution`
-## ------------------------------------------------
-
-x$plotLoqDistribution() \%>\%
- show()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -177,15 +155,6 @@ Prints instance variables of a \code{pgu.limitsOfQuantification} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
@@ -295,14 +264,6 @@ Returns the attribute's specific uloq.
 The attribute's uloq
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{uloq <- x$featureUloq(attribute = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_attribute_lloq"></a>}}
@@ -376,9 +337,6 @@ The attribute's outliers
                                         ####################
                                         #' @description
                                         #' Gathers and returns class information
-                                        #' @examples
-                                        #' x$dataInformation() \%>\%
-                                        #'  print()
                                         dataInformation = function()\{
                                           self$loq \%>\%
                                             dplyr::summarise_all(class) \%>\%
@@ -400,9 +358,6 @@ The attribute's outliers
                                         #' @return
                                         #' A formatted data table
                                         #' (DT::datatable)
-                                        #' @examples
-                                        #' x$loqDataTable(dfData, dfMetadata) \%>\%
-                                        #'  show()
                                         loqDataTable = function(dfData = "tbl_df", dfMetadata = "tbl_df")\{
                                           options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                                           t <- NULL
@@ -451,9 +406,6 @@ The attribute's outliers
                                         #' @return
                                         #' A formatted data table
                                         #' (DT::datatable)
-                                        #' @examples
-                                        #' x$loqFeatureTable(obj, feature = "infected") \%>\%
-                                        #'  show()
                                         loqFeatureTable = function(obj = "tbl_df", feature = "character")\{
                                           options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
                                           t <- NULL
@@ -501,15 +453,6 @@ Creates a plot of the instance variable loqStatistics.
 A plot.
 (ggplot2::ggplot)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$plotLoqDistribution() \%>\%
- show()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-attribute_bar_plot"></a>}}

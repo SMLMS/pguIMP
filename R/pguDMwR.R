@@ -14,8 +14,9 @@
 #' variable
 #' @param ws
 #' weights
-#' @export
+#' @return
 #' central value
+#' @export
 #' @examples
 #' centralValue(x = seq(1,10,1))
 #'
@@ -56,8 +57,9 @@ centralValue <- function(x, ws=NULL) {
 #' Method for estimating the missing value
 #' @param distData
 #' Distance to the case
-#' @export
+#' @return
 #' cleaned data
+#' @export
 #' @examples
 #' centralValue(x = seq(1,10,1))
 #'

@@ -17,298 +17,6 @@ Performs a data transfromation in order to achieve a normally distributed versio
 x <- pguIMP::pgu.transformator$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.transformator$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.transformator$new(data_df = y)
-
-## ------------------------------------------------
-## Method `pgu.transformator$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.transformator$resetTrafoParameter`
-## ------------------------------------------------
-
-x$resetTrafoParameter(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$trafoType`
-## ------------------------------------------------
-
-y <- x$trafoType(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$setTrafoType`
-## ------------------------------------------------
-
-x$setTrafoType(feature = "infected", type = "logNorm")
-
-## ------------------------------------------------
-## Method `pgu.transformator$addConstant`
-## ------------------------------------------------
-
-y <- x$addConstant(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$mirrorLogic`
-## ------------------------------------------------
-
-y <- x$mirrorLogic(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$setMirrorLogic`
-## ------------------------------------------------
-
-x$setMirrorLogic(feature = "infected", logic = FALSE)
-
-## ------------------------------------------------
-## Method `pgu.transformator$lambdaLOP`
-## ------------------------------------------------
-
-y <- x$lambdaLOP(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$setLambdaLOP`
-## ------------------------------------------------
-
-x$setLambdaLOP(feature = "infected", lambda = 2)
-
-## ------------------------------------------------
-## Method `pgu.transformator$lambdaBC`
-## ------------------------------------------------
-
-y <- x$lambdaBC(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$lambdaAS`
-## ------------------------------------------------
-
-y <- x$lambdaAS(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$addConstGenerator`
-## ------------------------------------------------
-
-idx <- x$addConstGenerator(value = -0.5)
-
-## ------------------------------------------------
-## Method `pgu.transformator$mirrorNumeric`
-## ------------------------------------------------
-
-y <- x$mirrorNumeric(value = c(-0.5, 0.0, 0.5, 1.0))
-
-## ------------------------------------------------
-## Method `pgu.transformator$mirrorData`
-## ------------------------------------------------
-
-y <- x$mirrorData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$calculateAddConst`
-## ------------------------------------------------
-
-y <- x$calculateAddConst(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$translateNumeric`
-## ------------------------------------------------
-
-y <- x$translateNumeric(value = c(0.1, 0.2, 0.3), const = 4.0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$translateData`
-## ------------------------------------------------
-
-y <- x$translateData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$backTranslateNumeric`
-## ------------------------------------------------
-
-y <- x$backTranslateNumeric(value = c(4.1, 4.2, 4.3), const = 4.0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$backTranslateData`
-## ------------------------------------------------
-
-y <- x$backTranslateData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$lambdaEstimator`
-## ------------------------------------------------
-
-y <- x$lambdaEstimator(value = c(4, 5, 6), feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$estimateLambda_temp`
-## ------------------------------------------------
-
-y <- x$estimateLambda(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$estimateLambda`
-## ------------------------------------------------
-
-y <- x$estimateLambda(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$normalizeArcSine`
-## ------------------------------------------------
-
-y <- x$normalizeArcSine(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$optimizeTukeyLadderOfPowers`
-## ------------------------------------------------
-
-y <- x$optimizeTukeyLadderOfPowers(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$optimizeBoxCox`
-## ------------------------------------------------
-
-y <- x$optimizeBoxCox(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformNumeric`
-## ------------------------------------------------
-
-y <- x$transformNumeric(value = c(4, 5, 6), feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformData`
-## ------------------------------------------------
-
-y <- x$transformData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformLogModulus`
-## ------------------------------------------------
-
-y <- x$transformLogModulus(value, base = 2)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformSquareRoot`
-## ------------------------------------------------
-
-y <- x$transformSquareRoot(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformCubeRoot`
-## ------------------------------------------------
-
-y <- x$transformCubeRoot(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformArcsine`
-## ------------------------------------------------
-
-y <- x$transformArcsine(value, lambda = max(value))
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformInverse`
-## ------------------------------------------------
-
-y <- x$transformInverse(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformTukeyLadderOfPowers`
-## ------------------------------------------------
-
-y <- x$transformTukeyLadderOfPowers(value, lambda = 0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$transformBoxCox`
-## ------------------------------------------------
-
-y <- x$transformBoxCox(value, lambda = 0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformNumeric`
-## ------------------------------------------------
-
-y <- x$inverseTransformNumeric(value = c(4, 5, 6), feature = "infected")
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformData`
-## ------------------------------------------------
-
-y <- x$inverseTransformData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformLogModulus`
-## ------------------------------------------------
-
-y <- x$inverseTransformLogModulus(value, base = 2)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformSquareRoot`
-## ------------------------------------------------
-
-y <- x$inverseTransformSquareRoot(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformCubeRoot`
-## ------------------------------------------------
-
-y <- x$inverseTransformCubeRoot(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformArcsine`
-## ------------------------------------------------
-
-y <- x$inverseTransformArcsine(value, lambda = max(value))
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformInverse`
-## ------------------------------------------------
-
-y <- x$inverseTransformInverse(value)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformTukeyLadderOfPowers`
-## ------------------------------------------------
-
-y <- x$inverseTransformTukeyLadderOfPowers(value, lambda = 0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$inverseTransformBoxCox`
-## ------------------------------------------------
-
-y <- x$inverseTransformBoxCox(value, lambda = 0)
-
-## ------------------------------------------------
-## Method `pgu.transformator$fit`
-## ------------------------------------------------
-
-x$fit(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$mutateData`
-## ------------------------------------------------
-
-y <- x$mutateData(data)
-
-## ------------------------------------------------
-## Method `pgu.transformator$reverseMutateData`
-## ------------------------------------------------
-
-y <- x$reverseMutateData(data)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -397,15 +105,6 @@ Creates and returns a new \code{pgu.transformator} object.
 A new \code{pgu.transformator} object.
 (pguIMP::pgu.transformator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.transformator$new(data_df = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -430,15 +129,6 @@ Prints instance variables of a \code{pgu.transformator} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetTrafoParameter"></a>}}
@@ -457,14 +147,6 @@ Resets instance variable \code{trafoParameter}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetTrafoParameter(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoType"></a>}}
@@ -488,14 +170,6 @@ for user defined attribute.
 Value of entry.
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$trafoType(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setTrafoType"></a>}}
@@ -519,14 +193,6 @@ for user defined attribute.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$setTrafoType(feature = "infected", type = "logNorm")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addConstant"></a>}}
@@ -550,14 +216,6 @@ for user defined attribute.
 Value of entry.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$addConstant(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mirrorLogic"></a>}}
@@ -581,14 +239,6 @@ for user defined attribute.
 Value of entry.
 (logical)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$mirrorLogic(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setMirrorLogic"></a>}}
@@ -611,14 +261,6 @@ for user defined attribute.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$setMirrorLogic(feature = "infected", logic = FALSE)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lambdaLOP"></a>}}
@@ -645,14 +287,6 @@ transfromation procedure.
 Value of entry.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$lambdaLOP(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setLambdaLOP"></a>}}
@@ -675,14 +309,6 @@ for user defined attribute.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$setLambdaLOP(feature = "infected", lambda = 2)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lambdaBC"></a>}}
@@ -709,14 +335,6 @@ transfromation procedure.
 Value of entry.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$lambdaBC(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lambdaAS"></a>}}
@@ -743,14 +361,6 @@ transfromation procedure.
 Value of entry.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$lambdaAS(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -773,14 +383,6 @@ Returns the index of a pgu.normDist object wihtin the instance variable \code{tr
 Index of attribute entry in dataframe
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addConstGenerator"></a>}}
@@ -805,14 +407,6 @@ if added to an attribute.
 The addConst for the attribute
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$addConstGenerator(value = -0.5)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mirrorNumeric"></a>}}
@@ -835,14 +429,6 @@ Mirrors the assigned values at the coordinate origin.
 Value or vector of values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$mirrorNumeric(value = c(-0.5, 0.0, 0.5, 1.0))
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mirrorData"></a>}}
@@ -865,14 +451,6 @@ Calls the class' mirrorNumeric function on all numeric attributes of a data fram
 A data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$mirrorData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-calculateAddConst"></a>}}
@@ -893,14 +471,6 @@ The results are stored in addConst attribute of the trafoParameter instance vari
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$calculateAddConst(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-translateNumeric"></a>}}
@@ -926,14 +496,6 @@ Translates the assigned values by a constant.
 A numeric or a vector of numerics.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$translateNumeric(value = c(0.1, 0.2, 0.3), const = 4.0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-translateData"></a>}}
@@ -959,14 +521,6 @@ serve as const variables.
 A data frame.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$translateData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-backTranslateNumeric"></a>}}
@@ -992,14 +546,6 @@ Back-translates the assigned values by a constant.
 A numeric or a vector of numerics.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$backTranslateNumeric(value = c(4.1, 4.2, 4.3), const = 4.0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-backTranslateData"></a>}}
@@ -1025,14 +571,6 @@ serve as const variables.
 A data frame.
 (tibble:tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$backTranslateData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-lambdaEstimator"></a>}}
@@ -1059,14 +597,6 @@ that are assigned to a user defined attribute..
 The specific lambda factor.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$lambdaEstimator(value = c(4, 5, 6), feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-estimateLambda_temp"></a>}}
@@ -1088,14 +618,6 @@ are stored in the lambda attribute of the instance variable trafoParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$estimateLambda(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-estimateLambda"></a>}}
@@ -1117,14 +639,6 @@ are stored in the lambda attribute of the instance variable trafoParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$estimateLambda(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-normalizeArcSine"></a>}}
@@ -1147,14 +661,6 @@ Estimates the lambda factor for an arcsine transformation for the given values,
 The specific lambda factor.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$normalizeArcSine(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-optimizeTukeyLadderOfPowers"></a>}}
@@ -1177,14 +683,6 @@ Estimates the lambda factor for a tukeyLOP transformation for the given values,
 The specific lambda factor.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$optimizeTukeyLadderOfPowers(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-optimizeBoxCox"></a>}}
@@ -1207,14 +705,6 @@ Estimates the lambda factor for a boxcox transformation for the given values,
 The specific lambda factor.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$optimizeBoxCox(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformNumeric"></a>}}
@@ -1241,14 +731,6 @@ that are assigned to a user defined attribute.
 A transfromed version of the given numeric or vector of numerics.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformNumeric(value = c(4, 5, 6), feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformData"></a>}}
@@ -1270,14 +752,6 @@ are read from the lambda attribute of the instance variable trafoParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformLogModulus"></a>}}
@@ -1304,14 +778,6 @@ based on a user defined base value.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformLogModulus(value, base = 2)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformSquareRoot"></a>}}
@@ -1334,14 +800,6 @@ Performes a square root transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformSquareRoot(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformCubeRoot"></a>}}
@@ -1364,14 +822,6 @@ Performes a cube root transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformCubeRoot(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformArcsine"></a>}}
@@ -1397,14 +847,6 @@ Performes an arcsine transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformArcsine(value, lambda = max(value))
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformInverse"></a>}}
@@ -1427,14 +869,6 @@ Performes an inverse transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformInverse(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformTukeyLadderOfPowers"></a>}}
@@ -1463,14 +897,6 @@ Performes a tukeyLOP transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformTukeyLadderOfPowers(value, lambda = 0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-transformBoxCox"></a>}}
@@ -1496,14 +922,6 @@ Performes a boxcox transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$transformBoxCox(value, lambda = 0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformNumeric"></a>}}
@@ -1533,14 +951,6 @@ that are assigned to a user defined attribute.
 An inverse transfromed version of the given numeric or vector of numerics.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformNumeric(value = c(4, 5, 6), feature = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformData"></a>}}
@@ -1562,14 +972,6 @@ are read from the lambda attribute of the instance variable trafoParameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformLogModulus"></a>}}
@@ -1599,14 +1001,6 @@ based on a user defined base value.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformLogModulus(value, base = 2)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformSquareRoot"></a>}}
@@ -1629,14 +1023,6 @@ Performes an inverse square root transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformSquareRoot(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformCubeRoot"></a>}}
@@ -1659,14 +1045,6 @@ Performes an inverse cube root transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformCubeRoot(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformArcsine"></a>}}
@@ -1695,14 +1073,6 @@ Performes an inverse arcsine transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformArcsine(value, lambda = max(value))
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformInverse"></a>}}
@@ -1725,14 +1095,6 @@ Performes an inverse inverse-transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformInverse(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformTukeyLadderOfPowers"></a>}}
@@ -1761,14 +1123,6 @@ Performes an inverse tukeyLOP transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformTukeyLadderOfPowers(value, lambda = 0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-inverseTransformBoxCox"></a>}}
@@ -1794,14 +1148,6 @@ Performes an inverse boxcox transformation for the given values.
 The transformed values.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$inverseTransformBoxCox(value, lambda = 0)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-fit"></a>}}
@@ -1823,14 +1169,6 @@ The results are stored in the respective attributes of the instance variable tra
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$fit(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutateData"></a>}}
@@ -1855,14 +1193,6 @@ functions mirrorData, tranlsateData and transfromData.
 A mutated data frame.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$mutateData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reverseMutateData"></a>}}
@@ -1887,14 +1217,6 @@ functions inverseTransformData, backTranslateData, mirrorData
 A mutated data frame.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$reverseMutateData(data)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

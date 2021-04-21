@@ -284,8 +284,6 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' @return
                           #' Index of attribute's name in rawData
                           #' (numeric)
-                          #' @examples
-                          #' idx <- x$attribute_index(attribute = "infected")
                           attribute_index = function(attribute = "character")
                           {
                             idx <- match(attribute, self$attributeNames)
@@ -302,8 +300,6 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' @return
                           #' A data frame
                           #' (tibble::tibble)
-                          #' @examples
-                          #' y <- x$numerical_data()
                           numerical_data = function()
                           {
                             self$rawData %>%
@@ -316,8 +312,6 @@ pgu.data <- R6::R6Class("pgu.data",
                           #' @return
                           #' A data frame
                           #' (tibble::tibble)
-                          #' @examples
-                          #' y <- x$categorical_data()
                           categorical_data = function()
                           {
                             self$rawData %>%

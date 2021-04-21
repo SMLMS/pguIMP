@@ -17,119 +17,6 @@ A class that performs pairwise correlation on the pguIMP data set.
 x <- pguIMP::pgu.correlator$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.correlator$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.correlator$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.correlator$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.correlator$resetCorrelator`
-## ------------------------------------------------
-
-x$resetCorrelator(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.correlator$resetMatrix`
-## ------------------------------------------------
-
-matrix <- x$resetMatrix(value)
-
-## ------------------------------------------------
-## Method `pgu.correlator$featureIdx`
-## ------------------------------------------------
-
-idx <- x$featureIdx(feature = "time")
-
-## ------------------------------------------------
-## Method `pgu.correlator$calcCorrelationNumeric`
-## ------------------------------------------------
-
-x$calcCorrelationNumeric(abscissa = x, ordinate = y, method = "pearson")
-
-## ------------------------------------------------
-## Method `pgu.correlator$createCorrelationMatrixPearson`
-## ------------------------------------------------
-
-x$createCorrelationMatrixPearson(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.correlator$createCorrelationMatrixKendall`
-## ------------------------------------------------
-
-x$createCorrelationMatrixKendall(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.correlator$createCorrelationMatrixSpearman`
-## ------------------------------------------------
-
-x$createCorrelationMatrixSpearman(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.correlator$correlate`
-## ------------------------------------------------
-
-x$correlate(data, progress)
-
-## ------------------------------------------------
-## Method `pgu.correlator$printFeature`
-## ------------------------------------------------
-
-x$printFeature() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printRTbl`
-## ------------------------------------------------
-
-x$printRTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printPPearsonTbl`
-## ------------------------------------------------
-
-x$printPPearsonTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printTauTbl`
-## ------------------------------------------------
-
-x$printTauTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printPKendallTbl`
-## ------------------------------------------------
-
-x$printPKendallTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printRhoTbl`
-## ------------------------------------------------
-
-x$printRhoTbl() \%>\%
- print()
-
-## ------------------------------------------------
-## Method `pgu.correlator$printPSpearmanTbl`
-## ------------------------------------------------
-
-x$printPSpearmanTbl() \%>\%
- print()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -225,15 +112,6 @@ Creates and returns a new \code{pgu.correlator} object.
 A new \code{pgu.correlator} object.
 (pguIMP::pgu.correlator)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.correlator$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-finalize"></a>}}
@@ -258,15 +136,6 @@ Prints instance variables of a \code{pgu.correlator} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetCorrelator"></a>}}
@@ -289,14 +158,6 @@ Progresse is indicated by the progress object passed to the function.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetCorrelator(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetMatrix"></a>}}
@@ -320,14 +181,6 @@ of the instance variable featureNames. The matrix entries are set to a distict \
 A square matrix.
 (matrix)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{matrix <- x$resetMatrix(value)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-featureIdx"></a>}}
@@ -350,14 +203,6 @@ Determines the numerical index of the column of an attribute based on the attrib
 The attributes column index.
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$featureIdx(feature = "time")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-calcCorrelationNumeric"></a>}}
@@ -388,14 +233,6 @@ Valid coiced are defined by the instance variable \code{method}.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$calcCorrelationNumeric(abscissa = x, ordinate = y, method = "pearson")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createCorrelationMatrixPearson"></a>}}
@@ -426,14 +263,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createCorrelationMatrixPearson(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createCorrelationMatrixKendall"></a>}}
@@ -464,14 +293,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createCorrelationMatrixKendall(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-createCorrelationMatrixSpearman"></a>}}
@@ -502,14 +323,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$createCorrelationMatrixSpearman(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-correlate"></a>}}
@@ -533,14 +346,6 @@ Displays the progress if shiny is loaded.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$correlate(data, progress)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printFeature"></a>}}
@@ -556,15 +361,6 @@ and returns it.
 The analyis result as a dataframe.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printFeature() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printRTbl"></a>}}
@@ -579,15 +375,6 @@ Transfroms instance variable \code{r} to a dataframe and returns it.
 Dataframe of instance variable \code{r}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printRTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printPPearsonTbl"></a>}}
@@ -602,15 +389,6 @@ Transfroms instance variable \code{pPearson} to a dataframe and returns it.
 Dataframe of instance variable \code{pPearson}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printPPearsonTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printTauTbl"></a>}}
@@ -625,15 +403,6 @@ Transfroms instance variable \code{tau} to a dataframe and returns it.
 Dataframe of instance variable \code{tau}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printTauTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printPKendallTbl"></a>}}
@@ -648,15 +417,6 @@ Transfroms instance variable \code{pKendall} to a dataframe and returns it.
 Dataframe of instance variable \code{pKendall}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printPKendallTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printRhoTbl"></a>}}
@@ -671,15 +431,6 @@ Transfroms instance variable \code{rho} to a dataframe and returns it.
 Dataframe of instance variable \code{rho}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printRhoTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-printPSpearmanTbl"></a>}}
@@ -694,15 +445,6 @@ Transfroms instance variable \code{pSpearman} to a dataframe and returns it.
 Dataframe of instance variable \code{pSpearman}.
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$printPSpearmanTbl() \%>\%
- print()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

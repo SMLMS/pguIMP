@@ -73,9 +73,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A new `pgu.normalizer` object.
                                 #' (pguIMP::pgu.normalizer)
-                                #' @examples
-                                #' y <- tibble:tibble()
-                                #' x <- pguIMP:pgu.normalizer$new(data = y)
                                 initialize = function(data_df = "tbl_df"){
                                   if(!tibble::is_tibble(data_df)){
                                     data_df <- tibble::tibble(names <- "none",
@@ -107,9 +104,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' Prints instance variables of a `pgu.normalizer` object.
                                 #' @return
                                 #' string
-                                #' @examples
-                                #' x$print()
-                                #' print(x)
                                 print = function(){
                                   rString <- sprintf("\npgu.normalizer\n")
                                   cat(rString)
@@ -128,8 +122,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @param data_df
                                 #' Dataframe to be analyzed.
                                 #' (tibble::tibble)
-                                #' @examples
-                                #' x$detectNormParameter(data_df)
                                 detectNormParameter = function(data_df  = "tbl_df"){
                                   private$.normParameter <- data_df %>%
                                     dplyr::select_if(is.numeric) %>%
@@ -153,8 +145,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A normalized version of the dataframe.
                                 #' (tibble::tibble)
-                                #' @examples
-                                #' x$scale(data_df)
                                 scale_data = function(data_df = "tbl_df"){
                                   switch(self$normAgent,
                                          "none"=data_df,
@@ -172,8 +162,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A min-max normalized version of the dataframe
-                                #' @examples
-                                #' x$scale_minMax(data_df)
                                 scale_minMax = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -194,8 +182,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' A min-max normalized version of the numeric object
-                                #' @examples
-                                #' x$scale_minMax_numeric(values)
                                 scale_minMax_numeric = function(values = "numeric", feature = "character"){
                                   min_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -220,8 +206,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A mean normalized version of the dataframe
-                                #' @examples
-                                #' x$scale_mean(data_df)
                                 scale_mean = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -242,8 +226,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' A mean normalized version of the numeric object
-                                #' @examples
-                                #' x$scale_mean_numeric(values)
                                 scale_mean_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -275,8 +257,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A z-score normalized version of the dataframe
-                                #' @examples
-                                #' x$scale_zScore(data_df)
                                 scale_zScore = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -297,8 +277,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' A z-score normalized version of the numeric object
-                                #' @examples
-                                #' x$scale_zScore_numeric(values)
                                 scale_zScore_numeric = function(values = "numeric", feature = character){
                                   mean_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -325,8 +303,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A rescaled version of the normalized dataframe.
                                 #' (tibble::tibble)
-                                #' @examples
-                                #' x$rescale(data_df)
                                 rescale_data = function(data_df = "tbl_df"){
                                   switch(self$normAgent,
                                          "none"=data_df,
@@ -344,8 +320,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A rescaled version of a min-max normalized dataframe
-                                #' @examples
-                                #' x$rescale_minMax(data_df)
                                 rescale_minMax = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -366,8 +340,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' Rescaled version of min-max normalized numeric object
-                                #' @examples
-                                #' x$rescale_minMax_numeric(values)
                                 rescale_minMax_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -393,8 +365,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A rescaled version of a mean normalized dataframe
-                                #' @examples
-                                #' x$rescale_mean(data_df)
                                 rescale_mean = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -415,8 +385,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' Rescaled version of mean normalized numeric object
-                                #' @examples
-                                #' x$rescale_mean_numeric(values)
                                 rescale_mean_numeric = function(values = "numeric", feature = character){
                                   min_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -448,8 +416,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (tibble::tibble)
                                 #' @return
                                 #' A rescaled version of a z-score normalized dataframe
-                                #' @examples
-                                #' x$rescale_zScore(data_df)
                                 rescale_zScore = function(data_df = "tbl_df"){
                                   for (feature in self$features){
                                     if(is.numeric(data_df[[feature]])){
@@ -470,8 +436,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' (character)
                                 #' @return
                                 #' Rescaled version of z-score normalized numeric object
-                                #' @examples
-                                #' x$rescale_zScore_numeric(values)
                                 rescale_zScore_numeric = function(values = "numeric", feature = character){
                                   mean_val <- self$normParameter %>%
                                     dplyr::filter(feature == !!feature) %>%
@@ -505,9 +469,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A histogram.
                                 #' (ggplot2::ggplot)
-                                #' @examples
-                                #' x$featureBarPlot(data_df, ) %>%
-                                #'  show()
                                 featureBarPlot = function(data_df = "tbl_df", feature = "character"){
                                   feature <- dplyr::sym(feature)
                                   p <- data_df %>%
@@ -536,9 +497,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A box plot.
                                 #' (ggplot2::ggplot)
-                                #' @examples
-                                #' x$featureBoxPlotWithSubset() %>%
-                                #'  show()
                                 featureBoxPlotWithSubset = function(data_df = "tbl_df", feature = "character"){
                                   p <- data_df %>%
                                     dplyr::select(feature) %>%
@@ -569,9 +527,6 @@ pgu.normalizer <- R6::R6Class("pgu.normalizer",
                                 #' @return
                                 #' A composite plot.
                                 #' (ggplot2::ggplot)
-                                #' @examples
-                                #' x$featurePlot() %>%
-                                #'  show()
                                 featurePlot = function(data_df = "tbl_df", feature = "character"){
                                   p1 <- self$featureBoxPlotWithSubset(data_df, feature) +
                                     ggplot2::theme(legend.position = c(0.9, 0.9),

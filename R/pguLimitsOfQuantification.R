@@ -444,9 +444,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                             #' Prints instance variables of a `pgu.limitsOfQuantification` object.
                                             #' @return
                                             #' string
-                                            #' @examples
-                                            #' x$print()
-                                            #' print(x)
                                             print = function() {
                                               rString <- sprintf("\npgu.limitsOfQuantification\n")
                                               cat(rString)
@@ -543,8 +540,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                             #' @return
                                             #' The attribute's uloq
                                             #' (numeric)
-                                            #' @examples
-                                            #' uloq <- x$featureUloq(attribute = "infected")
                                             attribute_uloq = function(attribute = "character"){
                                               limit <- NA
                                               if(private$attributes_are_known(attributes = attribute)){
@@ -620,9 +615,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
 #'                                             ####################
 #'                                             #' @description
 #'                                             #' Gathers and returns class information
-#'                                             #' @examples
-#'                                             #' x$dataInformation() %>%
-#'                                             #'  print()
 #'                                             dataInformation = function(){
 #'                                               self$loq %>%
 #'                                                 dplyr::summarise_all(class) %>%
@@ -644,9 +636,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
 #'                                             #' @return
 #'                                             #' A formatted data table
 #'                                             #' (DT::datatable)
-#'                                             #' @examples
-#'                                             #' x$loqDataTable(dfData, dfMetadata) %>%
-#'                                             #'  show()
 #'                                             loqDataTable = function(dfData = "tbl_df", dfMetadata = "tbl_df"){
 #'                                               options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
 #'                                               t <- NULL
@@ -695,9 +684,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
 #'                                             #' @return
 #'                                             #' A formatted data table
 #'                                             #' (DT::datatable)
-#'                                             #' @examples
-#'                                             #' x$loqFeatureTable(obj, feature = "infected") %>%
-#'                                             #'  show()
 #'                                             loqFeatureTable = function(obj = "tbl_df", feature = "character"){
 #'                                               options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
 #'                                               t <- NULL
@@ -735,9 +721,6 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                             #' @return
                                             #' A plot.
                                             #' (ggplot2::ggplot)
-                                            #' @examples
-                                            #' x$plotLoqDistribution() %>%
-                                            #'  show()
                                             plot_loq_distribution = function()
                                               {
                                               p <- self$loqStatistics %>%

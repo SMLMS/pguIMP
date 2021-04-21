@@ -11,6 +11,9 @@ centralValue(x, ws = NULL)
 
 \item{ws}{weights}
 }
+\value{
+central value
+}
 \description{
 Returns the central value of a variable.
 }

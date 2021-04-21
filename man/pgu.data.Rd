@@ -18,26 +18,6 @@ Provides additionally fast access to several statistical information about the d
 x <- pguIMP::pgu.data$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.data$attribute_index`
-## ------------------------------------------------
-
-idx <- x$attribute_index(attribute = "infected")
-
-## ------------------------------------------------
-## Method `pgu.data$numerical_data`
-## ------------------------------------------------
-
-y <- x$numerical_data()
-
-## ------------------------------------------------
-## Method `pgu.data$categorical_data`
-## ------------------------------------------------
-
-y <- x$categorical_data()
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -179,14 +159,6 @@ Returns the index of an attribute within the instance variable attributeNames.
 Index of attribute's name in rawData
 (numeric)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{idx <- x$attribute_index(attribute = "infected")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-numerical_data"></a>}}
@@ -201,14 +173,6 @@ Returns the numeric attributes of the instance variable rawData.
 A data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$numerical_data()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-categorical_data"></a>}}
@@ -223,14 +187,6 @@ Returns the categorical attributes of the instance variable rawData.
 A data frame
 (tibble::tibble)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$categorical_data()
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

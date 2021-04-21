@@ -101,9 +101,6 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' @return
                             #' A new pguIMP::pgu.filter object.
                             #' (pguIMP::pgu.filter)
-                            #' @examples
-                            #' y <- tibble:tibble()
-                            #' x <- pguIMP:pgu.filter$new(data_df = y)
                             initialize = function(data_df = "tbl_df")
                             {
                               if(!tibble::is_tibble(data_df)){
@@ -120,9 +117,6 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' Prints instance variables of a pguIMP::pgu.filter object.
                             #' @return
                             #' string
-                            #' @examples
-                            #' x$print()
-                            #' print(x)
                             print = function()
                             {
                               sprintf("\npgu.filter\ncolIdx:\n") %>%
@@ -141,8 +135,6 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' @param data_df
                             #' The data to be analyzed.
                             #' (tibble::tibble)
-                            #' @examples
-                            #' x$reset(data)
                             reset = function(data_df = "tbl_df")
                             {
                               private$reset_colIdx(data_df)
@@ -157,8 +149,6 @@ pgu.filter <- R6::R6Class("pgu.filter",
                             #' @return
                             #' The filtered data frame
                             #' (tibble::tibble)
-                            #' @examples
-                            #' y <- x$filter(data_df)
                             predict = function(data_df = "tbl_df")
                             {
                               data_df %>%

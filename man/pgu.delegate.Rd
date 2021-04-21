@@ -17,2088 +17,6 @@ Comprises all needed classes from the pguIMP package and manages the communicati
 x <- pguIMP::pgu.delegate$new(data)
 }
 
-\examples{
-
-## ------------------------------------------------
-## Method `pgu.delegate$new`
-## ------------------------------------------------
-
-y <- tibble:tibble()
-x <- pguIMP:pgu.delegate$new(data = y)
-
-## ------------------------------------------------
-## Method `pgu.delegate$print`
-## ------------------------------------------------
-
-x$print()
-print(x)
-
-## ------------------------------------------------
-## Method `pgu.delegate$query_data`
-## ------------------------------------------------
-
-x$query_data(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$import_data`
-## ------------------------------------------------
-
-x$import_data(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_import_data_Types_tbl`
-## ------------------------------------------------
-
-x$update_import_data_Types_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_import_data_statistics_tbl`
-## ------------------------------------------------
-
-x$update_import_data_statistics_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_import_missings_statistics_tbl`
-## ------------------------------------------------
-
-x$update_import_missings_statistics_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_filter_select_tbl`
-## ------------------------------------------------
-
-x$update_filter_select_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_filter`
-## ------------------------------------------------
-
-x$update_filter(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_filter_inverse`
-## ------------------------------------------------
-
-x$update_filter_inverse(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$reset_filter`
-## ------------------------------------------------
-
-x$reset_filter(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$filter_data`
-## ------------------------------------------------
-
-x$filter_data(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_filter_statistics_tbl`
-## ------------------------------------------------
-
-x$update_filter_statistics_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_filter_missings_tbl`
-## ------------------------------------------------
-
-x$update_filter_missings_tbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_gui`
-## ------------------------------------------------
-
-x$update_exploration_gui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_abscissa`
-## ------------------------------------------------
-
-x$update_exploration_abscissa(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_ordinate`
-## ------------------------------------------------
-
-x$update_exploration_ordinate(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_graphic`
-## ------------------------------------------------
-
-x$update_exploration_graphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_abscissa_graphic`
-## ------------------------------------------------
-
-x$update_exploration_abscissa_graphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_ordinate_graphic`
-## ------------------------------------------------
-
-x$updateExplorationOrdinateGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_abscissa_table`
-## ------------------------------------------------
-
-x$update_exploration_abscissa_table(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_exploration_ordinate_table`
-## ------------------------------------------------
-
-x$updateExplorationOrdinateTable(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_gui`
-## ------------------------------------------------
-
-x$update_loq_detect_gui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_na_handling`
-## ------------------------------------------------
-
-x$update_loq_na_handling(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$detect_loq`
-## ------------------------------------------------
-
-x$detectLoq(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_statistics_tbl`
-## ------------------------------------------------
-
-x$updateLoqDetectStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_outlier_tbl`
-## ------------------------------------------------
-
-x$updateLoqDetectOutlierTbl(input, output, session)
-#' @description
-#' Updates the numerical loq data table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateLoqDetectDataTbl(input, output, session)
-update_loq_detect_data_tbl = function(input, output, session){
-  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  t <- NULL
-  if(self$status$query(processName = "loqDetected")){
-    dfData <- self$filteredMetadata$rawData \%>\%
-      dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
-    dfOutlier <- self$loq$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    t <- dfData \%>\%
-      dplyr::mutate_if(is.numeric, round, 3) \%>\%
-      DT::datatable(
-        options = list(
-          scrollX = TRUE,
-          scrollY = '350px',
-          paging = FALSE,
-          dom = "Blfrtip",
-          buttons = list(list(
-            extend = 'csv',
-            filename = self$fileName$bluntFileName("loqData"),
-            text = "Download"
-          ))#buttons
-        )#options
-      )#DT::datatable
-    for (featureName in self$filteredData$numericFeatureNames){
-      featureOutlier <- dfOutlier \%>\%
-        dplyr::filter(feature == featureName) \%>\%
-        dplyr::mutate_if(is.numeric, round, 3)
-      if (nrow(featureOutlier)>0){
-        t <- DT::formatStyle(t,
-                             featureName,
-                             backgroundColor = styleEqual(dfData \%>\%
-                                                            dplyr::select(!!featureName) \%>\%
-                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-                                                            unlist() \%>\%
-                                                            as.numeric() \%>\%
-                                                            round(digits = 3),
-                                                          featureOutlier[["color"]])
-
-        )#t
-      }#if
-    }#for
-  }#if
-  output$tbl.loqDetectData <- DT::renderDataTable(t)
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_statistics_graphic`
-## ------------------------------------------------
-
-x$updateLoqDetectStatisticsGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_attribute_graphic`
-## ------------------------------------------------
-
-x$updateLoqDetectFeatureGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_detect_attribute_tbl`
-## ------------------------------------------------
-
-x$updateLoqDetectFeatureTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_mutate_gui`
-## ------------------------------------------------
-
-x$updateLoqMutateGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_lloq_substitute`
-## ------------------------------------------------
-
-x$updateLloqSubstitute(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_uloq_substitute`
-## ------------------------------------------------
-
-x$updateUloqSubstitute(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$mutate_loq`
-## ------------------------------------------------
-
-x$mutateLoq(input, output, session)
-#' @description
-#' Updates the numerical loq statistics table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateLoqMutateStatisticsTbl(input, output, session)
-updateLoqMutateStatisticsTbl = function(input, output, session){
-  if(private$.status$query(processName = "loqMutated")){
-    output$tbl.loqMutateStatistics <- DT::renderDataTable(
-      self$loq$loqStatistics \%>\%
-        format.data.frame(scientific = FALSE, digits = 3) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("loqStatistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-#' @description
-#' Updates the numerical loq outliers table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateLoqMutateOutlierTbl(input, output, session)
-updateLoqMutateOutlierTbl = function(input, output, session){
-  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  t <- NULL
-  if(self$status$query(processName = "loqMutated")){
-    dfData <- self$filteredMetadata$rawData \%>\%
-      dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
-    dfOutlier <- self$loq$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    t <- dfData \%>\%
-      dplyr::slice(idx) \%>\%
-      dplyr::mutate_if(is.numeric, round, 3) \%>\%
-      DT::datatable(
-        options = list(
-          scrollX = TRUE,
-          scrollY = '350px',
-          paging = FALSE,
-          dom = "Blfrtip",
-          buttons = list(list(
-            extend = 'csv',
-            filename = self$fileName$bluntFileName("loqOutlier"),
-            text = "Download"
-          ))#nuttons
-        )#options
-      )#DT::datatable
-    for (featureName in self$loqMutatedData$numericFeatureNames){
-      featureOutlier <- dfOutlier \%>\%
-        dplyr::filter(feature == featureName) \%>\%
-        dplyr::mutate_if(is.numeric, round, 3)
-      if (nrow(featureOutlier)>0){
-        t <- DT::formatStyle(t,
-                             featureName,
-                             backgroundColor = styleEqual(dfData \%>\%
-                                                            dplyr::select(!!featureName) \%>\%
-                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-                                                            unlist() \%>\%
-                                                            as.numeric() \%>\%
-                                                            round(digits = 3),
-                                                          featureOutlier[["color"]])
-
-        )#t
-      }#if
-    }#for
-  }#if
-  output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_mutate_data_tbl`
-## ------------------------------------------------
-
-x$updateLoqMutateDataTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_mutate_attribute_graphic`
-## ------------------------------------------------
-
-x$updateLoqMutateFeatureGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$update_loq_mutate_attribute_tbl`
-## ------------------------------------------------
-
-x$updateLoqMutateFeatureTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$optimizeTrafoParameter`
-## ------------------------------------------------
-
-x$optimizeTrafoParameter(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateDetectedTrafoTypes`
-## ------------------------------------------------
-
-x$updateDetectedTrafoTypes(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateDetectedTrafoParameter`
-## ------------------------------------------------
-
-x$updateDetectedTrafoParameter(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoDetectGui`
-## ------------------------------------------------
-
-x$updateTrafoDetectGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateFeature`
-## ------------------------------------------------
-
-x$updateTrafoMutateFeature(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateType`
-## ------------------------------------------------
-
-x$updateTrafoMutateType(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateLambda`
-## ------------------------------------------------
-
-x$updateTrafoMutateLambdae(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateMirror`
-## ------------------------------------------------
-
-x$updateTrafoMutateMirror(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$trafoMutateFit`
-## ------------------------------------------------
-
-x$trafoMutateFit(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$trafoMutateGlobal`
-## ------------------------------------------------
-
-x$trafoMutateGlobal(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$trafoMutateFeature`
-## ------------------------------------------------
-
-x$trafoMutateFeature(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateFeatureGraphic`
-## ------------------------------------------------
-
-x$updateTrafoMutateFeatureGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateFeatureParameterTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateFeatureParameterTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateFeatureQualityTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateFeatureQualityTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGlobalParameterTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateGlobalParameterTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGlobalModelTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateGlobalModelTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGlobalQualityTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateGlobalQualityTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGlobalTestsTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateGlobalTestsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoMutateGlobalDataTbl`
-## ------------------------------------------------
-
-x$updateTrafoMutateGlobalDataTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormFeature`
-## ------------------------------------------------
-
-x$updateTrafoNormFeature(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormMethod`
-## ------------------------------------------------
-
-x$updateTrafoNormMethod(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormGui`
-## ------------------------------------------------
-
-x$updateTrafoNormGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$trafoNormMutate`
-## ------------------------------------------------
-
-x$trafoNormMutate(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormFeatureGraphic`
-## ------------------------------------------------
-
-x$updateTrafoNormFeatureGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$resetTrafoNormGui`
-## ------------------------------------------------
-
-x$resetTrafoNormGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormFeatureStatisticsTbl`
-## ------------------------------------------------
-
-x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormStatisticsTbl`
-## ------------------------------------------------
-
-x$updateTrafoNormStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormParameterTbl`
-## ------------------------------------------------
-
-x$updateTrafoNormParameterTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateTrafoNormDataTbl`
-## ------------------------------------------------
-
-x$updateImputeNormDataTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$imputeMissingsAnalyze`
-## ------------------------------------------------
-
-x$imputeMissingsAnalyze(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsGraphic`
-## ------------------------------------------------
-
-x$updateImputeMissingsGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsStatisticsTbl`
-## ------------------------------------------------
-
-x$updateImputeMissingsStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsDistributionTbl`
-## ------------------------------------------------
-
-x$updateImputeMissingsDistributionTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingCharacteristicsGraphic`
-## ------------------------------------------------
-
-x$updateImputeMissingCharacteristicsGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsCharacteristicsTbl`
-## ------------------------------------------------
-
-x$updateImputeMissingsCharacteristicsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMissingsDetailTbl`
-## ------------------------------------------------
-
-x$updateImputeMissingsDetailTbl(input, output, session)
-
-                            #' @description
-                            #' Updates the tbl.imputeDetectData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsDataTbl(input, output, session)
-                            updateImputeMissingsDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "naDetected")){
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData \%>\%
-                                    dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$predict("imputationSiteDetectionData") \%>\%
-                                            tools::file_path_sans_ext(),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersMethod`
-## ------------------------------------------------
-
-x$updateImputeOutliersMethod(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersFeature`
-## ------------------------------------------------
-
-x$updateImputeOutliersFeature(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersAlpha`
-## ------------------------------------------------
-
-x$updateImputeOutliersAlpha(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersEpsilon`
-## ------------------------------------------------
-
-x$updateImputeOutliersEpsilon(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersMinSamples`
-## ------------------------------------------------
-
-x$updateImputeOutliersMinSamples(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersGamma`
-## ------------------------------------------------
-
-x$updateImputeOutliersGamma(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersNu`
-## ------------------------------------------------
-
-x$updateImputeOutliersNu(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersCutoff`
-## ------------------------------------------------
-
-x$updateImputeOutliersCutoff(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersK`
-## ------------------------------------------------
-
-x$updateImputeOutliersK(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersSeed`
-## ------------------------------------------------
-
-x$updateImputeOutliersSeed(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersGui`
-## ------------------------------------------------
-
-x$updateImputeOutliersGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$resetImputeOutliersGui`
-## ------------------------------------------------
-
-x$resetImputeOutliersGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$imputeOutliersDetect`
-## ------------------------------------------------
-
-x$imputeOutliersDetect(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersGraphic`
-## ------------------------------------------------
-
-x$updateImputeOutliersGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersFeatureGraphic`
-## ------------------------------------------------
-
-x$updateImputeOutliersFeatureGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersFeatureTbl`
-## ------------------------------------------------
-
-x$updateImputeOutliersFeatureTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersStatisticsTbl`
-## ------------------------------------------------
-
-x$updateImputeOutliersStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeOutliersDetailTbl`
-## ------------------------------------------------
-
-x$updateImputeOutliersDetailTbl(input, output, session)
-#' @description
-#' Updates the numerical outliers data table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateImputeOutliersDataTbl(input, output, session)
-updateImputeOutliersDataTbl = function(input, output, session){
-  # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  # t <- NULL
-  # if(self$status$query(processName = "outliersDetected")){
-  #   dfData <- self$filteredMetadata$rawData \%>\%
-  #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
-  #   dfOutlier <- self$outliers$outliers
-  #   # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-  #   t <- dfData \%>\%
-  #     dplyr::mutate_if(is.numeric, round, 3) \%>\%
-  #     DT::datatable(
-  #       options = list(
-  #         scrollX = TRUE,
-  #         scrollY = '350px',
-  #         paging = FALSE,
-  #         dom = "Blfrtip",
-  #         buttons = list(list(
-  #           extend = 'csv',
-  #           filename = self$fileName$predict("OutliersData") \%>\%
-  #             tools::file_path_sans_ext(),
-  #           text = "Download"
-  #         ))#buttons
-  #       )#options
-  #     )#DT::datatable
-  #   for (featureName in self$normalizedData$numericalAttributeNames){
-  #     featureOutlier <- dfOutlier \%>\%
-  #       dplyr::filter(feature == featureName) \%>\%
-  #       dplyr::mutate_if(is.numeric, round, 3)
-  #     if (nrow(featureOutlier)>0){
-  #       t <- DT::formatStyle(t,
-  #                            featureName,
-  #                            backgroundColor = styleEqual(dfData \%>\%
-  #                                                           dplyr::select(!!featureName) \%>\%
-  #                                                           dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-  #                                                           unlist() \%>\%
-  #                                                           as.numeric() \%>\%
-  #                                                           round(digits = 3),
-  #                                                         featureOutlier[["color"]])
-  #
-  #       )#t
-  #     }#if
-  #   }#for
-  # }#if
-  # output$tbl.outliersImputeData <- DT::renderDataTable(t)
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateFeature`
-## ------------------------------------------------
-
-x$updateImputeMutateFeature(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateMethod`
-## ------------------------------------------------
-
-x$updateImputeMutateMethod(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateNNeighbors`
-## ------------------------------------------------
-
-x$updateImputeMutateNNeighbors(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutatePredFrac`
-## ------------------------------------------------
-
-x$updateImputeMutatePredFrac(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateOutfluxThr`
-## ------------------------------------------------
-
-x$updateImputeMutateOutfluxThr(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateSeed`
-## ------------------------------------------------
-
-x$updateImputeMutateSeed(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateIterations`
-## ------------------------------------------------
-
-x$updateImputeMutateIterations(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateGui`
-## ------------------------------------------------
-
-x$updateImputeMutateGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$resetImputeMutateGui`
-## ------------------------------------------------
-
-x$resetImputeMutateGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$imputeMutateMutate`
-## ------------------------------------------------
-
-x$imputeMutateMutate(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeFluxGraphic`
-## ------------------------------------------------
-
-x$updateImputeFluxGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateGraphic`
-## ------------------------------------------------
-
-x$updateImputeMutateGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateStatisticsTbl`
-## ------------------------------------------------
-
-x$updateImputeMutateStatisticsTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateDistributionTbl`
-## ------------------------------------------------
-
-x$updateImputeMutateDistributionTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateFeatureDetailGraphic`
-## ------------------------------------------------
-
-x$updateImputeMutateFeatureDetailGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateFeatureDetailTbl`
-## ------------------------------------------------
-
-x$updateImputeMutateFeatureDetailTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateDetailTbl`
-## ------------------------------------------------
-
-x$updateImputeMutateDetailTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateImputeMutateDataTbl`
-## ------------------------------------------------
-
-x$updateImputeMutateDataTbl(input, output, session)
-#' @description
-#' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
-#' Updates the instance class status.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$outliersDetect(input, output, session)
-outliersDetect = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    self$transformedData$numericData() \%>\%
-      private$.outliers$resetOutliersParameter()
-    private$.status$update(processName = "outliersDetected", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
-  }#else
-}, #function
-
-#' @description
-#' Updates the plt.outliersDetectSummary graphic.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectGraphic(input, output, session)
-updateOutliersDetectGraphic = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$plt.outliersDetectSummary <- shiny::renderPlot(
-      self$outliers$plotOutliersDistribution()
-    )#output
-  }#if
-  else{
-    output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersDetectStatistics table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectStatisticsTbl(input, output, session)
-updateOutliersDetectStatisticsTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$tbl.outliersDetectStatistics <- DT::renderDataTable(
-      self$outliers$outliersStatistics \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionStatistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersDetectDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectDetailTbl(input, output, session)
-updateOutliersDetectDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    dfOutlier <- self$outliers$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    output$tbl.outliersDetectDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersDetectData table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectDataTbl(input, output, session)
-updateOutliersDetectDataTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$tbl.outliersDetectData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionData"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-############################
-# outlier mutate functions #
-############################
-#' @description
-#' Updates the si.outliersMutateFeature shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeature(input, output, session)
-updateOutliersMutateFeature = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateSelectInput(session,
-                             "si.outliersMutateFeature",
-                             choices = self$outliers$outliersParameter[["features"]],
-                             selected = self$outliers$outliersParameter[["features"]][1]
-    )#input
-  }#if
-}, #function
-
-#' @description
-#' Updates the si.outliersMutateMethod shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateMethod(input, output, session)
-updateOutliersMutateMethod = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateSelectInput(session,
-                             "si.outliersMutateMethod",
-                             choices = self$outliers$cleaningAgentAlphabet,
-                             selected = self$outliers$cleaningAgent
-    )#input
-  }#if
-}, #function
-
-#' @description
-#' Updates the ni.outliersMutateSeed shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateSeed(input, output, session)
-updateOutliersMutateSeed = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.outliersMutateSeed",
-                              value = self$outliers$seed)
-  }#if
-}, #function
-
-#' @description
-#' Updates the ni.outliersMutateIterations shiny widget.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateIterations(input, output, session)
-updateOutliersMutateIterations = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.outliersMutateIterations",
-                              value = self$outliers$iterations)
-  }#if
-}, #function
-
-#' @description
-#' Updates the gui.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateGui(input, output, session)
-updateOutliersMutateGui = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    self$updateOutliersMutateFeature(input, output, session)
-    self$updateOutliersMutateMethod(input, output, session)
-    self$updateOutliersMutateSeed(input, output, session)
-    self$updateOutliersMutateIterations(input, output, session)
-  }#if
-}, #function
-
-#' @description
-#' Calls the mutate outliers routine of the instance variable outliers on the instance variable transformedData.
-#' Updates the instance class status.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$outliersMutate(input, output, session)
-outliersMutate = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
-    private$.outliers$setSeed <- input$ni.outliersMutateSeed
-    private$.outliers$setIterations <- input$ni.outliersMutateIterations
-
-    progress <- shiny::Progress$new(session, min = 1, max = 2 * length(self$imputedData$numericFeatureNames))
-    progress$set(message = "Mutate Outliers", value = 0)
-    on.exit(progress$close())
-
-    name  <- as.name("Sample Name")
-    private$.revisedData$setRawData <- self$imputedData$numericData() \%>\%
-      self$outliers$handleOutliers(progress = progress) \%>\%
-      tibble::add_column(!! name := self$imputedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-    private$.cleanedData$setRawData <- self$revisedData$numericData() \%>\%
-      self$model$rescaleData() \%>\%
-      self$transformator$reverseMutateData() \%>\%
-      tibble::add_column(!! name := self$imputedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-    private$.status$update(processName = "outliersMutated", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No outliers detected. Please detect outliers first."),type = "error", duration = 10)
-  }#else
-}, #function
-
-#' @description
-#' Updates the plt.outliersMutateFeatureDetail graphic.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeatureDetailGraphic(input, output, session)
-updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
-      self$outliers$featurePlot(data = self$revisedData$numericData(),
-                                feature = input$si.outliersMutateFeature)
-    )#output
-  }#if
-  else{
-    output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersMutateFeatureDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeatureDetailTbl(input, output, session)
-updateOutliersMutateFeatureDetailTbl = function(input, output, session){
-  if (self$status$query(processName = "outliersMutated")){
-    output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData \%>\%
-                            dplyr::select(c("Sample Name", input$si.outliersMutateFeature))  ,
-                          by = "Sample Name") \%>\%
-        dplyr::slice(self$outliers$outliersIdxByFeature(feature = input$si.outliersMutateFeature)) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationDetails"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersMutateDetail table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateDetailTbl(input, output, session)
-updateOutliersMutateDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    dfOutlier <- self$outliers$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    output$tbl.outliersMutateDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.outliersMutateData table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateDataTbl(input, output, session)
-updateOutliersMutateDataTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    output$tbl.outliersMutateData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationData"),
-              text = "Download"
-            ))#output
-          )#options
-        )#DT::datatabe
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
-  } #else
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$validate`
-## ------------------------------------------------
-
-x$validate(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateAnalysisValidationGui`
-## ------------------------------------------------
-
-x$updateAnalysisValidationGui(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateAnalysisValidationGraphic`
-## ------------------------------------------------
-
-x$updateAnalysisValidationGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateAnalysisValidationTestTbl`
-## ------------------------------------------------
-
-x$updateAnalysisValidationTestTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCentralMomentsOrgTbl`
-## ------------------------------------------------
-
-x$updateCentralMomentsOrgTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCentralMomentsImpTbl`
-## ------------------------------------------------
-
-x$updateCentralMomentsImpTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCentralMomentsDeltaTbl`
-## ------------------------------------------------
-
-x$updateCentralMomentsDeltaTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCorrelationValidationScatterGraphic`
-## ------------------------------------------------
-
-x$updateCorrelationValidationScatterGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCorrelationValidationBoxPlotGraphic`
-## ------------------------------------------------
-
-x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCorrelationValidationDeviationTbl`
-## ------------------------------------------------
-
-x$updateCorrelationValidationDeviationTbl(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$updateCorrelationValidationDataTbl`
-## ------------------------------------------------
-
-x$updateCorrelationValidationDataTbl(input, output, session)
-
-                            #########################
-                            # correlation functions #
-                            #########################
-                            #' @description
-                            #' Calls the correlate routine of the instance variable correlator on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$correlate(input, output, session)
-                            correlate = function(input, output, session){
-                              if(self$status$query(processName = "validated")){
-                                progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
-                                progress$set(message = "Calculate Correlation", value = 1)
-                                on.exit(progress$close())
-                                # self$cleanedData$numericData() \%>\%
-                                self$cleanedData$numericData() \%>\%
-                                  dplyr::select_if(function(x){!all(is.na(x))}) \%>\%
-                                  private$.correlator$resetCorrelator(progress = progress)
-                                private$.status$update(processName = "correlated", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixR table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRTbl(input, output, session)
-                            updateCorrelationMatrixRTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(
-                                  self$correlator$printRTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_R"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPPearson table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPPearsonTbl(input, output, session)
-                            updateCorrelationMatrixPPearsonTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
-                                  self$correlator$printPPearsonTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Pearson"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixTau table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixTauTbl(input, output, session)
-                            updateCorrelationMatrixTauTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(
-                                  self$correlator$printTauTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Tau"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPKendall table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPKendallTbl(input, output, session)
-                            updateCorrelationMatrixPKendallTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
-                                  self$correlator$printPKendallTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Kendall"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixRho table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRhoTbl(input, output, session)
-                            updateCorrelationMatrixRhoTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(
-                                  self$correlator$printRhoTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Rho"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPSpearman table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPSpearmanTbl(input, output, session)
-                            updateCorrelationMatrixPSpearmanTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
-                                  self$correlator$printPSpearmanTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Spearman"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            ########################
-                            # regression functions #
-                            ########################
-                            #' @description
-                            #' Calls the regression routine of the instance variable regressor on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$regression(input, output, session)
-                            regression = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
-                                progress$set(message = "Calculate Regression", value = 1)
-                                on.exit(progress$close())
-                                # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.status$update(processName = "regression", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionAbs shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionAbscissa(input, output, session)
-                            updateRegressionAbscissa = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionAbs",
-                                                         choices = self$regressor$featureNames,
-                                                         selected = self$regressor$featureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionOrd shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionOrdinate(input, output, session)
-                            updateRegressionOrdinate = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionOrd",
-                                                         choices = ordinateFeatureNames,
-                                                         selected = ordinateFeatureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the gui.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGui(input, output, session)
-                            updateRegressionGui = function(input, output, session){
-                              self$updateRegressionAbscissa(input, output, session)
-                              self$updateRegressionOrdinate(input, output, session)
-                            }, #function
-
-                            #' @description
-                            #' Updates the plt.regressionFeature graphic.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGraphic(input, output, session)
-                            updateRegressionGraphic = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$plt.regressionFeature <- shiny::renderPlot(
-                                  self$regressor$plotModel(data = self$cleanedData$numericData(),
-                                                           abscissa = input$si.regressionAbs,
-                                                           ordinate = input$si.regressionOrd)
-                                )#output
-                              }#if
-                              else{
-                                output$plt.regressionFeature <- shiny::renderPlot(NULL)
-                              } #else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionFeature table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionModelTbl(input, output, session)
-                            updateRegressionModelTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionFeature <- DT::renderDataTable(
-                                  self$regressor$printModel(abscissa = input$si.regressionAbs, ordinate = input$si.regressionOrd) \%>\%
-                                    # format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Model"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionFeature <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionInterceptTbl(input, output, session)
-                            updateRegressionInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionIntercept <- DT::renderDataTable(
-                                  self$regressor$printInterceptTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #functions
-
-                            #' @description
-                            #' Updates the tbl.regressionPIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPInterceptTbl(input, output, session)
-                            updateRegressionPInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(
-                                  self$regressor$printPInterceptTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionSlopeTbl(input, output, session)
-                            updateRegressionSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionSlope <- DT::renderDataTable(
-                                  self$regressor$printSlopeTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionSlope <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionPSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPSlopeTbl(input, output, session)
-                            updateRegressionPSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPSlope <- DT::renderDataTable(
-                                  self$regressor$printPSlopeTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
-                              } #else
-                            }, #function
-#' @description
-#' Updates the tbl.loqInfo table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateLoqInfo(input, output, session)
-updateLoqInfo = function(input, output, session){
-  if(private$.status$query(processName = "dataImported")){
-    output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '75vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("loqData_type"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::Datatable
-    })#output
-  }#if
-  else{
-    output$tbl.loqInfo <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.metadataInfo table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateMetadataInfo(input, output, session)
-updateMetadataInfo = function(input, output, session){
-  if(private$.status$query(processName = "metadataImported")){
-    output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '75vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("metadata_type"),
-              text = "Download"
-            )) #buttons
-          )#options
-        )#DT::datatable
-    })#output
-  }#if
-  else{
-    output$tbl.metadataInfo <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-#' @description
-#' Updates the tbl.rawDataStatistics table.
-#' @param input
-#' Pointer to shiny input
-#' @param output
-#' Pointer to shiny output
-#' @param session
-#' Pointer to shiny session
-#' @examples
-#' x$updateRawDataStatisticsTbl(input, output, session)
-updateRawDataStatisticsTbl = function(input, output, session){
-  if(private$.status$query(processName = "dataImported")){
-    output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '25vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("rawData_statistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )}#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
-  }#else
-}, #function
-
-## ------------------------------------------------
-## Method `pgu.delegate$exportFileName`
-## ------------------------------------------------
-
-y <- x$exportFileName(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$exportData`
-## ------------------------------------------------
-
-x$exportData(input, file="result.xlsx")
-
-## ------------------------------------------------
-## Method `pgu.delegate$reportFileName`
-## ------------------------------------------------
-
-y <- x$reportFileName(input, output, session)
-
-## ------------------------------------------------
-## Method `pgu.delegate$writeReport`
-## ------------------------------------------------
-
-x$write_report(input, file="report.pdf")
-
-## ------------------------------------------------
-## Method `pgu.delegate$hide_outdated_results`
-## ------------------------------------------------
-
-x$hide_outdated_results(input, output, session)
-}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -2361,15 +279,6 @@ Creates and returns a new \code{pgu.delegate} object.
 A new \code{pgu.delegate} object.
 (pguIMP::pgu.delegate)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- tibble:tibble()
-x <- pguIMP:pgu.delegate$new(data = y)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -2383,15 +292,6 @@ Prints instance variables of a \code{pgu.delegate} object.
 \subsection{Returns}{
 string
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$print()
-print(x)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_import_gui"></a>}}
@@ -2435,14 +335,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$query_data(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-import_data"></a>}}
@@ -2465,14 +357,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$import_data(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_import_data_Types_tbl"></a>}}
@@ -2494,14 +378,6 @@ Updates the tbl.importDataTypes table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_import_data_Types_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_import_data_statistics_tbl"></a>}}
@@ -2523,14 +399,6 @@ Updates the tbl.importDataStatistics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_import_data_statistics_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_import_missings_statistics_tbl"></a>}}
@@ -2552,14 +420,6 @@ Updates the tbl.importMissingsStatistics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_import_missings_statistics_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_filter_select_tbl"></a>}}
@@ -2581,14 +441,6 @@ Updates the tbl.filter table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_filter_select_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_filter"></a>}}
@@ -2611,14 +463,6 @@ and stores them in the instance variable filterSet.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_filter(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_filter_inverse"></a>}}
@@ -2642,14 +486,6 @@ and stores them in the instance variable filterSet.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_filter_inverse(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset_filter"></a>}}
@@ -2673,14 +509,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$reset_filter(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter_data"></a>}}
@@ -2704,14 +532,6 @@ Updated the instance variable filterSet.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$filter_data(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_filter_statistics_tbl"></a>}}
@@ -2733,14 +553,6 @@ Updates the tbl.filterStatistics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_filter_statistics_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_filter_missings_tbl"></a>}}
@@ -2762,14 +574,6 @@ Updates the tbl.filterMissings table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_filter_missings_tbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_gui"></a>}}
@@ -2791,14 +595,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_gui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_abscissa"></a>}}
@@ -2820,14 +616,6 @@ Transfers the information oabout the selected abscissa attribute to the explorer
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_abscissa(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_ordinate"></a>}}
@@ -2849,14 +637,6 @@ Transfers the information oabout the selected ordinate attribute to the explorer
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_ordinate(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_graphic"></a>}}
@@ -2879,14 +659,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_graphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_abscissa_graphic"></a>}}
@@ -2909,14 +681,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_abscissa_graphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_ordinate_graphic"></a>}}
@@ -2939,14 +703,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationOrdinateGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_abscissa_table"></a>}}
@@ -2969,14 +725,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_exploration_abscissa_table(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_exploration_ordinate_table"></a>}}
@@ -2999,14 +747,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateExplorationOrdinateTable(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset_loq_values"></a>}}
@@ -3265,8 +1005,6 @@ Updates loq class.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$importLoq(input, output, session)
 importLoq = function(input, output, session){
 if (private$.status$query(processName = "dataImported")){
 tryCatch({
@@ -3308,14 +1046,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_loq_detect_gui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_na_handling"></a>}}
@@ -3338,14 +1068,6 @@ corresponding to the respective user defined parameter.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$update_loq_na_handling(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_detect_loq"></a>}}
@@ -3390,14 +1112,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$detectLoq(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_detect_statistics_tbl"></a>}}
@@ -3419,14 +1133,6 @@ Updates the numerical loq statistics analysis table
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_detect_outlier_tbl"></a>}}
@@ -3444,13 +1150,7 @@ Updates the numerical loq table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectOutlierTbl(input, output, session)
+\item{\code{session}}{Pointer to shiny session
 #' @description
 #' Updates the numerical loq data table.
 #' @param input
@@ -3459,57 +1159,53 @@ Updates the numerical loq table.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateLoqDetectDataTbl(input, output, session)
 update_loq_detect_data_tbl = function(input, output, session){
-  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  t <- NULL
-  if(self$status$query(processName = "loqDetected")){
-    dfData <- self$filteredMetadata$rawData \%>\%
-      dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
-    dfOutlier <- self$loq$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    t <- dfData \%>\%
-      dplyr::mutate_if(is.numeric, round, 3) \%>\%
-      DT::datatable(
-        options = list(
-          scrollX = TRUE,
-          scrollY = '350px',
-          paging = FALSE,
-          dom = "Blfrtip",
-          buttons = list(list(
-            extend = 'csv',
-            filename = self$fileName$bluntFileName("loqData"),
-            text = "Download"
-          ))#buttons
-        )#options
-      )#DT::datatable
-    for (featureName in self$filteredData$numericFeatureNames){
-      featureOutlier <- dfOutlier \%>\%
-        dplyr::filter(feature == featureName) \%>\%
-        dplyr::mutate_if(is.numeric, round, 3)
-      if (nrow(featureOutlier)>0){
-        t <- DT::formatStyle(t,
-                             featureName,
-                             backgroundColor = styleEqual(dfData \%>\%
-                                                            dplyr::select(!!featureName) \%>\%
-                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-                                                            unlist() \%>\%
-                                                            as.numeric() \%>\%
-                                                            round(digits = 3),
-                                                          featureOutlier[["color"]])
+options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+t <- NULL
+if(self$status$query(processName = "loqDetected")){
+dfData <- self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$filteredData$rawData, by = "Sample Name")
+dfOutlier <- self$loq$outliers
+idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
+t <- dfData \%>\%
+dplyr::mutate_if(is.numeric, round, 3) \%>\%
+DT::datatable(
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("loqData"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+for (featureName in self$filteredData$numericFeatureNames){
+featureOutlier <- dfOutlier \%>\%
+dplyr::filter(feature == featureName) \%>\%
+dplyr::mutate_if(is.numeric, round, 3)
+if (nrow(featureOutlier)>0){
+t <- DT::formatStyle(t,
+featureName,
+backgroundColor = styleEqual(dfData \%>\%
+dplyr::select(!!featureName) \%>\%
+dplyr::slice(featureOutlier[\link{"measurement"}]) \%>\%
+unlist() \%>\%
+as.numeric() \%>\%
+round(digits = 3),
+featureOutlier[\link{"color"}])\preformatted{    )#t
+  \}#if
+\}#for
+}
 
-        )#t
-      }#if
-    }#for
-  }#if
-  output$tbl.loqDetectData <- DT::renderDataTable(t)
-}, #function
+}#if
+output$tbl.loqDetectData <- DT::renderDataTable(t)
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_detect_statistics_graphic"></a>}}
@@ -3531,14 +1227,6 @@ Updates the loq statistics graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectStatisticsGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_detect_attribute_graphic"></a>}}
@@ -3560,14 +1248,6 @@ Updates the loq feature compound graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectFeatureGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_detect_attribute_tbl"></a>}}
@@ -3589,14 +1269,6 @@ Updates the numerical loq feature table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqDetectFeatureTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_mutate_gui"></a>}}
@@ -3618,14 +1290,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_lloq_substitute"></a>}}
@@ -3647,14 +1311,6 @@ Updates the si.lloqSubstitute shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLloqSubstitute(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_uloq_substitute"></a>}}
@@ -3676,14 +1332,6 @@ Updates the si.uloqSubstitute shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateUloqSubstitute(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_mutate_loq"></a>}}
@@ -3726,13 +1374,7 @@ Updates the instance class status.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$mutateLoq(input, output, session)
+\item{\code{session}}{Pointer to shiny session
 #' @description
 #' Updates the numerical loq statistics table.
 #' @param input
@@ -3741,32 +1383,30 @@ Updates the instance class status.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateLoqMutateStatisticsTbl(input, output, session)
 updateLoqMutateStatisticsTbl = function(input, output, session){
-  if(private$.status$query(processName = "loqMutated")){
-    output$tbl.loqMutateStatistics <- DT::renderDataTable(
-      self$loq$loqStatistics \%>\%
-        format.data.frame(scientific = FALSE, digits = 3) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("loqStatistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
-  }#else
+if(private$.status$query(processName = "loqMutated")){
+output$tbl.loqMutateStatistics <- DT::renderDataTable(
+self$loq$loqStatistics \%>\%
+format.data.frame(scientific = FALSE, digits = 3) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("loqStatistics"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.loqMutateStatistics <- DT::renderDataTable(NULL)
+}#else
 }, #function
 #' @description
 #' Updates the numerical loq outliers table.
@@ -3776,58 +1416,54 @@ updateLoqMutateStatisticsTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateLoqMutateOutlierTbl(input, output, session)
 updateLoqMutateOutlierTbl = function(input, output, session){
-  options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  t <- NULL
-  if(self$status$query(processName = "loqMutated")){
-    dfData <- self$filteredMetadata$rawData \%>\%
-      dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
-    dfOutlier <- self$loq$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    t <- dfData \%>\%
-      dplyr::slice(idx) \%>\%
-      dplyr::mutate_if(is.numeric, round, 3) \%>\%
-      DT::datatable(
-        options = list(
-          scrollX = TRUE,
-          scrollY = '350px',
-          paging = FALSE,
-          dom = "Blfrtip",
-          buttons = list(list(
-            extend = 'csv',
-            filename = self$fileName$bluntFileName("loqOutlier"),
-            text = "Download"
-          ))#nuttons
-        )#options
-      )#DT::datatable
-    for (featureName in self$loqMutatedData$numericFeatureNames){
-      featureOutlier <- dfOutlier \%>\%
-        dplyr::filter(feature == featureName) \%>\%
-        dplyr::mutate_if(is.numeric, round, 3)
-      if (nrow(featureOutlier)>0){
-        t <- DT::formatStyle(t,
-                             featureName,
-                             backgroundColor = styleEqual(dfData \%>\%
-                                                            dplyr::select(!!featureName) \%>\%
-                                                            dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-                                                            unlist() \%>\%
-                                                            as.numeric() \%>\%
-                                                            round(digits = 3),
-                                                          featureOutlier[["color"]])
+options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
+t <- NULL
+if(self$status$query(processName = "loqMutated")){
+dfData <- self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$loqMutatedData$rawData, by = "Sample Name")
+dfOutlier <- self$loq$outliers
+idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
+t <- dfData \%>\%
+dplyr::slice(idx) \%>\%
+dplyr::mutate_if(is.numeric, round, 3) \%>\%
+DT::datatable(
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("loqOutlier"),
+text = "Download"
+))#nuttons
+)#options
+)#DT::datatable
+for (featureName in self$loqMutatedData$numericFeatureNames){
+featureOutlier <- dfOutlier \%>\%
+dplyr::filter(feature == featureName) \%>\%
+dplyr::mutate_if(is.numeric, round, 3)
+if (nrow(featureOutlier)>0){
+t <- DT::formatStyle(t,
+featureName,
+backgroundColor = styleEqual(dfData \%>\%
+dplyr::select(!!featureName) \%>\%
+dplyr::slice(featureOutlier[\link{"measurement"}]) \%>\%
+unlist() \%>\%
+as.numeric() \%>\%
+round(digits = 3),
+featureOutlier[\link{"color"}])\preformatted{    )#t
+  \}#if
+\}#for
+}
 
-        )#t
-      }#if
-    }#for
-  }#if
-  output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
-}, #function
+}#if
+output$tbl.loqMutateOutlier <- DT::renderDataTable(t)
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_mutate_data_tbl"></a>}}
@@ -3849,14 +1485,6 @@ Updates the numerical loq mutate outliers table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateDataTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_loq_mutate_statistics_graphic"></a>}}
@@ -3899,14 +1527,6 @@ Updates the loq mutate feature graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateFeatureGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_loq_mutate_attribute_tbl"></a>}}
@@ -3949,14 +1569,6 @@ Updates the numeric loq mutate feature table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateLoqMutateFeatureTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-optimizeTrafoParameter"></a>}}
@@ -3979,14 +1591,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$optimizeTrafoParameter(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateDetectedTrafoTypes"></a>}}
@@ -4008,14 +1612,6 @@ Updates the detected trafo types table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateDetectedTrafoTypes(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateDetectedTrafoParameter"></a>}}
@@ -4037,14 +1633,6 @@ Updates the detected trafo parameters table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateDetectedTrafoParameter(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoDetectGui"></a>}}
@@ -4066,14 +1654,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoDetectGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateFeature"></a>}}
@@ -4095,14 +1675,6 @@ Updates the si.trafoMutateFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateFeature(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateType"></a>}}
@@ -4124,14 +1696,6 @@ Updates the si.trafoMutateType shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateType(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateLambda"></a>}}
@@ -4153,14 +1717,6 @@ Updates the ni.trafoMutateLambda shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateLambdae(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateMirror"></a>}}
@@ -4182,14 +1738,6 @@ Updates the cb.trafoMutateMirror shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateMirror(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetTrafoMutateGui"></a>}}
@@ -4254,14 +1802,6 @@ Updates the GUI
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$trafoMutateFit(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoMutateGlobal"></a>}}
@@ -4284,14 +1824,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$trafoMutateGlobal(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoMutateFeature"></a>}}
@@ -4314,14 +1846,6 @@ of the instance variable loqMutatedData.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$trafoMutateFeature(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateFeatureGraphic"></a>}}
@@ -4343,14 +1867,6 @@ Updates the trafo mutate feature graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateFeatureGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateFeatureParameterTbl"></a>}}
@@ -4372,14 +1888,6 @@ Updates the trafo mutate feature patameter table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateFeatureParameterTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateFeatureQualityTbl"></a>}}
@@ -4401,14 +1909,6 @@ Updates the trafo mutate feature quality table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateFeatureQualityTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateGlobalParameterTbl"></a>}}
@@ -4430,14 +1930,6 @@ Updates the trafo mutate global parameter table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGlobalParameterTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateGlobalModelTbl"></a>}}
@@ -4459,14 +1951,6 @@ Updates the tbl.trafoMutateGlobalModel table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGlobalModelTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateGlobalQualityTbl"></a>}}
@@ -4488,14 +1972,6 @@ Updates the tbl.trafoMutateGlobalQuality table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGlobalQualityTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateGlobalTestsTbl"></a>}}
@@ -4517,14 +1993,6 @@ Updates the tbl.trafoMutateGlobalTests table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGlobalTestsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoMutateGlobalDataTbl"></a>}}
@@ -4546,14 +2014,6 @@ Updates the tbl.trafoMutateGlobalData table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoMutateGlobalDataTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormFeature"></a>}}
@@ -4575,14 +2035,6 @@ Updates the si.trafoNormFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormFeature(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormMethod"></a>}}
@@ -4604,14 +2056,6 @@ Updates the si.trafoNormMethod shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormMethod(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormGui"></a>}}
@@ -4633,14 +2077,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-trafoNormMutate"></a>}}
@@ -4663,14 +2099,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$trafoNormMutate(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormFeatureGraphic"></a>}}
@@ -4692,14 +2120,6 @@ Updates the impute norm feature compound graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormFeatureGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetTrafoNormGui"></a>}}
@@ -4721,14 +2141,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetTrafoNormGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormFeatureStatisticsTbl"></a>}}
@@ -4751,14 +2163,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormFeatureStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormStatisticsTbl"></a>}}
@@ -4781,14 +2185,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormParameterTbl"></a>}}
@@ -4811,14 +2207,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateTrafoNormParameterTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateTrafoNormDataTbl"></a>}}
@@ -4841,14 +2229,6 @@ corresponding to the respective user defined attributes.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeNormDataTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeMissingsAnalyze"></a>}}
@@ -4872,14 +2252,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeMissingsAnalyze(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingsGraphic"></a>}}
@@ -4901,14 +2273,6 @@ Updates the plt.imputeMissingsSummary graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingsStatisticsTbl"></a>}}
@@ -4930,14 +2294,6 @@ Updates the tbl.imputeMissingsStatistics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingsDistributionTbl"></a>}}
@@ -4959,14 +2315,6 @@ Updates the tbl.imputeMissingsDistribution table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsDistributionTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingCharacteristicsGraphic"></a>}}
@@ -4988,14 +2336,6 @@ Updates the plt.imputeMissingsPairs graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingCharacteristicsGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingsCharacteristicsTbl"></a>}}
@@ -5017,14 +2357,6 @@ Updates the tbl.imputeMissingsCharacteristics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsCharacteristicsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMissingsDetailTbl"></a>}}
@@ -5042,56 +2374,45 @@ Updates the tbl.imputeDetectDetail table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
+\item{\code{session}}{Pointer to shiny session\preformatted{                        #' @description
+                        #' Updates the tbl.imputeDetectData table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateImputeMissingsDataTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "naDetected"))\{
+                            output$tbl.imputeMissingsData <- DT::renderDataTable(
+                              self$filteredMetadata$rawData \%>\%
+                                dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$predict("imputationSiteDetectionData") \%>\%
+                                        tools::file_path_sans_ext(),
+                                      text = "Download"
+                                    ))#buttons
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+}}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMissingsDetailTbl(input, output, session)
-
-                            #' @description
-                            #' Updates the tbl.imputeDetectData table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateImputeMissingsDataTbl(input, output, session)
-                            updateImputeMissingsDataTbl = function(input, output, session){
-                              if(self$status$query(processName = "naDetected")){
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(
-                                  self$filteredMetadata$rawData \%>\%
-                                    dplyr::right_join(self$normalizedData$rawData, by = "Sample Name") \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$predict("imputationSiteDetectionData") \%>\%
-                                            tools::file_path_sans_ext(),
-                                          text = "Download"
-                                        ))#buttons
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.imputeMissingsData <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersMethod"></a>}}
@@ -5113,14 +2434,6 @@ Updates the si.imputeOutliersMethod shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersMethod(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersFeature"></a>}}
@@ -5142,14 +2455,6 @@ Updates the si.imputeOutliersFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersFeature(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersAlpha"></a>}}
@@ -5171,14 +2476,6 @@ Updates the ni.imputeOutliersAlpha shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersAlpha(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersEpsilon"></a>}}
@@ -5200,14 +2497,6 @@ Updates the ni.imputeOutliersEpsilon shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersEpsilon(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersMinSamples"></a>}}
@@ -5229,14 +2518,6 @@ Updates the ni.imputeOutliersMinSamples shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersMinSamples(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersGamma"></a>}}
@@ -5258,14 +2539,6 @@ Updates the ni.imputeOutliersGamma shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersGamma(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersNu"></a>}}
@@ -5287,14 +2560,6 @@ Updates the ni.imputeOutliersNu shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersNu(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersCutoff"></a>}}
@@ -5316,14 +2581,6 @@ Updates the ni.imputeOutliersCutoff shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersCutoff(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersK"></a>}}
@@ -5345,14 +2602,6 @@ Updates the ni.imputeOutliersK shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersK(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersSeed"></a>}}
@@ -5374,14 +2623,6 @@ Updates the ni.imputeOutliersSeed shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersSeed(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersGui"></a>}}
@@ -5403,14 +2644,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetImputeOutliersGui"></a>}}
@@ -5432,14 +2665,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetImputeOutliersGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeOutliersDetect"></a>}}
@@ -5463,14 +2688,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeOutliersDetect(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersGraphic"></a>}}
@@ -5492,14 +2709,6 @@ Updates the plt.outliersImputeSummary graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersFeatureGraphic"></a>}}
@@ -5521,14 +2730,6 @@ Updates the plt.outliersImputeFeature graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersFeatureGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersFeatureTbl"></a>}}
@@ -5550,14 +2751,6 @@ Updates the numeric outlier feature table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersFeatureTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersStatisticsTbl"></a>}}
@@ -5579,14 +2772,6 @@ Updates the numerical loq statistics analysis table
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeOutliersDetailTbl"></a>}}
@@ -5604,13 +2789,7 @@ Updates the numerical outlier table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeOutliersDetailTbl(input, output, session)
+\item{\code{session}}{Pointer to shiny session
 #' @description
 #' Updates the numerical outliers data table.
 #' @param input
@@ -5619,58 +2798,12 @@ Updates the numerical outlier table.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateImputeOutliersDataTbl(input, output, session)
-updateImputeOutliersDataTbl = function(input, output, session){
-  # options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))
-  # t <- NULL
-  # if(self$status$query(processName = "outliersDetected")){
-  #   dfData <- self$filteredMetadata$rawData \%>\%
-  #     dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")
-  #   dfOutlier <- self$outliers$outliers
-  #   # idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-  #   t <- dfData \%>\%
-  #     dplyr::mutate_if(is.numeric, round, 3) \%>\%
-  #     DT::datatable(
-  #       options = list(
-  #         scrollX = TRUE,
-  #         scrollY = '350px',
-  #         paging = FALSE,
-  #         dom = "Blfrtip",
-  #         buttons = list(list(
-  #           extend = 'csv',
-  #           filename = self$fileName$predict("OutliersData") \%>\%
-  #             tools::file_path_sans_ext(),
-  #           text = "Download"
-  #         ))#buttons
-  #       )#options
-  #     )#DT::datatable
-  #   for (featureName in self$normalizedData$numericalAttributeNames){
-  #     featureOutlier <- dfOutlier \%>\%
-  #       dplyr::filter(feature == featureName) \%>\%
-  #       dplyr::mutate_if(is.numeric, round, 3)
-  #     if (nrow(featureOutlier)>0){
-  #       t <- DT::formatStyle(t,
-  #                            featureName,
-  #                            backgroundColor = styleEqual(dfData \%>\%
-  #                                                           dplyr::select(!!featureName) \%>\%
-  #                                                           dplyr::slice(featureOutlier[["measurement"]]) \%>\%
-  #                                                           unlist() \%>\%
-  #                                                           as.numeric() \%>\%
-  #                                                           round(digits = 3),
-  #                                                         featureOutlier[["color"]])
-  #
-  #       )#t
-  #     }#if
-  #   }#for
-  # }#if
-  # output$tbl.outliersImputeData <- DT::renderDataTable(t)
-}, #function
+updateImputeOutliersDataTbl = function(input, output, session){options(htmlwidgets.TOJSON_ARGS = list(na = 'string'))t <- NULLif(self$status$query(processName = "outliersDetected")){dfData <- self$filteredMetadata$rawData \%>\%dplyr::right_join(self$normalizedData$rawData, by = "Sample Name")dfOutlier <- self$outliers$outliers# idx <- dfOutlier["measurement"][!duplicated(dfOutlier["measurement"])]t <- dfData \%>\%dplyr::mutate_if(is.numeric, round, 3) \%>\%DT::datatable(options = list(scrollX = TRUE,scrollY = '350px',paging = FALSE,dom = "Blfrtip",buttons = list(list(extend = 'csv',filename = self$fileName$predict("OutliersData") \%>\%tools::file_path_sans_ext(),text = "Download"))#buttons)#options)#DT::datatablefor (featureName in self$normalizedData$numericalAttributeNames){featureOutlier <- dfOutlier \%>\%dplyr::filter(feature == featureName) \%>\%dplyr::mutate_if(is.numeric, round, 3)if (nrow(featureOutlier)>0){t <- DT::formatStyle(t,featureName,backgroundColor = styleEqual(dfData 
+
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateFeature"></a>}}
@@ -5692,14 +2825,6 @@ Updates the si.imputeMutateFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateFeature(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateMethod"></a>}}
@@ -5721,14 +2846,6 @@ Updates the si.imputeMutateMethod shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateMethod(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateNNeighbors"></a>}}
@@ -5750,14 +2867,6 @@ Updates the ni.imputeMutateNumberOfNeighbors shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateNNeighbors(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutatePredFrac"></a>}}
@@ -5779,14 +2888,6 @@ Updates the ni.imputeMutatePredFrac shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutatePredFrac(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateOutfluxThr"></a>}}
@@ -5808,14 +2909,6 @@ Updates the ni.imputeMutateOutfluxThr shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateOutfluxThr(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateSeed"></a>}}
@@ -5837,14 +2930,6 @@ Updates the ni.imputeMutateSeed shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateSeed(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateIterations"></a>}}
@@ -5866,14 +2951,6 @@ Updates the ni.imputeMutateIterations shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateIterations(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateGui"></a>}}
@@ -5895,14 +2972,6 @@ Updates the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-resetImputeMutateGui"></a>}}
@@ -5924,14 +2993,6 @@ Resets the gui.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$resetImputeMutateGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-imputeMutateMutate"></a>}}
@@ -5954,14 +3015,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$imputeMutateMutate(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeFluxGraphic"></a>}}
@@ -5983,14 +3036,6 @@ Updates the plt.imputeMutateFlux graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeFluxGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateGraphic"></a>}}
@@ -6012,14 +3057,6 @@ Updates the plt.imputeMutateSummary graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateStatisticsTbl"></a>}}
@@ -6041,14 +3078,6 @@ Updates the tbl.imputeMutateStatistics table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateStatisticsTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateDistributionTbl"></a>}}
@@ -6070,14 +3099,6 @@ Updates the tbl.imputeMutateDistribution table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateDistributionTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateFeatureDetailGraphic"></a>}}
@@ -6099,14 +3120,6 @@ Updates the plt.imputeMutateFeatureDetail graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateFeatureDetailGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateFeatureDetailTbl"></a>}}
@@ -6128,14 +3141,6 @@ Updates the tbl.imputeMutateFeatureDetail table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateFeatureDetailTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateDetailTbl"></a>}}
@@ -6157,14 +3162,6 @@ Updates the tbl.imputeMutateDetail table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateDetailTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateImputeMutateDataTbl"></a>}}
@@ -6182,13 +3179,7 @@ Updates the tbl.imputeMutateData table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateImputeMutateDataTbl(input, output, session)
+\item{\code{session}}{Pointer to shiny session
 #' @description
 #' Calls the detect outliers routine of the instance variable outliers on the instance variable transformedData.
 #' Updates the instance class status.
@@ -6198,17 +3189,15 @@ Updates the tbl.imputeMutateData table.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$outliersDetect(input, output, session)
 outliersDetect = function(input, output, session){
-  if(self$status$query(processName = "naDetected")){
-    self$transformedData$numericData() \%>\%
-      private$.outliers$resetOutliersParameter()
-    private$.status$update(processName = "outliersDetected", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
-  }#else
+if(self$status$query(processName = "naDetected")){
+self$transformedData$numericData() \%>\%
+private$.outliers$resetOutliersParameter()
+private$.status$update(processName = "outliersDetected", value = TRUE)
+}#if
+else{
+shiny::showNotification(paste("No NaNs detected. Please run detect NaN first."),type = "error", duration = 10)
+}#else
 }, #function
 
 #' @description
@@ -6219,17 +3208,15 @@ outliersDetect = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectGraphic(input, output, session)
 updateOutliersDetectGraphic = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$plt.outliersDetectSummary <- shiny::renderPlot(
-      self$outliers$plotOutliersDistribution()
-    )#output
-  }#if
-  else{
-    output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
-  }#else
+if(self$status$query(processName = "outliersDetected")){
+output$plt.outliersDetectSummary <- shiny::renderPlot(
+self$outliers$plotOutliersDistribution()
+)#output
+}#if
+else{
+output$plt.outliersDetectSummary <- shiny::renderPlot(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6240,31 +3227,29 @@ updateOutliersDetectGraphic = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectStatisticsTbl(input, output, session)
 updateOutliersDetectStatisticsTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$tbl.outliersDetectStatistics <- DT::renderDataTable(
-      self$outliers$outliersStatistics \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionStatistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
-  }#else
+if(self$status$query(processName = "outliersDetected")){
+output$tbl.outliersDetectStatistics <- DT::renderDataTable(
+self$outliers$outliersStatistics \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersDetectionStatistics"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.outliersDetectStatistics <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6275,36 +3260,34 @@ updateOutliersDetectStatisticsTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectDetailTbl(input, output, session)
 updateOutliersDetectDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    dfOutlier <- self$outliers$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    output$tbl.outliersDetectDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
-  }#else
+if(self$status$query(processName = "outliersDetected")){
+dfOutlier <- self$outliers$outliers
+idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
+output$tbl.outliersDetectDetail <- DT::renderDataTable(
+self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
+dplyr::slice(idx) \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersDetectionDetail"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.outliersDetectDetail <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6315,36 +3298,34 @@ updateOutliersDetectDetailTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersDetectDataTbl(input, output, session)
 updateOutliersDetectDataTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    output$tbl.outliersDetectData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersDetectionData"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
-  }#else
+if(self$status$query(processName = "outliersDetected")){
+output$tbl.outliersDetectData <- DT::renderDataTable(
+self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$transformedData$rawData, by = "Sample Name") \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersDetectionData"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.outliersDetectData <- DT::renderDataTable(NULL)
+}#else
 }, #function
-############################
-# outlier mutate functions #
+############################outlier mutate functions
+
 ############################
 #' @description
 #' Updates the si.outliersMutateFeature shiny widget.
@@ -6354,16 +3335,14 @@ updateOutliersDetectDataTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeature(input, output, session)
 updateOutliersMutateFeature = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateSelectInput(session,
-                             "si.outliersMutateFeature",
-                             choices = self$outliers$outliersParameter[["features"]],
-                             selected = self$outliers$outliersParameter[["features"]][1]
-    )#input
-  }#if
+if(self$status$query(processName = "outliersDetected")){
+shiny::updateSelectInput(session,
+"si.outliersMutateFeature",
+choices = self$outliers$outliersParameter[\link{"features"}],
+selected = self$outliers$outliersParameter[\link{"features"}][1]
+)#input
+}#if
 }, #function
 
 #' @description
@@ -6374,16 +3353,14 @@ updateOutliersMutateFeature = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateMethod(input, output, session)
 updateOutliersMutateMethod = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateSelectInput(session,
-                             "si.outliersMutateMethod",
-                             choices = self$outliers$cleaningAgentAlphabet,
-                             selected = self$outliers$cleaningAgent
-    )#input
-  }#if
+if(self$status$query(processName = "outliersDetected")){
+shiny::updateSelectInput(session,
+"si.outliersMutateMethod",
+choices = self$outliers$cleaningAgentAlphabet,
+selected = self$outliers$cleaningAgent
+)#input
+}#if
 }, #function
 
 #' @description
@@ -6394,14 +3371,12 @@ updateOutliersMutateMethod = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateSeed(input, output, session)
 updateOutliersMutateSeed = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.outliersMutateSeed",
-                              value = self$outliers$seed)
-  }#if
+if(self$status$query(processName = "outliersDetected")){
+shiny::updateNumericInput(session,
+"ni.outliersMutateSeed",
+value = self$outliers$seed)
+}#if
 }, #function
 
 #' @description
@@ -6412,14 +3387,12 @@ updateOutliersMutateSeed = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateIterations(input, output, session)
 updateOutliersMutateIterations = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    shiny::updateNumericInput(session,
-                              "ni.outliersMutateIterations",
-                              value = self$outliers$iterations)
-  }#if
+if(self$status$query(processName = "outliersDetected")){
+shiny::updateNumericInput(session,
+"ni.outliersMutateIterations",
+value = self$outliers$iterations)
+}#if
 }, #function
 
 #' @description
@@ -6430,15 +3403,13 @@ updateOutliersMutateIterations = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateGui(input, output, session)
 updateOutliersMutateGui = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    self$updateOutliersMutateFeature(input, output, session)
-    self$updateOutliersMutateMethod(input, output, session)
-    self$updateOutliersMutateSeed(input, output, session)
-    self$updateOutliersMutateIterations(input, output, session)
-  }#if
+if(self$status$query(processName = "outliersDetected")){
+self$updateOutliersMutateFeature(input, output, session)
+self$updateOutliersMutateMethod(input, output, session)
+self$updateOutliersMutateSeed(input, output, session)
+self$updateOutliersMutateIterations(input, output, session)
+}#if
 }, #function
 
 #' @description
@@ -6450,39 +3421,37 @@ updateOutliersMutateGui = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$outliersMutate(input, output, session)
 outliersMutate = function(input, output, session){
-  if(self$status$query(processName = "outliersDetected")){
-    private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
-    private$.outliers$setSeed <- input$ni.outliersMutateSeed
-    private$.outliers$setIterations <- input$ni.outliersMutateIterations
+if(self$status$query(processName = "outliersDetected")){
+private$.outliers$setCleaningAgent <- input$si.outliersMutateMethod
+private$.outliers$setSeed <- input$ni.outliersMutateSeed
+private$.outliers$setIterations <- input$ni.outliersMutateIterations\preformatted{progress <- shiny::Progress$new(session, min = 1, max = 2 * length(self$imputedData$numericFeatureNames))
+progress$set(message = "Mutate Outliers", value = 0)
+on.exit(progress$close())
 
-    progress <- shiny::Progress$new(session, min = 1, max = 2 * length(self$imputedData$numericFeatureNames))
-    progress$set(message = "Mutate Outliers", value = 0)
-    on.exit(progress$close())
+name  <- as.name("Sample Name")
+private$.revisedData$setRawData <- self$imputedData$numericData() \%>\%
+  self$outliers$handleOutliers(progress = progress) \%>\%
+  tibble::add_column(!! name := self$imputedData$rawData \%>\%
+                       dplyr::select(!!name) \%>\%
+                       unlist() \%>\%
+                       as.character()) \%>\%
+  dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+private$.cleanedData$setRawData <- self$revisedData$numericData() \%>\%
+  self$model$rescaleData() \%>\%
+  self$transformator$reverseMutateData() \%>\%
+  tibble::add_column(!! name := self$imputedData$rawData \%>\%
+                       dplyr::select(!!name) \%>\%
+                       unlist() \%>\%
+                       as.character()) \%>\%
+  dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
+private$.status$update(processName = "outliersMutated", value = TRUE)
+}
 
-    name  <- as.name("Sample Name")
-    private$.revisedData$setRawData <- self$imputedData$numericData() \%>\%
-      self$outliers$handleOutliers(progress = progress) \%>\%
-      tibble::add_column(!! name := self$imputedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-    private$.cleanedData$setRawData <- self$revisedData$numericData() \%>\%
-      self$model$rescaleData() \%>\%
-      self$transformator$reverseMutateData() \%>\%
-      tibble::add_column(!! name := self$imputedData$rawData \%>\%
-                           dplyr::select(!!name) \%>\%
-                           unlist() \%>\%
-                           as.character()) \%>\%
-      dplyr::select(c(!!name, self$imputedData$numericFeatureNames))
-    private$.status$update(processName = "outliersMutated", value = TRUE)
-  }#if
-  else{
-    shiny::showNotification(paste("No outliers detected. Please detect outliers first."),type = "error", duration = 10)
-  }#else
+}#if
+else{
+shiny::showNotification(paste("No outliers detected. Please detect outliers first."),type = "error", duration = 10)
+}#else
 }, #function
 
 #' @description
@@ -6493,18 +3462,16 @@ outliersMutate = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeatureDetailGraphic(input, output, session)
 updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
-      self$outliers$featurePlot(data = self$revisedData$numericData(),
-                                feature = input$si.outliersMutateFeature)
-    )#output
-  }#if
-  else{
-    output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
-  }#else
+if(self$status$query(processName = "outliersMutated")){
+output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(
+self$outliers$featurePlot(data = self$revisedData$numericData(),
+feature = input$si.outliersMutateFeature)
+)#output
+}#if
+else{
+output$plt.outliersMutateFeatureDetail <- shiny::renderPlot(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6515,36 +3482,34 @@ updateOutliersMutateFeatureDetailGraphic = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateFeatureDetailTbl(input, output, session)
 updateOutliersMutateFeatureDetailTbl = function(input, output, session){
-  if (self$status$query(processName = "outliersMutated")){
-    output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData \%>\%
-                            dplyr::select(c("Sample Name", input$si.outliersMutateFeature))  ,
-                          by = "Sample Name") \%>\%
-        dplyr::slice(self$outliers$outliersIdxByFeature(feature = input$si.outliersMutateFeature)) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationDetails"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
-  }#else
+if (self$status$query(processName = "outliersMutated")){
+output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(
+self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$revisedData$rawData \%>\%
+dplyr::select(c("Sample Name", input$si.outliersMutateFeature))  ,
+by = "Sample Name") \%>\%
+dplyr::slice(self$outliers$outliersIdxByFeature(feature = input$si.outliersMutateFeature)) \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersMutationDetails"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.outliersMutateFeatureDetail <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6555,36 +3520,34 @@ updateOutliersMutateFeatureDetailTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateDetailTbl(input, output, session)
 updateOutliersMutateDetailTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    dfOutlier <- self$outliers$outliers
-    idx <- dfOutlier[["measurement"]][!duplicated(dfOutlier[["measurement"]])]
-    output$tbl.outliersMutateDetail <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
-        dplyr::slice(idx) \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationDetail"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
-  }#else
+if(self$status$query(processName = "outliersMutated")){
+dfOutlier <- self$outliers$outliers
+idx <- dfOutlier[\link{"measurement"}][!duplicated(dfOutlier[\link{"measurement"}])]
+output$tbl.outliersMutateDetail <- DT::renderDataTable(
+self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
+dplyr::slice(idx) \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersMutationDetail"),
+text = "Download"
+))#buttons
+)#options
+)#DT::datatable
+)#output
+}#if
+else{
+output$tbl.outliersMutateDetail <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -6595,39 +3558,35 @@ updateOutliersMutateDetailTbl = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateOutliersMutateDataTbl(input, output, session)
 updateOutliersMutateDataTbl = function(input, output, session){
-  if(self$status$query(processName = "outliersMutated")){
-    output$tbl.outliersMutateData <- DT::renderDataTable(
-      self$filteredMetadata$rawData \%>\%
-        dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '350px',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("outliersMutationData"),
-              text = "Download"
-            ))#output
-          )#options
-        )#DT::datatabe
-    )#output
-  }#if
-  else{
-    output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
-  } #else
-}, #function
+if(self$status$query(processName = "outliersMutated")){
+output$tbl.outliersMutateData <- DT::renderDataTable(
+self$filteredMetadata$rawData \%>\%
+dplyr::right_join(self$revisedData$rawData, by = "Sample Name") \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '350px',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("outliersMutationData"),
+text = "Download"
+))#output
+)#options
+)#DT::datatabe
+)#output
+}#if
+else{
+output$tbl.outliersMutateData <- DT::renderDataTable(NULL)
+} #else
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validate"></a>}}
@@ -6650,14 +3609,6 @@ Updates the instance class status.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$validate(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateAnalysisValidationGui"></a>}}
@@ -6679,14 +3630,6 @@ Updates the si.analysisValidationFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateAnalysisValidationGui(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateAnalysisValidationGraphic"></a>}}
@@ -6708,14 +3651,6 @@ Updates the plt.analysisValidationFeature shiny widget.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateAnalysisValidationGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateAnalysisValidationTestTbl"></a>}}
@@ -6737,14 +3672,6 @@ Updtates the tbl.analysisValidationTest table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateAnalysisValidationTestTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCentralMomentsOrgTbl"></a>}}
@@ -6766,14 +3693,6 @@ Updtates the tbl.centralMomentsOrg table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCentralMomentsOrgTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCentralMomentsImpTbl"></a>}}
@@ -6795,14 +3714,6 @@ Updtates the tbl.centralMomentsImp table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCentralMomentsImpTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCentralMomentsDeltaTbl"></a>}}
@@ -6824,14 +3735,6 @@ Updtates the tbl.centralMomentsDelta table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCentralMomentsDeltaTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCorrelationValidationScatterGraphic"></a>}}
@@ -6853,14 +3756,6 @@ Updtates the plt.correlationValidationScatter graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCorrelationValidationScatterGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCorrelationValidationBoxPlotGraphic"></a>}}
@@ -6882,14 +3777,6 @@ Updtates the plt.correlationValidationBoxPlot graphic.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCorrelationValidationBoxPlotGraphic(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCorrelationValidationDeviationTbl"></a>}}
@@ -6911,14 +3798,6 @@ Updtates the tbl.correlationValidationDeviation table.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCorrelationValidationDeviationTbl(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-updateCorrelationValidationDataTbl"></a>}}
@@ -6936,568 +3815,528 @@ Updtates the tbl.correlationValidationData table.
 
 \item{\code{output}}{Pointer to shiny output}
 
-\item{\code{session}}{Pointer to shiny session}
+\item{\code{session}}{Pointer to shiny session\preformatted{                        #########################
+                        # correlation functions #
+                        #########################
+                        #' @description
+                        #' Calls the correlate routine of the instance variable correlator on the instance variable revisedData.
+                        #' Updates the instance class status.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        correlate = function(input, output, session)\{
+                          if(self$status$query(processName = "validated"))\{
+                            progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
+                            progress$set(message = "Calculate Correlation", value = 1)
+                            on.exit(progress$close())
+                            # self$cleanedData$numericData() \%>\%
+                            self$cleanedData$numericData() \%>\%
+                              dplyr::select_if(function(x)\{!all(is.na(x))\}) \%>\%
+                              private$.correlator$resetCorrelator(progress = progress)
+                            private$.status$update(processName = "correlated", value = TRUE)
+                          \}#if
+                          else\{
+                            shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixR table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixRTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixR <- DT::renderDataTable(
+                              self$correlator$printRTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_R"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixPPearson table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixPPearsonTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
+                              self$correlator$printPPearsonTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_P_Pearson"),
+                                      text = "Download"
+                                    )),#buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::Datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixTau table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixTauTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixTau <- DT::renderDataTable(
+                              self$correlator$printTauTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_Tau"),
+                                      text = "Download"
+                                    )),#buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixPKendall table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixPKendallTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
+                              self$correlator$printPKendallTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_P_Kendall"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixRho table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixRhoTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixRho <- DT::renderDataTable(
+                              self$correlator$printRhoTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_Rho"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::Datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.correlationMatrixPSpearman table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateCorrelationMatrixPSpearmanTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
+                              self$correlator$printPSpearmanTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("CorrelationMatrix_P_Spearman"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        ########################
+                        # regression functions #
+                        ########################
+                        #' @description
+                        #' Calls the regression routine of the instance variable regressor on the instance variable revisedData.
+                        #' Updates the instance class status.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        regression = function(input, output, session)\{
+                          if(self$status$query(processName = "correlated"))\{
+                            progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
+                            progress$set(message = "Calculate Regression", value = 1)
+                            on.exit(progress$close())
+                            # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
+                            private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
+                            private$.status$update(processName = "regression", value = TRUE)
+                          \}#if
+                          else\{
+                            shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the si.regressionAbs shiny widget.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionAbscissa = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            shiny::updateSelectInput(session,
+                                                     "si.regressionAbs",
+                                                     choices = self$regressor$featureNames,
+                                                     selected = self$regressor$featureNames[1]
+                            )#input
+                          \}#if
+                        \}, #function
+
+                        #' @description
+                        #' Updates the si.regressionOrd shiny widget.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionOrdinate = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
+                            shiny::updateSelectInput(session,
+                                                     "si.regressionOrd",
+                                                     choices = ordinateFeatureNames,
+                                                     selected = ordinateFeatureNames[1]
+                            )#input
+                          \}#if
+                        \}, #function
+
+                        #' @description
+                        #' Updates the gui.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionGui = function(input, output, session)\{
+                          self$updateRegressionAbscissa(input, output, session)
+                          self$updateRegressionOrdinate(input, output, session)
+                        \}, #function
+
+                        #' @description
+                        #' Updates the plt.regressionFeature graphic.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionGraphic = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$plt.regressionFeature <- shiny::renderPlot(
+                              self$regressor$plotModel(data = self$cleanedData$numericData(),
+                                                       abscissa = input$si.regressionAbs,
+                                                       ordinate = input$si.regressionOrd)
+                            )#output
+                          \}#if
+                          else\{
+                            output$plt.regressionFeature <- shiny::renderPlot(NULL)
+                          \} #else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.regressionFeature table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionModelTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$tbl.regressionFeature <- DT::renderDataTable(
+                              self$regressor$printModel(abscissa = input$si.regressionAbs, ordinate = input$si.regressionOrd) \%>\%
+                                # format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("RegressionMatrix_Model"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.regressionFeature <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.regressionIntercept table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionInterceptTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$tbl.regressionIntercept <- DT::renderDataTable(
+                              self$regressor$printInterceptTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("RegressionMatrix_Intercept"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #functions
+
+                        #' @description
+                        #' Updates the tbl.regressionPIntercept table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionPInterceptTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$tbl.regressionPIntercept <- DT::renderDataTable(
+                              self$regressor$printPInterceptTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("RegressionMatrix_P_Intercept"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.regressionSlope table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionSlopeTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$tbl.regressionSlope <- DT::renderDataTable(
+                              self$regressor$printSlopeTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("RegressionMatrix_Slope"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.regressionSlope <- DT::renderDataTable(NULL)
+                          \}#else
+                        \}, #function
+
+                        #' @description
+                        #' Updates the tbl.regressionPSlope table.
+                        #' @param input
+                        #' Pointer to shiny input
+                        #' @param output
+                        #' Pointer to shiny output
+                        #' @param session
+                        #' Pointer to shiny session
+                        updateRegressionPSlopeTbl = function(input, output, session)\{
+                          if(self$status$query(processName = "regression"))\{
+                            output$tbl.regressionPSlope <- DT::renderDataTable(
+                              self$regressor$printPSlopeTbl() \%>\%
+                                format.data.frame(scientific = TRUE, digits = 4) \%>\%
+                                DT::datatable(
+                                  extensions = "Buttons",
+                                  options = list(
+                                    scrollX = TRUE,
+                                    scrollY = '350px',
+                                    paging = FALSE,
+                                    dom = "Blfrtip",
+                                    buttons = list(list(
+                                      extend = 'csv',
+                                      filename = self$fileName$bluntFileName("RegressionMatrix_P_Slope"),
+                                      text = "Download"
+                                    )), #buttons
+                                    autoWidth = TRUE,
+                                    columnDefs = list(list(width = '50px', targets = "_all"))
+                                  )#options
+                                )#DT::datatable
+                            )#output
+                          \}#if
+                          else\{
+                            output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
+                          \} #else
+                        \}, #function
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$updateCorrelationValidationDataTbl(input, output, session)
 
-                            #########################
-                            # correlation functions #
-                            #########################
-                            #' @description
-                            #' Calls the correlate routine of the instance variable correlator on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$correlate(input, output, session)
-                            correlate = function(input, output, session){
-                              if(self$status$query(processName = "validated")){
-                                progress <- shiny::Progress$new(session, min = 1, max  = 3 * length(self$imputedData$numericFeatureNames) ** 2)
-                                progress$set(message = "Calculate Correlation", value = 1)
-                                on.exit(progress$close())
-                                # self$cleanedData$numericData() \%>\%
-                                self$cleanedData$numericData() \%>\%
-                                  dplyr::select_if(function(x){!all(is.na(x))}) \%>\%
-                                  private$.correlator$resetCorrelator(progress = progress)
-                                private$.status$update(processName = "correlated", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixR table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRTbl(input, output, session)
-                            updateCorrelationMatrixRTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(
-                                  self$correlator$printRTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_R"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixR <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPPearson table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPPearsonTbl(input, output, session)
-                            updateCorrelationMatrixPPearsonTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(
-                                  self$correlator$printPPearsonTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Pearson"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPPearson <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixTau table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixTauTbl(input, output, session)
-                            updateCorrelationMatrixTauTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(
-                                  self$correlator$printTauTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Tau"),
-                                          text = "Download"
-                                        )),#buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixTau <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPKendall table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPKendallTbl(input, output, session)
-                            updateCorrelationMatrixPKendallTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(
-                                  self$correlator$printPKendallTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Kendall"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPKendall <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixRho table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixRhoTbl(input, output, session)
-                            updateCorrelationMatrixRhoTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(
-                                  self$correlator$printRhoTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_Rho"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::Datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixRho <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.correlationMatrixPSpearman table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateCorrelationMatrixPSpearmanTbl(input, output, session)
-                            updateCorrelationMatrixPSpearmanTbl = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(
-                                  self$correlator$printPSpearmanTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("CorrelationMatrix_P_Spearman"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.correlationMatrixPSpearman <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            ########################
-                            # regression functions #
-                            ########################
-                            #' @description
-                            #' Calls the regression routine of the instance variable regressor on the instance variable revisedData.
-                            #' Updates the instance class status.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$regression(input, output, session)
-                            regression = function(input, output, session){
-                              if(self$status$query(processName = "correlated")){
-                                progress <- shiny::Progress$new(session, min = 1, max = length(self$cleanedData$numericFeatureNames)**2)
-                                progress$set(message = "Calculate Regression", value = 1)
-                                on.exit(progress$close())
-                                # private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.regressor$resetRegressor(data = self$cleanedData$numericData(), progress = progress)
-                                private$.status$update(processName = "regression", value = TRUE)
-                              }#if
-                              else{
-                                shiny::showNotification(paste("No outliers revised. Please revise outliers first."),type = "error", duration = 10)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionAbs shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionAbscissa(input, output, session)
-                            updateRegressionAbscissa = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionAbs",
-                                                         choices = self$regressor$featureNames,
-                                                         selected = self$regressor$featureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the si.regressionOrd shiny widget.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionOrdinate(input, output, session)
-                            updateRegressionOrdinate = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                ordinateFeatureNames <- self$regressor$featureNames[-self$regressor$featureIdx(input$si.regressionAbs)]
-                                shiny::updateSelectInput(session,
-                                                         "si.regressionOrd",
-                                                         choices = ordinateFeatureNames,
-                                                         selected = ordinateFeatureNames[1]
-                                )#input
-                              }#if
-                            }, #function
-
-                            #' @description
-                            #' Updates the gui.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGui(input, output, session)
-                            updateRegressionGui = function(input, output, session){
-                              self$updateRegressionAbscissa(input, output, session)
-                              self$updateRegressionOrdinate(input, output, session)
-                            }, #function
-
-                            #' @description
-                            #' Updates the plt.regressionFeature graphic.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionGraphic(input, output, session)
-                            updateRegressionGraphic = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$plt.regressionFeature <- shiny::renderPlot(
-                                  self$regressor$plotModel(data = self$cleanedData$numericData(),
-                                                           abscissa = input$si.regressionAbs,
-                                                           ordinate = input$si.regressionOrd)
-                                )#output
-                              }#if
-                              else{
-                                output$plt.regressionFeature <- shiny::renderPlot(NULL)
-                              } #else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionFeature table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionModelTbl(input, output, session)
-                            updateRegressionModelTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionFeature <- DT::renderDataTable(
-                                  self$regressor$printModel(abscissa = input$si.regressionAbs, ordinate = input$si.regressionOrd) \%>\%
-                                    # format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Model"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionFeature <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionInterceptTbl(input, output, session)
-                            updateRegressionInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionIntercept <- DT::renderDataTable(
-                                  self$regressor$printInterceptTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #functions
-
-                            #' @description
-                            #' Updates the tbl.regressionPIntercept table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPInterceptTbl(input, output, session)
-                            updateRegressionPInterceptTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(
-                                  self$regressor$printPInterceptTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Intercept"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPIntercept <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionSlopeTbl(input, output, session)
-                            updateRegressionSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionSlope <- DT::renderDataTable(
-                                  self$regressor$printSlopeTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionSlope <- DT::renderDataTable(NULL)
-                              }#else
-                            }, #function
-
-                            #' @description
-                            #' Updates the tbl.regressionPSlope table.
-                            #' @param input
-                            #' Pointer to shiny input
-                            #' @param output
-                            #' Pointer to shiny output
-                            #' @param session
-                            #' Pointer to shiny session
-                            #' @examples
-                            #' x$updateRegressionPSlopeTbl(input, output, session)
-                            updateRegressionPSlopeTbl = function(input, output, session){
-                              if(self$status$query(processName = "regression")){
-                                output$tbl.regressionPSlope <- DT::renderDataTable(
-                                  self$regressor$printPSlopeTbl() \%>\%
-                                    format.data.frame(scientific = TRUE, digits = 4) \%>\%
-                                    DT::datatable(
-                                      extensions = "Buttons",
-                                      options = list(
-                                        scrollX = TRUE,
-                                        scrollY = '350px',
-                                        paging = FALSE,
-                                        dom = "Blfrtip",
-                                        buttons = list(list(
-                                          extend = 'csv',
-                                          filename = self$fileName$bluntFileName("RegressionMatrix_P_Slope"),
-                                          text = "Download"
-                                        )), #buttons
-                                        autoWidth = TRUE,
-                                        columnDefs = list(list(width = '50px', targets = "_all"))
-                                      )#options
-                                    )#DT::datatable
-                                )#output
-                              }#if
-                              else{
-                                output$tbl.regressionPSlope <- DT::renderDataTable(NULL)
-                              } #else
-                            }, #function
 #' @description
 #' Updates the tbl.loqInfo table.
 #' @param input
@@ -7506,30 +4345,28 @@ Updtates the tbl.correlationValidationData table.
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateLoqInfo(input, output, session)
 updateLoqInfo = function(input, output, session){
-  if(private$.status$query(processName = "dataImported")){
-    output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '75vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("loqData_type"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )#DT::Datatable
-    })#output
-  }#if
-  else{
-    output$tbl.loqInfo <- DT::renderDataTable(NULL)
-  }#else
+if(private$.status$query(processName = "dataImported")){
+output$tbl.loqInfo <- DT::renderDataTable({self$loq$dataInformation() \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '75vh',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("loqData_type"),
+text = "Download"
+))#buttons
+)#options
+)#DT::Datatable
+})#output
+}#if
+else{
+output$tbl.loqInfo <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -7540,30 +4377,28 @@ updateLoqInfo = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateMetadataInfo(input, output, session)
 updateMetadataInfo = function(input, output, session){
-  if(private$.status$query(processName = "metadataImported")){
-    output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '75vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("metadata_type"),
-              text = "Download"
-            )) #buttons
-          )#options
-        )#DT::datatable
-    })#output
-  }#if
-  else{
-    output$tbl.metadataInfo <- DT::renderDataTable(NULL)
-  }#else
+if(private$.status$query(processName = "metadataImported")){
+output$tbl.metadataInfo <- DT::renderDataTable({self$metadata$dataInformation() \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '75vh',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("metadata_type"),
+text = "Download"
+)) #buttons
+)#options
+)#DT::datatable
+})#output
+}#if
+else{
+output$tbl.metadataInfo <- DT::renderDataTable(NULL)
+}#else
 }, #function
 
 #' @description
@@ -7574,37 +4409,33 @@ updateMetadataInfo = function(input, output, session){
 #' Pointer to shiny output
 #' @param session
 #' Pointer to shiny session
-#' @examples
-#' x$updateRawDataStatisticsTbl(input, output, session)
 updateRawDataStatisticsTbl = function(input, output, session){
-  if(private$.status$query(processName = "dataImported")){
-    output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() \%>\%
-        format.data.frame(scientific = TRUE, digits = 4) \%>\%
-        DT::datatable(
-          extensions = "Buttons",
-          options = list(
-            scrollX = TRUE,
-            scrollY = '25vh',
-            paging = FALSE,
-            dom = "Blfrtip",
-            buttons = list(list(
-              extend = 'csv',
-              filename = self$fileName$bluntFileName("rawData_statistics"),
-              text = "Download"
-            ))#buttons
-          )#options
-        )}#DT::datatable
-    )#output
-  }#if
-  else{
-    output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
-  }#else
-}, #function
+if(private$.status$query(processName = "dataImported")){
+output$tbl.rawDataStatistics <- DT::renderDataTable({self$rawData$dataStatistics() \%>\%
+format.data.frame(scientific = TRUE, digits = 4) \%>\%
+DT::datatable(
+extensions = "Buttons",
+options = list(
+scrollX = TRUE,
+scrollY = '25vh',
+paging = FALSE,
+dom = "Blfrtip",
+buttons = list(list(
+extend = 'csv',
+filename = self$fileName$bluntFileName("rawData_statistics"),
+text = "Download"
+))#buttons
+)#options
+)}#DT::datatable
+)#output
+}#if
+else{
+output$tbl.rawDataStatistics <- DT::renderDataTable(NULL)
+}#else
+}, #function}
 }
 \if{html}{\out{</div>}}
-
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-exportFileName"></a>}}
@@ -7630,14 +4461,6 @@ Creates and returns an export filename.
 export filename
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$exportFileName(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-exportData"></a>}}
@@ -7658,14 +4481,6 @@ Exports the pguIMP analysis results
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$exportData(input, file="result.xlsx")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reportFileName"></a>}}
@@ -7691,14 +4506,6 @@ Creates and returns a report filename.
 export filename
 (character)
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{y <- x$reportFileName(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-writeReport"></a>}}
@@ -7720,14 +4527,6 @@ in pdf format.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$write_report(input, file="report.pdf")
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-hide_outdated_results"></a>}}
@@ -7749,14 +4548,6 @@ Updates the gui if analysis parameters change.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{x$hide_outdated_results(input, output, session)
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-update_help_html"></a>}}

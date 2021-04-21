@@ -93,9 +93,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' A new `pgu.optimizer` object.
                                 #' (pguIMP::pgu.optimizer)
-                                #' @examples
-                                #' y <- tibble:tibble()
-                                #' x <- pguIMP:pgu.optimizer$new(data = y)
                                 initialize = function(data = "tbl_df"){
                                   if(class(data) != "tbl_df"){
                                     data <- tibble::tibble(names <- "none",
@@ -116,9 +113,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' Prints instance variables of a `pgu.optimizer` object.
                                 #' @return
                                 #' string
-                                #' @examples
-                                #' x$print()
-                                #' print(x)
                                 print = function(){
                                   rString <- sprintf("\npgu.optimizer\n")
                                   cat(rString)
@@ -144,8 +138,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @param data
                                 #' The data to be analyzed.
                                 #' (tibble::tibble)
-                                #' @examples
-                                #' x$resetFeatures(data = y)
                                 resetFeatures = function(data = "tbl_df"){
                                   private$.features <- data %>%
                                     dplyr::select_if(is.numeric) %>%
@@ -154,8 +146,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
 
                                 #' @description
                                 #' Initializes the instance variable optParameter.
-                                #' @examples
-                                #' x$resetOptParameter()
                                 resetOptParameter = function(){
                                   features <- self$features
                                   mirrorLogic <- c(rep(FALSE, length(features)))
@@ -180,8 +170,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
 
                                 #' @description
                                 #' Initializes the instance variable optTypes.
-                                #' @examples
-                                #' x$resetOptTypes()
                                 resetOptTypes = function(){
                                   features <- self$features
                                   mirrorLogic <- c(rep(FALSE, length(features)))
@@ -211,8 +199,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @param data
                                 #' The data to be analyzed.
                                 #' (tibble::tibble)
-                                #' @examples
-                                #' x$resetOptimizer(data)
                                 resetOptimizer = function(data = "tbl_df"){
                                   self$resetFeatures(data)
                                   self$setTrafoAlphabet <- c("none", "log2", "logNorm", "log10", "squareRoot", "cubeRoot", "arcsine", "inverse")
@@ -232,8 +218,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' The attributes column index.
                                 #' (numeric)
-                                #' @examples
-                                #' idx <- x$featureIdx(feature = "time")
                                 featureIdx = function(feature = "character"){
                                   idx <- match(feature, self$features)
                                   if(is.na(idx)){
@@ -255,8 +239,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' Test Result
                                 #' (logical)
-                                #' @examples
-                                #' y <- x$modelParameterIsBigger(modelParameter = 3, referenceParameter = 2)
                                 modelParameterIsBigger = function(modelParameter = "numeric", referenceParameter = "numeric"){
                                   result <- FALSE
                                   if ((!is.na(modelParameter)) &&
@@ -278,8 +260,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' Test Result
                                 #' (logical)
-                                #' @examples
-                                #' y <- x$modelParameterIsSmaller(modelParameter = 2, referenceParameter = 3)
                                 modelParameterIsSmaller = function(modelParameter = "numeric", referenceParameter = "numeric"){
                                   result <- FALSE
                                   if ((!is.na(modelParameter)) &&
@@ -305,9 +285,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' An updated instance of the pgu.transformator class
                                 #' (pguIMP::pgu.transformator)
-                                #' @examples
-                                #' t <- pgu.transformator$new(data)
-                                #' t <- x$updateTrafoType(transformator = t, type = "logNorm")
                                 updateTrafoType = function(transformator = "pgu.transformator", type = "character"){
                                   for (feature in self$features){
                                     transformator$setTrafoType(feature, type)
@@ -327,9 +304,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @return
                                 #' An updated instance of the pgu.transformator class
                                 #' (pguIMP::pgu.transformator)
-                                #' @examples
-                                #' t <- pgu.transformator$new(data)
-                                #' t <- x$updateMirrorLogic(transformator = t, logic = TRUE)
                                 updateMirrorLogic = function(transformator = "pgu.transformator", logic = "logical"){
                                   for (feature in self$features){
                                     transformator$setMirrorLogic(feature, logic)
@@ -353,9 +327,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @param logic
                                 #' The mirrorLogic parameter
                                 #' (logic)
-                                #' @examples
-                                #' m <- pgu.model$new(data)
-                                #' x$updateOptParameter(model = m,type = "logNorm", logic = TRUE)
                                 updateOptParameter = function(model = "pgu.model", type = "character", logic = "character"){
                                   modelParameter <- model$modelParameter
                                   referenceParameter <- self$optParameter %>%
@@ -402,8 +373,6 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                 #' @param progress
                                 #' If shiny is loaded, the analysis' progress is stored within this instance of the shiny Progress class.
                                 #' (shiny::Progress)
-                                #' @examples
-                                #' x$optimize(data, progress)
                                 optimize = function(data  = "tbl_df", progress = "Progress"){
                                   transformator <- pgu.transformator$new(data)
                                   mirrorLogic <- c(FALSE)
@@ -416,7 +385,7 @@ pgu.optimizer <- R6::R6Class("pgu.optimizer",
                                     for (type  in self$trafoAlphabet){
                                       if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
                                         progress$inc(1)
-                                      }#if
+                                      }#iftidyverse,@exam
                                       transformator <- self$updateTrafoType(transformator, type)
                                       transformator$estimateTrafoParameter(data)
                                       model <- pgu.model$new(data %>%

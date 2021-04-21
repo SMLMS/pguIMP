@@ -58,9 +58,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' A new `pgu.model` object.
                                  #' (pguIMP::pgu.model)
-                                 #' @examples
-                                 #' y <- tibble:tibble()
-                                 #' x <- pguIMP:pgu.model$new(data = y)
                                  initialize = function(data = "tbl_df"){
                                    if(class(data)[1] != "tbl_df"){
                                      data <- tibble::tibble(names <- "none",
@@ -82,9 +79,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' Prints instance variables of a `pgu.model` object.
                                  #' @return
                                  #' string
-                                 #' @examples
-                                 #' x$print()
-                                 #' print(x)
                                  print = function(){
                                    rString <- sprintf("\npgu.model\n")
                                    cat(rString)
@@ -102,8 +96,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param data
                                  #' Dataframe to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$resetModelParameter(data)
                                  resetModelParameter = function(data  = "tbl_df"){
                                    features <- data %>%
                                      dplyr::select_if(is.numeric) %>%
@@ -138,8 +130,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param data
                                  #' Dataframe to be analyzed.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' x$resetModelList()
                                  resetModelList = function(data = "tbl_df"){
                                    results=list()
                                    for (feature in self$modelParameter[["features"]]){
@@ -161,8 +151,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param progress
                                  #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
                                  #' (shiny::Progress)
-                                 #' @examples
-                                 #' x$resetModel(data, progress)
                                  resetModel = function(data = "tbl_df", progress = "Progress"){
                                    self$resetModelParameter(data)
                                    self$resetModelList(data)
@@ -178,8 +166,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param feature
                                  #' Attribute corresponding to the pgu.normDist object data.
                                  #' (character)
-                                 #' @examples
-                                 #' x$setNormDist(data, feature = "infected")
                                  setNormDist = function(data = "pgu.normDist", feature = "character"){
                                    idx <- match(feature, self$modelParameter[["features"]])
                                    if(!is.na(idx)){
@@ -199,8 +185,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Index of attribute entry in dataframe
                                  #' (numeric)
-                                 #' @examples
-                                 #' idx <- x$featureIdx(feature = "infected")
                                  featureIdx = function(feature = "character"){
                                    idx <- match(feature, self$modelParameter[["features"]])
                                    if(is.na(idx)){
@@ -216,12 +200,10 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #################
                                  #' @description
                                  #' Runs the fit function of a pgu.normDist object at a
-                                 #' user denied position within the instance variable `modelList.`
+                                 #' user denied position within the instance variable modelList.
                                  #' @param feature
                                  #' Attribute's name.
                                  #' (character)
-                                 #' @examples
-                                 #' x$fitFeature(feature = "infected")
                                  fitFeature = function(feature = "character"){
                                    idx <- match(feature, self$modelParameter[["features"]])
                                    if(!is.na(idx)){
@@ -245,8 +227,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' If shiny is loaded, the analysis' progress is stored in this instance of the shiny Progress class.
                                  #' (shiny::Progress)
                                  #' @seealso [fitFeature()]
-                                 #' @examples
-                                 #' x$fitData(progress)
                                  fitData = function(progress = "Progress"){
                                    for (feature in self$modelParameter[["features"]]){
                                      if(("shiny" %in% (.packages())) & (class(progress)[1] == "Progress")){
@@ -268,8 +248,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param feature
                                  #' Attribute's name.
                                  #' (character)
-                                 #' @examples
-                                 #' x$logFitResultsFeature(feature = "infected")
                                  logFitResultsFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -298,8 +276,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @param feature
                                  #' Attribute's name.
                                  #' (character)
-                                 #' @examples
-                                 #' x$logFailedFitResultsFeature(feature = "infected")
                                  logFailedFitResultsFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -335,8 +311,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' scaled version of the given vector
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$scaleNumeric(value = c(1,2,3),feature = "infected")
                                  scaleNumeric = function(value = "numeric", feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -356,8 +330,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' scaled version of the given dataframe
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$scaleData(data)
                                  scaleData = function(data = "tbl_df"){
                                    for (feature in self$modelParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -382,8 +354,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Re-scaled version of the given vector
                                  #' (numeric)
-                                 #' @examples
-                                 #' y <- x$rescaleNumeric(value = c(1,2,3),feature = "infected")
                                  rescaleNumeric = function(value = "numeric", feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    if(!is.na(idx)){
@@ -403,8 +373,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Re-scaled version of the given dataframe
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$rescaleData(data)
                                  rescaleData = function(data = "tbl_df"){
                                    for (feature in self$modelParameter[["features"]]){
                                      idx <- self$featureIdx(feature)
@@ -423,8 +391,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model parameter.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$modelParameterData()
                                  modelParameterData = function(){
                                    self$modelParameter %>%
                                      dplyr::select(features, mu:sigma) %>%
@@ -440,8 +406,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model parameter.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$modelParameterFeature(feature = "infected")
                                  modelParameterFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    self$modelParameter %>%
@@ -455,8 +419,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model parameter.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$modelQualityData()
                                  modelQualityData = function(){
                                    self$modelParameter %>%
                                      dplyr::select(features, dataPoints:rmse) %>%
@@ -472,8 +434,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model parameter.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$modelQualityFeature(feature = "infected")
                                  modelQualityFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    self$modelParameter %>%
@@ -487,8 +447,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model fit results.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$fitResultData()
                                  fitResultData = function(){
                                    self$modelParameter %>%
                                      dplyr::select(features, mu:rmse) %>%
@@ -504,8 +462,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising model fit results.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$fitResultFeature(feature = "infected")
                                  fitResultFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    self$modelParameter %>%
@@ -519,8 +475,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising the hypothesis test results.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$testResultData()
                                  testResultData = function(){
                                    self$modelParameter %>%
                                      dplyr::select(features, w.shapiro:p.anderson) %>%
@@ -536,8 +490,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Dataframe comprising the hypothesis test results.
                                  #' (tibble::tibble)
-                                 #' @examples
-                                 #' y <- x$testResultFeature(feature = "infected")
                                  testResultFeature = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    self$modelParameter %>%
@@ -559,8 +511,6 @@ pgu.model <- R6::R6Class("pgu.model",
                                  #' @return
                                  #' Composite result plot.
                                  #' (ggplot2::ggplot)
-                                 #' @examples
-                                 #' p <- x$plotModel(feature = "infected")
                                  plotModel = function(feature = "character"){
                                    idx <- self$featureIdx(feature)
                                    model <- self$modelList[[idx]]

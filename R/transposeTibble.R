@@ -11,8 +11,6 @@
 #' The transposed data frame.
 #' (tibble:tibble)
 #'
-#' @examples
-#' y <- tansposeTibble(obj=df)
 #'
 #' @import tidyverse
 #'
