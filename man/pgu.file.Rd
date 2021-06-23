@@ -11,12 +11,8 @@ Handles file names for the pguIMP shiny web interface.
 }
 \details{
 The class stores filenames and upload specifications for the pguIMP shiny web interface in its instance variables.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.file$new()
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

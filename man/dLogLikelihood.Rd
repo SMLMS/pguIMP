@@ -7,12 +7,10 @@
 dLogLikelihood(x = "numeric", pars = c(mu = 0, sigma = 1))
 }
 \arguments{
-\item{x}{The x-value.
-(numeric)}
+\item{x}{The x-value(numeric)}
 
-\item{pars}{Numeric vector with two entries
-1: The expextation value.
-2: The standard deviation.
+\item{pars}{Numeric vector with two entries c(mu, sigma).
+Where mu is the expectation value and sigma is the standard deviation.
 (numeric)}
 }
 \value{
@@ -20,11 +18,10 @@ The logLikelihood.
 (numeric)
 }
 \description{
-Calculates the logLikelihood.
+Calculates the logLikelihood of a normally distributed event.
 }
 \examples{
-y <- dLogLikelihood(x=5, pars = c(mu=0.0, sigma=1.0))
-
+y <- pguIMP::dLogLikelihood(x=5, pars = c(mu=0.0, sigma=1.0))
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}

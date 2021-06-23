@@ -1,6 +1,8 @@
-#' @title IMPgui
-#' @description Run shiny based gui of pguIMP.
-#'
+#' @title pguIMP
+#' @description Reproducible cleaning of biomedical laboratory data using methods of visualization, error correction and transformation implemented as interactive R-notebooks.
+#' @details
+#' A graphical data preprocessing toolbox, named “pguIMP”, that includes a fixed sequence of preprocessing steps to enable error-free data preprocessing interactively.
+#' By implementing contemporary data processing methods including machine learning-based imputation procedures, the creation of corrected and cleaned bioanalytical datasets is ensured, which preserve data structures such as clusters better than resulting with classical methods.
 #' @return shiny application object
 #'
 #' @import shiny
@@ -11,15 +13,12 @@
 #' @include transposeTibble.R
 #' @include normalDistribution.R
 #'
-#' @examples
-#' pguIMP::IMPgui()
-#'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
 #' @export
 #'
 
-IMPgui <- function() {
+pguIMP <- function() {
   appDir <- system.file("application", package = "pguIMP")
   if (appDir == "") {
     stop("Could not find application. Try re-installing `pguIMP`.", call. = FALSE)

@@ -11,7 +11,9 @@ Analyses and substitutes imputation sites in a data set.
 }
 \details{
 Analyses imputation sites in a data set.
-Replaces imputation sites by nissing values and substitutes NAs by classical and AI-powerd substitution algorithms.
+Replaces imputation sites by missing values and substitutes NAs
+by classical and ML-powered substitution algorithms.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

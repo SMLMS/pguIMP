@@ -10,6 +10,7 @@
 #' The expectation value and standard deviation of a normal distribution
 #' representing the data are determined by maximizing the logLikelihood
 #' with respect to the expectation value und standard deviation.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:

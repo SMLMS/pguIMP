@@ -10,7 +10,8 @@
 Transforms the data of pguIMP.
 }
 \details{
-Performs a data transfromation in order to achieve a normally distributed version of the dataframe.
+Performs a data transformation in order to achieve a normally distributed version of the dataframe.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

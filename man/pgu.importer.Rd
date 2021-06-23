@@ -11,6 +11,7 @@ Handles the data import
 }
 \details{
 Menages the import of the pguIMP dataset
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

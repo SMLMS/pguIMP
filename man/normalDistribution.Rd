@@ -7,30 +7,24 @@
 normalDistribution(x = "numeric", mu = "numeric", sigma = "numeric")
 }
 \arguments{
-\item{x}{The x-value.
-(numeric)}
+\item{x}{The x-value (numeric)}
 
-\item{mu}{The expextation value.
-(numeric)}
+\item{mu}{The expextation value (numeric)}
 
-\item{sigma}{The standard deviation.
-(numeric)}
+\item{sigma}{The standard deviation (numeric)}
 }
 \value{
-The probability of event x.
-(numeric)
+The probability of observing event x given mu and sigma. (numeric)
 }
 \description{
-Represents a normal distribution.
+Probability density distribution of a normally distributed variable.
 }
 \details{
-Calculates p(x | mu, sigma). Where p is a normal distribution
-with user defined expectation value \code{mu}
-and standard deviation \code{sigma}.
+Calculates p(x | mu, sigma). Where p is the probability of observing an event x
+given the expected value mu and the standard deviation sigma.
 }
 \examples{
-y <- normalDistribution(x=5, mu=0.0, sigma=1.0)
-
+y <- pguIMP::normalDistribution(x=5, mu=0.0, sigma=1.0)
 }
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}

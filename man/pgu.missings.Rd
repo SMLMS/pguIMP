@@ -11,6 +11,7 @@ Detects and substitutes missing values from data set.
 }
 \details{
 Detects missing values in the transformed and normalized data set.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

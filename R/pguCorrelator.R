@@ -1,22 +1,24 @@
 #' @title pgu.correlator
 #'
 #' @description
-#' A class that performs pairwise correlation on the pguIMP data set.
-#'
-#' @details
-#' A class that performs pairwise correlation on the pguIMP data set.
+#' An R6 class that performs pairwise correlation on the pguIMP data set.
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:
-#' x <- pguIMP::pgu.correlator$new(data)
-#'
+#' x <- pguIMP::pgu.correlator$new()
 #' @import R6
 #' @import tidyverse
 #' @import stats
 #' @import DT
-#'
+#' @examples
+#' require(dplyr)
+#' require(tibble)
+#' data(iris)
+#' data_df <- iris %>%
+#'   tibble::as.tibble() %>%
+#'   dplyr::select(-c("Species"))
+#' correlator = pguIMP::pgu.correlator$new(data_df)
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
-#'
 #' @export
 #'
 
@@ -145,7 +147,7 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                  #' A new `pgu.correlator` object.
                                  #' (pguIMP::pgu.correlator)
                                  initialize = function(data = "tbl_df"){
-                                   if(class(data)[1] != "tbl_df"){
+                                   if(!tibble::is_tibble(data)){
                                      data <- tibble::tibble(names <- "none",
                                                             values <- c(NA))
                                    }
@@ -168,14 +170,30 @@ pgu.correlator <- R6::R6Class("pgu.correlator",
                                    rString <- sprintf("\npgu.correlator\n")
                                    cat(rString)
                                    print(self$featureNames)
-                                   mString <- sprintf("\nmethod: %s\n", self$method)
+                                   mString <- sprintf("\nmethod: %s\n", self$method[1])
                                    cat(mString)
-                                   coefString <- sprintf("\ncorrelation coefficient matrix\n")
+                                   coefString <- sprintf("\nPearson's r:\n")
                                    cat(coefString)
-                                   print(self$coefficient)
-                                   pString <- sprintf("\np-Value matrix\n")
+                                   print(self$r)
+                                   pString <- sprintf("\nPearson's p-Value:\n")
                                    cat(pString)
-                                   print(self$pValue)
+                                   print(self$pPearson)
+                                   mString <- sprintf("\nmethod: %s\n", self$method[2])
+                                   cat(mString)
+                                   coefString <- sprintf("\nKendall's tau:\n")
+                                   cat(coefString)
+                                   print(self$tau)
+                                   pString <- sprintf("\nKendall's p-Value:\n")
+                                   cat(pString)
+                                   print(self$pKendall)
+                                   mString <- sprintf("\nmethod: %s\n", self$method[3])
+                                   cat(mString)
+                                   coefString <- sprintf("\nSpearman's rho:\n")
+                                   cat(coefString)
+                                   print(self$rho)
+                                   pString <- sprintf("\nSpearman's p-Value:\n")
+                                   cat(pString)
+                                   print(self$pPearson)
                                    cat("\n\n")
                                    invisible(self)
                                  },#function

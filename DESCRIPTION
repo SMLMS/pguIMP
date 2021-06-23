@@ -1,12 +1,18 @@
 Package: pguIMP
 Title: pguIMP
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:c(
     person(given = "Sebastian",
            family = "Malkusch",
            role = c("aut", "cre"),
            email = "malkusch@med.uni-frankfurt.de",
-           comment = c(ORCID = "0000-0001-6766-140X"))
+           comment = c(ORCID = "0000-0001-6766-140X")),
+    person(given = "Joern",
+           family = "Loetsch",
+           role = c("aut"),
+           email = "j.loetsch@em.uni-frankfurt.de",
+           comment = c(ORCID = "0000-0002-5818-6958")))
+Maintainer: Sebastian Malkusch <malkusch@med.uni-frankfurt.de>
 Description: Reproducible cleaning of biomedical laboratory data using methods of visualization,error correction and transformation implemented as interactive R-notebooks.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
@@ -21,9 +27,11 @@ Imports:
     DT,
     DataVisualizations,
     dbscan,
+    dplyr,
     e1071,
     finalfit,
     GGally,
+    ggplot2,
     Hmisc,
     kableExtra,
     knitr,
@@ -37,9 +45,12 @@ Imports:
     nortest,
     outliers,
     parallelDist,
+    plotly,
     pracma,
     psych,
     rcompanion,
+    readr,
+    readxl,
     rmarkdown,
     robust,
     shiny,
@@ -47,6 +58,7 @@ Imports:
     shinyjs,
     shinyWidgets,
     stats,
+    tibble,
     tidyverse,
     tools,
     writexl

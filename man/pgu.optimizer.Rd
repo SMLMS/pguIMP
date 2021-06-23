@@ -11,6 +11,7 @@ Finds the transformation models that result in distributions that come closest t
 }
 \details{
 Analysis is performed individually on each attribute.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

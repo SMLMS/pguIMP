@@ -11,12 +11,8 @@ Manages the communication between the shiny gui layer and the classes of the pgu
 }
 \details{
 Comprises all needed classes from the pguIMP package and manages the communication between the gui and the analysis.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.delegate$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

@@ -12,6 +12,7 @@ Comprises a list of models for data manipulation.
 \details{
 Comprises a list of pgu.normDist objects and model parameters.
 These can be used to scale data.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

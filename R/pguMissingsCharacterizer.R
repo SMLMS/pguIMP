@@ -5,6 +5,7 @@
 #'
 #' @details
 #' A class that characterizes the origin of missing values.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:

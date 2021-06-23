@@ -11,6 +11,7 @@ A class that characterizes the origin of missing values.
 }
 \details{
 A class that characterizes the origin of missing values.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

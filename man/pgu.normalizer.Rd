@@ -11,6 +11,7 @@ Normalization of data. Part of pguIMP.
 }
 \details{
 Performs a data normalization in order to achieve a standardized version of the dataframe.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \section{Construction}{
 

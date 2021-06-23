@@ -8,6 +8,7 @@
 }
 \description{
 Validates that the distribution is not significantly altered by the imputation process.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \details{
 Takes two distributions (before and after imputation).

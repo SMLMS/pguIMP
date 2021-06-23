@@ -8,6 +8,7 @@
 }
 \description{
 Creates a human readable report file of the pguIMP analysis in odf format via rmarkdown and latex.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
 \details{
 I run at the end of the analysis.

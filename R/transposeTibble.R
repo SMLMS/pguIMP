@@ -2,6 +2,7 @@
 #'
 #' @description
 #' Transposes a tibble
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @param obj
 #' The data frame to be transposed.

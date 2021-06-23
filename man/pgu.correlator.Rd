@@ -7,16 +7,22 @@
 \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-A class that performs pairwise correlation on the pguIMP data set.
-}
-\details{
-A class that performs pairwise correlation on the pguIMP data set.
+An R6 class that performs pairwise correlation on the pguIMP data set.
 }
 \section{Construction}{
 
-x <- pguIMP::pgu.correlator$new(data)
+x <- pguIMP::pgu.correlator$new()
 }
 
+\examples{
+require(dplyr)
+require(tibble)
+data(iris)
+data_df <- iris \%>\%
+  tibble::as.tibble() \%>\%
+  dplyr::select(-c("Species"))
+correlator = pguIMP::pgu.correlator$new(data_df)
+}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

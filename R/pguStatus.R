@@ -11,6 +11,7 @@
 #' This way pguIMG knows any time during analysis,
 #' if all necessary information for the next desired analysis
 #' step are available.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
 #' @section Construction:

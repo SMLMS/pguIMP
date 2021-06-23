@@ -5,10 +5,9 @@
 #'
 #' @details
 #' The class stores filenames and upload specifications for the pguIMP shiny web interface in its instance variables.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.file$new()
 #'
 #' @import R6
 #' @importFrom  tools file_path_sans_ext file_ext

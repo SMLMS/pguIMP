@@ -6,10 +6,9 @@
 #' @details
 #' Creates a download file name and saves a list of tibbles to an Excel file.
 #' Each tibble is written to a separate sheet.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.exporter$new()
 #'
 #' @import R6
 #' @import tidyverse

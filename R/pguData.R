@@ -1,23 +1,23 @@
 #' @title pgu.data
-#'
 #' @description
 #' Handles the pguIMP dataset.
-#'
 #' @details
 #' Stores the pguIMP dataset as instance variable and keeps track of the attributes of interest.
 #' Provides additionally fast access to several statistical information about the data set.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.data$new(data)
-#'
 #' @import R6
 #' @import tidyverse
-#'
 #' @include pguFile.R
-#'
+#' @examples
+#' require(dplyr)
+#' require(tibble)
+#' data(iris)
+#' data_df <- iris %>%
+#'   tibble::as.tibble()
+#' data_obj = pguIMP::pgu.data$new(data_df)
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
-#'
 #' @export
 #'
 

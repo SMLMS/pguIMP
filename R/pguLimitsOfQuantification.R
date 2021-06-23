@@ -2,6 +2,7 @@
 #'
 #' @description
 #' Handles values in the pguIMP dataset that exceed the limits of quantification.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @details
 #' more information

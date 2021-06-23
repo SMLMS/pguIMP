@@ -1,15 +1,16 @@
+#' @title importDataSet
+#' @description
 #' Imports a dataset to the shiny pguIMP web interface.
-#'
 #' Extracts import options from a pguIMP::file instance
 #' and imports the desired record based on the passed information.
 #' @import R6
 #' @import tidyverse
-#' @param obj
-#' Instance of type R6 and pguIMP::pgu.file
-#' @export
+#' @param obj Instance of the R6 class pguIMP::pgu.file.
 #' @return
-#' A data frame
+#' A data frame that contains the imported data
 #' (tibble::tibble)
+#' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
+#' @export
 #'
 
 importDataSet = function(obj = "pgu.file")

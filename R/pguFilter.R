@@ -5,10 +5,9 @@
 #'
 #' @details
 #' The filtering is done by column and row indices.
+#' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.filter$new(data)
 #'
 #' @import R6
 #' @import tidyverse

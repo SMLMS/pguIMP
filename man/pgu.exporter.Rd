@@ -12,12 +12,8 @@ A class that writes the results of the pguIMP analysis to an Excel file.
 \details{
 Creates a download file name and saves a list of tibbles to an Excel file.
 Each tibble is written to a separate sheet.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.exporter$new()
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

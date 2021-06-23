@@ -7,16 +7,27 @@
 \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-A class that performs pairwise correlation on the pguIMP data set.
-}
-\details{
-A class that performs pairwise correlation on the pguIMP data set.
+An R6 class that performs pairwise correlation of the features of the original and the imputed data set.
+The correlation results of both data sets are compared by subtraction.
 }
 \section{Construction}{
 
-x <- pguIMP::pgu.correlator$new(data)
+x <- pguIMP::pgu.corrValidator$new()
 }
 
+\examples{
+require(dplyr)
+require(tibble)
+data(iris)
+data_df <- iris \%>\%
+  tibble::as.tibble()
+comp_df <- data_df \%>\%
+  dplyr::mutate(Sepal.Length = sample(Sepal.Length))
+corr_obj = pguIMP::pgu.corrValidator$new()
+corr_obj$fit(data_df, comp_df)
+print(corr_obj)
+
+}
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

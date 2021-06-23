@@ -11,12 +11,8 @@ Visual exploration of the pguIMP dataset.
 }
 \details{
 Pariwise anlysis of attributes from the pguIMP dataset.
+This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.explorer$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

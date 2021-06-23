@@ -2,18 +2,22 @@
 % Please edit documentation in R/importDataSet.R
 \name{importDataSet}
 \alias{importDataSet}
-\title{Imports a dataset to the shiny pguIMP web interface.}
+\title{importDataSet}
 \usage{
 importDataSet(obj = "pgu.file")
 }
 \arguments{
-\item{obj}{Instance of type R6 and pguIMP::pgu.file}
+\item{obj}{Instance of the R6 class pguIMP::pgu.file.}
 }
 \value{
-A data frame
+A data frame that contains the imported data
 (tibble::tibble)
 }
 \description{
+Imports a dataset to the shiny pguIMP web interface.
 Extracts import options from a pguIMP::file instance
 and imports the desired record based on the passed information.
+}
+\author{
+Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
