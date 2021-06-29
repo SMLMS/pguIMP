@@ -9,16 +9,24 @@
 #' For this purpose outliers are handled as imputation sites.
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.outliers$new(data_df)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import gridExtra
-#' @import outliers
-#' @import dbscan
-#' @import e1071
-#' @import DT
+#' @importFrom dbscan dbscan
+#' @importFrom dplyr add_row count filter mutate mutate_if pull select select_if
+#' @importFrom dplyr slice summarise_all sym transmute_all
+#' @importFrom DT datatable formatStyle
+#' @importFrom e1071 svm
+#' @importFrom ggplot2 aes aes_string coord_flip element_blank element_rect element_text
+#' @importFrom ggplot2 geom_bar geom_boxplot geom_col geom_jitter ggplot
+#' @importFrom ggplot2 ggtitle layer_scales scale_x_continuous scale_y_continuous theme theme_linedraw
+#' @importFrom ggplot2 xlab ylab
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom outliers grubbs.test
+#' @importFrom R6 R6Class
+#' @importFrom shiny Progress
+#' @importFrom tibble add_row is_tibble tibble
+#' @importFrom tidyr drop_na gather
+#' @importFrom tidyselect all_of
 #'
 #' @include pguOutlierDetection.R
 #'

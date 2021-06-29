@@ -15,11 +15,6 @@ Takes two distributions (before and after imputation).
 Performs a Wilcoxon-Mann-Whitney U test.
 Performs a Kolmogorow-Smirnow test.
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.validator$new()
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

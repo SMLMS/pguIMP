@@ -17,7 +17,7 @@
 #' @examples
 #' y <- sLogLikelihood (mu=0.0, sigma=1.0)
 #'
-#' @import bbmle
+#' @importFrom bbmle snorm
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

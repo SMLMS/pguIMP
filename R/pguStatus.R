@@ -14,10 +14,8 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.status$new()
 #'
-#' @import R6
+#' @importFrom R6 R6Class
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

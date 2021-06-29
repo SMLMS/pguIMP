@@ -16,6 +16,7 @@
 #' weights
 #' @return
 #' central value
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #' centralValue(x = seq(1,10,1))
@@ -28,7 +29,7 @@ centralValue <- function(x, ws=NULL) {
   } else {
     x <- as.factor(x)
     if (is.null(ws)) levels(x)[which.max(table(x))]
-    else levels(x)[which.max(aggregate(ws,list(x),sum)[,2])]
+    else levels(x)[which.max(stats::aggregate(ws,list(x),sum)[,2])]
   }
 }
 
@@ -59,6 +60,7 @@ centralValue <- function(x, ws=NULL) {
 #' Distance to the case
 #' @return
 #' cleaned data
+#' @importFrom stats complete.cases
 #' @export
 #' @examples
 #' centralValue(x = seq(1,10,1))
@@ -88,7 +90,7 @@ knnImputation <- function(data,k=10,scale=TRUE,meth='weighAvg',distData=NULL) {
 
   dm <- as.matrix(dm)
 
-  nas <- which(!complete.cases(dm))
+  nas <- which(!stats::complete.cases(dm))
   if (!is.null(distData)) tgt.nas <- nas[nas <= n]
   else tgt.nas <- nas
 

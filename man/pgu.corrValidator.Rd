@@ -20,7 +20,7 @@ require(dplyr)
 require(tibble)
 data(iris)
 data_df <- iris \%>\%
-  tibble::as.tibble()
+  tibble::as_tibble()
 comp_df <- data_df \%>\%
   dplyr::mutate(Sepal.Length = sample(Sepal.Length))
 corr_obj = pguIMP::pgu.corrValidator$new()

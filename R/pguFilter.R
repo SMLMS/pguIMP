@@ -9,8 +9,10 @@
 #'
 #' @format [R6::R6Class] object.
 #'
-#' @import R6
-#' @import tidyverse
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select slice
+#' @importFrom R6 R6Class
+#' @importFrom tibble is_tibble tibble
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -126,7 +128,7 @@ pgu.filter <- R6::R6Class("pgu.filter",
                               print(self$rowIdx)
                               cat("\n\n")
                               invisible(self)
-                            }, #end pgiIMP::pgu.filter$print()
+                            }, #end pguIMP::pgu.filter$print()
 
 
                             #' @description
@@ -154,6 +156,6 @@ pgu.filter <- R6::R6Class("pgu.filter",
                                 dplyr::select(self$colIdx) %>%
                                 dplyr::slice(self$rowIdx) %>%
                                 return()
-                            } #end phuIMP::pgi.filter$predict()
+                            } #end pguIMP::pgi.filter$predict()
                           )#public
 )#class

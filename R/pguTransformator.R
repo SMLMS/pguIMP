@@ -8,13 +8,14 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.transformator$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import rcompanion
-#' @import MASS
+#' @importFrom dplyr mutate_all near select select_if summarise_all
+#' @importFrom magrittr %>%
+#' @importFrom MASS boxcox
+#' @importFrom purrr discard
+#' @importFrom R6 R6Class
+#' @importFrom rcompanion transformTukey
+#' @importFrom tibble is_tibble tibble
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

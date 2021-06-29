@@ -15,11 +15,6 @@ Replaces imputation sites by missing values and substitutes NAs
 by classical and ML-powered substitution algorithms.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.imputation$new()
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }
@@ -54,7 +49,7 @@ Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 (integer)}
 
 \item{\code{flux_df}}{Returns the instance variable flux_df
-(tibble::tible)}
+(tibble::tibble)}
 
 \item{\code{outflux_thr}}{Returns the instance variable outflux_thr.
 (numeric)}

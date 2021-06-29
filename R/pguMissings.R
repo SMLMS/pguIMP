@@ -8,15 +8,13 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.missings$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import gridExtra
-#' @import DT
-#' @import VIM
-#' @import mice
+#' @importFrom dplyr any_vars bind_cols filter_all mutate select select_if transmute_all
+#' @importFrom magrittr %>%
+#' @importFrom mice md.pattern
+#' @importFrom R6 R6Class
+#' @importFrom tibble as_tibble is_tibble tibble
+#' @importFrom VIM aggr
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

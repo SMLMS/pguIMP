@@ -13,11 +13,6 @@ Finds the transformation models that result in distributions that come closest t
 Analysis is performed individually on each attribute.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.optimizer$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

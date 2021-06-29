@@ -9,9 +9,16 @@
 #'
 #' @format [R6::R6Class] object.
 #'
-#' @import R6
-#' @import tidyverse
-#' @import gridExtra
+#' @importFrom dplyr select
+#' @importFrom ggplot2 aes_string coord_flip element_rect geom_bar geom_boxplot geom_jitter
+#' @importFrom ggplot2 geom_point ggplot ggtitle layer_scales scale_x_continuous
+#' @importFrom ggplot2 theme theme_linedraw xlab ylab
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom purrr map
+#' @importFrom R6 R6Class
+#' @importFrom tibble as_tibble is_tibble rownames_to_column tibble
+#' @importFrom tidyr gather_
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

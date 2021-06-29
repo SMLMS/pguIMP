@@ -13,11 +13,6 @@ Detects and substitutes missing values from data set.
 Detects missing values in the transformed and normalized data set.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.missings$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

@@ -9,11 +9,15 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.model$new(data)
 #'
-#' @import R6
-#' @import tidyverse
+#' @importFrom dplyr select select_if slice
+#' @importFrom ggplot2 coord_flip ggplot layer_scales scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom shiny Progress
+#' @importFrom tibble tibble
 #'
 #' @include pguNormDist.R
 #'

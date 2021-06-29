@@ -19,7 +19,7 @@ require(dplyr)
 require(tibble)
 data(iris)
 data_df <- iris \%>\%
-  tibble::as.tibble() \%>\%
+  tibble::as_tibble() \%>\%
   dplyr::select(-c("Species"))
 correlator = pguIMP::pgu.correlator$new(data_df)
 }

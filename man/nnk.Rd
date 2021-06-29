@@ -31,7 +31,7 @@ Outlier Observations: A matrix of outlier observations
 
 Location of Outlier: Vector of Sr. no. of outliers
 
-Outlier probability: Vector of proportion of times an outlier exceeds local bootstrap cutoff
+Outlier probability: Vector of proportion of times an outlier exceeds local bootstrap cutof
 }
 \description{
 Outlier detection using kth Nearest Neighbour Distance method

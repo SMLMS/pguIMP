@@ -11,7 +11,8 @@
 #' @details nnk computes kth nearest neighbour distance of an observation and based on the bootstrapped cutoff, labels an observation as outlier. Outlierliness of the labelled 'Outlier' is also reported and it is the bootstrap estimate of probability of the observation being an outlier. For bivariate data, it also shows the scatterplot of the data with labelled outliers.
 #' @return Outlier Observations: A matrix of outlier observations
 #' @return Location of Outlier: Vector of Sr. no. of outliers
-#' @return Outlier probability: Vector of proportion of times an outlier exceeds local bootstrap cutoff
+#' @return Outlier probability: Vector of proportion of times an outlier exceeds local bootstrap cutof
+#' @importFrom stats density dist quantile
 #' @references Hautamaki, V., Karkkainen, I., and Franti, P. 2004. Outlier detection using k-nearest neighbour graph. In Proc. IEEE Int. Conf. on Pattern Recognition (ICPR), Cambridge, UK.
 #' @author Vinay Tiwari, Akanksha Kashikar
 #' @export
@@ -25,15 +26,15 @@ nnk=function(x,k=0.05*nrow(x),cutoff=.95,Method="euclidean",rnames=FALSE,boottim
 {
 
   data=as.data.frame(x)
-  dis=as.matrix(dist(data,diag=TRUE,upper = TRUE,method=Method))
+  dis=as.matrix(stats::dist(data,diag=TRUE,upper = TRUE,method=Method))
   d=c();
   for (i in 1:nrow(data)) {
     temp=dis[,i]
     d[i]=sort(temp)[k]
   }
-  quanorig=quantile(d,cutoff)
+  quanorig=stats::quantile(d,cutoff)
   #ub=quantile(d,cutoff)
-  k=density(d)
+  k=stats::density(d)
   aa=which(k$x<=quanorig)
   a=max(aa)
   b=which.max(k$x>=quanorig)
@@ -46,20 +47,20 @@ nnk=function(x,k=0.05*nrow(x),cutoff=.95,Method="euclidean",rnames=FALSE,boottim
   for (j in 1:boottimes) {
     s=sample(1:length(d),length(d),replace = T)
     bootdata=d[s]
-    bootub=quantile(bootdata,cutoff)
-    k=density(bootdata)
+    bootub=stats::quantile(bootdata,cutoff)
+    k=stats::density(bootdata)
     aa=which(k$x<=quanorig)
     a=max(aa)
     b=which.max(k$x>=quanorig)
     f=((k$y[b]-k$y[a])/(k$x[b]-k$x[a]))*(quanorig-k$x[a])+k$y[a]
 
     v=((1-cutoff)*cutoff)/f^2
-    bootubstand=(bootub-quantile(d,cutoff))/sqrt(v)
+    bootubstand=(bootub-stats::quantile(d,cutoff))/sqrt(v)
     bootubnorm[j]=bootubstand*sqrt(varorig)+quanorig
 
   }
 
-  ub=quantile(bootubnorm,cutoff)
+  ub=stats::quantile(bootubnorm,cutoff)
   wh=which(d>ub)
   out=data[wh,]
   loc=wh

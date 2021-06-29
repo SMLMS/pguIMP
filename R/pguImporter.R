@@ -8,12 +8,10 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.importer$new()
 #'
-#' @import R6
-#' @import tools
-#' @import tidyverse
+#' @importFrom R6 R6Class
+#' @importFrom readxl read_xlsx
+#' @importFrom tibble tibble
 #'
 #' @include pguFile.R
 #'

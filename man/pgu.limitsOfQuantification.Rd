@@ -13,11 +13,6 @@ This object is used by the shiny based gui and is not for use in individual R-sc
 \details{
 more information
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.limitsOfQuantification$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

@@ -10,10 +10,9 @@
 #'
 #' @format [R6::R6Class] object.
 #'
-#' @import R6
-#' @import tidyverse
-#' @import writexl
-#' @import tools
+#' @importFrom R6 R6Class
+#' @importFrom tools file_ext
+#' @importFrom writexl write_xlsx
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

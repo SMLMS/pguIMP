@@ -19,7 +19,7 @@ require(dplyr)
 require(tibble)
 data(iris)
 data_df <- iris \%>\%
-  tibble::as.tibble()
+  tibble::as_tibble()
 data_obj = pguIMP::pgu.data$new(data_df)
 }
 \author{

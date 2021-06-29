@@ -8,15 +8,9 @@
 #' I run at the end of the analysis.
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.reporter$new()
 #'
-#' @import R6
-#' @import tidyverse
-#' @import shiny
-#' @import rmarkdown
-#' @import knitr
-#' @import kableExtra
+#' @importFrom R6 R6Class
+#' @importFrom rmarkdown render
 #'
 #' @include pguStatus.R
 #' @include pguImporter.R

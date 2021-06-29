@@ -18,7 +18,7 @@ The logLikelihood.
 (numeric)
 }
 \description{
-Calculates the logLikelihood of a normally distributed event.
+Calculates the log Likelihood of a normally distributed event.
 }
 \examples{
 y <- pguIMP::dLogLikelihood(x=5, pars = c(mu=0.0, sigma=1.0))

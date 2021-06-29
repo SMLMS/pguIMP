@@ -10,20 +10,29 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.imputation$new()
 #'
-#' @import R6
-#' @import tidyverse
-#' @import gridExtra
-#' @import outliers
-#' @import MASS
-#' @import DT
-#' @import mice
-#' @import RWeka
-#' @import Amelia
-#' @import psych
-#' @import VIM
+#' @importFrom dplyr all_of arrange bind_rows filter group_by mutate
+#' @importFrom dplyr n_distinct pull rename rowwise select select_if
+#' @importFrom dplyr slice summarise sym transmute_all ungroup
+#' @importFrom ggplot2 aes aes_string coord_flip element_blank
+#' @importFrom ggplot2 element_rect geom_bar geom_boxplot geom_hline
+#' @importFrom ggplot2 geom_jitter geom_point geom_text ggplot
+#' @importFrom ggplot2 ggtitle layer_scales scale_linetype_manual
+#' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme theme_linedraw
+#' @importFrom ggplot2 xlab xlim ylab ylim
+#' @importFrom ggthemes geom_rangeframe theme_tufte
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom MASS fitdistr
+#' @importFrom mice complete flux md.pattern mice quickpred
+#' @importFrom psych describe
+#' @importFrom R6 R6Class
+#' @importFrom RWeka M5P
+#' @importFrom shiny Progress
+#' @importFrom stats as.formula median rnorm
+#' @importFrom tibble add_row as_tibble is_tibble rownames_to_column tibble
+#' @importFrom tidyr drop_na expand_grid gather_
+#' @importFrom VIM aggr
 #'
 #' @include pguDMwR.R
 #'
@@ -114,7 +123,7 @@ pgu.imputation <- R6::R6Class("pgu.imputation",
                                  },
                                  #' @field flux_df
                                  #' Returns the instance variable flux_df
-                                 #' (tibble::tible)
+                                 #' (tibble::tibble)
                                  flux_df = function(){
                                    return(private$.flux_df)
                                  },

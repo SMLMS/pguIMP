@@ -13,11 +13,6 @@ A class that characterizes the origin of missing values.
 A class that characterizes the origin of missing values.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.missingsCharacterizer$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

@@ -13,11 +13,6 @@ A class that performs pairwise robust regression on the pguIMP data set.
 A class that performs pairwise robust regression on the pguIMP data set.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.regressor$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

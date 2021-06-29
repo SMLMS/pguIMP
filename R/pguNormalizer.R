@@ -8,11 +8,16 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.normalizer$new(data)
 #'
-#' @import R6
-#' @import tidyverse
+#' @importFrom dplyr filter group_by mutate pull select select_if summarise_all sym
+#' @importFrom ggplot2 aes_string coord_flip element_blank element_rect geom_bar geom_boxplot
+#' @importFrom ggplot2 geom_jitter ggplot layer_scales scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 theme theme_linedraw xlab ylab
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom tibble is_tibble tibble
+#' @importFrom tidyr gather gather_ pivot_longer spread
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

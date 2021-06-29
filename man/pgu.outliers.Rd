@@ -14,11 +14,6 @@ Performes Grubb's test for outliers to detect outliers in the normalized and Z-s
 Replace missing values with substitutes by classical and AI-powerd substitution algorithms.
 For this purpose outliers are handled as imputation sites.
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.outliers$new(data_df)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

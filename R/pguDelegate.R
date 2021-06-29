@@ -8,11 +8,14 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#'
-#' @import R6
-#' @import tidyverse
-#' @import shiny
-#' @import DT
+#' @importFrom R6 R6Class
+#' @importFrom magrittr %>%
+#' @importFrom dplyr all_of any_vars everything filter  filter_all  mutate mutate_if pull rename right_join select select_if slice summarise_all
+#' @importFrom DT datatable formatStyle renderDataTable styleEqual
+#' @importFrom shiny includeHTML Progress renderPlot renderUI showNotification updateCheckboxInput updateNumericInput updateSelectInput
+#' @importFrom tibble add_column as_tibble rownames_to_column tibble
+#' @importFrom tidyr pivot_longer
+#' @importFrom tools file_path_sans_ext
 #'
 #' @include pguStatus.R
 #' @include pguFile.R

@@ -8,11 +8,13 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.optimizer$new(data)
 #'
-#' @import R6
-#' @import tidyverse
+#' @importFrom dplyr mutate select_if
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom shiny Progress
+#' @importFrom tibble tibble
+#' @importFrom tidyr separate unite
 #'
 #' @include pguTransformator.R
 #' @include pguModel.R

@@ -6,16 +6,19 @@
 #' @format [R6::R6Class] object.
 #' @section Construction:
 #' x <- pguIMP::pgu.correlator$new()
-#' @import R6
-#' @import tidyverse
-#' @import stats
-#' @import DT
+#'
+#' @importFrom R6 R6Class
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select select_if pull rename mutate everything
+#' @importFrom tibble tibble as_tibble is_tibble rownames_to_column
+#'
+#' @importFrom stats cor.test
 #' @examples
 #' require(dplyr)
 #' require(tibble)
 #' data(iris)
 #' data_df <- iris %>%
-#'   tibble::as.tibble() %>%
+#'   tibble::as_tibble() %>%
 #'   dplyr::select(-c("Species"))
 #' correlator = pguIMP::pgu.correlator$new(data_df)
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}

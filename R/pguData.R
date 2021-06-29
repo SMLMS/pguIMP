@@ -7,15 +7,21 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @import R6
-#' @import tidyverse
+#' @importFrom R6 R6Class
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull select mutate rename summarise summarise_all select_if all_of
+#' @importFrom purrr negate
+#' @importFrom tibble tibble as_tibble is_tibble rownames_to_column
+#' @importFrom tidyr gather
+#'
 #' @include pguFile.R
+#'
 #' @examples
 #' require(dplyr)
 #' require(tibble)
 #' data(iris)
 #' data_df <- iris %>%
-#'   tibble::as.tibble()
+#'   tibble::as_tibble()
 #' data_obj = pguIMP::pgu.data$new(data_df)
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #' @export

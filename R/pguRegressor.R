@@ -8,15 +8,17 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.regressor$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import stats
-#' @import robust
-#' @import DT
-#' @import gridExtra
+#' @importFrom dplyr everything mutate select select_if sym
+#' @importFrom ggplot2 aes aes_string element_blank geom_boxplot geom_histogram geom_point ggplot
+#' @importFrom ggplot2 ggtitle stat_smooth theme
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom robust lmRob
+#' @importFrom shiny Progress
+#' @importFrom stats as.formula lm
+#' @importFrom tibble as_tibble enframe tibble
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

@@ -10,18 +10,22 @@
 #' Performs a Kolmogorow-Smirnow test.
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.validator$new()
 #'
-#' @import R6
-#' @import tidyverse
-#' @import grid
-#' @import gridExtra
-#' @import stats
-#' @import e1071
-#' @import parallelDist
-#' @import DataVisualizations
-#'
+#' @importFrom DataVisualizations ParetoDensityEstimation
+#' @importFrom dplyr all_of filter mutate pull rename right_join select select_if
+#' @importFrom e1071 kurtosis skewness
+#' @importFrom ggplot2 aes aes_string element_rect geom_abline geom_boxplot geom_hline geom_jitter
+#' @importFrom ggplot2 geom_line geom_point ggplot ggtitle theme theme_linedraw
+#' @importFrom ggplot2 xlab ylab
+#' @importFrom grid gpar textGrob
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom purrr discard
+#' @importFrom R6 R6Class
+#' @importFrom shiny Progress
+#' @importFrom stats ks.test wilcox.test
+#' @importFrom tibble add_row as_tibble tibble
+#' @importFrom tidyr drop_na gather
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

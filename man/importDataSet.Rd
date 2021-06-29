@@ -14,8 +14,8 @@ A data frame that contains the imported data
 (tibble::tibble)
 }
 \description{
-Imports a dataset to the shiny pguIMP web interface.
-Extracts import options from a pguIMP::file instance
+Imports a data set to the shiny 'pguIMP' web interface.
+Extracts import options from a 'pguIMP::file' instance
 and imports the desired record based on the passed information.
 }
 \author{

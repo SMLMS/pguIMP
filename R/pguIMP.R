@@ -5,8 +5,8 @@
 #' By implementing contemporary data processing methods including machine learning-based imputation procedures, the creation of corrected and cleaned bioanalytical datasets is ensured, which preserve data structures such as clusters better than resulting with classical methods.
 #' @return shiny application object
 #'
-#' @import shiny
-#' @import shinyWidgets
+#' @importFrom magrittr %>%
+#' @importFrom  shiny dialogViewer runApp runGadget shinyAppDir
 #'
 #' @include dLogLikelihood.R
 #' @include sLogLikelihood.R

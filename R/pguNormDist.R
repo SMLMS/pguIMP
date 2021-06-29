@@ -8,19 +8,23 @@
 #' The distribution of a single value is tested for normality by
 #' Shapiro-Wilk test, Kolmogorov-Smirnov test, Anderson-Darling test.
 #' The expectation value and standard deviation of a normal distribution
-#' representing the data are determined by maximizing the logLikelihood
-#' with respect to the expectation value und standard deviation.
+#' representing the data are determined by maximizing the log Likelihood
+#' with respect to the expectation value and standard deviation.
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.normDist$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import bbmle
-#' @import stats
-#' @import nortest
+#' @importFrom bbmle AIC AICc logLik mle2 residuals
+#' @importFrom dplyr mutate
+#' @importFrom ggplot2 aes aes_string element_rect geom_col geom_histogram geom_line geom_point
+#' @importFrom ggplot2 geom_smooth ggplot ggplot_build ggtitle stat_qq stat_qq_line
+#' @importFrom ggplot2 theme theme_linedraw xlab ylab
+#' @importFrom magrittr %>%
+#' @importFrom nortest ad.test lillie.test
+#' @importFrom purrr discard
+#' @importFrom R6 R6Class
+#' @importFrom stats BIC ks.test na.omit optim shapiro.test
+#' @importFrom tibble tibble
 #'
 #' @include dLogLikelihood.R
 #' @include sLogLikelihood.R

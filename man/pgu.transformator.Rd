@@ -13,11 +13,6 @@ Transforms the data of pguIMP.
 Performs a data transformation in order to achieve a normally distributed version of the dataframe.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.transformator$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

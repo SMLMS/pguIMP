@@ -8,13 +8,16 @@
 #' This object is used by the shiny based gui and is not for use in individual R-scripts!
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.missingsCharacterizer$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import GGally
-#' @import finalfit
+#' @importFrom dplyr add_row all_of filter pull select select_if
+#' @importFrom finalfit missing_compare missing_pairs
+#' @importFrom ggplot2 element_rect element_text theme theme_linedraw
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom shiny Progress
+#' @importFrom stringr str_subset
+#' @importFrom tibble is_tibble tibble
+#' @importFrom rlang sym
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

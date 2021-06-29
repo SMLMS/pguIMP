@@ -8,14 +8,22 @@
 #' more information
 #'
 #' @format [R6::R6Class] object.
-#' @section Construction:
-#' x <- pguIMP::pgu.limitsOfQuantification$new(data)
 #'
-#' @import R6
-#' @import tidyverse
-#' @import pracma
-#' @import DT
-#' @import gridExtra
+#' @importFrom dplyr bind_cols filter if_else mutate mutate_if pull
+#' @importFrom dplyr right_join select slice summarise_all sym
+#' @importFrom DT datatable formatStyle styleEqual
+#' @importFrom ggplot2 aes aes_string coord_flip element_blank
+#' @importFrom ggplot2 element_rect element_text geom_bar geom_boxplot
+#' @importFrom ggplot2 geom_col geom_hline geom_jitter geom_vline
+#' @importFrom ggplot2 ggplot ggtitle layer_scales
+#' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme theme_linedraw
+#' @importFrom ggplot2 xlab ylab
+#' @importFrom gridExtra grid.arrange
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+#' @importFrom stringr str_detect
+#' @importFrom tibble add_row is_tibble tibble
+#' @importFrom tidyr gather gather_
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

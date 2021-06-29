@@ -14,15 +14,10 @@ by using several statistic tests.
 The distribution of a single value is tested for normality by
 Shapiro-Wilk test, Kolmogorov-Smirnov test, Anderson-Darling test.
 The expectation value and standard deviation of a normal distribution
-representing the data are determined by maximizing the logLikelihood
-with respect to the expectation value und standard deviation.
+representing the data are determined by maximizing the log Likelihood
+with respect to the expectation value and standard deviation.
 This object is used by the shiny based gui and is not for use in individual R-scripts!
 }
-\section{Construction}{
-
-x <- pguIMP::pgu.normDist$new(data)
-}
-
 \author{
 Sebastian Malkusch, \email{malkusch@med.uni-frankfurt.de}
 }

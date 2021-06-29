@@ -1,10 +1,13 @@
 #' @title importDataSet
 #' @description
-#' Imports a dataset to the shiny pguIMP web interface.
-#' Extracts import options from a pguIMP::file instance
+#' Imports a data set to the shiny 'pguIMP' web interface.
+#' Extracts import options from a 'pguIMP::file' instance
 #' and imports the desired record based on the passed information.
-#' @import R6
-#' @import tidyverse
+#'
+#' @importFrom R6 is.R6
+#' @importFrom readr read_csv cols read_delim
+#' @importFrom readxl read_xls read_xlsx
+#'
 #' @param obj Instance of the R6 class pguIMP::pgu.file.
 #' @return
 #' A data frame that contains the imported data

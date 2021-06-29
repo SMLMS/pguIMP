@@ -12,8 +12,8 @@
 #' The transposed data frame.
 #' (tibble:tibble)
 #'
-#'
-#' @import tidyverse
+#' @importFrom magrittr %>%
+#' @importFrom tibble as_tibble tibble
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

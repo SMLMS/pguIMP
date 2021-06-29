@@ -8,16 +8,21 @@
 #' @section Construction:
 #' x <- pguIMP::pgu.corrValidator$new()
 #'
-#' @import R6
-#' @import tidyverse
-#' @import Hmisc
+#' @importFrom R6 R6Class
+#' @importFrom magrittr %>%
+#' @importFrom dplyr pull select mutate summarise select_if all_of
+#' @importFrom tibble tibble as_tibble is_tibble rownames_to_column
+#' @importFrom tidyr gather_
+#' @importFrom ggplot2 ggplot aes_string geom_abline geom_point ggtitle xlab ylab theme_linedraw theme element_rect geom_bar geom_boxplot geom_jitter geom_hline scale_x_continuous scale_y_continuous layer_scales coord_flip
+#' @importFrom gridExtra grid.arrange
+#' @importFrom Hmisc rcorr
 #'
 #' @examples
 #' require(dplyr)
 #' require(tibble)
 #' data(iris)
 #' data_df <- iris %>%
-#'   tibble::as.tibble()
+#'   tibble::as_tibble()
 #' comp_df <- data_df %>%
 #'   dplyr::mutate(Sepal.Length = sample(Sepal.Length))
 #' corr_obj = pguIMP::pgu.corrValidator$new()
