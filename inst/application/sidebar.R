@@ -1,8 +1,9 @@
 #' Shiny app server object
 #'
-#' @import shiny
-#' @import shinydashboard
-#' @import shinyjs
+#' @importFrom shiny downloadButton icon
+#' @importFrom shinydashboard dashboardSidebar menuItem menuSubItem sidebarMenu
+#' @importFrom shinyWidgets switchInput
+#' @importFrom shinyjs useShinyjs
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

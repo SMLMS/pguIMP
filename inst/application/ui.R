@@ -1,8 +1,6 @@
 #' Shiny app server object
 #'
-#' @import shiny
-#' @import shinydashboard
-#' @import shinyjs
+#' @importFrom shinydashboard dashboardPage
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

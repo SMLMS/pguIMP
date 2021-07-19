@@ -1,7 +1,6 @@
 #' Shiny app server object
 #'
-#' @import shiny
-#' @import shinydashboard
+#' @importFrom shinydashboard dashboardHeader
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'
@@ -12,5 +11,4 @@
 
 header <- shinydashboard::dashboardHeader(
   title = "PGU IMP"
-  # shinydashboard::dropdownMenuOutput("helpMenu")
 )

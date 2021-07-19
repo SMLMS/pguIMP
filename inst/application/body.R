@@ -1,9 +1,7 @@
 #' Shiny app server object
 #'
-#' @import shiny
-#' @import shinydashboard
-#' @import shinyWidgets
-#' @import shinyjs
+#' @importFrom shiny actionButton br checkboxInput column fileInput fluidPage fluidRow h1 h3 h5 hr htmlOutput numericInput plotOutput selectInput
+#' @importFrom shinydashboard dashboardBody tabItem tabItems
 #'
 #' @author Sebastian Malkusch, \email{malkusch@@med.uni-frankfurt.de}
 #'

@@ -1,14 +1,10 @@
 #' @title server
 #' @description Run shiny based gui of pguIMP.
 #'
-#' @import tidyverse
-#' @import shiny
-#' @import shinydashboard
-#' @import shinyjs
-#' @import shinyWidgets
-#'
-#'
-#' @include pguDelegate.R
+#' @importFrom shiny downloadHandler observe observeEvent reactiveVal
+#' @importFrom shinydashboard renderMenu dropdownMenu
+#' @importFrom shinyjs disable enable
+#' @importFrom pguIMP pgu.delegate
 #'
 #' @param input Pointer to shiny input
 #' @param output Pointer to shiny output
@@ -20,7 +16,7 @@
 #'
 
 server <- function(input, output, session) {
-  delegate <- pgu.delegate$new()
+  delegate <- pguIMP::pgu.delegate$new()
   analysisFinished <- shiny::reactiveVal(FALSE)
 
   shiny::observeEvent(input$fi.import,{
