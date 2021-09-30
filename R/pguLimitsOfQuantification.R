@@ -159,7 +159,7 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                               idx_uloq <- integer()
                                               if(!is.na(uloq))
                                               {
-                                                idx_uloq <- which(values > lloq)
+                                                idx_uloq <- which(values > uloq)
                                               }
                                               if(length(idx_uloq) > 0)
                                               {
@@ -167,7 +167,7 @@ pgu.limitsOfQuantification <- R6::R6Class('pgu.limitsOfQuantification',
                                                                                      instance = idx_uloq,
                                                                                      attribute = rep(attribute, length(idx_uloq)),
                                                                                      value = values[idx_uloq],
-                                                                                     type = rep("<uloq", length(idx_uloq)),
+                                                                                     type = rep(">uloq", length(idx_uloq)),
                                                                                      color = rep("red", length(idx_uloq)))
                                               }#if
                                             }, #function

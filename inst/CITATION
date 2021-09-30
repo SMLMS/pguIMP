@@ -1,11 +1,13 @@
 citHeader("To cite pguIMP in publications use:")
 
 citEntry(
-  entry    = "Manual",
-  title    = "pguIMP: Reproducible cleaning of biomedical laboratory data.",
-  author   = "Sebastian Malkusch",
+  entry    = "manual",
+  title    = "Visually guided preprocessing of bioanalytical laboratory data using an interactive R notebook (pguIMP)",
+  author   = "Sebastian Malkusch and Joern Loetsch",
   year     = 2021,
   textVersion = paste(
 
   )
 )
+
+
